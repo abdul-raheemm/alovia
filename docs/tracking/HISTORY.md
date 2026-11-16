@@ -149,3 +149,36 @@ Suggestions raised (not implemented): none
 Docs updated: PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: 405 error code; Data API / RLS setting at project creation; `backend/.env` not filled yet
 Next step: ML reference outputs — owner agrees the input set first.
+
+## Session 4 — 2026-11-17 — ML reference outputs
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 1 — record ML reference outputs before moving ML code
+Goal: save the old backend's exact outputs for owner-approved inputs (ml_models_spec.md §6).
+
+Done:
+- Datasets found in `Documents\Alovia major project\ml modules\` and copied (not moved) to `C:\Users\Engineer\Desktop\alovia-data` (outside the repo). Model files there are identical to `ml-test`'s.
+- Old `ml-test/app` copied to a temporary folder and run in a separate Python 3.14 venv with the old exact versions (xgboost 3.4.1, scikit-learn 1.9.1, shap 0.52.0, numpy 2.5.3, pandas 3.0.5, joblib 1.6.0, scipy 1.18.1, numba 0.67.0, fastapi 0.141.1, pydantic 2.13.5; xlrd 2.0.2 to read CTG.xls).
+- 12 owner-approved cases sent through the old `/predict/fetal` and `/predict/maternal` endpoints; saved with inputs, full outputs, package versions and model SHA-256 hashes.
+
+Files changed:
+- `backend/tests/fixtures/ml_reference_outputs.json` — added — reference for the ML-move regression tests
+- docs/tracking/* — modified — records
+
+Decisions made (with owner approval):
+- Input set: fetal CTG.xls "Data" rows 1194 (Normal), 552 (Suspect), 1949 (Pathological); maternal Patient IDs 4442 (Low), 5546 (Mid), 2192 (High), plus all 6 High rows predicted Mid (114, 688, 1463, 2800, 3663, 5186) — the documented misclassification case is among them but cannot be identified without the notebook.
+- Maternal CSV columns `Blood Glucose(HbA1c)` and `Blood Glucose(Fasting hour-mg/dl)` map by position to the model's `HbA1c mmol/mol` and `Fasting mmol/L` (renamed only).
+- Data API left enabled until Phase 8.
+
+Checks run (exact commands and results):
+- SHA-256 of copied datasets vs originals → identical; Documents model files vs ml-test → 8/8 same
+- old maternal model on all 6,103 rows → 99.74% agree with labels; 6 High→Mid; 0 High→Low
+- old fetal model on all 2,126 rows → 97.88% agree; 0 Pathological→Normal
+- `record_reference.py` run twice → `cmp run1.json run2.json` byte-identical
+- fixture model hashes vs `ml-test/app/models` → 8/8 match; no names in the fixture
+- `pytest` (backend) → 11 passed
+
+Errors met: none
+Suggestions raised (not implemented): turn off the Data API before Phase 8 (owner: leave it)
+Docs updated: PROGRESS, CONTEXT, HISTORY
+Open questions for the owner: `backend/.env` is still empty on disk
+Next step: auth dependency + `/me` + consent route (plan first).

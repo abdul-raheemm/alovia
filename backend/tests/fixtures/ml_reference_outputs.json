@@ -1,0 +1,614 @@
+{
+  "description": "Reference outputs of the old ml-test backend (POST /predict/fetal, /predict/maternal) for owner-approved inputs. The new backend must reproduce expected_output exactly (ml_models_spec.md §6).",
+  "recorded_on": "2026-11-17",
+  "approved_by": "Raheem (owner), 2026-11-17",
+  "selection": "Per class: the correctly predicted row closest to that class's median (z-scored features). Plus all 6 maternal rows labelled High that the model predicts Mid (covers the documented misclassification case).",
+  "datasets": "Kept outside the repo (C:/Users/Engineer/Desktop/alovia-data); only the inputs below are stored. No names.",
+  "packages": {
+    "xgboost": "3.4.1",
+    "scikit-learn": "1.9.1",
+    "shap": "0.52.0",
+    "numpy": "2.5.3",
+    "pandas": "3.0.5",
+    "joblib": "1.6.0",
+    "scipy": "1.18.1",
+    "numba": "0.67.0",
+    "fastapi": "0.141.1",
+    "pydantic": "2.13.5"
+  },
+  "python": "3.14.10",
+  "model_files_sha256": {
+    "fetal_risk_feature_order.json": "641030bea91c82c74673b0bb82a2984f9189b815e2d3eabc3acab62404840c6e",
+    "fetal_risk_label_mapping.json": "c1e46d4bdf5d4330d97d0ecefc978d6c8c5a47a8f304ff7117d25d0962289842",
+    "fetal_risk_model_metadata.json": "10c2b86794bd0c102b4240789e1eaca524786044d754d0bf9786f9c64d62b657",
+    "fetal_risk_xgboost_model.joblib": "630d78adbbeb4675a97b75e9425aed2e3e66ba1c5e2c89f3d1ecc86a4d9dd1e0",
+    "maternal_risk_feature_order.json": "050a62ea63bfd9d684fe7a3aa9e6f51ee3d3b8f1308761a25e5ed7348251c62a",
+    "maternal_risk_label_mapping.json": "fb965bcca151d3d368de0df72fe61861211109a7d4009283ee7f127f3a0774cb",
+    "maternal_risk_model_metadata.json": "38a403ced06217f2bbdf786df76261f8f83b67fe8df7e051c7de2443aa2733ff",
+    "maternal_risk_xgboost_model.joblib": "48ddd3f8f3b7b5c391c92f5fdc453c13f5e7e51bca09d539f14a24a777527b8c"
+  },
+  "cases": [
+    {
+      "id": "fetal_normal",
+      "model": "fetal",
+      "source": {
+        "file": "CTG.xls",
+        "sheet": "Data",
+        "excel_row": 1194
+      },
+      "dataset_label": "Normal",
+      "input": {
+        "LB": 133,
+        "AC.1": 0.003464203233256351,
+        "FM.1": 0,
+        "UC.1": 0.006928406466512702,
+        "DL.1": 0,
+        "DS.1": 0,
+        "DP.1": 0,
+        "ASTV": 52,
+        "MSTV": 0.7,
+        "ALTV": 1,
+        "MLTV": 9.2,
+        "Width": 67,
+        "Min": 94,
+        "Max": 161,
+        "Nmax": 4,
+        "Nzeros": 0,
+        "Mode": 136,
+        "Mean": 137,
+        "Median": 138,
+        "Variance": 2,
+        "Tendency": 0
+      },
+      "expected_output": {
+        "predicted_class": "Normal",
+        "confidence": 0.9994,
+        "class_probabilities": {
+          "Normal": 0.9994,
+          "Suspect": 0.0005,
+          "Pathological": 0.0
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "AC.1",
+            "impact": 1.8468,
+            "direction": "supports 'Normal' prediction"
+          },
+          {
+            "feature": "ASTV",
+            "impact": 0.9033,
+            "direction": "supports 'Normal' prediction"
+          },
+          {
+            "feature": "Variance",
+            "impact": 0.4001,
+            "direction": "supports 'Normal' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "fetal_suspect",
+      "model": "fetal",
+      "source": {
+        "file": "CTG.xls",
+        "sheet": "Data",
+        "excel_row": 552
+      },
+      "dataset_label": "Suspect",
+      "input": {
+        "LB": 141,
+        "AC.1": 0,
+        "FM.1": 0,
+        "UC.1": 0.002554278416347382,
+        "DL.1": 0,
+        "DS.1": 0,
+        "DP.1": 0,
+        "ASTV": 61,
+        "MSTV": 0.4,
+        "ALTV": 22,
+        "MLTV": 6.9,
+        "Width": 19,
+        "Min": 133,
+        "Max": 152,
+        "Nmax": 1,
+        "Nzeros": 0,
+        "Mode": 144,
+        "Mean": 143,
+        "Median": 145,
+        "Variance": 0,
+        "Tendency": 0
+      },
+      "expected_output": {
+        "predicted_class": "Suspect",
+        "confidence": 0.9667,
+        "class_probabilities": {
+          "Normal": 0.0274,
+          "Suspect": 0.9667,
+          "Pathological": 0.006
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "ALTV",
+            "impact": 0.7493,
+            "direction": "supports 'Suspect' prediction"
+          },
+          {
+            "feature": "Nmax",
+            "impact": -0.3964,
+            "direction": "pushes away from 'Suspect' prediction"
+          },
+          {
+            "feature": "Mean",
+            "impact": 0.3497,
+            "direction": "supports 'Suspect' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "fetal_pathological",
+      "model": "fetal",
+      "source": {
+        "file": "CTG.xls",
+        "sheet": "Data",
+        "excel_row": 1949
+      },
+      "dataset_label": "Pathological",
+      "input": {
+        "LB": 133,
+        "AC.1": 0,
+        "FM.1": 0.0010090817356205853,
+        "UC.1": 0.005045408678102927,
+        "DL.1": 0.0030272452068617556,
+        "DS.1": 0,
+        "DP.1": 0.0020181634712411706,
+        "ASTV": 61,
+        "MSTV": 2.3,
+        "ALTV": 0,
+        "MLTV": 5,
+        "Width": 105,
+        "Min": 60,
+        "Max": 165,
+        "Nmax": 4,
+        "Nzeros": 0,
+        "Mode": 128,
+        "Mean": 103,
+        "Median": 116,
+        "Variance": 70,
+        "Tendency": 0
+      },
+      "expected_output": {
+        "predicted_class": "Pathological",
+        "confidence": 0.9985,
+        "class_probabilities": {
+          "Normal": 0.0008,
+          "Suspect": 0.0007,
+          "Pathological": 0.9985
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Mean",
+            "impact": 2.3824,
+            "direction": "supports 'Pathological' prediction"
+          },
+          {
+            "feature": "Median",
+            "impact": 1.2022,
+            "direction": "supports 'Pathological' prediction"
+          },
+          {
+            "feature": "DP.1",
+            "impact": 1.0483,
+            "direction": "supports 'Pathological' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_low",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 4442
+      },
+      "dataset_label": "Low",
+      "input": {
+        "Age": 24,
+        "Body Temperature(F) ": 98.6,
+        "Heart rate(bpm)": 74,
+        "Systolic Blood Pressure(mm Hg)": 128,
+        "Diastolic Blood Pressure(mm Hg)": 83,
+        "BMI(kg/m 2)": 21.1,
+        "Blood Glucose(HbA1c mmol/mol)": 38,
+        "Blood Glucose(Fasting mmol/L)": 5
+      },
+      "expected_output": {
+        "predicted_class": "Low",
+        "confidence": 0.9982,
+        "class_probabilities": {
+          "Low": 0.9982,
+          "Mid": 0.0009,
+          "High": 0.0008
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Systolic Blood Pressure(mm Hg)",
+            "impact": 1.6192,
+            "direction": "supports 'Low' prediction"
+          },
+          {
+            "feature": "Diastolic Blood Pressure(mm Hg)",
+            "impact": 0.566,
+            "direction": "supports 'Low' prediction"
+          },
+          {
+            "feature": "Age",
+            "impact": 0.5176,
+            "direction": "supports 'Low' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_mid",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 5546
+      },
+      "dataset_label": "Mid",
+      "input": {
+        "Age": 28,
+        "Body Temperature(F) ": 98.6,
+        "Heart rate(bpm)": 73,
+        "Systolic Blood Pressure(mm Hg)": 141,
+        "Diastolic Blood Pressure(mm Hg)": 89,
+        "BMI(kg/m 2)": 20.8,
+        "Blood Glucose(HbA1c mmol/mol)": 37,
+        "Blood Glucose(Fasting mmol/L)": 5.9
+      },
+      "expected_output": {
+        "predicted_class": "Mid",
+        "confidence": 0.9353,
+        "class_probabilities": {
+          "Low": 0.0601,
+          "Mid": 0.9353,
+          "High": 0.0045
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Systolic Blood Pressure(mm Hg)",
+            "impact": 2.1068,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Age",
+            "impact": -0.373,
+            "direction": "pushes away from 'Mid' prediction"
+          },
+          {
+            "feature": "Body Temperature(F) ",
+            "impact": -0.2249,
+            "direction": "pushes away from 'Mid' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_high",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 2192
+      },
+      "dataset_label": "High",
+      "input": {
+        "Age": 20,
+        "Body Temperature(F) ": 98.6,
+        "Heart rate(bpm)": 95,
+        "Systolic Blood Pressure(mm Hg)": 142,
+        "Diastolic Blood Pressure(mm Hg)": 94,
+        "BMI(kg/m 2)": 21.7,
+        "Blood Glucose(HbA1c mmol/mol)": 38,
+        "Blood Glucose(Fasting mmol/L)": 5.6
+      },
+      "expected_output": {
+        "predicted_class": "High",
+        "confidence": 0.6137,
+        "class_probabilities": {
+          "Low": 0.0028,
+          "Mid": 0.3835,
+          "High": 0.6137
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Heart rate(bpm)",
+            "impact": 0.6505,
+            "direction": "supports 'High' prediction"
+          },
+          {
+            "feature": "Systolic Blood Pressure(mm Hg)",
+            "impact": -0.5955,
+            "direction": "pushes away from 'High' prediction"
+          },
+          {
+            "feature": "Diastolic Blood Pressure(mm Hg)",
+            "impact": 0.4331,
+            "direction": "supports 'High' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_high_predicted_mid_114",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 114
+      },
+      "dataset_label": "High",
+      "input": {
+        "Age": 19,
+        "Body Temperature(F) ": 98.6,
+        "Heart rate(bpm)": 84,
+        "Systolic Blood Pressure(mm Hg)": 145,
+        "Diastolic Blood Pressure(mm Hg)": 88,
+        "BMI(kg/m 2)": 24,
+        "Blood Glucose(HbA1c mmol/mol)": 44,
+        "Blood Glucose(Fasting mmol/L)": 6.2
+      },
+      "expected_output": {
+        "predicted_class": "Mid",
+        "confidence": 0.6824,
+        "class_probabilities": {
+          "Low": 0.001,
+          "Mid": 0.6824,
+          "High": 0.3166
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Age",
+            "impact": -0.7148,
+            "direction": "pushes away from 'Mid' prediction"
+          },
+          {
+            "feature": "Systolic Blood Pressure(mm Hg)",
+            "impact": 0.5555,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Heart rate(bpm)",
+            "impact": 0.5427,
+            "direction": "supports 'Mid' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_high_predicted_mid_688",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 688
+      },
+      "dataset_label": "High",
+      "input": {
+        "Age": 22,
+        "Body Temperature(F) ": 98.6,
+        "Heart rate(bpm)": 98,
+        "Systolic Blood Pressure(mm Hg)": 112,
+        "Diastolic Blood Pressure(mm Hg)": 65,
+        "BMI(kg/m 2)": 18.8,
+        "Blood Glucose(HbA1c mmol/mol)": 39,
+        "Blood Glucose(Fasting mmol/L)": 5.8
+      },
+      "expected_output": {
+        "predicted_class": "Mid",
+        "confidence": 0.8444,
+        "class_probabilities": {
+          "Low": 0.0115,
+          "Mid": 0.8444,
+          "High": 0.144
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Heart rate(bpm)",
+            "impact": 0.771,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Diastolic Blood Pressure(mm Hg)",
+            "impact": -0.3106,
+            "direction": "pushes away from 'Mid' prediction"
+          },
+          {
+            "feature": "BMI(kg/m 2)",
+            "impact": -0.2761,
+            "direction": "pushes away from 'Mid' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_high_predicted_mid_1463",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 1463
+      },
+      "dataset_label": "High",
+      "input": {
+        "Age": 22,
+        "Body Temperature(F) ": 98.8,
+        "Heart rate(bpm)": 70,
+        "Systolic Blood Pressure(mm Hg)": 151,
+        "Diastolic Blood Pressure(mm Hg)": 80,
+        "BMI(kg/m 2)": 18.8,
+        "Blood Glucose(HbA1c mmol/mol)": 39,
+        "Blood Glucose(Fasting mmol/L)": 6
+      },
+      "expected_output": {
+        "predicted_class": "Mid",
+        "confidence": 0.9963,
+        "class_probabilities": {
+          "Low": 0.0009,
+          "Mid": 0.9963,
+          "High": 0.0028
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Systolic Blood Pressure(mm Hg)",
+            "impact": 1.4934,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Body Temperature(F) ",
+            "impact": 0.5476,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Blood Glucose(Fasting mmol/L)",
+            "impact": 0.457,
+            "direction": "supports 'Mid' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_high_predicted_mid_2800",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 2800
+      },
+      "dataset_label": "High",
+      "input": {
+        "Age": 21,
+        "Body Temperature(F) ": 98.6,
+        "Heart rate(bpm)": 135,
+        "Systolic Blood Pressure(mm Hg)": 137,
+        "Diastolic Blood Pressure(mm Hg)": 84,
+        "BMI(kg/m 2)": 23.4,
+        "Blood Glucose(HbA1c mmol/mol)": 37,
+        "Blood Glucose(Fasting mmol/L)": 5.8
+      },
+      "expected_output": {
+        "predicted_class": "Mid",
+        "confidence": 0.7993,
+        "class_probabilities": {
+          "Low": 0.1245,
+          "Mid": 0.7993,
+          "High": 0.0762
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Heart rate(bpm)",
+            "impact": 0.7483,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Systolic Blood Pressure(mm Hg)",
+            "impact": -0.5018,
+            "direction": "pushes away from 'Mid' prediction"
+          },
+          {
+            "feature": "BMI(kg/m 2)",
+            "impact": 0.4559,
+            "direction": "supports 'Mid' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_high_predicted_mid_3663",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 3663
+      },
+      "dataset_label": "High",
+      "input": {
+        "Age": 22,
+        "Body Temperature(F) ": 98.6,
+        "Heart rate(bpm)": 76,
+        "Systolic Blood Pressure(mm Hg)": 115,
+        "Diastolic Blood Pressure(mm Hg)": 94,
+        "BMI(kg/m 2)": 22.8,
+        "Blood Glucose(HbA1c mmol/mol)": 36,
+        "Blood Glucose(Fasting mmol/L)": 5.8
+      },
+      "expected_output": {
+        "predicted_class": "Mid",
+        "confidence": 0.9903,
+        "class_probabilities": {
+          "Low": 0.0012,
+          "Mid": 0.9903,
+          "High": 0.0085
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Diastolic Blood Pressure(mm Hg)",
+            "impact": 0.8796,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "BMI(kg/m 2)",
+            "impact": 0.7092,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Blood Glucose(HbA1c mmol/mol)",
+            "impact": 0.3188,
+            "direction": "supports 'Mid' prediction"
+          }
+        ]
+      }
+    },
+    {
+      "id": "maternal_high_predicted_mid_5186",
+      "model": "maternal",
+      "source": {
+        "file": "Maternal_Risk.csv",
+        "patient_id": 5186
+      },
+      "dataset_label": "High",
+      "input": {
+        "Age": 22,
+        "Body Temperature(F) ": 98.6,
+        "Heart rate(bpm)": 94,
+        "Systolic Blood Pressure(mm Hg)": 146,
+        "Diastolic Blood Pressure(mm Hg)": 94,
+        "BMI(kg/m 2)": 22.3,
+        "Blood Glucose(HbA1c mmol/mol)": 38,
+        "Blood Glucose(Fasting mmol/L)": 5.9
+      },
+      "expected_output": {
+        "predicted_class": "Mid",
+        "confidence": 0.7423,
+        "class_probabilities": {
+          "Low": 0.0023,
+          "Mid": 0.7423,
+          "High": 0.2554
+        },
+        "top_contributing_factors": [
+          {
+            "feature": "Diastolic Blood Pressure(mm Hg)",
+            "impact": 0.3506,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Blood Glucose(HbA1c mmol/mol)",
+            "impact": 0.2863,
+            "direction": "supports 'Mid' prediction"
+          },
+          {
+            "feature": "Systolic Blood Pressure(mm Hg)",
+            "impact": 0.2396,
+            "direction": "supports 'Mid' prediction"
+          }
+        ]
+      }
+    }
+  ]
+}
