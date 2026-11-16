@@ -1,0 +1,16 @@
+# Old folders: read/copy only, never committed (DEC-019)
+ml-test/
+rag/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Environments, dependencies, caches
+.venv/
+node_modules/
+__pycache__/
+
+# graphify output (CLAUDE.md §7)
+graphify-out/
