@@ -55,3 +55,13 @@ Fix: owner approved; `py -3.13 -m pip install graphifyy` (0.9.111).
 Verified by: `import graphify` succeeds; detect finds the docs and 0 old-folder files.
 Prevention: none needed.
 Category: tooling
+
+### ERR-004 — 2026-11-16 — Said rag/archive had data folders; it has only scripts
+Who: Claude Code
+Phase / task: Phase 1 — start-of-session review of the old folders
+What happened: the agent told the owner `rag/archive/` held data folders `international`, `medlineplus`, `nhs`; it holds only 8 `.py` scripts.
+Cause: misread interleaved `ls` output — those folders belong to `clean/` and `raw/`.
+Fix: corrected PROGRESS, CONTEXT, HISTORY and knowledge-base/README.
+Verified by: `find rag/archive` → 8 `.py` files only.
+Prevention: check a folder's contents with `find` before naming them.
+Category: spec misread

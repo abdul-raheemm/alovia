@@ -79,5 +79,5 @@ Checks run (exact commands and results):
 Errors met: 3 (details in ERROR_LOG.md: ERR-001, ERR-002, ERR-003)
 Suggestions raised (not implemented): none
 Docs updated: DECISIONS, ARCHITECTURE, DEPLOYMENT, CONTEXT, PROGRESS, ROADMAP, knowledge-base/README, HISTORY, ERROR_LOG, CLAUDE.md, README.md
-Open questions for the owner: four `rag/` root CSVs; `rag/archive/` folders; the old `ml-test` venv was built on another PC and cannot run here
+Open questions for the owner: four `rag/` root CSVs; the old `ml-test` venv was built on another PC and cannot run here
 Next step: copy the knowledge base into `knowledge-base/` (plan first).

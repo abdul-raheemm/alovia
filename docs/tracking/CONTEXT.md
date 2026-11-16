@@ -33,4 +33,4 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 - Phase 0 (documentation) complete — awaiting owner review.
 - Phase 1 started: GitHub repo exists (origin = `abdul-raheemm/alovia`, public); first commit holds docs, `CLAUDE.md` and `.gitignore` only; old folders are git-ignored.
 - Next: copy the knowledge base into `knowledge-base/`, then the backend skeleton (see `PROGRESS.md`).
-- Open owner actions: create fresh Supabase project; approve the ML reference input set; decide on the four `rag/` root CSVs and the `rag/archive/` folders; fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).
+- Open owner actions: create fresh Supabase project; approve the ML reference input set; decide on the four `rag/` root CSVs; fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).
