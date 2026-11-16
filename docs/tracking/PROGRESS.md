@@ -15,8 +15,9 @@ Update after every task. Each line: status, task, who, date, notes.
 - [x] Backend skeleton (Python 3.14 venv, FastAPI app factory, config, logging, error envelope, `/health`) — Raheem + Claude Code — 2026-11-17 (11 tests pass, 100% coverage; `/health` gains `db`, models, rules in later tasks; 405 error code `TODO(OPEN)`)
 - [x] Agree ML reference inputs with the owner; run the old `ml-test` backend (from a copy) and save outputs to `backend/tests/fixtures/ml_reference_outputs.json` before any change — Raheem + Claude Code — 2026-11-17 (12 cases: 3 fetal, 3 maternal + 6 High→Mid; two runs byte-identical)
 - [~] **Owner action:** create fresh Supabase project (done 2026-11-17, Mumbai); fill `backend/.env` (open)
-- [ ] Auth dependency (JWT verify) + `/me` + consent route
+- [x] Auth part 1: token check (`app/core/auth.py`, JWKS signature, issuer, audience, expiry) — Raheem + Claude Code — 2026-11-17 (27 tests pass)
 - [ ] Alembic setup + Phase 1 migration (identity + result tables; no RLS until Phase 8) — ask before applying
+- [ ] Auth part 2: `/me` + consent route + role lookup (needs the Phase 1 tables; consent version per DEC-031; user rows per DEC-032)
 - [ ] Move ML code + model files; regression tests identical to reference outputs
 - [ ] Frontend workspace: patient-web, doctor-web, packages/ui (tokens, themes, fonts), packages/shared (API client)
 - [ ] Sign-up through invite link only (18+ + consent), sign-in, sign-out; role routing. Note: invite creation UI is Phase 5 — until then the seed script creates invite links for testing

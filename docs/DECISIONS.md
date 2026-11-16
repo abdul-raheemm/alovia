@@ -35,6 +35,8 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-028 | 2026-11-16 | Alembic migrations; agent asks before running any migration on Supabase | Reproducible schema; safety | Accepted |
 | DEC-029 | 2026-11-16 | Self-hosted fonts; Lucide icons; no external CDNs | Privacy; licences | Accepted |
 | DEC-030 | 2026-11-16 | Python 3.14 for the backend (replaces DEC-018) | The old ml-test venv was 3.14 and the model libraries support it; 3.15 is too new | Accepted |
+| DEC-031 | 2026-11-17 | The consent version is written in `docs/legal/CONSENT_TEXT.md`; the backend keeps a copy of only the version string in a backend config file, and a test fails if the two differ | Only `backend/` is deployed (DEPLOYMENT.md), so the backend cannot read `docs/` at runtime | Accepted |
+| DEC-032 | 2026-11-17 | For now, `users` rows and roles are created by admins and the owner; later, doctor accounts come through the admin invite (Flow A1) | Owner choice; keeps Phase 1 simple | Accepted |
 
 ## Template for new entries
 

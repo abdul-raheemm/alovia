@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Never chain a commit or push after file edits with `&&` alone: check that the edit step succeeded (git diff) before committing.
 - Before the first commit of any repo, write `.gitignore` and read `git status`.
 
 ## Error rate tracker (update at the end of each phase)
@@ -95,3 +96,23 @@ Fix: routers declare `prefix=API_PREFIX` themselves (`app/api/__init__.py`); `in
 Verified by: test passes; live `uvicorn` log shows `"path": "/api/v1/health"`.
 Prevention: every new router uses `APIRouter(prefix=API_PREFIX)`; the request-log test guards it.
 Category: dependency
+
+### ERR-008 — 2026-11-17 — Test route returned a plain dict instead of the envelope
+Who: Claude Code
+Phase / task: Phase 1 — auth part 1 (token check)
+What happened: `test_valid_token_accepted` → `KeyError: 'data'` although the status was 200.
+Cause: the test-only route returned `{"id", "email"}` directly instead of `ok(...)`, so there was no `data` key.
+Fix: the test route returns `ok({...})` like real routes.
+Verified by: `pytest` → 27 passed.
+Prevention: every route, including test-only ones, returns through `app.common.responses.ok`.
+Category: test
+
+### ERR-009 — 2026-11-17 — Commit 09393fa pushed without its doc edits
+Who: Claude Code
+Phase / task: Phase 1 — recording auth part 1
+What happened: `.venv_py=backend/.venv/Scripts/python.exe: No such file or directory`; the doc-edit step was skipped but the following lines (HISTORY append, commit, push) still ran, so 09393fa says DECISIONS/ENVIRONMENT/PROGRESS/CONTEXT/ERROR_LOG were updated when they were not.
+Cause: an invalid shell variable name (`.venv_py`) at the start of an `&&` chain; the next commands were on new lines, so they ran regardless.
+Fix: the doc edits applied in a follow-up commit and pushed.
+Verified by: `git show --stat HEAD` lists the five docs; `grep DEC-031 docs/DECISIONS.md` finds the entry.
+Prevention: lesson line above — verify `git diff --stat` shows every intended file before committing.
+Category: tooling

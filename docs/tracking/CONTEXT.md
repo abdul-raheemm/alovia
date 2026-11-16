@@ -36,5 +36,6 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 - Backend skeleton done (`backend/`, venv `backend/.venv` on Python 3.14): app factory, settings, JSON logs with request ID, error envelope, `GET /api/v1/health`.
 - ML reference outputs recorded from the old backend: `backend/tests/fixtures/ml_reference_outputs.json` (12 owner-approved cases). Source datasets are kept outside the repo in `C:\Users\Engineer\Desktop\alovia-data` (copies of `Documents\Alovia major project\ml modules\CTG.xls` and `Maternal_Risk.csv`; the maternal file is the raw 6,103-row version).
 - Supabase Data API is enabled and exposes tables automatically; no RLS (accepted risk DEC-022, left until Phase 8 by the owner).
-- Next: auth dependency + `/me` + consent route (needs `backend/.env`), see `PROGRESS.md`.
-- Open owner actions: fill `backend/.env` from `backend/.env.example` (file exists but is empty); decide on the four `rag/` root CSVs; fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).
+- Auth part 1 done: every protected route can use `get_current_user` (Supabase token verified with the project's public keys). The app now starts with `uvicorn app.main:create_app --factory`.
+- Next: Alembic + Phase 1 migration (needs `DATABASE_URL`), then `/me` + consent (see `PROGRESS.md`).
+- Open owner actions: fill `DATABASE_URL` in `backend/.env` (other values are set and checked); fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).

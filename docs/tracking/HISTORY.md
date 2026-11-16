@@ -210,7 +210,7 @@ Checks run (exact commands and results):
 - `uvicorn app.main:create_app --factory` with empty `.env` → refused to start ("Field required" for both auth settings)
 - `backend/.env` shape check (no values shown) → all keys set and matching the project except `DATABASE_URL` (empty)
 
-Errors met: 1 (ERR-008)
+Errors met: 2 (ERR-008, ERR-009 — this entry was first committed in 09393fa without the doc edits it lists; they followed in the next commit)
 Suggestions raised (not implemented): none
 Docs updated: DECISIONS (DEC-031, DEC-032), ENVIRONMENT, README, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: `DATABASE_URL` empty; confirm `aud = "authenticated"` against one real token (needs owner OK for one call to the project's key URL); which flow creates a patient's `users` row (DEC-032 covers admins/owner and doctors)

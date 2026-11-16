@@ -11,7 +11,7 @@ Each part has its own `.env.example` (committed, empty values) and `.env` (never
 | `DATABASE_URL` | Supabase Postgres connection string (owner provides; pooled vs direct checked at deploy) | 1 |
 | `SUPABASE_URL` | Project URL | 1 |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-side key (Storage, admin invites) | 1 |
-| `SUPABASE_JWT_ISSUER` / `SUPABASE_JWKS_URL` (or `SUPABASE_JWT_SECRET`, whichever the project uses) | Token verification | 1 |
+| `SUPABASE_JWT_ISSUER` / `SUPABASE_JWKS_URL` | Token verification (the project uses JWT signing keys, so no JWT secret is needed) | 1 |
 | `CORS_ORIGINS` | Comma-separated frontend origins | 1 |
 | `STORAGE_BUCKET` | Private bucket name (`medical-records`) | 5 |
 | `LLM_PROVIDER`, `LLM_MODEL`, `LLM_API_KEY` | AI drafts / RAG | 6–7 |
