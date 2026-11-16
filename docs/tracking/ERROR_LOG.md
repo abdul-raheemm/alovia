@@ -75,3 +75,23 @@ Fix: fresh copies from `rag/`, then a byte-safe Python replace of the one line.
 Verified by: `diff --strip-trailing-cr` → exactly 1 line per script; SHA-256 check of all other 401 files identical.
 Prevention: edit copied files with a byte-safe method and check the diff.
 Category: tooling
+
+### ERR-006 — 2026-11-17 — Log tests could not read the app's log output
+Who: Claude Code
+Phase / task: Phase 1 — backend skeleton
+What happened: `test_crash_returns_internal_error_without_details` and `test_request_log_line` failed (StopIteration, then "I/O operation on closed file").
+Cause: the log handler keeps the `sys.stdout` object it was created with; pytest swaps `sys.stdout` between test phases, so `capsys` never saw the lines.
+Fix: the two tests attach their own in-memory handler (same JSON formatter) via a `log_buffer` fixture; app code unchanged.
+Verified by: `pytest` → 11 passed.
+Prevention: test logging through an in-memory handler, not stdout capture. Note: three attempts were made; CLAUDE.md §5 says stop and report after two — follow it.
+Category: test
+
+### ERR-007 — 2026-11-17 — Request log showed "/health" instead of "/api/v1/health"
+Who: Claude Code
+Phase / task: Phase 1 — backend skeleton
+What happened: `test_request_log_line` → `('GET', '/health', 200) != ('GET', '/api/v1/health', 200)`.
+Cause: in FastAPI 0.163 a prefix passed to `include_router()` is not part of the matched route's path (only private telemetry code holds the full path).
+Fix: routers declare `prefix=API_PREFIX` themselves (`app/api/__init__.py`); `include_router()` gets no prefix.
+Verified by: test passes; live `uvicorn` log shows `"path": "/api/v1/health"`.
+Prevention: every new router uses `APIRouter(prefix=API_PREFIX)`; the request-log test guards it.
+Category: dependency

@@ -14,3 +14,6 @@ __pycache__/
 
 # graphify output (CLAUDE.md §7)
 graphify-out/
+
+# Test coverage data
+.coverage

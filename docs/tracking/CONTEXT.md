@@ -33,5 +33,6 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 - Phase 0 (documentation) complete — awaiting owner review.
 - Phase 1 started: GitHub repo exists (origin = `abdul-raheemm/alovia`, public); first commit holds docs, `CLAUDE.md` and `.gitignore` only; old folders are git-ignored.
 - Knowledge base copied into `knowledge-base/` (collection continues there). Supabase project created (Mumbai; email confirmation on; JWT signing keys; session pooler connection).
-- Next: backend skeleton (Python 3.14) (see `PROGRESS.md`).
+- Backend skeleton done (`backend/`, venv `backend/.venv` on Python 3.14): app factory, settings, JSON logs with request ID, error envelope, `GET /api/v1/health`.
+- Next: ML reference outputs (owner agrees test inputs first), see `PROGRESS.md`.
 - Open owner actions: fill `backend/.env` from `backend/.env.example`; approve the ML reference input set; decide on the four `rag/` root CSVs; fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).

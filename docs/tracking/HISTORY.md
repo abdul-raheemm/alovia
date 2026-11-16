@@ -117,3 +117,35 @@ Suggestions raised (not implemented): none
 Docs updated: PROGRESS, CONTEXT, HISTORY, ERROR_LOG, knowledge-base/README, knowledge-base/PROGRESS
 Open questions for the owner: Data API / RLS options chosen at project creation (not reported yet)
 Next step: backend skeleton plan (Python 3.14).
+
+## Session 3 — 2026-11-17 — Backend skeleton
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 1 — backend skeleton
+Goal: FastAPI app factory, settings, logging, error envelope and `/health` on Python 3.14.
+
+Done:
+- `backend/.venv` (Python 3.14.10); packages pinned in `requirements.txt` / `requirements-dev.txt`.
+- `app/main.py` (`create_app`), `app/core/config.py` (APP_ENV, LOG_LEVEL, CORS_ORIGINS from `backend/.env`), `app/core/logging.py` (JSON logs, request ID, `X-Request-ID`, crash → INTERNAL_ERROR), `app/core/errors.py` (`AppError` + handlers), `app/common/responses.py` (envelope), `app/api/health.py`.
+- 11 tests (unit + integration). `httpx` replaced by `httpx2` (Starlette deprecation). `.coverage` git-ignored.
+
+Files changed:
+- `backend/**` — added — skeleton and tests
+- `.gitignore` — modified — ignore `.coverage`
+- docs/tracking/* — modified — records
+
+Decisions made (with owner approval):
+- `/health` reports `models_loaded`/`rules_loaded` as false and omits `db` until the database task → no new DEC
+- Error code for statuses outside API.md §3 (e.g. 405) left `TODO(OPEN)`; placeholder `VALIDATION_ERROR`
+
+Checks run (exact commands and results):
+- `pytest --cov=app` → 11 passed, 0 failed; coverage 100% (124 statements)
+- `pytest -W error::DeprecationWarning` → 11 passed (no deprecation warnings)
+- `ruff check .` → All checks passed; `ruff format --check .` → 12 files already formatted
+- `mypy app tests` (strict) → Success: no issues found in 12 source files
+- `uvicorn app.main:app` + `curl /api/v1/health` → 200, envelope, `x-request-id` header; `curl /api/v1/nope` → NOT_FOUND envelope
+
+Errors met: 2 (ERR-006, ERR-007)
+Suggestions raised (not implemented): none
+Docs updated: PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: 405 error code; Data API / RLS setting at project creation; `backend/.env` not filled yet
+Next step: ML reference outputs — owner agrees the input set first.
