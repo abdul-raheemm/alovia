@@ -11,10 +11,10 @@ Update after every task. Each line: status, task, who, date, notes.
 ## Phase 1 — Foundation
 - [x] `.gitignore` (`ml-test/`, `rag/`, `.env`, `.venv/`, `node_modules/`, …); first commit rewritten so the old folders were never in it — Raheem + Claude Code — 2026-11-16
 - [x] **Owner action:** create GitHub repo; remote added — Raheem — 2026-11-16
-- [ ] Copy `rag/alovia-knowledge-base/` (`clean/`, `raw/`, CSVs, `PROGRESS.md`) into `knowledge-base/` and `rag/*.py` into `knowledge-base/tools/` (copy only; `rag/` untouched; licence and attribution details stay with each file as `docs/knowledge-base/knowledgebase.md` requires). Ask the owner before copying the four `rag/` root CSVs. Collection continues in `knowledge-base/` afterwards. The RAG module stays in Phase 7.
+- [x] Copy `rag/alovia-knowledge-base/` (`clean/`, `raw/`, CSVs, `PROGRESS.md`) into `knowledge-base/` and `rag/*.py` into `knowledge-base/tools/` (copy only; `rag/` untouched; licence and attribution details stay with each file as `docs/knowledge-base/knowledgebase.md` requires). Ask the owner before copying the four `rag/` root CSVs. Collection continues in `knowledge-base/` afterwards. The RAG module stays in Phase 7. — Raheem + Claude Code — 2026-11-17 (401 identical, 3 scripts one line changed, validator 196/0/10)
 - [ ] Backend skeleton (Python 3.14 venv, FastAPI app factory, config, logging, error envelope, `/health`) — Python 3.14.10 installed by the owner 2026-11-16
 - [ ] Agree ML reference inputs with the owner; run the old `ml-test` backend (from a copy) and save outputs to `backend/tests/fixtures/ml_reference_outputs.json` before any change
-- [ ] **Owner action:** create fresh Supabase project; fill `backend/.env`
+- [~] **Owner action:** create fresh Supabase project (done 2026-11-17, Mumbai); fill `backend/.env` (open)
 - [ ] Auth dependency (JWT verify) + `/me` + consent route
 - [ ] Alembic setup + Phase 1 migration (identity + result tables; no RLS until Phase 8) — ask before applying
 - [ ] Move ML code + model files; regression tests identical to reference outputs

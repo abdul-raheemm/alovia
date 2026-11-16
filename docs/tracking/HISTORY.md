@@ -81,3 +81,39 @@ Suggestions raised (not implemented): none
 Docs updated: DECISIONS, ARCHITECTURE, DEPLOYMENT, CONTEXT, PROGRESS, ROADMAP, knowledge-base/README, HISTORY, ERROR_LOG, CLAUDE.md, README.md
 Open questions for the owner: four `rag/` root CSVs; the old `ml-test` venv was built on another PC and cannot run here
 Next step: copy the knowledge base into `knowledge-base/` (plan first).
+
+## Session 2 — 2026-11-17 — Knowledge base copy, Supabase project, .env.example
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 1 — copy the knowledge base; Supabase owner action
+Goal: bring the knowledge base into the repo and prepare backend configuration.
+
+Done:
+- `rag/alovia-knowledge-base/*`, the 4 root CSVs → `knowledge-base/`; `rag/*.py` → `knowledge-base/tools/`; `rag/archive/*.py` → `knowledge-base/tools/archive/`.
+- Option A: one path line changed in `crawl_nhs.py`, `extract_nhs_all.py`, `flags_nhs.py`; old paths in `knowledge-base/PROGRESS.md` updated.
+- `.gitattributes`: `raw/` kept byte-identical, `clean/` kept LF.
+- graphify skill set to run extraction subagents on Sonnet (owner approved after /usage review).
+- Owner created the Supabase project (Mumbai; email confirmation on; JWT signing keys; session pooler connection string).
+- `backend/.env.example` created (Phase 1 variables from ENVIRONMENT.md).
+
+Files changed:
+- `knowledge-base/` — added (405 files) — collection moved into the repo
+- `.gitattributes` — added — line-ending rules for the knowledge base
+- `backend/.env.example` — added — owner fills `backend/.env`
+- docs/tracking/* — modified — records
+
+Decisions made (with owner approval):
+- Copied scripts run from `knowledge-base/` (option A) → no new DEC
+- Large MedlinePlus XML (29 MB) committed → no new DEC
+
+Checks run (exact commands and results):
+- SHA-256 rag/ vs knowledge-base/ → 404 pairs: 401 identical, 3 intentionally edited, 0 missing, 0 unexpected
+- `find rag -type f | wc -l` → 404 (untouched)
+- `py -3.13 tools/validate_kb.py .` (in knowledge-base/) → 196 valid, 0 with errors, 10 warnings
+- `cmp knowledge-base/manifest.csv rag/alovia-knowledge-base/manifest.csv` → identical
+- `git check-ignore` → `backend/.env` ignored; `backend/.env.example` not ignored
+
+Errors met: 2 (ERR-004, ERR-005)
+Suggestions raised (not implemented): none
+Docs updated: PROGRESS, CONTEXT, HISTORY, ERROR_LOG, knowledge-base/README, knowledge-base/PROGRESS
+Open questions for the owner: Data API / RLS options chosen at project creation (not reported yet)
+Next step: backend skeleton plan (Python 3.14).

@@ -1,2 +1,4 @@
 # Keep saved source pages byte-identical (no line-ending conversion)
 knowledge-base/raw/** -text
+# Keep clean knowledge-base files with LF line endings, as written
+knowledge-base/clean/** text eol=lf

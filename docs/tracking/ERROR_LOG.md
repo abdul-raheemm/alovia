@@ -65,3 +65,13 @@ Fix: corrected PROGRESS, CONTEXT, HISTORY and knowledge-base/README.
 Verified by: `find rag/archive` → 8 `.py` files only.
 Prevention: check a folder's contents with `find` before naming them.
 Category: spec misread
+
+### ERR-005 — 2026-11-17 — `sed -i` rewrote line endings of 3 copied scripts
+Who: Claude Code
+Phase / task: Phase 1 — copy the knowledge base
+What happened: after a one-line `sed -i` edit, `diff` showed every line of `crawl_nhs.py`, `extract_nhs_all.py`, `flags_nhs.py` changed.
+Cause: Git Bash `sed -i` writes LF line endings; the originals use CRLF.
+Fix: fresh copies from `rag/`, then a byte-safe Python replace of the one line.
+Verified by: `diff --strip-trailing-cr` → exactly 1 line per script; SHA-256 check of all other 401 files identical.
+Prevention: edit copied files with a byte-safe method and check the diff.
+Category: tooling
