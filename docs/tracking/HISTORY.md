@@ -182,3 +182,36 @@ Suggestions raised (not implemented): turn off the Data API before Phase 8 (owne
 Docs updated: PROGRESS, CONTEXT, HISTORY
 Open questions for the owner: `backend/.env` is still empty on disk
 Next step: auth dependency + `/me` + consent route (plan first).
+
+## Session 5 — 2026-11-17 — Auth part 1: token check
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 1 — auth (split approved: token check → migration → `/me` + consent)
+Goal: verify the Supabase access token on protected requests (SECURITY.md §0-1).
+
+Done:
+- `app/core/auth.py`: `get_current_user` — Bearer token, signature via the project's JWKS (cached), issuer, audience `authenticated`, expiry, subject; ES256/RS256 only; 401 `AUTH_REQUIRED` with the reason logged (never the token); 503 when the key server is unreachable.
+- `SUPABASE_JWKS_URL` and `SUPABASE_JWT_ISSUER` required in settings; app built by factory (`uvicorn app.main:create_app --factory`); README updated.
+- `PyJWT[crypto]==2.15.1`, `cryptography==50.0.2` pinned.
+
+Files changed:
+- `backend/app/core/auth.py`, `backend/tests/integration/test_auth.py` — added
+- `backend/app/core/config.py`, `backend/app/core/logging.py`, `backend/app/main.py`, `backend/requirements.txt`, `README.md` — modified
+- `backend/tests/unit/test_config_and_logging.py`, `backend/tests/integration/test_app_basics.py` — modified (pass the two new required settings; one new test that they are required; nothing removed or weakened)
+- docs: DECISIONS, ENVIRONMENT, tracking/* — modified
+
+Decisions made (with owner approval):
+- Task split → token check, then Alembic + migration, then `/me` + consent
+- Consent version → DEC-031 (option A); user rows/roles → DEC-032
+
+Checks run (exact commands and results):
+- `pytest -W error::DeprecationWarning --cov=app` → 27 passed, 0 failed; coverage 99%
+- `ruff check .` → All checks passed; `ruff format --check .` → 14 files already formatted
+- `mypy app tests` (strict) → Success: no issues found in 14 source files
+- `uvicorn app.main:create_app --factory` with empty `.env` → refused to start ("Field required" for both auth settings)
+- `backend/.env` shape check (no values shown) → all keys set and matching the project except `DATABASE_URL` (empty)
+
+Errors met: 1 (ERR-008)
+Suggestions raised (not implemented): none
+Docs updated: DECISIONS (DEC-031, DEC-032), ENVIRONMENT, README, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: `DATABASE_URL` empty; confirm `aud = "authenticated"` against one real token (needs owner OK for one call to the project's key URL); which flow creates a patient's `users` row (DEC-032 covers admins/owner and doctors)
+Next step: Alembic + Phase 1 migration plan.

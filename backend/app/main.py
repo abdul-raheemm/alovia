@@ -1,5 +1,6 @@
-"""App factory. Run with: uvicorn app.main:app --reload (from backend/)."""
+"""App factory. Run from backend/: uvicorn app.main:create_app --factory --reload"""
 
+import jwt
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,6 +16,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     configure_logging(settings.log_level)
 
     app = FastAPI(title="Alovia API", version=__version__)
+    app.state.settings = settings
+    # public signing keys, fetched on first use and cached (app.core.auth)
+    app.state.jwks_client = jwt.PyJWKClient(settings.supabase_jwks_url, cache_keys=True)
     register_error_handlers(app)
     app.middleware("http")(request_context)
     # added last so it wraps everything, including the 500 response
@@ -27,6 +31,3 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.include_router(health.router)
     return app
-
-
-app = create_app()

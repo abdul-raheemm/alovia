@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     app_env: Literal["development", "test", "production"] = "development"
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
     cors_origins: Annotated[list[str], NoDecode] = []
+    # token verification (SECURITY.md §1); required, so the app refuses to start without them
+    supabase_jwks_url: str
+    supabase_jwt_issuer: str
 
     @field_validator("cors_origins", mode="before")
     @classmethod
@@ -32,4 +35,4 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
-    return Settings()
+    return Settings()  # required values come from backend/.env; missing ones stop startup

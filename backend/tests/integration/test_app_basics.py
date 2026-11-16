@@ -16,11 +16,15 @@ from app.core.logging import LOGGER_NAME, JsonFormatter
 from app.main import create_app
 
 ORIGIN = "http://localhost:5173"
+AUTH: dict[str, Any] = {
+    "supabase_jwks_url": "https://example.test/auth/v1/.well-known/jwks.json",
+    "supabase_jwt_issuer": "https://example.test/auth/v1",
+}
 
 
 @pytest.fixture
 def app() -> FastAPI:
-    app = create_app(Settings(_env_file=None, cors_origins=ORIGIN))
+    app = create_app(Settings(_env_file=None, cors_origins=ORIGIN, **AUTH))
 
     # test-only routes, to exercise the error paths
     @app.get("/test/app-error")

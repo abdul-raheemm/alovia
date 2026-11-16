@@ -19,7 +19,7 @@ from app.common.responses import error_body
 
 LOGGER_NAME = "alovia"
 REQUEST_ID_HEADER = "X-Request-ID"
-EXTRA_FIELDS = ("method", "path", "status", "duration_ms")
+EXTRA_FIELDS = ("method", "path", "status", "duration_ms", "reason")
 
 request_id_var: ContextVar[str | None] = ContextVar("request_id", default=None)
 logger = logging.getLogger(LOGGER_NAME)

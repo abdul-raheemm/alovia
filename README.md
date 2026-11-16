@@ -35,7 +35,7 @@ py -3.14 -m venv .venv
 pip install -r requirements.txt -r requirements-dev.txt
 copy .env.example .env      # then fill values (see docs/ENVIRONMENT.md)
 alembic upgrade head        # only after the owner approves
-uvicorn app.main:app --reload
+uvicorn app.main:create_app --factory --reload
 
 # Frontends (new terminal)
 cd frontend
