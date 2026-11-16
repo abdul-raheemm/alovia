@@ -5,7 +5,7 @@ A woman-centric pregnancy companion web app with a doctor dashboard.
 
 - **Patient app:** pregnancy journey home, calendar and appointments, symptom tracking with safety prompts, genetic inheritance estimates, shared results and doctor notes; knowledge assistant later.
 - **Doctor app:** patient list with urgent-first inbox, CTG/vitals entry with explainable ML predictions, reviews, records, notes; minimal admin area.
-- **Backend:** FastAPI (Python 3.12), Supabase (Postgres, Auth, Storage).
+- **Backend:** FastAPI (Python 3.14), Supabase (Postgres, Auth, Storage).
 
 ## Repository layout
 ```
@@ -19,7 +19,7 @@ Full structure: `docs/ARCHITECTURE.md` §7.
 See `docs/tracking/PROGRESS.md` and `docs/ROADMAP.md`. Current phase: **0 (documentation) complete → Phase 1 (foundation) next.**
 
 ## Requirements (development, Windows)
-- Python **3.12** (`py -3.12`)
+- Python **3.14** (`py -3.14`)
 - Node.js LTS + npm
 - Git
 - A Supabase project (created by the owner; values go in `.env` files, see `docs/ENVIRONMENT.md`)
@@ -30,7 +30,7 @@ _Commands are filled in during Phase 1 and must stay correct._
 ```powershell
 # Backend
 cd backend
-py -3.12 -m venv .venv
+py -3.14 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt -r requirements-dev.txt
 copy .env.example .env      # then fill values (see docs/ENVIRONMENT.md)

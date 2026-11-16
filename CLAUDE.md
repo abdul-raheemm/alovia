@@ -133,7 +133,7 @@ If any plugin's guidance conflicts with this file or `/docs`, follow this file a
 
 - Patients and doctors use **two separate web apps** (`frontend/apps/patient-web`, `frontend/apps/doctor-web`); admin lives in the doctor app.
 - Frontends use Supabase **only** for sign-in; all data goes through the backend.
-- TypeScript (strict) frontends; Python 3.12 backend.
+- TypeScript (strict) frontends; Python 3.14 backend.
 - Fetal/maternal **models must not change**; outputs must match the old backend exactly.
 - No combined risk score. No baby-sex prediction. No diagnosis, treatment or dose advice.
 - Synthetic/test data only.

@@ -17,7 +17,7 @@ Two React web apps (patient, doctor+admin) talk to **one FastAPI backend**. The 
 |---|---|---|
 | Frontend | React + **TypeScript** + Vite, Tailwind CSS, shadcn/ui (Radix) | Two apps in one npm workspace |
 | Frontend libraries | React Router, TanStack Query, React Hook Form + Zod, Recharts, react-day-picker (calendar), `motion` (Framer Motion), lottie-react, vite-plugin-pwa (patient app), Supabase JS (**auth only**) | Exact versions pinned at setup and recorded in `DECISIONS.md` |
-| Backend | Python **3.12**, FastAPI, Pydantic v2, SQLAlchemy 2 (async optional), Alembic | Python 3.12 virtual environment (the laptop has 3.14; ML libraries may lag) |
+| Backend | Python **3.14**, FastAPI, Pydantic v2, SQLAlchemy 2 (async optional), Alembic | Python 3.14 virtual environment (same version as the old `ml-test` venv; DEC-030) |
 | ML | XGBoost, scikit-learn, SHAP, joblib, pandas, NumPy | Versions must match the saved models (`ml_models_spec.md`) |
 | RAG (Phase 7) | LangChain, pgvector, embedding API `[OPEN]`, LLM API `[OPEN]` | |
 | Database | Supabase PostgreSQL (fresh project) + `vector` extension | |
@@ -139,7 +139,7 @@ Old folders `ml-test/` and `rag/` stay **inside the root folder but git-ignored*
 - No new dependency without asking the owner (CLAUDE.md).
 
 ## 9. Key Technical Decisions
-Recorded in `DECISIONS.md` (database access only through FastAPI, rules as files, two apps, TypeScript, Python 3.12, fresh Supabase project, hosting, security last, etc.).
+Recorded in `DECISIONS.md` (database access only through FastAPI, rules as files, two apps, TypeScript, Python 3.14, fresh Supabase project, hosting, security last, etc.).
 
 ## 10. Performance
 - Predictions under 1–2 s, dashboard pages under 2 s (demo data, warm service).

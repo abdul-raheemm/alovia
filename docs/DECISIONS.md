@@ -22,7 +22,7 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-015 | 2026-11-16 | Soft lavender accent; warmer patient palette, cooler doctor palette; light + dark themes; letter-mark "A" logo; Nunito (patient), Inter (doctor) | Owner choice; contrast-checked | Accepted `[CONFIRM visually]` |
 | DEC-016 | 2026-11-16 | Fresh Supabase project; agent notifies the owner when URLs/keys are needed | Clean start | Accepted |
 | DEC-017 | 2026-11-16 | Hosting: backend Render (free); frontends Vercel Hobby (free, non-commercial academic use) | Free, easy, fits Vite | Accepted |
-| DEC-018 | 2026-11-16 | Python 3.12 for the backend | ML library compatibility | Accepted |
+| DEC-018 | 2026-11-16 | Python 3.12 for the backend | ML library compatibility | Superseded by DEC-030 |
 | DEC-019 | 2026-11-16 | Fresh git repository at `C:\Users\Engineer\Desktop\Alovia` itself (no extra `alovia/` subfolder). The old `ml-test/` and `rag/` folders stay where they are, untouched, **listed in `.gitignore` from the first commit** and excluded from graphify, until the owner moves or deletes them | Short paths; safety of existing work | Accepted |
 | DEC-020 | 2026-11-16 | Build order: Foundation → Journey → Symptoms → Genetic → Dashboard/Admin → AI drafts → RAG → Security hardening → Deployment; database built per phase | Owner choice | Accepted |
 | DEC-021 | 2026-11-16 | **Security hardening last (Phase 8)**; only the minimum in `SECURITY.md` §0 earlier | Owner choice | Accepted |
@@ -34,6 +34,7 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-027 | 2026-11-16 | No analytics, ads or tracking; essential storage only; so no cookie banner in v1 | Data minimisation | Accepted |
 | DEC-028 | 2026-11-16 | Alembic migrations; agent asks before running any migration on Supabase | Reproducible schema; safety | Accepted |
 | DEC-029 | 2026-11-16 | Self-hosted fonts; Lucide icons; no external CDNs | Privacy; licences | Accepted |
+| DEC-030 | 2026-11-16 | Python 3.14 for the backend (replaces DEC-018) | The old ml-test venv was 3.14 and the model libraries support it; 3.15 is too new | Accepted |
 
 ## Template for new entries
 

@@ -46,3 +46,38 @@ Checks run: palette contrast ratios computed (all ≥ 4.5:1).
 Errors met: none.
 Open questions for the owner: see CONTEXT.md "Open owner actions".
 Next step: owner review, then Phase 1 with the start prompt.
+
+## Session 1 — 2026-11-16 — Clean first commit, .gitignore, Python 3.14
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 1 — .gitignore and first commit
+Goal: get the old folders out of git and record the owner's decisions.
+
+Done:
+- `.gitignore` added; first commit rewritten without `ml-test/`, `rag/` and `alovia_tree.txt`; force-pushed.
+- graphify installed (graphifyy 0.9.111); graph built with the old folders excluded; post-commit hook installed.
+- Docs updated for Python 3.14 and the knowledge-base copy task.
+
+Files changed:
+- `.gitignore` — added — DEC-019
+- `alovia_tree.txt` — deleted — stray folder listing
+- docs (see "Docs updated") — modified — owner decisions
+
+Decisions made (with owner approval):
+- Backend uses Python 3.14 → DEC-030 (supersedes DEC-018)
+- `raw/` NHS and MedlinePlus pages are licence-checked and approved by the owner; licence and attribution details stay with each file → no new DEC
+- Knowledge-base copy is a Phase 1 task; the RAG module stays Phase 7 → no new DEC
+
+Checks run (exact commands and results):
+- `git ls-files ml-test rag alovia_tree.txt` → 0 files
+- `git rev-list --objects HEAD | grep` old-folder paths → 0
+- `git check-ignore -v` on 9 paths → all ignored; `backend/.env.example` not ignored
+- file counts before/after → ml-test 13921/13921, rag 404/404
+- `git push --force-with-lease origin main` → `+ 360ca84...4d29b90 main -> main (forced update)`
+- `py -0` → 3.15.2, 3.14.10, 3.13.17
+- graphify detect → 0 old-folder files
+
+Errors met: 3 (details in ERROR_LOG.md: ERR-001, ERR-002, ERR-003)
+Suggestions raised (not implemented): none
+Docs updated: DECISIONS, ARCHITECTURE, DEPLOYMENT, CONTEXT, PROGRESS, ROADMAP, knowledge-base/README, HISTORY, ERROR_LOG, CLAUDE.md, README.md
+Open questions for the owner: four `rag/` root CSVs; `rag/archive/` folders; the old `ml-test` venv was built on another PC and cannot run here
+Next step: copy the knowledge base into `knowledge-base/` (plan first).

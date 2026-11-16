@@ -16,7 +16,7 @@ URLs are recorded here once created `[OPEN]`.
 ## 2. One-time setup (owner, guided by the agent)
 1. Create the **fresh Supabase project** → give the agent the URL, keys and database URL through the `.env` files (never in chat history if avoidable).
 2. Create the **GitHub repository** (new, empty) → agent adds the remote after approval.
-3. Render: new Web Service from the repo, root `backend/`, start command `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, Python 3.12, environment variables from `ENVIRONMENT.md`.
+3. Render: new Web Service from the repo, root `backend/`, start command `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, Python 3.14, environment variables from `ENVIRONMENT.md`.
 4. Vercel: two projects from the same repo, roots `frontend/apps/patient-web` and `frontend/apps/doctor-web`, framework Vite.
 5. Supabase Auth: set site URLs/redirects to the two Vercel domains.
 

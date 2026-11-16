@@ -9,6 +9,7 @@ Each phase ends with: all checks pass, owner review, `CHANGELOG.md` entry, `PROG
 
 ### Phase 1 — Foundation
 - Fresh repo, folder structure, `.gitignore`, `.env.example` files, `scripts/check_all`.
+- Copy the knowledge-base collection from the old `rag/` into `knowledge-base/` (collection only; the RAG module stays Phase 7).
 - Backend skeleton: config, logging, error envelope, auth dependency, `/health`, `/me`.
 - **Owner action:** create fresh Supabase project and provide values.
 - Alembic + Phase 1 migration (identity tables, result tables). No RLS until Phase 8 (DEC-022).

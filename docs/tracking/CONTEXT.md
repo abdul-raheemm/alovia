@@ -1,6 +1,6 @@
 # CONTEXT — start here (for any new agent, chat or teammate)
 
-**Last updated:** 2026-11-16 by Claude (planning chat) — update the "Current state" section at the end of every session.
+**Last updated:** 2026-11-16 by Claude Code (session 1) — update the "Current state" section at the end of every session.
 
 ## What Alovia is
 A woman-centric pregnancy web app (patient app) with a doctor dashboard (doctor app) and one FastAPI backend. Capstone project of a 3-person team at MJCET (AI & DS), led by Raheem. Research prototype — synthetic/test data only, not for clinical use.
@@ -27,9 +27,10 @@ A woman-centric pregnancy web app (patient app) with a doctor dashboard (doctor 
 - `C:\Users\Engineer\Desktop\Alovia\rag` — knowledge base collection: scripts (`crawl_nhs*.py`, `extract_*.py`, `validate_kb.py`, …), `alovia-knowledge-base/` (`clean/`, `raw/`, CSV logs, `PROGRESS.md`), `archive/`.
 
 ## Environment
-Windows, PowerShell, `py` launcher. Backend uses a Python 3.12 virtual environment. Node.js LTS for the frontends.
+Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environment (DEC-030). Node.js LTS for the frontends.
 
 ## Current state
 - Phase 0 (documentation) complete — awaiting owner review.
-- Next: Phase 1 Foundation (see `PROGRESS.md`).
-- Open owner actions: create fresh Supabase project; create GitHub repo; approve the ML reference input set; fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).
+- Phase 1 started: GitHub repo exists (origin = `abdul-raheemm/alovia`, public); first commit holds docs, `CLAUDE.md` and `.gitignore` only; old folders are git-ignored.
+- Next: copy the knowledge base into `knowledge-base/`, then the backend skeleton (see `PROGRESS.md`).
+- Open owner actions: create fresh Supabase project; approve the ML reference input set; decide on the four `rag/` root CSVs and the `rag/archive/` folders; fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).
