@@ -1,0 +1,120 @@
+---
+doc_id: NHS-SYMPTOMS-008
+title: "Stomach pain in pregnancy"
+source_org: "NHS (UK)"
+source_type: government
+licence_tier: A
+licence: "Open Government Licence v3.0"
+attribution: "Information from the NHS website as at 211026. Information from the NHS website is licensed under the Open Government Licence v3.0."
+url: "https://www.nhs.uk/pregnancy/common-symptoms/stomach-pain/"
+date_accessed: 2026-10-21
+published_or_reviewed: "2024-11-18"
+region: international
+country: UK
+language: en
+doc_type: patient_education
+audience: patient
+topics: [common-symptoms]
+trimester: "all"
+week_start: null
+week_end: null
+contains_treatment_advice: true
+contains_dosage: false
+time_sensitive: false
+priority: P1
+raw_file: raw/nhs/NHS-SYMPTOMS-008.html
+part: null
+notes: ""
+---
+
+# Stomach pain in pregnancy
+
+Stomach (abdominal) pains or cramps are common in pregnancy. They're usually nothing to worry about, but they can sometimes be a sign of something more serious that needs to be checked.
+
+It's probably nothing to worry about if the pain is mild and goes away when you change position, have a rest, do a poo or pass wind.
+
+But if you have stomach pains and are worried, call your maternity unit. If the unit is not available, call 111.
+
+If you're less than 20 weeks pregnant, you may need to contact your GP or an early pregnancy unit, depending on what's available in your area.
+
+Harmless stomach pains, which can be dull or sharp, may be caused by:
+
+- ligament pain (often called "growing pains" as the ligaments stretch to support your growing bump) – this can feel like a sharp cramp on one side of your lower tummy
+- constipation – which is common in pregnancy (find out how to avoid constipation)
+- trapped wind
+
+## Urgent advice: Call your maternity unit immediately if you have stomach pain and:
+
+- vaginal bleeding or spotting
+- regular cramping or tightenings
+- lower back pain
+- vaginal discharge that's unusual for you or fluid leaking from your vagina
+- pain when you pee, or needing to pee suddenly or more often than usual
+- your pee looks cloudy, pink, red or brown
+- the stomach pain is severe or does not go away after you've rested for 30 to 60 minutes
+
+Any of these could be the symptoms of something that needs to be checked or treated urgently.
+
+If your maternity unit is not available call 111.
+
+## Possible causes of serious stomach pain
+
+Some conditions that need urgent medical attention can cause stomach pain, including ectopic pregnancy, miscarriage, pre-eclampsia, premature labour, placental abruption and urinary tract infections (UTIs).
+
+### Ectopic pregnancy
+
+This is when a fertilised egg implants outside the womb, for example in a fallopian tube. The pregnancy cannot survive and needs to be removed with medicine or surgery.
+
+Symptoms typically appear between 4 and 12 weeks of pregnancy and can include:
+
+- tummy pain and bleeding
+- pain in the tip of your shoulder
+- discomfort when pooing or peeing
+
+Find out more about ectopic pregnancy
+
+### Miscarriage
+
+Cramping pains and bleeding before 24 weeks of pregnancy can sometimes be a sign of miscarriage or threatened miscarriage (when you bleed but the pregnancy normally continues).
+
+You may be able to go straight to an early pregnancy unit for an assessment.
+
+Find an early pregnancy unit near you on The Association of Early Pregnancy Units directory
+
+### Pre-eclampsia
+
+Pain just under the ribs is common in later pregnancy due to the growing baby and uterus pushing up under the ribs.
+
+But if this pain is bad or persistent, particularly on the right side, it can be a sign of pre-eclampsia, which affects some pregnancies. It usually starts after 20 weeks or just after the baby is born.
+
+Other symptoms of pre-eclampsia include:
+
+- severe headache
+- vision problems
+- swollen feet, hands and face
+
+You'll need to be monitored in hospital.
+
+Find out more about pre-eclampsia
+
+### Premature labour
+
+If you're less than 37 weeks pregnant and are having regular abdominal cramps or tightenings, call your maternity unit immediately.
+
+This could be a sign of premature labour, and you'll need to be monitored in hospital.
+
+### Placental abruption
+
+This is when the placenta starts to come away from the wall of the womb, usually causing bleeding and pain. The pain can come and go like a contraction, or it can be constant.
+
+You should contact your maternity unit so you and your baby can be checked.
+
+If the pain or bleeding is severe, call 999 and ask for an ambulance.
+
+Find out more about placental abruption and complications that affect the placenta
+
+### Urinary tract infections (UTIs)
+
+UTIs are common in pregnancy and can usually be easily treated. They can cause tummy pain and sometimes, but not always, pain when you pee.
+
+Find out more about urinary tract infections (UTIs)

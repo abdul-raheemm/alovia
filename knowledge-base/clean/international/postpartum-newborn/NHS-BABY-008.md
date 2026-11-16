@@ -1,0 +1,128 @@
+---
+doc_id: NHS-BABY-008
+title: "Expressing and storing breast milk"
+source_org: "NHS (UK)"
+source_type: government
+licence_tier: A
+licence: "Open Government Licence v3.0"
+attribution: "Information from the NHS website as at 211026. Information from the NHS website is licensed under the Open Government Licence v3.0."
+url: "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/expressing-breast-milk/"
+date_accessed: 2026-10-21
+published_or_reviewed: "2026-08-18"
+region: international
+country: UK
+language: en
+doc_type: patient_education
+audience: patient
+topics: [postpartum-newborn]
+trimester: "postpartum"
+week_start: null
+week_end: null
+contains_treatment_advice: false
+contains_dosage: false
+time_sensitive: false
+priority: P1
+raw_file: raw/nhs/NHS-BABY-008.html
+part: null
+notes: ""
+---
+
+# Expressing and storing breast milk
+
+You might want to express milk if:
+
+- you have to be away from your baby, for example, because your baby is in special care or because you're going back to work
+- your breasts feel uncomfortably full (engorged)
+- your baby is not able to latch or suck well, but you still want to give them breast milk
+- when you start introducing solids, you may want to include some breast milk
+- you want to boost your milk supply
+
+## How to express breast milk
+
+You can express milk by hand or with a breast pump. How often you express your milk, and how much you express, will depend on why you're doing it.
+
+Sometimes it takes a little while for your milk to start flowing. Try to choose a time when you feel relaxed. Having your baby (or a photo of them) nearby may help your milk to flow.
+
+You may find it easier to express if you cover your breasts with a warm towel first, or after you have a shower or bath.
+
+## Expressing breast milk by hand
+
+Expressing your milk by hand can take a bit of time and practice to get right, but it can be a useful skill to learn.
+
+It means you can express without needing a pump, or an electricity supply.
+
+Hand expressing allows you to encourage milk to flow from a particular part of the breast. This may be useful, for example, if one of the milk ducts in your breast becomes blocked.
+
+Hold a sterilised feeding bottle or container below your breast to catch the milk as it flows.
+
+These tips may help:
+
+- Before you start, wash your hands with soap and warm water.
+- Have something clean ready to collect the milk in.
+- Some find gently massaging their breasts before expressing helps their milk to let down. Start off with long strokes from your armpit, working towards your nipple.
+- Cup your breast with one hand then, with your other hand, form a "C" shape with your forefinger and thumb.
+- Squeeze gently, keeping your finger and thumb a few centimetres away from your nipple, just outside the darker area around it (areola). Do not squeeze the nipple itself as you could make it sore. This should not hurt.
+- Release the pressure, then repeat, building up a rhythm. Try not to slide your fingers over the skin.
+- Drops should start to appear, and then your milk usually starts to flow.
+- If no drops appear, try moving your finger and thumb slightly, but still avoid squeezing the darker area near your nipple.
+- When the flow slows down, move your fingers round to a different section of your breast, and repeat.
+- When the flow from one breast has slowed, swap to the other breast. Keep changing breasts until your milk drips very slowly or stops altogether.
+
+Watch a video about expressing milk by hand on the UNICEF website
+
+## Expressing milk with a breast pump
+
+There are 2 different types of breast pump: manual (hand-operated) and electric.
+
+Manual pumps are cheaper but may not be as quick as an electric pump.
+
+You may be able to hire an electric pump. Your midwife, health visitor or a local breastfeeding supporter can give you details of pump hire services near you.
+
+The suction strength can be altered on some electric pumps. Build up slowly. Setting the strength to high straight away may be painful or damage your nipple.
+
+You may also be able to get different funnel (the part that goes over your nipple) sizes to fit your nipples. The pump should never cause bruising or catch your nipple as it's sucked into the funnel.
+
+Always make sure that the pump and container are clean and sterilised before you use them.
+
+Find out how to sterilise baby bottles
+
+## Storing breast milk
+
+You can store breast milk in a sterilised container or in special breast milk storage bags:
+
+- in the back of the fridge for up to 8 days at 4C or lower (you can buy fridge thermometers online) – if you're not sure of the temperature of your fridge, or it runs between 5C to 10C, use it within 3 days
+- for 2 weeks in the ice compartment of a fridge
+- for up to 6 months in a freezer, if it's -18C or lower
+
+Breast milk that's been cooled in the fridge can be carried in a cool bag with ice packs for up to 24 hours.
+
+Storing breast milk in small quantities will help avoid waste. If you're freezing it, make sure you label and date it first.
+
+## Defrosting frozen breast milk
+
+It's best to defrost frozen breast milk slowly in the fridge before giving it to your baby. If you need to use it straight away, you can defrost it by putting it in a jug of warm water or holding it under running warm water.
+
+Once it's defrosted, give it a gentle shake if it has separated. Use it straight away. Do not re-freeze milk that's been defrosted.
+
+Once your baby has drunk from a bottle of breast milk it should be used within 1 hour and anything left over should be thrown away.
+
+## Warming breast milk
+
+You can feed expressed milk straight from the fridge if your baby is happy to drink it cold. Or you can warm the milk to body temperature by putting the bottle in a jug of warm water or holding it under running warm water.
+
+Do not heat up or defrost breast milk using a microwave or stove. This can cause hot spots, which can burn your baby's mouth.
+
+## Storing breast milk if your baby is in hospital
+
+If you're expressing breast milk because your baby is premature or sick, ask the hospital staff caring for your baby for advice on how to store it.
+
+Read more about breastfeeding a premature or sick baby
+
+## If you're having difficulty expressing breast milk
+
+If you're finding it difficult or uncomfortable to express your breast milk:
+
+- Ask your midwife, health visitor or breastfeeding supporter for help. They can also tell you about other breastfeeding support available near you.
+- Call the National Breastfeeding Helpline 24 hours a day on 0300 100 0212.
+
+The Bliss website also has advice about expressing milk for a premature or sick baby

@@ -1,0 +1,2 @@
+# Keep saved source pages byte-identical (no line-ending conversion)
+knowledge-base/raw/** -text

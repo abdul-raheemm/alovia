@@ -1,0 +1,254 @@
+doc_id,hub,url,final_url,title,last_reviewed,next_review_due,review_overdue,article_words,h2_count,status,note
+NHS-BABY-001,baby,https://www.nhs.uk/baby/babys-development/height-weight-and-reviews/baby-height-and-weight/,,Your baby's weight and height,2023-09-20,2026-09-20,yes,640,5,fetched,0 pregnancy mentions
+NHS-BABY-002,baby,https://www.nhs.uk/baby/babys-development/height-weight-and-reviews/baby-reviews/,,Your baby's health and development reviews,2023-11-30,2026-11-30,no,1082,5,fetched,0 pregnancy mentions
+NHS-BABY-003,baby,https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/,,Breastfeeding and bottle feeding advice,,,no,51,4,skipped,skipped by decision
+NHS-BABY-004,baby,https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/bottle-feeding/combine-breast-and-bottle/,,How to combine breast and bottle feeding,2023-03-30,2026-03-30,yes,731,6,fetched,0 pregnancy mentions
+NHS-BABY-005,baby,https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/bottle-feeding/formula-milk-questions/,,Formula milk: common questions,2023-09-08,2026-09-08,yes,862,6,fetched,0 pregnancy mentions
+NHS-BABY-006,baby,https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-problems/,,Breastfeeding problems,,,no,20,0,skipped,skipped by decision
+NHS-BABY-007,baby,https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/benefits/,,Benefits of breastfeeding,2026-09-29,2029-09-29,no,293,3,fetched,1 pregnancy mentions
+NHS-BABY-008,baby,https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/expressing-breast-milk/,,Expressing and storing breast milk,2026-08-18,2029-08-18,no,1040,8,fetched,0 pregnancy mentions
+NHS-BABY-009,baby,https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/the-first-few-days/,,Breastfeeding: the first few days,2026-09-14,2029-09-14,no,1233,9,fetched,3 pregnancy mentions
+NHS-BABY-010,baby,https://www.nhs.uk/baby/caring-for-a-newborn/how-to-change-your-babys-nappy/,,How to change your baby's nappy,2024-08-27,2027-08-27,no,1304,10,fetched,0 pregnancy mentions
+NHS-BABY-011,baby,https://www.nhs.uk/baby/caring-for-a-newborn/reduce-the-risk-of-sudden-infant-death-syndrome/,https://www.nhs.uk/baby/caring-for-a-newborn/sudden-infant-death-syndrome-sids/,,,,,,,duplicate,same as NHS-BABY-013
+NHS-BABY-012,baby,https://www.nhs.uk/baby/caring-for-a-newborn/soothing-a-crying-baby/,,Soothing a crying baby,2026-04-22,2029-04-22,no,1069,5,fetched,0 pregnancy mentions
+NHS-BABY-013,baby,https://www.nhs.uk/baby/caring-for-a-newborn/sudden-infant-death-syndrome-sids/,,Sudden infant death syndrome (SIDS),2025-11-25,2028-11-25,no,1386,5,fetched,3 pregnancy mentions
+NHS-BABY-014,baby,https://www.nhs.uk/baby/caring-for-a-newborn/washing-and-bathing-your-baby/,,Washing and bathing your baby,2024-07-23,2027-07-23,no,859,4,fetched,0 pregnancy mentions
+NHS-BABY-015,baby,https://www.nhs.uk/baby/newborn-screening/,,Newborn screening,,,no,10,0,skipped,skipped by decision
+NHS-BABY-016,baby,https://www.nhs.uk/baby/newborn-screening/blood-spot-test/,,Newborn blood spot test,2024-09-05,2027-09-05,no,1336,8,fetched,1 pregnancy mentions
+NHS-BABY-017,baby,https://www.nhs.uk/baby/newborn-screening/hearing-test/,,Newborn hearing screening,2026-07-23,2029-07-23,no,719,7,fetched,0 pregnancy mentions
+NHS-BABY-018,baby,https://www.nhs.uk/baby/newborn-screening/physical-examination/,,Newborn physical examination,2025-06-09,2028-06-09,no,647,6,fetched,1 pregnancy mentions
+NHS-BABY-019,baby,https://www.nhs.uk/baby/support-and-services/keeping-fit-and-healthy-with-a-baby/,,Keeping fit and healthy with a baby,2026-04-20,2029-04-20,no,1236,5,fetched,6 pregnancy mentions
+NHS-BABY-020,baby,https://www.nhs.uk/baby/support-and-services/services-and-support-for-parents/,,Services and support for parents,2026-04-27,2029-04-27,no,882,6,fetched,2 pregnancy mentions
+NHS-BABY-021,baby,https://www.nhs.uk/baby/support-and-services/sex-and-contraception-after-birth/,,Sex and contraception after birth,2024-02-07,2027-02-07,no,820,5,fetched,7 pregnancy mentions
+NHS-BABY-022,baby,https://www.nhs.uk/baby/support-and-services/your-6-week-postnatal-check/,,Your 6-week postnatal check,2026-10-09,2029-10-09,no,569,3,fetched,3 pregnancy mentions
+NHS-BABY-023,baby,https://www.nhs.uk/baby/support-and-services/your-post-pregnancy-body/,,Your post-pregnancy body,2026-07-20,2029-07-20,no,909,5,fetched,5 pregnancy mentions
+NHS-COND-001,conditions,https://www.nhs.uk/conditions/angina/,,Angina,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-002,conditions,https://www.nhs.uk/conditions/arrhythmia/,,Heart rhythm problems (arrhythmia),,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-003,conditions,https://www.nhs.uk/conditions/asthma/,,Asthma,2025-04-07,2028-04-07,no,1638,13,skipped,skipped by decision
+NHS-COND-004,conditions,https://www.nhs.uk/conditions/asthma/symptoms/,https://www.nhs.uk/conditions/asthma/,,,,,,,duplicate,same as NHS-COND-003
+NHS-COND-005,conditions,https://www.nhs.uk/conditions/asthma/treatment/,https://www.nhs.uk/conditions/asthma/,,,,,,,duplicate,same as NHS-COND-003
+NHS-COND-006,conditions,https://www.nhs.uk/conditions/atopic-eczema/,,Atopic eczema,,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-007,conditions,https://www.nhs.uk/conditions/birthmarks/,,Birthmarks,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-008,conditions,https://www.nhs.uk/conditions/blood-clots/,https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/,,,,,,,duplicate,same as NHS-COND-023
+NHS-COND-009,conditions,https://www.nhs.uk/conditions/bronchiolitis/,,Bronchiolitis,,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-010,conditions,https://www.nhs.uk/conditions/bronchitis/,,Bronchitis,,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-011,conditions,https://www.nhs.uk/conditions/caesarean-section/,https://www.nhs.uk/tests-and-treatments/caesarean-section/,,,,,,,duplicate,same as NHS-TESTS-005
+NHS-COND-012,conditions,https://www.nhs.uk/conditions/chickenpox/,,Chickenpox,2025-01-31,2028-01-31,no,1807,5,fetched,2 pregnancy mentions
+NHS-COND-013,conditions,https://www.nhs.uk/conditions/cleft-lip-and-palate/,,Overview - Cleft lip and palate,2023-03-23,2026-03-23,yes,1206,8,fetched,7 pregnancy mentions
+NHS-COND-091,conditions,https://www.nhs.uk/conditions/cleft-lip-and-palate/treatment/,,Treatment - Cleft lip and palate,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-014,conditions,https://www.nhs.uk/conditions/congenital-heart-disease/,,Congenital heart disease,2025-12-11,2028-12-11,no,1238,10,skipped,skipped by decision
+NHS-COND-015,conditions,https://www.nhs.uk/conditions/constipation/,,Constipation,,,,,,not_relevant,2 mentions of pregnancy
+NHS-COND-016,conditions,https://www.nhs.uk/conditions/contraception/,https://www.nhs.uk/contraception/,,,,,,,redirected_out,extra
+NHS-COND-017,conditions,https://www.nhs.uk/conditions/contraception/contraceptive-diaphragm-or-cap/,https://www.nhs.uk/contraception/methods-of-contraception/contraceptive-diaphragm-or-cap/,,,,,,,redirected_out,extra
+NHS-COND-018,conditions,https://www.nhs.uk/conditions/contraception/male-condoms/,https://www.nhs.uk/contraception/methods-of-contraception/condoms/,,,,,,,redirected_out,extra
+NHS-COND-019,conditions,https://www.nhs.uk/conditions/coronary-heart-disease/,,Overview - Coronary heart disease,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-020,conditions,https://www.nhs.uk/conditions/coronavirus-covid-19/how-to-avoid-catching-and-spreading-coronavirus-covid-19/,https://www.nhs.uk/conditions/covid-19/how-to-avoid-catching-and-spreading-covid-19/,How to avoid catching and spreading COVID-19 infection,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-021,conditions,https://www.nhs.uk/conditions/covid-19/covid-19-symptoms-and-what-to-do/,,COVID-19 symptoms and what to do,,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-022,conditions,https://www.nhs.uk/conditions/cytomegalovirus-cmv/,,Cytomegalovirus (CMV),2023-07-20,2026-07-20,yes,560,6,fetched,6 pregnancy mentions
+NHS-COND-023,conditions,https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/,,DVT (deep vein thrombosis),2026-04-30,2029-04-30,no,882,8,fetched,6 pregnancy mentions
+NHS-COND-024,conditions,https://www.nhs.uk/conditions/dehydration/,,Dehydration,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-025,conditions,https://www.nhs.uk/conditions/diabetic-eye-screening/,https://www.nhs.uk/tests-and-treatments/diabetic-eye-screening/,Diabetic eye screening,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-026,conditions,https://www.nhs.uk/conditions/diabetic-ketoacidosis/,,Diabetic ketoacidosis,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-027,conditions,https://www.nhs.uk/conditions/diabetic-retinopathy/,,Diabetic retinopathy,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-028,conditions,https://www.nhs.uk/conditions/downs-syndrome/,,What is Down's syndrome? - Down's syndrome,2023-02-17,2026-02-17,yes,331,2,fetched,3 pregnancy mentions
+NHS-COND-092,conditions,https://www.nhs.uk/conditions/downs-syndrome/advice-for-new-parents/,,Advice for new parents - Down's syndrome,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-093,conditions,https://www.nhs.uk/conditions/downs-syndrome/how-to-help-children-and-young-people/,,How to help children and young people - Down's syndrome,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-094,conditions,https://www.nhs.uk/conditions/downs-syndrome/other-health-conditions/,,Other health conditions - Down's syndrome,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-095,conditions,https://www.nhs.uk/conditions/downs-syndrome/support-for-adults/,,Support for adults - Down's syndrome,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-096,conditions,https://www.nhs.uk/conditions/downs-syndrome/support-for-families-and-carers/,,Support for families and carers - Down's syndrome,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-029,conditions,https://www.nhs.uk/conditions/ectopic-pregnancy/,,Overview - Ectopic pregnancy,2022-08-23,2025-08-23,yes,1119,7,fetched,47 pregnancy mentions
+NHS-COND-097,conditions,https://www.nhs.uk/conditions/ectopic-pregnancy/diagnosis/,,Diagnosis - Ectopic pregnancy,2022-08-23,2025-08-23,yes,383,3,fetched,16 pregnancy mentions
+NHS-COND-098,conditions,https://www.nhs.uk/conditions/ectopic-pregnancy/symptoms/,,Symptoms - Ectopic pregnancy,2022-08-23,2025-08-23,yes,480,2,fetched,18 pregnancy mentions
+NHS-COND-099,conditions,https://www.nhs.uk/conditions/ectopic-pregnancy/treatment/,,Treatment - Ectopic pregnancy,2022-08-23,2025-08-23,yes,740,3,fetched,16 pregnancy mentions
+NHS-COND-030,conditions,https://www.nhs.uk/conditions/edwards-syndrome/,,Edwards' syndrome (trisomy 18),2025-02-19,2028-02-19,no,961,7,fetched,9 pregnancy mentions
+NHS-COND-031,conditions,https://www.nhs.uk/conditions/female-genital-mutilation-fgm/,,Overview - Female genital mutilation (FGM),2026-07-22,2029-07-22,no,1618,11,fetched,7 pregnancy mentions
+NHS-COND-032,conditions,https://www.nhs.uk/conditions/fetal-alcohol-spectrum-disorder/,,Fetal alcohol spectrum disorder,2023-04-04,2026-04-04,yes,703,4,fetched,8 pregnancy mentions
+NHS-COND-033,conditions,https://www.nhs.uk/conditions/food-poisoning/,,Food poisoning,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-034,conditions,https://www.nhs.uk/conditions/gender-dysphoria-and-incongruence/,,Gender dysphoria and incongruence,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-035,conditions,https://www.nhs.uk/conditions/genital-herpes/,,Genital herpes,2023-06-27,2026-06-27,yes,1360,10,fetched,10 pregnancy mentions
+NHS-COND-036,conditions,https://www.nhs.uk/conditions/gestational-diabetes/,,Overview - Gestational diabetes,2022-12-08,2025-12-08,yes,1243,7,fetched,26 pregnancy mentions
+NHS-COND-100,conditions,https://www.nhs.uk/conditions/gestational-diabetes/treatment/,,Treatment - Gestational diabetes,2022-12-08,2025-12-08,yes,1485,8,fetched,12 pregnancy mentions
+NHS-COND-037,conditions,https://www.nhs.uk/conditions/group-b-strep/,,Group B strep,2024-04-19,2027-04-19,no,674,7,fetched,12 pregnancy mentions
+NHS-COND-038,conditions,https://www.nhs.uk/conditions/hay-fever/,,Hay fever,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-039,conditions,https://www.nhs.uk/conditions/heart-failure/,,Heart failure,,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-040,conditions,https://www.nhs.uk/conditions/heartburn-and-acid-reflux/,,Heartburn and acid reflux,2023-11-20,2026-11-20,no,757,4,skipped,skipped by decision
+NHS-COND-041,conditions,https://www.nhs.uk/conditions/hepatitis-b/,,Hepatitis B,,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-042,conditions,https://www.nhs.uk/conditions/hepatitis-c/,,Hepatitis C,,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-043,conditions,https://www.nhs.uk/conditions/hernia/,,Hernia,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-044,conditions,https://www.nhs.uk/conditions/high-blood-pressure-hypertension/,https://www.nhs.uk/conditions/high-blood-pressure/,High blood pressure,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-045,conditions,https://www.nhs.uk/conditions/high-cholesterol/,,What is high cholesterol? - High cholesterol,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-046,conditions,https://www.nhs.uk/conditions/hiv-and-aids/,,HIV and AIDS,2025-07-09,2028-07-09,no,1638,9,fetched,4 pregnancy mentions
+NHS-COND-047,conditions,https://www.nhs.uk/conditions/infertility/,,Overview - Infertility,2023-08-09,2026-08-09,yes,709,3,fetched,7 pregnancy mentions
+NHS-COND-101,conditions,https://www.nhs.uk/conditions/infertility/causes/,,Causes - Infertility,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-102,conditions,https://www.nhs.uk/conditions/infertility/diagnosis/,,Diagnosis - Infertility,2023-08-09,2026-08-09,yes,1288,5,fetched,4 pregnancy mentions
+NHS-COND-103,conditions,https://www.nhs.uk/conditions/infertility/treatment/,,Treatment - Infertility,,,,,,not_relevant,2 mentions of pregnancy
+NHS-COND-048,conditions,https://www.nhs.uk/conditions/iron-deficiency-anaemia/,,Iron deficiency anaemia,2024-01-26,2027-01-26,no,809,7,fetched,5 pregnancy mentions
+NHS-COND-049,conditions,https://www.nhs.uk/conditions/jaundice-in-babies/,,Jaundice in babies,2026-03-24,2029-03-24,no,706,6,fetched,0 pregnancy mentions
+NHS-COND-050,conditions,https://www.nhs.uk/conditions/listeriosis/,,Listeriosis,2023-11-10,2026-11-10,no,872,7,fetched,10 pregnancy mentions
+NHS-COND-051,conditions,https://www.nhs.uk/conditions/liver-disease/,,Liver disease,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-052,conditions,https://www.nhs.uk/conditions/low-blood-sugar-hypoglycaemia/,,Low blood sugar (hypoglycaemia),,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-053,conditions,https://www.nhs.uk/conditions/malnutrition/,,Overview - Malnutrition,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-054,conditions,https://www.nhs.uk/conditions/marfan-syndrome/,,Overview - Marfan syndrome,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-055,conditions,https://www.nhs.uk/conditions/mastitis/,,Mastitis,2023-03-17,2026-03-17,yes,591,4,fetched,0 pregnancy mentions
+NHS-COND-056,conditions,https://www.nhs.uk/conditions/miscarriage/,,Miscarriage,2026-03-31,2029-03-31,no,1231,8,fetched,28 pregnancy mentions
+NHS-COND-057,conditions,https://www.nhs.uk/conditions/molar-pregnancy/,,Molar pregnancy,2023-06-19,2026-06-19,yes,665,8,fetched,40 pregnancy mentions
+NHS-COND-058,conditions,https://www.nhs.uk/conditions/overweight-and-obesity/,,Overweight and obesity in adults,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-059,conditions,https://www.nhs.uk/conditions/pataus-syndrome/,,Patau's syndrome,2023-07-18,2026-07-18,yes,1109,6,fetched,7 pregnancy mentions
+NHS-COND-060,conditions,https://www.nhs.uk/conditions/periods/fertility-in-the-menstrual-cycle/,,Periods and fertility in the menstrual cycle - Periods,2023-01-05,2026-01-05,yes,746,6,fetched,11 pregnancy mentions
+NHS-COND-061,conditions,https://www.nhs.uk/conditions/piles-haemorrhoids/,,Piles (haemorrhoids),,,,,,not_relevant,2 mentions of pregnancy
+NHS-COND-062,conditions,https://www.nhs.uk/conditions/pneumonia/,,Pneumonia,,,,,,not_relevant,2 mentions of pregnancy
+NHS-COND-063,conditions,https://www.nhs.uk/conditions/polyhydramnios/,,Polyhydramnios (too much amniotic fluid),2024-04-18,2027-04-18,no,532,6,fetched,6 pregnancy mentions
+NHS-COND-064,conditions,https://www.nhs.uk/conditions/pre-eclampsia-old/,,,,,,,,dead_link,404 when fetched
+NHS-COND-065,conditions,https://www.nhs.uk/conditions/pre-eclampsia/,,Pre-eclampsia,2026-03-23,2029-03-23,no,857,8,fetched,15 pregnancy mentions
+NHS-COND-066,conditions,https://www.nhs.uk/conditions/pregnancy-and-baby/baby-special-intensive-care/,https://www.nhs.uk/pregnancy/labour-and-birth/special-care-ill-or-premature-babies/,,,,,,,redirected_out,extra
+NHS-COND-067,conditions,https://www.nhs.uk/conditions/pregnancy-and-baby/breastfeeding-first-days/,https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/the-first-few-days/,,,,,,,duplicate,same as NHS-BABY-009
+NHS-COND-068,conditions,https://www.nhs.uk/conditions/pregnancy-and-baby/miscarriage/,https://www.nhs.uk/conditions/miscarriage/,,,,,,,duplicate,same as NHS-COND-056
+NHS-COND-069,conditions,https://www.nhs.uk/conditions/pulmonary-embolism/,,Pulmonary embolism,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-070,conditions,https://www.nhs.uk/conditions/rhesus-disease-hdfn/,,Haemolytic disease of the fetus and newborn (HDFN),2026-03-20,2029-03-20,no,548,6,fetched,7 pregnancy mentions
+NHS-COND-071,conditions,https://www.nhs.uk/conditions/rubella/,,Rubella (german measles),2026-03-13,2029-03-13,no,639,6,fetched,9 pregnancy mentions
+NHS-COND-072,conditions,https://www.nhs.uk/conditions/scars/,,Scars,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-073,conditions,https://www.nhs.uk/conditions/sexually-transmitted-infections-stis/,,Sexually transmitted infections (STIs),,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-074,conditions,https://www.nhs.uk/conditions/sickle-cell-disease/,,Sickle cell disease,2026-09-22,2029-09-22,no,1224,8,fetched,6 pregnancy mentions
+NHS-COND-075,conditions,https://www.nhs.uk/conditions/slapped-cheek-syndrome/,,Slapped cheek syndrome,,,,,,not_relevant,2 mentions of pregnancy
+NHS-COND-076,conditions,https://www.nhs.uk/conditions/spina-bifida/,,Spina bifida,2025-10-16,2028-10-16,no,1348,8,fetched,10 pregnancy mentions
+NHS-COND-077,conditions,https://www.nhs.uk/conditions/squint/,,Overview - Squint,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-078,conditions,https://www.nhs.uk/conditions/stillbirth/,,Overview - Stillbirth,2024-04-24,2027-04-24,no,464,4,fetched,5 pregnancy mentions
+NHS-COND-104,conditions,https://www.nhs.uk/conditions/stillbirth/causes/,,Causes - Stillbirth,2024-04-24,2027-04-24,no,653,6,fetched,8 pregnancy mentions
+NHS-COND-105,conditions,https://www.nhs.uk/conditions/stillbirth/prevention/,,Preventing stillbirth - Stillbirth,2024-04-24,2027-04-24,no,642,5,fetched,17 pregnancy mentions
+NHS-COND-106,conditions,https://www.nhs.uk/conditions/stillbirth/what-happens/,,What happens if your unborn baby dies - Stillbirth,2024-04-24,2027-04-24,no,1376,7,fetched,4 pregnancy mentions
+NHS-COND-079,conditions,https://www.nhs.uk/conditions/stop-smoking-treatments/,https://www.nhs.uk/better-health/quit-smoking/ready-to-quit-smoking/find-the-best-stop-smoking-products-for-you/,,,,,,,redirected_out,extra
+NHS-COND-080,conditions,https://www.nhs.uk/conditions/stretch-marks/,,Stretch marks,2024-04-30,2027-04-30,no,347,4,skipped,skipped by decision
+NHS-COND-081,conditions,https://www.nhs.uk/conditions/syphilis/,,Syphilis,2026-03-17,2029-03-17,no,1033,7,fetched,9 pregnancy mentions
+NHS-COND-082,conditions,https://www.nhs.uk/conditions/thalassaemia/,,Overview - Thalassaemia,2022-10-17,2025-10-17,yes,935,8,fetched,3 pregnancy mentions
+NHS-COND-107,conditions,https://www.nhs.uk/conditions/thalassaemia/carriers/,,Thalassaemia carriers - Thalassaemia,2022-10-17,2025-10-17,yes,805,5,fetched,4 pregnancy mentions
+NHS-COND-108,conditions,https://www.nhs.uk/conditions/thalassaemia/causes/,,Causes - Thalassaemia,,,,,,not_relevant,2 mentions of pregnancy
+NHS-COND-109,conditions,https://www.nhs.uk/conditions/thalassaemia/diagnosis/,,Diagnosis - Thalassaemia,2022-10-17,2025-10-17,yes,346,3,fetched,5 pregnancy mentions
+NHS-COND-110,conditions,https://www.nhs.uk/conditions/thalassaemia/living-with/,,Living with - Thalassaemia,2022-10-17,2025-10-17,yes,419,4,fetched,6 pregnancy mentions
+NHS-COND-111,conditions,https://www.nhs.uk/conditions/thalassaemia/symptoms/,,Symptoms - Thalassaemia,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-112,conditions,https://www.nhs.uk/conditions/thalassaemia/treatment/,,Treatment - Thalassaemia,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-083,conditions,https://www.nhs.uk/conditions/thrush-in-men-and-women/,,Thrush in men and women,,,,,,not_relevant,2 mentions of pregnancy
+NHS-COND-084,conditions,https://www.nhs.uk/conditions/toxoplasmosis/,,Toxoplasmosis,2023-08-25,2026-08-25,yes,648,7,fetched,9 pregnancy mentions
+NHS-COND-085,conditions,https://www.nhs.uk/conditions/urinary-incontinence/10-ways-to-stop-leaks/,,10 ways to stop leaks - Urinary incontinence,,,,,,not_relevant,0 mentions of pregnancy
+NHS-COND-086,conditions,https://www.nhs.uk/conditions/urinary-tract-infections-utis/,,Urinary tract infections (UTIs),2025-07-11,2028-07-11,no,1394,8,fetched,5 pregnancy mentions
+NHS-COND-087,conditions,https://www.nhs.uk/conditions/vitamin-b12-or-folate-deficiency-anaemia/,,Overview - Vitamin B12 or folate deficiency anaemia,,,,,,not_relevant,1 mentions of pregnancy
+NHS-COND-088,conditions,https://www.nhs.uk/conditions/vitamins-and-minerals/vitamin-d/,,Vitamin D - Vitamins and minerals,2020-08-03,2023-08-03,yes,1063,4,fetched,5 pregnancy mentions
+NHS-COND-089,conditions,https://www.nhs.uk/conditions/whooping-cough/,,Whooping cough,2026-08-06,2029-08-06,no,808,8,fetched,6 pregnancy mentions
+NHS-COND-090,conditions,https://www.nhs.uk/conditions/zika/,,Zika virus,2025-07-31,2028-07-31,no,787,7,fetched,13 pregnancy mentions
+NHS-SYMPTOMS-002,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/back-pain/,,Back pain in pregnancy,2024-01-10,2027-01-10,no,528,3,fetched,
+NHS-SYMPTOMS-003,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/common-health-problems/,,,,,,,,deferred,roundup page; split later
+NHS-SYMPTOMS-004,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/headaches/,,Headaches in pregnancy,2024-04-02,2027-04-02,no,293,3,fetched,
+NHS-SYMPTOMS-001,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/indigestion-and-heartburn/,,Indigestion and heartburn in pregnancy,2023-11-14,2026-11-14,no,900,5,fetched,ROUNDUP?
+NHS-SYMPTOMS-005,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/pelvic-pain/,,Pelvic pain in pregnancy,2022-12-12,2025-12-12,yes,779,6,fetched,ROUNDUP?
+NHS-SYMPTOMS-006,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/piles/,,Piles in pregnancy,2024-01-03,2027-01-03,no,290,2,fetched,
+NHS-SYMPTOMS-007,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/pregnancy-symptoms-you-need-to-get-help-for/,,Pregnancy symptoms you need to get help for,2026-06-24,2029-06-24,no,1073,2,fetched,
+NHS-SYMPTOMS-008,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/stomach-pain/,,Stomach pain in pregnancy,2024-11-18,2027-11-18,no,659,2,fetched,
+NHS-SYMPTOMS-009,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/stretch-marks/,,Stretch marks in pregnancy,2022-11-25,2025-11-25,yes,458,5,fetched,ROUNDUP?
+NHS-SYMPTOMS-010,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/swollen-ankles-feet-and-fingers/,,"Swollen ankles, feet and fingers in pregnancy",2024-04-19,2027-04-19,no,349,3,fetched,
+NHS-SYMPTOMS-011,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/thrush/,,Thrush,2024-04-17,2027-04-17,no,254,3,fetched,
+NHS-SYMPTOMS-012,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/tiredness/,,Tiredness and sleep problems in pregnancy,2024-03-11,2027-03-11,no,602,6,fetched,ROUNDUP?
+NHS-SYMPTOMS-013,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/vaginal-bleeding/,,Vaginal bleeding in pregnancy,2026-02-17,2029-02-17,no,641,7,fetched,ROUNDUP?
+NHS-SYMPTOMS-014,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/vaginal-discharge/,,Vaginal discharge in pregnancy,2024-04-17,2027-04-17,no,352,3,fetched,
+NHS-SYMPTOMS-015,common-symptoms,https://www.nhs.uk/pregnancy/common-symptoms/vomiting-and-morning-sickness/,,Vomiting and morning sickness,2024-04-17,2027-04-17,no,740,5,fetched,ROUNDUP?
+NHS-COMPLICATIONS-002,complications,https://www.nhs.uk/pregnancy/complications/itching-and-intrahepatic-cholestasis/,,Itching in pregnancy,2026-02-24,2029-02-24,no,637,5,fetched,ROUNDUP?
+NHS-COMPLICATIONS-001,complications,https://www.nhs.uk/pregnancy/complications/severe-vomiting/,,Severe vomiting in pregnancy,2023-01-11,2026-01-11,yes,1021,7,fetched,ROUNDUP?
+NHS-EXISTING-001,existing-health-conditions,https://www.nhs.uk/pregnancy/existing-health-conditions/asthma/,,Asthma and pregnancy,2024-05-01,2027-05-01,no,601,4,fetched,
+NHS-EXISTING-002,existing-health-conditions,https://www.nhs.uk/pregnancy/existing-health-conditions/congenital-heart-disease/,,Congenital heart disease and pregnancy,2024-04-29,2027-04-29,no,912,5,fetched,ROUNDUP?
+NHS-EXISTING-003,existing-health-conditions,https://www.nhs.uk/pregnancy/existing-health-conditions/coronary-heart-disease/,,Coronary heart disease and pregnancy,2024-05-21,2027-05-21,no,743,6,fetched,ROUNDUP?
+NHS-EXISTING-004,existing-health-conditions,https://www.nhs.uk/pregnancy/existing-health-conditions/diabetes/,,Diabetes and pregnancy,2024-05-28,2027-05-28,no,1206,6,fetched,ROUNDUP?
+NHS-EXISTING-005,existing-health-conditions,https://www.nhs.uk/pregnancy/existing-health-conditions/epilepsy/,,Epilepsy and pregnancy,2026-02-17,2029-02-17,no,780,8,fetched,ROUNDUP?
+NHS-EXISTING-006,existing-health-conditions,https://www.nhs.uk/pregnancy/existing-health-conditions/high-blood-pressure/,,High blood pressure (hypertension) and pregnancy,2024-11-13,2027-11-13,no,944,6,fetched,ROUNDUP?
+NHS-FINDING-001,finding-out,https://www.nhs.uk/pregnancy/finding-out/nhs-maternity-care-and-benefits-when-you-are-pregnant/,,NHS maternity care and benefits when you're pregnant,2026-03-06,2029-03-06,no,457,5,fetched,ROUNDUP?
+NHS-FINDING-002,finding-out,https://www.nhs.uk/pregnancy/finding-out/what-to-do-when-you-find-out-you-are-pregnant/,,What to do when you find out you're pregnant,2026-02-03,2029-02-03,no,406,5,fetched,ROUNDUP?
+NHS-LGBT-001,having-a-baby-if-you-are-lgbt-plus,https://www.nhs.uk/pregnancy/having-a-baby-if-you-are-lgbt-plus/chestfeeding-if-youre-trans-or-non-binary/,,Chestfeeding if you're trans or non-binary,2025-01-09,2028-01-09,no,301,3,fetched,
+NHS-LGBT-002,having-a-baby-if-you-are-lgbt-plus,https://www.nhs.uk/pregnancy/having-a-baby-if-you-are-lgbt-plus/testosterone-and-pregnancy/,,Testosterone and pregnancy,2025-07-21,2028-07-21,no,430,4,fetched,
+NHS-LGBT-003,having-a-baby-if-you-are-lgbt-plus,https://www.nhs.uk/pregnancy/having-a-baby-if-you-are-lgbt-plus/ways-to-become-a-parent-if-you-are-lgbt-plus/,,Ways to become a parent if you're LGBT+,2023-06-15,2026-06-15,yes,556,6,fetched,ROUNDUP?
+NHS-WELL-001,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/drinking-alcohol-while-pregnant/,,Drinking alcohol while pregnant,2023-03-13,2026-03-13,yes,410,3,fetched,
+NHS-WELL-002,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/exercise/,,Exercise in pregnancy,2026-09-24,2029-09-24,no,651,7,fetched,ROUNDUP?
+NHS-WELL-003,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/foods-to-avoid/,,Foods to avoid in pregnancy,2026-06-15,2029-06-15,no,1730,12,fetched,ROUNDUP?
+NHS-WELL-004,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/have-a-healthy-diet/,,Have a healthy diet in pregnancy,2023-04-21,2026-04-21,yes,1461,10,fetched,ROUNDUP?
+NHS-WELL-005,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/illegal-drugs/,,Illegal drugs in pregnancy,2023-05-09,2026-05-09,yes,258,2,fetched,
+NHS-WELL-006,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/infections-that-may-affect-your-baby/,,Infections in pregnancy that may affect your baby,2024-04-09,2027-04-09,no,1910,12,fetched,ROUNDUP?
+NHS-WELL-007,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/medicines/,,Medicines in pregnancy,2022-09-05,2025-09-05,yes,471,3,fetched,
+NHS-WELL-017,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/mental-health/,https://www.nhs.uk/pregnancy/mental-health-in-pregnancy-and-after-the-birth/mental-health/,,,,,,,duplicate,same as NHS-MENTAL-003
+NHS-WELL-008,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/overweight/,,Obesity and pregnancy,2023-02-17,2026-02-17,yes,556,5,fetched,ROUNDUP?
+NHS-WELL-009,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/pregnancy-and-covid-19/,,Pregnancy and COVID-19,2022-10-24,2025-10-24,yes,703,4,fetched,
+NHS-WELL-010,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/pregnancy-vitamins-and-supplements/,,Pregnancy vitamins and supplements,2026-06-03,2029-06-03,no,767,8,fetched,ROUNDUP?
+NHS-WELL-011,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/stop-smoking/,,Stop smoking in pregnancy,2023-01-10,2026-01-10,yes,1210,8,fetched,ROUNDUP?
+NHS-WELL-012,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/travelling/,,Travelling in pregnancy,2022-08-17,2025-08-17,yes,890,8,fetched,ROUNDUP?
+NHS-WELL-013,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/vaccinations/,,Vaccinations in pregnancy,2023-01-18,2026-01-18,yes,1102,4,fetched,
+NHS-WELL-014,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/weight-gain/,,Weight gain in pregnancy,2022-07-06,2025-07-06,yes,400,6,fetched,ROUNDUP?
+NHS-WELL-015,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/whooping-cough-vaccination/,,Whooping cough vaccination in pregnancy,2023-03-24,2026-03-24,yes,1390,18,fetched,ROUNDUP?
+NHS-WELL-016,keeping-well,https://www.nhs.uk/pregnancy/keeping-well/your-babys-movements/,,Your baby's movements,2024-07-08,2027-07-08,no,337,6,fetched,ROUNDUP?
+NHS-LABOUR-002,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/early-days/,,Early days,2026-01-27,2029-01-27,no,1173,2,fetched,
+NHS-LABOUR-003,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/episiotomy-and-perineal-tears/,,Episiotomy and perineal tears,2023-06-09,2026-06-09,yes,1546,5,fetched,ROUNDUP?
+NHS-LABOUR-004,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/forceps-or-vacuum-delivery/,,Forceps or vacuum delivery,2023-05-16,2026-05-16,yes,1035,7,fetched,ROUNDUP?
+NHS-LABOUR-005,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/getting-to-know-your-newborn/,,Your newborn baby,2024-04-22,2027-04-22,no,1085,12,fetched,ROUNDUP?
+NHS-LABOUR-006,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/giving-birth-to-twins-or-more/,,Giving birth to twins or more,2022-10-31,2025-10-31,yes,633,4,fetched,
+NHS-LABOUR-007,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/if-your-baby-is-breech/,,What happens if your baby is breech?,2023-11-01,2026-11-01,no,527,2,fetched,
+NHS-LABOUR-008,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/inducing-labour/,,Inducing labour,2023-11-01,2026-11-01,no,1001,6,fetched,ROUNDUP?
+NHS-LABOUR-009,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/pain-relief-in-labour/,,Pain relief in labour,2023-03-13,2026-03-13,yes,1675,9,fetched,ROUNDUP?
+NHS-LABOUR-010,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/placenta-complications/,,What complications can affect the placenta?,2026-05-29,2029-05-29,no,610,4,fetched,
+NHS-LABOUR-011,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/premature-labour-and-birth/,,Premature labour and birth,2024-01-10,2027-01-10,no,1213,8,fetched,ROUNDUP?
+NHS-LABOUR-017,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/preparing-for-the-birth/how-to-make-a-birth-plan/,https://www.nhs.uk/best-start-in-life/pregnancy/preparing-for-labour-and-birth/what-to-include-in-your-birth-plan/,,,,,,,redirected_out,new_in_fetch
+NHS-LABOUR-001,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/signs-that-labour-has-begun/,,Signs that labour has begun,2023-11-09,2026-11-09,no,1134,9,fetched,ROUNDUP?
+NHS-LABOUR-012,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/special-care-ill-or-premature-babies/,,Special care: ill or premature babies,2024-04-30,2027-04-30,no,1099,8,fetched,ROUNDUP?
+NHS-LABOUR-013,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/the-stages-of-labour-and-birth/,,The stages of labour and birth,2023-05-02,2026-05-02,yes,1885,4,fetched,
+NHS-LABOUR-014,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/what-happens-straight-after/,,What happens straight after the birth?,2022-08-22,2025-08-22,yes,583,4,fetched,
+NHS-LABOUR-015,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/where-to-give-birth-the-options/,,Where to give birth: the options,2024-04-29,2027-04-29,no,1760,10,fetched,ROUNDUP?
+NHS-LABOUR-016,labour-and-birth,https://www.nhs.uk/pregnancy/labour-and-birth/your-body/,,Your body after the birth,2024-04-25,2027-04-25,no,1053,12,fetched,ROUNDUP?
+NHS-MENTAL-001,mental-health-in-pregnancy-and-after-the-birth,https://www.nhs.uk/pregnancy/mental-health-in-pregnancy-and-after-the-birth/anxiety-in-pregnancy/,,Anxiety in pregnancy,2026-03-17,2029-03-17,no,513,6,fetched,ROUNDUP?
+NHS-MENTAL-002,mental-health-in-pregnancy-and-after-the-birth,https://www.nhs.uk/pregnancy/mental-health-in-pregnancy-and-after-the-birth/depression/,,Depression in pregnancy,2024-10-01,2027-10-01,no,594,5,fetched,ROUNDUP?
+NHS-MENTAL-003,mental-health-in-pregnancy-and-after-the-birth,https://www.nhs.uk/pregnancy/mental-health-in-pregnancy-and-after-the-birth/mental-health/,,Mental health in pregnancy,2026-03-11,2029-03-11,no,425,5,fetched,ROUNDUP?
+NHS-TRYING-001,trying-for-a-baby,https://www.nhs.uk/pregnancy/trying-for-a-baby/doing-a-pregnancy-test/,,Doing a pregnancy test,2022-02-09,2025-02-09,yes,723,8,fetched,ROUNDUP?
+NHS-TRYING-002,trying-for-a-baby,https://www.nhs.uk/pregnancy/trying-for-a-baby/signs-and-symptoms-that-might-mean-youre-pregnant/,,Signs and symptoms that might mean you're pregnant,2026-07-31,2029-07-31,no,429,5,fetched,ROUNDUP?
+NHS-TRYING-003,trying-for-a-baby,https://www.nhs.uk/pregnancy/trying-for-a-baby/trying-to-get-pregnant/,,Trying to get pregnant,2026-06-02,2029-06-02,no,720,5,fetched,ROUNDUP?
+NHS-CARE-001,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/12-week-scan/,,12-week scan,2023-11-08,2026-11-08,no,456,2,fetched,
+NHS-CARE-002,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/20-week-scan/,,20-week screening scan,2024-10-01,2027-10-01,no,1080,7,fetched,ROUNDUP?
+NHS-CARE-003,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/antenatal-care-with-twins/,,Antenatal care with twins,2022-10-14,2025-10-14,yes,852,4,fetched,
+NHS-CARE-004,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/having-a-baby-that-might-be-born-with-a-condition/,,Having a baby that might be born with a condition,2022-10-12,2025-10-12,yes,648,6,fetched,ROUNDUP?
+NHS-CARE-005,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/if-antenatal-screening-tests-find-something/,,If antenatal screening tests find something,2022-11-29,2025-11-29,yes,544,4,fetched,
+NHS-CARE-006,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/pregnant-with-twins/,,Pregnant with twins,2022-10-11,2025-10-11,yes,449,6,fetched,ROUNDUP?
+NHS-CARE-007,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/screening-for-downs-edwards-pataus-syndrome/,,"Screening for Down's syndrome, Edwards' syndrome and Patau's syndrome",2025-06-26,2028-06-26,no,1091,6,fetched,ROUNDUP?
+NHS-CARE-008,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/screening-for-hepatitis-b-hiv-and-syphilis/,,"Screening for hepatitis B, HIV and syphilis",2024-01-23,2027-01-23,no,899,9,fetched,ROUNDUP?
+NHS-CARE-009,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/screening-for-sickle-cell-and-thalassaemia/,,Screening for sickle cell and thalassaemia,2026-05-06,2029-05-06,no,904,6,fetched,ROUNDUP?
+NHS-CARE-010,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/screening-tests/,,Screening tests in pregnancy,2026-03-16,2029-03-16,no,644,6,fetched,ROUNDUP?
+NHS-CARE-011,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/termination-for-fetal-anomaly/,,Termination for fetal anomaly,2024-07-25,2027-07-25,no,747,6,fetched,ROUNDUP?
+NHS-CARE-012,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/ultrasound-scans/,,Ultrasound scans in pregnancy,2023-11-13,2026-11-13,no,1220,13,fetched,ROUNDUP?
+NHS-CARE-014,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/your-antenatal-appointments/,https://www.nhs.uk/pregnancy/your-pregnancy-care/your-antenatal-care-and-appointments/,,,,,,,duplicate,same as NHS-CARE-013
+NHS-CARE-013,your-pregnancy-care,https://www.nhs.uk/pregnancy/your-pregnancy-care/your-antenatal-care-and-appointments/,,Antenatal (pregnancy) care and appointments,2026-04-17,2029-04-17,no,1245,14,fetched,ROUNDUP?
+NHS-TESTS-001,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/abortion/,,Abortion,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-002,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/amniocentesis/,,Amniocentesis,2026-04-26,2029-04-26,no,964,7,fetched,10 pregnancy mentions
+NHS-TESTS-003,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/blood-tests/,,Blood tests,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-004,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/blood-transfusion/,,Blood transfusion,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-005,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/caesarean-section/,,Overview - Caesarean section,2023-01-04,2026-01-04,yes,927,6,fetched,5 pregnancy mentions
+NHS-TESTS-006,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/caesarean-section/recovery/,,Recovery - Caesarean section,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-024,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/caesarean-section/risks/,,Risks - Caesarean section,2023-01-04,2026-01-04,yes,438,3,fetched,4 pregnancy mentions
+NHS-TESTS-025,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/caesarean-section/what-happens/,,What happens - Caesarean section,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-007,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/cervical-screening/,,Cervical screening,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-008,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/cgm-and-hcl-for-diabetes/,,Continuous glucose monitoring and hybrid closed loop for diabetes,,,,,,not_relevant,2 mentions of pregnancy
+NHS-TESTS-009,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/chorionic-villus-sampling-cvs/,,Overview - Chorionic villus sampling,2023-01-03,2026-01-03,yes,785,5,fetched,12 pregnancy mentions
+NHS-TESTS-010,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/chorionic-villus-sampling-cvs/results/,,Results - Chorionic villus sampling,2023-01-03,2026-01-03,yes,739,4,fetched,4 pregnancy mentions
+NHS-TESTS-026,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/chorionic-villus-sampling-cvs/risks/,,Complications - Chorionic villus sampling,2023-01-03,2026-01-03,yes,420,4,fetched,4 pregnancy mentions
+NHS-TESTS-027,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/chorionic-villus-sampling-cvs/what-happens/,,What happens - Chorionic villus sampling,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-028,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/chorionic-villus-sampling-cvs/why-its-done/,,Why it's offered - Chorionic villus sampling,2023-01-03,2026-01-03,yes,517,2,fetched,5 pregnancy mentions
+NHS-TESTS-011,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/cognitive-behavioural-therapy-cbt/,,Cognitive behavioural therapy (CBT),,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-012,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/consent-to-treatment/,,Overview - Consent to treatment,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-013,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/counselling/,,Counselling,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-014,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/emollients/,,Emollients,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-015,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/epidural/,,Overview - Epidural,2023-02-01,2026-02-01,yes,612,5,fetched,0 pregnancy mentions
+NHS-TESTS-029,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/epidural/side-effects/,,Side effects - Epidural,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-016,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/herbal-medicines-and-complementary-therapies/,,Herbal medicines and complementary therapies,,,,,,not_relevant,1 mentions of pregnancy
+NHS-TESTS-017,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/intrauterine-insemination-iui/,,Intrauterine insemination (IUI),2024-06-25,2027-06-25,no,1063,7,fetched,13 pregnancy mentions
+NHS-TESTS-018,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/ivf/,,IVF,2025-04-15,2028-04-15,no,1580,8,fetched,13 pregnancy mentions
+NHS-TESTS-019,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/local-anaesthesia/,,Local anaesthetic,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-020,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/physiotherapy/,,Physiotherapy,,,,,,not_relevant,1 mentions of pregnancy
+NHS-TESTS-021,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/talking-therapies/,,Talking therapies,,,,,,not_relevant,0 mentions of pregnancy
+NHS-TESTS-022,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/transcutaneous-electrical-nerve-stimulation-tens/,,TENS (transcutaneous electrical nerve stimulation),2025-02-14,2028-02-14,no,492,4,fetched,2 pregnancy mentions
+NHS-TESTS-023,tests-and-treatments,https://www.nhs.uk/tests-and-treatments/ultrasound-scan/,,Ultrasound scan,2025-02-25,2028-02-25,no,925,5,fetched,3 pregnancy mentions
+NHS-VACC-001,vaccinations,https://www.nhs.uk/vaccinations/6-in-1-vaccine/,,6-in-1 vaccine,,,,,,not_relevant,0 mentions of pregnancy
+NHS-VACC-002,vaccinations,https://www.nhs.uk/vaccinations/covid-19-vaccine/,,COVID-19 vaccine,,,,,,not_relevant,1 mentions of pregnancy
+NHS-VACC-003,vaccinations,https://www.nhs.uk/vaccinations/flu-vaccine/,,Flu vaccine,2026-09-29,2029-09-29,no,1254,7,fetched,7 pregnancy mentions
+NHS-VACC-004,vaccinations,https://www.nhs.uk/vaccinations/mmr-vaccine/,,"MMR (measles, mumps and rubella) vaccine",2024-03-08,2027-03-08,no,1202,10,fetched,3 pregnancy mentions
+NHS-VACC-005,vaccinations,https://www.nhs.uk/vaccinations/nhs-vaccinations-and-when-to-have-them/,,NHS vaccinations and when to have them,2023-08-09,2026-08-09,yes,817,4,fetched,4 pregnancy mentions
+NHS-VACC-006,vaccinations,https://www.nhs.uk/vaccinations/rsv-vaccine/,,RSV vaccine,2024-09-01,2027-09-01,no,1018,8,fetched,12 pregnancy mentions
+NHS-VACC-007,vaccinations,https://www.nhs.uk/vaccinations/why-vaccination-is-important-and-the-safest-way-to-protect-yourself/,,Why vaccination is important and the safest way to protect yourself,,,,,,not_relevant,0 mentions of pregnancy

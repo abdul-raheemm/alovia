@@ -1,0 +1,121 @@
+---
+doc_id: NHS-COND-037
+title: "Group B strep"
+source_org: "NHS (UK)"
+source_type: government
+licence_tier: A
+licence: "Open Government Licence v3.0"
+attribution: "Information from the NHS website as at 211026. Information from the NHS website is licensed under the Open Government Licence v3.0."
+url: "https://www.nhs.uk/conditions/group-b-strep/"
+date_accessed: 2026-10-21
+published_or_reviewed: "2024-04-19"
+region: international
+country: UK
+language: en
+doc_type: patient_education
+audience: patient
+topics: [conditions]
+trimester: "all"
+week_start: null
+week_end: null
+contains_treatment_advice: true
+contains_dosage: false
+time_sensitive: false
+priority: P1
+raw_file: raw/nhs/NHS-COND-037.html
+part: null
+notes: ""
+---
+
+# Group B strep
+
+Group B strep is normally harmless and most people will not realise they have it.
+
+It's usually only a problem:
+
+- if you're pregnant – it could spread to your baby
+- in young babies – it can make them very ill
+- if you're older or you're already very ill – it can cause repeated or serious infections
+
+This page focuses on group B strep in pregnancy and babies.
+
+## Group B strep in pregnancy
+
+Group B strep is common in pregnancy and rarely causes any problems.
+
+It's not routinely tested for, but may be found during tests carried out for another reason, such as a urine test or vaginal swab.
+
+### Risks in pregnancy
+
+If you have group B strep while you're pregnant:
+
+- your baby will usually be healthy
+- there's a small risk it could spread to your baby during labour and make them ill – this happens in about 1 in 1,750 pregnancies
+- there's an extremely small risk you could miscarry or lose your baby
+
+### What to do if you're worried
+
+If you're worried about group B strep, speak to your midwife or GP for advice.
+
+Talk to them about the risks to your baby and ask their advice about whether to get tested.
+
+Routine testing is not currently recommended and tests are rarely done on the NHS. This is because group B strep is very common and testing cannot predict whether a baby will get an infection. You can pay for a test privately.
+
+Find out more about getting tested for group B strep on the Group B Strep Support website
+
+## What happens if you have group B strep
+
+If tests find group B strep while you're pregnant, or you've had a baby that's been affected by it before, you may need extra care and treatment.
+
+You may be advised to:
+
+- speak to your midwife about your birth plan – they may recommend giving birth in hospital
+- contact your midwife as soon as you go into labour or your waters break
+- have antibiotics into a vein during labour – this can significantly reduce the risk of your baby getting ill
+- stay in hospital for at least 12 hours after giving birth so your baby can be monitored – this is not always necessary
+
+## Group B strep in babies
+
+If you had group B strep during pregnancy, there's a small risk it could spread to your baby and make them very ill.
+
+If this happens, it's usually soon after they're born. Your baby may be monitored in hospital for up to 12 hours to check for any problems.
+
+They'll be given antibiotics into a vein if they develop symptoms.
+
+## What to look for after leaving hospital
+
+Occasionally, symptoms of a group B strep infection in a baby can develop up to 3 months after birth.
+
+Symptoms may include:
+
+- being floppy or not responding normally
+- grunting when breathing, or working hard to breathe when you look at their chest or stomach
+- very fast or slow breathing
+- an unusually high or low temperature
+- changes in their skin colour or blotchy skin
+- not feeding well or vomiting milk up
+- an unusually fast or slow heart rate
+
+## Immediate action required: Call 999 or go to A&E if:
+
+- your baby has symptoms of a group B strep infection
+
+They may need treatment with antibiotics in hospital immediately.
+
+Find your nearest A&E
+
+Information:
+
+Do not drive to A&E. Ask someone to drive you or call 999 and ask for an ambulance.
+
+Bring any medicines you take with you.
+
+## Risks of group B strep in babies
+
+Most babies with a group B strep infection make a full recovery if treated.
+
+Some babies may develop serious problems like sepsis or meningitis.
+
+This can cause lasting problems like hearing loss or loss of vision. Sometimes it can be fatal.
+
+Page last reviewed: 19 April 2024 Next review due: 19 April 2027
