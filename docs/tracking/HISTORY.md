@@ -284,3 +284,33 @@ Suggestions raised (not implemented): none
 Docs updated: API (`/me`, `/me/consent` shapes), DATABASE §6, DECISIONS (DEC-035, DEC-036), PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: none new
 Next step: move the ML code with regression tests.
+
+## Session 8 — 2026-11-17 — Move the ML code
+Who: Raheem + agent: Claude Code (Phase 1 permission, no per-task approval)
+Phase / task: Phase 1 — move ML code + model files; regression tests
+Goal: the new backend serves the same models with byte-for-byte the same outputs as ml-test.
+
+Done:
+- 8 model files copied from `ml-test/app/models/` (read-only source) to `backend/ml_models/`; `.gitattributes`: `backend/ml_models/** -text` so git never changes their bytes.
+- `RiskModel` moved to `app/modules/predictions/risk_model.py` token-for-token (only line wrapping and one lint comment differ); `load_models()` loads both models once per process; `create_app` fails fast if a file is missing; `/health` reports `models_loaded`.
+- ML packages pinned at the old backend's exact versions; one mypy exception for the unchanged, partly untyped file.
+- `tests/unit/test_ml_regression.py`: model-file hashes, ML package versions, and all 12 reference cases (sent through the same input-schema path as the old endpoint).
+
+Files changed:
+- `backend/ml_models/*` (8), `backend/app/modules/predictions/risk_model.py`, `backend/tests/unit/test_ml_regression.py` — added
+- `backend/app/main.py`, `backend/app/api/health.py`, `backend/requirements.txt`, `backend/pyproject.toml`, `.gitattributes`, `backend/tests/integration/test_app_basics.py` (`models_loaded` now true) — modified
+- docs: ml_models_spec, tracking/*
+
+Decisions made (with owner approval): none new (Phase 1 permission)
+
+Checks run (exact commands and results):
+- `sha256sum -c` of the copied model files → 8 OK
+- token diff of the `RiskModel` class vs `ml-test/app/main.py` → only whitespace and one `# noqa` comment differ
+- `pytest -W error::DeprecationWarning -W error::ResourceWarning -W error::pytest.PytestUnraisableExceptionWarning --cov=app` → 65 passed (12/12 ML cases identical), coverage 99% (3 unreachable fallback lines in the unchanged ML code)
+- `ruff check .`, `ruff format --check .` → pass; `mypy app tests migrations` → Success: no issues found in 31 source files
+
+Errors met: none (one edit-script assertion fired because the formatter had already wrapped the line; nothing to change)
+Suggestions raised (not implemented): none
+Docs updated: ml_models_spec §6, PROGRESS, CONTEXT, HISTORY
+Open questions for the owner: none
+Next step: frontend workspace.

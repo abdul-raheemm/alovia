@@ -17,6 +17,20 @@ plugins = ["pydantic.mypy"]
 mypy_path = "."
 explicit_package_bases = true
 
+# The ML code is moved unchanged from ml-test (ml_models_spec.md §0), so it keeps its
+# original, partly untyped signatures; the ML libraries ship no type stubs.
+[[tool.mypy.overrides]]
+module = "app.modules.predictions.risk_model"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_any_generics = false
+warn_return_any = false
+disable_error_code = ["call-overload"]
+
+[[tool.mypy.overrides]]
+module = ["joblib", "pandas", "shap", "sklearn.*", "xgboost.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]

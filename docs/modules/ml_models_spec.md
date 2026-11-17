@@ -65,6 +65,8 @@ After the move, re-run the real test cases from the training notebooks and compa
 - fetal Normal, Suspect, Pathological;
 - maternal Low, Mid, High, plus the known documented misclassification case.
 
+**Done (2026-11-17):** reference outputs recorded for 12 owner-approved cases (`backend/tests/fixtures/ml_reference_outputs.json`); `backend/tests/unit/test_ml_regression.py` checks every case, the model-file hashes and the ML package versions.
+
 **Decision (2026-11-16):** the notebook test values are not available. Before moving any code, the agent runs the old `ml-test` backend locally (read-only, from a copy) on a set of inputs agreed with the owner — at least one per class for each model, taken from rows of the public datasets or the owner's synthetic cases — saves inputs and full outputs to `backend/tests/fixtures/ml_reference_outputs.json`, and the new backend must reproduce them exactly. The owner approves the input set first.
 
 ## 7. What changes for the doctor (Phase 5, Dashboard spec §9–10)

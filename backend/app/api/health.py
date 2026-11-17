@@ -16,12 +16,12 @@ router = APIRouter(prefix=API_PREFIX)
 
 @router.get("/health")
 def health(request: Request) -> dict[str, Any]:
-    # models_loaded and rules_loaded turn true in the ML-move and rule-file tasks
+    # rules_loaded turns true in the rule-file tasks (Phases 2-4)
     return ok(
         {
             "status": "ok",
             "db": _db_status(request.app.state.engine),
-            "models_loaded": False,
+            "models_loaded": request.app.state.models is not None,
             "rules_loaded": {"genetic": False, "symptoms": False, "journey": False},
             "version": __version__,
         }

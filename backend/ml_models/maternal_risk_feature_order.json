@@ -1,0 +1,10 @@
+[
+  "Age",
+  "Body Temperature(F) ",
+  "Heart rate(bpm)",
+  "Systolic Blood Pressure(mm Hg)",
+  "Diastolic Blood Pressure(mm Hg)",
+  "BMI(kg/m 2)",
+  "Blood Glucose(HbA1c mmol/mol)",
+  "Blood Glucose(Fasting mmol/L)"
+]

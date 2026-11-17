@@ -2,3 +2,5 @@
 knowledge-base/raw/** -text
 # Keep clean knowledge-base files with LF line endings, as written
 knowledge-base/clean/** text eol=lf
+# Model files must stay byte-identical to the originals (ml_models_spec.md §0)
+backend/ml_models/** -text

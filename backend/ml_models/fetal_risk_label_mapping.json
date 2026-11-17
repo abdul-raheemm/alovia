@@ -1,0 +1,12 @@
+{
+  "model_output_to_nsp": {
+    "0": 1,
+    "1": 2,
+    "2": 3
+  },
+  "nsp_to_label": {
+    "1": "Normal",
+    "2": "Suspect",
+    "3": "Pathological"
+  }
+}

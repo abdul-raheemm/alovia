@@ -52,7 +52,7 @@ def test_health(client: TestClient) -> None:
         "data": {
             "status": "ok",
             "db": "ok",
-            "models_loaded": False,
+            "models_loaded": True,
             "rules_loaded": {"genetic": False, "symptoms": False, "journey": False},
             "version": "0.0.0",
         },

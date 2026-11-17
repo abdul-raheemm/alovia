@@ -1,0 +1,24 @@
+{
+  "model_type": "XGBoost",
+  "task": "Maternal Risk Classification (Low/Mid/High)",
+  "trained_on": "2026-09-17",
+  "n_features": 8,
+  "best_params": {
+    "subsample": 1.0,
+    "n_estimators": 300,
+    "min_child_weight": 3,
+    "max_depth": 8,
+    "learning_rate": 0.2,
+    "gamma": 0.1,
+    "colsample_bytree": 0.7
+  },
+  "test_macro_f1": 0.9909,
+  "test_accuracy": 0.99,
+  "cv_macro_f1": 0.9924,
+  "requires_scaling": false,
+  "unit_notes": {
+    "Blood Glucose(HbA1c mmol/mol)": "mmol/mol (IFCC), NOT percent",
+    "Blood Glucose(Fasting mmol/L)": "mmol/L, NOT mg/dl despite original source column name"
+  },
+  "notes": "No class_weight/SMOTE used \u2014 classes are near-perfectly balanced (~33% each). Feature order in maternal_risk_feature_order.json must be preserved exactly at inference time. Trained on cleaned data (6058 rows, 45 physiologically implausible raw rows removed per Hossain et al. 2026 validated ranges)."
+}

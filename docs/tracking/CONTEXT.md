@@ -40,5 +40,6 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 - Database: migration 0001 applied to the main project (9 Phase 1 tables, no RLS — DEC-022). Migration tests run against the separate `alovia-test` project (DEC-034). Both URLs in `backend/.env` are Session pooler URLs.
 - `/me` and `/me/consent` done; `get_account` (in `app/modules/users/service.py`) loads the users row for any route that needs the role.
 - Owner permission (2026-11-17): finish the rest of Phase 1 without asking per task; normal approvals resume with Phase 2.
-- Next: move the ML code (see `PROGRESS.md`).
+- ML moved: `backend/ml_models/` (8 files, byte-identical), `app/modules/predictions/risk_model.py` (logic unchanged), loaded once at startup; `/health` `models_loaded: true`. Prediction routes come in Phase 5.
+- Next: frontend workspace (see `PROGRESS.md`).
 - Open owner actions: fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).

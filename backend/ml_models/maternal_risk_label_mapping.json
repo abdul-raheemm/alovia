@@ -1,0 +1,12 @@
+{
+  "model_output_to_status": {
+    "0": "low risk",
+    "1": "mid risk",
+    "2": "high risk"
+  },
+  "status_to_label": {
+    "low risk": "Low",
+    "mid risk": "Mid",
+    "high risk": "High"
+  }
+}

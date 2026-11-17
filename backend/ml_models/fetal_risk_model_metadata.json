@@ -1,0 +1,22 @@
+{
+  "model_type": "XGBoost",
+  "task": "Fetal Risk Classification (Normal/Suspect/Pathological)",
+  "trained_on": "2026-09-17",
+  "n_features": 21,
+  "best_params": {
+    "subsample": 1.0,
+    "n_estimators": 500,
+    "min_child_weight": 3,
+    "max_depth": 3,
+    "learning_rate": 0.1,
+    "gamma": 0.2,
+    "colsample_bytree": 0.8
+  },
+  "test_macro_f1": 0.9164,
+  "test_pathological_recall": 0.97,
+  "test_suspect_recall": 0.85,
+  "test_normal_recall": 0.96,
+  "cv_macro_f1": 0.9217,
+  "requires_scaling": false,
+  "notes": "Uses class_weight='balanced' via sample_weight, no SMOTE. Feature order in fetal_risk_feature_order.json must be preserved exactly at inference time."
+}
