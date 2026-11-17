@@ -2,7 +2,7 @@
 
 import uuid
 
-from pydantic import BaseModel, ConfigDict, StrictBool
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
 
 class UserOut(BaseModel):
@@ -32,6 +32,16 @@ class MeOut(BaseModel):
     patient: PatientRef | None
     doctor: DoctorRef | None
     consent: ConsentStatus
+
+
+class InviteCheckOut(BaseModel):
+    valid: bool
+
+
+class LinkIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    code: str = Field(min_length=1, max_length=64)
 
 
 class ConsentIn(BaseModel):

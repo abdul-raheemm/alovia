@@ -7,6 +7,7 @@ cryptography==50.0.2
 SQLAlchemy==2.1.9
 alembic==1.20.1
 psycopg[binary]==3.3.9
+PyYAML==6.0.3
 # ML: exact versions of the old ml-test backend (ml_models_spec.md; outputs must not change)
 xgboost==3.4.1
 scikit-learn==1.9.1

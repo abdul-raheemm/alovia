@@ -1,0 +1,4 @@
+# Doctor Dashboard settings (doctor_dashboard_module_spec.md §23, all [CONFIGURABLE]).
+# Only the settings used so far are listed; the rest are added with Phase 5.
+invite_code_length: 8
+invite_code_days: 7
