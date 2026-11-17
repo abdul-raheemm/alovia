@@ -1,5 +1,322 @@
-# Prototype Journey content (journey spec §8.3). EMPTY until Phase 2 task 4 fills it from the
-# approved sources (womenshealth.gov, OpenStax, Tier A KB files, WHO sizes — DEC-042).
-# Items must follow the §8.1 shape exactly; every item carries its source and
-# is_prototype: true. No content may be written from memory (CLAUDE.md rule 5).
-items: []
+# Prototype Journey content (journey spec §8.3, DEC-042) — a SMALL sample: all 9 months,
+# sample weeks, every content_type at least once. Not full coverage. All items are
+# is_prototype: true and review_status: unreviewed; the apps show the prototype banner.
+#
+# Sources and handling (CLAUDE.md rule 5 — nothing written from the agent's own knowledge):
+# - NHS items: UNCHANGED contiguous excerpts from the knowledge-base clean files (OGL v3.0,
+#   attribution "Information from the NHS website is licensed under the Open Government
+#   Licence v3.0").
+# - MedlinePlus items: public-domain text, shortened by REMOVING words/bullets only.
+# - Office on Women's Health items: the page is marked free of copyright restrictions
+#   (fetched 2026-11-17). Bodies keep only the page's stated values inside the fixed frame
+#   "Typical at this stage: ..." because spec §13.1 forbids the page's own "your baby
+#   is/weighs" phrasing on screens. No medical statement was added.
+# - OpenStax (spec S2) is NOT used: its live page is CC BY-NC-SA, which the project's
+#   licence rules do not allow (open question for the owner; see tracking/CONTEXT.md).
+items:
+  # ---- fetal development: one month item per month (values from OWH "Stages of pregnancy") ----
+  - id: owh_month_1
+    granularity: month
+    month: 1
+    content_type: fetal_development
+    title: "At four to five weeks"
+    body: "Typical at this stage: an embryo, one-twenty-fifth inch long."
+    source: &owh
+      publisher: "Office on Women's Health (HHS)"
+      title: "Stages of pregnancy"
+      url: "https://womenshealth.gov/pregnancy/youre-pregnant-now-what/stages-pregnancy"
+      licence: "Free of copyright restrictions (OWH/HHS; cite source); page last updated 2025-09-26"
+      date_accessed: 2026-11-17
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_month_2
+    granularity: month
+    month: 2
+    content_type: fetal_development
+    title: "At eight weeks"
+    body: "Typical at this stage: length nearly 1 inch; weight less than one-eighth ounce."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_month_3
+    granularity: month
+    month: 3
+    content_type: fetal_development
+    title: "At 12 weeks"
+    body: "Typical at this stage: length about 3 inches; weight almost an ounce."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_month_4
+    granularity: month
+    month: 4
+    content_type: fetal_development
+    title: "At 16 weeks"
+    body: "Typical at this stage: length about 4 to 5 inches; weight almost 3 ounces."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_month_5
+    granularity: month
+    month: 5
+    content_type: fetal_development
+    title: "At 20 weeks"
+    body: "Typical at this stage (halfway through pregnancy): length about 6 inches; weight about 9 ounces."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_month_6
+    granularity: month
+    month: 6
+    content_type: fetal_development
+    title: "At 24 weeks"
+    body: "Typical at this stage: length about 12 inches; weight about 1½ pounds."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_month_7_body
+    granularity: month
+    month: 7
+    content_type: body_changes
+    title: "Third trimester (week 29–week 40)"
+    body: "Many women find breathing difficult and notice they have to go to the bathroom even more often."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_month_8
+    granularity: month
+    month: 8
+    content_type: fetal_development
+    title: "At 32 weeks"
+    body: "Typical at this stage: length about 15 to 17 inches; weight about 4 to 4½ pounds."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_month_9
+    granularity: month
+    month: 9
+    content_type: fetal_development
+    title: "At 36 weeks"
+    body: "Typical at this stage: length about 16 to 19 inches; weight about 6 to 6½ pounds."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- sample week items (test §8.1 selection: a week item beats a month item on home) ----
+  - id: owh_week_20
+    granularity: week
+    week_start: 20
+    week_end: 20
+    content_type: fetal_development
+    title: "At 20 weeks"
+    body: "Typical at this stage (halfway through pregnancy): length about 6 inches; weight about 9 ounces."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_weeks_37_40
+    granularity: week_range
+    week_start: 37
+    week_end: 40
+    content_type: fetal_development
+    title: "Weeks 37–40"
+    body: "At 39 weeks, a pregnancy is considered full-term."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- body changes by trimester (OWH; verbatim sentences) ----
+  - id: owh_body_t1
+    granularity: week_range
+    week_start: 0
+    week_end: 13
+    content_type: body_changes
+    title: "First trimester (week 1–week 12)"
+    body: "During the first trimester your body undergoes many changes."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+  - id: owh_body_t2
+    granularity: week_range
+    week_start: 14
+    week_end: 27
+    content_type: body_changes
+    title: "Second trimester (week 13–week 28)"
+    body: "Your abdomen will expand as the baby continues to grow."
+    source: *owh
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- common symptoms (NHS, unchanged excerpt) ----
+  - id: nhs_symptoms_indigestion
+    granularity: week_range
+    week_start: 12
+    week_end: 42
+    content_type: common_symptoms
+    title: "Indigestion and heartburn in pregnancy"
+    body: |-
+      Indigestion, also called heartburn or acid reflux, is common in pregnancy. It can be caused by hormonal changes and the growing baby pressing against your stomach.
+
+      You can help ease indigestion and heartburn by making changes to your diet and lifestyle, and there are medicines that are safe to take in pregnancy.
+
+      Symptoms of indigestion and heartburn include:
+
+      - a burning sensation or pain in the chest
+      - feeling full, heavy or bloated
+      - burping or belching
+      - feeling or being sick
+      - bringing up food
+
+      Information from the NHS website is licensed under the Open Government Licence v3.0.
+    source:
+      publisher: "NHS (UK)"
+      title: "Indigestion and heartburn in pregnancy"
+      url: "https://www.nhs.uk/pregnancy/common-symptoms/indigestion-and-heartburn/"
+      licence: "Open Government Licence v3.0"
+      date_accessed: 2026-10-21
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- warning signs (NHS, unchanged excerpt) ----
+  - id: nhs_warning_movements
+    granularity: week_range
+    week_start: 16
+    week_end: 42
+    content_type: warning_signs
+    title: "Change in your baby's movements"
+    body: |-
+      You should start to feel your baby move from around 16 to 24 weeks of pregnancy.
+
+      A change in your baby's movements can sometimes be a sign of a problem, so it's important to get help if you notice any change.
+
+      Information from the NHS website is licensed under the Open Government Licence v3.0.
+    source:
+      publisher: "NHS (UK)"
+      title: "Pregnancy symptoms you need to get help for"
+      url: "https://www.nhs.uk/pregnancy/common-symptoms/pregnancy-symptoms-you-need-to-get-help-for/"
+      licence: "Open Government Licence v3.0"
+      date_accessed: 2026-10-21
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- nutrition (NHS, unchanged excerpt) ----
+  - id: nhs_nutrition_dairy
+    granularity: week_range
+    week_start: 0
+    week_end: 42
+    content_type: nutrition
+    title: "Foods to avoid in pregnancy: cheese, milk and other dairy"
+    body: |-
+      Safe to eat:
+
+      - any pasteurised milk, butter, yoghurt, cream and ice cream (including cows', sheep's and goats' milk)
+      - pasteurised or unpasteurised hard cheeses, such as cheddar, gruyère and parmesan
+      - pasteurised semi-hard cheeses, such as edam
+      - any cheese that's been cooked until steaming hot, including soft or blue cheese
+
+      Most dairy products, like milk, cheese and butter you buy in supermarkets are pasteurised. You can check the packaging to make sure.
+
+      Information from the NHS website is licensed under the Open Government Licence v3.0.
+    source:
+      publisher: "NHS (UK)"
+      title: "Foods to avoid in pregnancy"
+      url: "https://www.nhs.uk/pregnancy/keeping-well/foods-to-avoid/"
+      licence: "Open Government Licence v3.0"
+      date_accessed: 2026-10-21
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- dos and don'ts (NHS, unchanged excerpt) ----
+  - id: nhs_exercise
+    granularity: week_range
+    week_start: 0
+    week_end: 42
+    content_type: dos_and_donts
+    title: "How much exercise to do in pregnancy"
+    body: |-
+      It's recommended you aim for 150 minutes (2 and a half hours) of moderate intensity activity a week, including muscle strengthening exercises. This is the same advice given to all adults.
+
+      Moderate activity raises your heart rate, and makes you breathe faster and feel warmer. Many things, including walking, swimming and yoga, can count towards the 150 minutes a week. When you're doing moderate activity, you should be able to talk but not sing.
+
+      Information from the NHS website is licensed under the Open Government Licence v3.0.
+    source:
+      publisher: "NHS (UK)"
+      title: "Exercise in pregnancy"
+      url: "https://www.nhs.uk/pregnancy/keeping-well/exercise/"
+      licence: "Open Government Licence v3.0"
+      date_accessed: 2026-10-21
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- guidance (MedlinePlus, public domain, verbatim paragraph) ----
+  - id: mlp_guidance_healthy
+    granularity: week_range
+    week_start: 0
+    week_end: 42
+    content_type: guidance
+    title: "Fetal Health and Development"
+    body: "Besides getting medical care, there are other things you can do to keep your baby as healthy as possible. It's important not to drink or smoke. Try to eat a healthy diet and make sure to take care of any health problems you have during pregnancy."
+    source:
+      publisher: "MedlinePlus (US National Library of Medicine)"
+      title: "Fetal Health and Development"
+      url: "https://medlineplus.gov/fetalhealthanddevelopment.html"
+      licence: "Public domain (US federal government work)"
+      date_accessed: 2026-10-02
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- checklist (MedlinePlus, public domain, shortened by removing words only) ----
+  - id: mlp_checklist_pregnancy
+    granularity: week_range
+    week_start: 0
+    week_end: 42
+    content_type: checklist
+    title: "Taking care of your health while you're pregnant"
+    body: |-
+      - Have regular visits with your health care provider.
+      - Eat healthy and drink plenty of water.
+      - Take prenatal vitamins.
+      - Be careful with medicines. Always check with your provider before you start or stop any medicine.
+      - Stay active.
+      - Avoid substances that could hurt your baby, including alcohol, drugs, and tobacco.
+    source:
+      publisher: "MedlinePlus (US National Library of Medicine)"
+      title: "Pregnancy"
+      url: "https://medlineplus.gov/pregnancy.html"
+      licence: "Public domain (US federal government work)"
+      date_accessed: 2026-10-02
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- discuss with doctor (MedlinePlus, public domain, verbatim) ----
+  - id: mlp_discuss_visits
+    granularity: week_range
+    week_start: 0
+    week_end: 42
+    content_type: discuss_with_doctor
+    title: "Prenatal Care"
+    body: "Every prenatal visit offers you the chance to ask questions about having a healthy pregnancy and preparing for delivery. Talk to your provider about childbirth education classes for you and your partner to help you prepare for the birth of your baby."
+    source:
+      publisher: "MedlinePlus (US National Library of Medicine)"
+      title: "Prenatal Care"
+      url: "https://medlineplus.gov/prenatalcare.html"
+      licence: "Public domain (US federal government work)"
+      date_accessed: 2026-10-02
+    review_status: unreviewed
+    is_prototype: true
+
+  # ---- fetal development, general (MedlinePlus, public domain, verbatim) ----
+  - id: mlp_fetal_trimesters
+    granularity: week_range
+    week_start: 0
+    week_end: 42
+    content_type: fetal_development
+    title: "Fetal Health and Development"
+    body: "A normal pregnancy lasts nine months. Each three-month period of pregnancy is called a trimester. During each trimester, the fetus grows and develops."
+    source:
+      publisher: "MedlinePlus (US National Library of Medicine)"
+      title: "Fetal Health and Development"
+      url: "https://medlineplus.gov/fetalhealthanddevelopment.html"
+      licence: "Public domain (US federal government work)"
+      date_accessed: 2026-10-02
+    review_status: unreviewed
+    is_prototype: true

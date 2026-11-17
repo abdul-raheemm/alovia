@@ -49,7 +49,19 @@ export function BabyCard({
       />
       <div className="flex flex-col gap-1">
         <h2>Month {pregnancy.month}</h2>
-        {size && <p>{sizeLine(size)}</p>}
+        {size && (
+          <p className="flex items-center gap-2">
+            {/* comparison object from Microsoft Fluent Emoji (MIT); name is in the text */}
+            <img
+              src={`/icons/fluent/${size.object_icon_id}.svg`}
+              alt=""
+              width={28}
+              height={28}
+              className="size-7 shrink-0"
+            />
+            {sizeLine(size)}
+          </p>
+        )}
         {size && (
           <p className="text-sm text-muted">
             Source: {size.source.publisher} — {size.source.title}

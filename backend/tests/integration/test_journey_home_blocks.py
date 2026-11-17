@@ -56,9 +56,14 @@ def test_home_blocks_with_a_dated_pregnancy(client: TestClient, engine: Engine) 
     assert [m["month"] for m in data["months"]] == list(range(1, 10))
     assert data["months"][0] == {"month": 1, "week_start": 0, "week_end": 4}
     assert data["months"][8] == {"month": 9, "week_start": 36, "week_end": 42}
-    # content and size are empty until task 4 fills the files (DEC-042/043, §15 test 7)
-    assert data["stage_items"] == []
-    assert data["size"] is None
+    # task 4 content at week 24: the 0-42 fetal item + the trimester-2 body item; the
+    # month-6 fetal item is held back for the detail view (§8.1 precedence)
+    assert {i["id"] for i in data["stage_items"]} == {"mlp_fetal_trimesters", "owh_body_t2"}
+    assert all(
+        i["is_prototype"] and i["review_status"] == "unreviewed" for i in data["stage_items"]
+    )
+    # WHO Table 11, 50th percentile at week 24 (DEC-043 sample)
+    assert data["size"]["weight_g"] == 665 and data["size"]["object_icon_id"] == "coconut"
     assert data["next_appointment"] is None
 
 
@@ -124,13 +129,14 @@ def test_month_detail_and_is_current(client: TestClient, engine: Engine) -> None
     user_id = dated_patient(engine, client, weeks=24)  # week 24 -> month 6
     res = month_detail(client, user_id, 6)
     assert res.status_code == 200
-    assert res.json()["data"] == {
-        "month": 6,
-        "week_start": 23,
-        "week_end": 27,
-        "is_current": True,
-        "items": [],
-    }
+    data = res.json()["data"]
+    assert (data["month"], data["week_start"], data["week_end"], data["is_current"]) == (
+        6,
+        23,
+        27,
+        True,
+    )
+    assert [i["id"] for i in data["items"]] == ["owh_month_6"]  # the held-back month item
     assert month_detail(client, user_id, 1).json()["data"]["is_current"] is False
 
 

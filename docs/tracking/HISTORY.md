@@ -444,3 +444,34 @@ Suggestions raised (not implemented): none new
 Docs updated: API, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: none — task 4 (fetch S1/S2/S3/S6 content, DEC-042/043) is next and already approved
 Next step: task 4 — fill the content and size files from the approved sources.
+
+## Session 13 — 2026-11-17 — Phase 2 task 4: prototype content and size reference
+Who: Raheem + agent: Claude Code (DEC-042/043, option C network fetches approved)
+Phase / task: Phase 2 — prototype YAML content + size reference (sourced)
+Goal: fill the (previously empty) content files from the approved sources only.
+
+Done:
+- Fetched (web-fetch agents, verbatim-quote discipline): OWH "Stages of pregnancy" (page confirms it is free of copyright restrictions; exact values and short exact sentences used) and the OpenStax 28.3 page (NOT used — see licence finding). WHO weights: supplementary files turned out to be figures only, so Table 11 was downloaded as the published PNG and the 50th-percentile column transcribed by reading the image directly (no value estimated).
+- `prototype_content.yaml`: 21 items — 9 month items (one per month), week/week-range samples (incl. the §8.1 precedence pair at week 20), NHS unchanged excerpts (indigestion, movements warning signs, dairy foods, exercise) each carrying the OGL attribution line, MedlinePlus public-domain items (guidance, checklist, discuss-with-doctor, trimester overview) shortened by removing words only. Every item: full §8.1 source, is_prototype, unreviewed.
+- Spec §13.1 conflict handled: source sentences say "your baby is/weighs" (banned on screens); month-item bodies therefore carry only the sourced values inside the fixed frame "Typical at this stage: …". A unit test now scans every shipped item for the banned phrasings.
+- `size_reference.yaml`: weeks 14, 16, 20, 24, 28, 32, 36 = 90/144/330/665/1189/1901/2745 g (WHO Table 11, 50th percentile, CC BY 4.0); lengths none (the chart gives weight only); draft objects lemon/tomato/mango/coconut/pineapple/melon/small watermelon (India-familiar where possible) pending doctor review R2.
+- Icons: 7 Fluent Emoji colour SVGs + MIT LICENSE in `public/icons/fluent/`; BabyCard shows the object icon (decorative alt, name stays in the text).
+- Tests updated from "files are empty" to sample coverage: all 9 types, all 9 months, banned-phrase scan, WHO values exact and strictly growing, icon file exists per size row, precedence at week 20; home-blocks route tests updated to the filled sample.
+
+Files changed:
+- backend: `content/prototype_content.yaml`, `content/size_reference.yaml`, `tests/unit/test_journey_content.py`, `tests/integration/test_journey_home_blocks.py`
+- frontend: `components/journey/JourneyBlocks.tsx` (size icon), `public/icons/fluent/*` (8 files)
+- docs: PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+
+Decisions made (with owner approval): under DEC-042/043. OpenStax dropped (licence) — owner decision requested on the spec's S2/D9 references.
+
+Checks run (exact commands and results):
+- `pytest` (strict warnings) → 187 passed; `ruff check .` / `ruff format --check .` / `mypy app tests migrations scripts` → pass
+- frontend typecheck/lint/format/unit (27) → pass; `npm run test:e2e` → 42 passed
+- `scripts/check_all.ps1` → All checks passed, exit 0
+
+Errors met: 1 (ERR-033)
+Suggestions raised (not implemented): none
+Docs updated: PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: OpenStax licence (spec S2/D9); doctor review of content items and size objects (R2) before release — tracked for the rule-review flow
+Next step: task 6 (calendar + appointments, patient side) — one batched decision pending (react-day-picker install).

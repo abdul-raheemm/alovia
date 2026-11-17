@@ -31,7 +31,7 @@ Update after every task. Each line: status, task, who, date, notes.
 - [x] Migration (date history, appointments, notifications, doctor_notes) + inbox_items (DEC-044) — Raheem + Claude Code — 2026-11-17 (migration 0002; tested on alovia-test; applied to the main project: `alembic current` = 0002)
 - [x] GA/month/trimester calculations + tests — Raheem + Claude Code — 2026-11-17 (`app/modules/journey/engine.py`, `rules/journey/config.yaml`; 42 engine tests)
 - [x] Dates onboarding + validation — Raheem + Claude Code — 2026-11-17 (D1-D3, §5.3 override confirmation, date history; messages.yaml with all §13.2 keys pending approval; home header + onboarding + dates screens; nav from config, DEC-040)
-- [ ] Content provider interface + prototype YAML content + size reference (sourced)
+- [x] Content provider interface + prototype YAML content + size reference (sourced) — Raheem + Claude Code — 2026-11-17 (interface built in task 5; 21 items covering all 9 content types and all 9 months from OWH stages page, local NHS unchanged excerpts, local MedlinePlus public-domain text; 7 size rows from WHO Table 11 50th percentile transcribed from the published table image; 7 Fluent Emoji icons (MIT) + LICENSE shipped; OpenStax NOT used — its live licence is CC BY-NC-SA, open question for the owner)
 - [x] Home screen blocks; month cards + detail; illustrations (licensed or placeholders) — Raheem + Claude Code — 2026-11-17 (§4.3 order: header, baby card with float, This stage, quick log, next appointment, months strip; month detail; content provider interface with EMPTY files until task 4; placeholder drawings labelled "Placeholder"; defensive bad-date guard)
 - [ ] Calendar + appointments (patient side)
 - [ ] Notifications bar

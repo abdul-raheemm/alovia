@@ -1,4 +1,60 @@
-# Prototype size reference (journey spec §7.2). EMPTY until Phase 2 task 4 fills it from the
-# WHO fetal growth charts (S3) and womenshealth.gov/OpenStax for early weeks (DEC-043).
-# Weeks without a sourced value get no row — the app then shows no size comparison (§15 test 7).
-sizes: []
+# Prototype size reference (journey spec §7.2, DEC-043) — a SAMPLE of weeks; weeks without a
+# row show no size comparison (§15 test 7). review_status stays unreviewed until a doctor
+# confirms each week's comparison object (R2).
+#
+# Weights: WHO Fetal Growth Charts, Table 11 ("Growth chart for estimated fetal weight
+# regardless of fetal sex"), 50th percentile, grams — transcribed on 2026-11-17 from the
+# published table image (doi:10.1371/journal.pmed.1002220.t011, CC BY 4.0). No value was
+# estimated or interpolated. Lengths: none (the chart gives weight only).
+#
+# Comparison objects: Microsoft Fluent Emoji (MIT), icons in
+# frontend/apps/patient-web/public/icons/fluent/. Object choices are the agent's DRAFT,
+# preferring objects familiar in India (DEC-043); a doctor reviews each one (R2).
+sizes:
+  - week: 14
+    weight_g: 90
+    object_icon_id: lemon
+    object_name: lemon
+    source: &who
+      publisher: "Kiserud T et al., PLOS Medicine (WHO Fetal Growth Charts)"
+      title: "Table 11: Growth chart for estimated fetal weight regardless of fetal sex (50th percentile)"
+      url: "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1002220"
+      licence: "CC BY 4.0"
+      date_accessed: 2026-11-17
+    review_status: unreviewed
+  - week: 16
+    weight_g: 144
+    object_icon_id: tomato
+    object_name: tomato
+    source: *who
+    review_status: unreviewed
+  - week: 20
+    weight_g: 330
+    object_icon_id: mango
+    object_name: mango
+    source: *who
+    review_status: unreviewed
+  - week: 24
+    weight_g: 665
+    object_icon_id: coconut
+    object_name: coconut
+    source: *who
+    review_status: unreviewed
+  - week: 28
+    weight_g: 1189
+    object_icon_id: pineapple
+    object_name: pineapple
+    source: *who
+    review_status: unreviewed
+  - week: 32
+    weight_g: 1901
+    object_icon_id: melon
+    object_name: melon
+    source: *who
+    review_status: unreviewed
+  - week: 36
+    weight_g: 2745
+    object_icon_id: watermelon
+    object_name: small watermelon
+    source: *who
+    review_status: unreviewed

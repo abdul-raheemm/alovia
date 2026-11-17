@@ -350,3 +350,13 @@ Fix: count-based and filtered selectors.
 Verified by: `npm run test:e2e` → 42 passed.
 Prevention: none needed — strict mode caught exactly what it should.
 Category: test
+
+### ERR-033 — 2026-11-17 — Read used the scratchpad path for a file saved under $TEMP
+Who: Claude Code
+Phase / task: Phase 2 — task 4 (WHO table image)
+What happened: the first Read of the downloaded Table 11 image failed ("File does not exist").
+Cause: the shell's $TEMP is C:\Users\Engineer\AppData\Local\Temp, not the session scratchpad; the download went to $TEMP\who-s1.
+Fix: read the real path after checking `echo $TEMP`.
+Verified by: the image opened and the table was transcribed.
+Prevention: print the resolved path once before reading downloaded files.
+Category: tooling

@@ -85,11 +85,48 @@ sizes:
 """
 
 
-def test_shipped_files_are_valid_and_empty_until_task_4() -> None:
+def test_shipped_prototype_content_covers_the_sample(tmp_path: Path) -> None:
+    """§8.3: all 9 months, sample weeks, every content_type at least once; everything is
+    prototype + unreviewed until a doctor reviews it (DEC-042/043)."""
     provider = PrototypeContentProvider(CONTENT_DIR)
-    assert provider.items_for_week(20) == []
-    assert provider.items_for_month(5) == []
-    assert provider.size_for_week(20) is None
+    all_items = [i for m in range(1, 10) for i in provider.items_for_month(m)] + [
+        i for w in range(0, 43) for i in provider.items_for_week(w)
+    ]
+    assert all(i.is_prototype and i.review_status == "unreviewed" for i in all_items)
+    types = {i.content_type for i in all_items}
+    assert types == {
+        "fetal_development", "body_changes", "common_symptoms", "guidance", "nutrition",
+        "dos_and_donts", "warning_signs", "checklist", "discuss_with_doctor",
+    }  # fmt: skip
+    for month in range(1, 10):  # every month detail screen has at least one item
+        assert provider.items_for_month(month), f"month {month} has no item"
+    # spec §13.1 / §15 test 11: the banned phrasings never reach a screen
+    for item in all_items:
+        text = f"{item.title} {item.body}".lower()
+        assert "your baby is" not in text and "your baby weighs" not in text, item.id
+    # home selection at a sample week returns the week item ahead of the month item
+    chosen = {i.id for i in select_for_home(provider, 20, 5, ["fetal_development"])}
+    assert "owh_week_20" in chosen and "owh_month_5" not in chosen
+
+
+def test_shipped_size_reference_sample() -> None:
+    """§7.2 / DEC-043: WHO Table 11 50th-percentile sample; unsampled weeks show nothing."""
+    provider = PrototypeContentProvider(CONTENT_DIR)
+    weights = {}
+    for week in range(0, 43):
+        size = provider.size_for_week(week)
+        if size is not None:
+            assert size.review_status == "unreviewed"  # object choice awaits R2 review
+            assert size.weight_g is not None and size.length_cm is None
+            assert "1002220" in size.source.url  # the WHO charts article
+            weights[week] = size.weight_g
+    assert weights == {14: 90, 16: 144, 20: 330, 24: 665, 28: 1189, 32: 1901, 36: 2745}
+    assert provider.size_for_week(15) is None and provider.size_for_week(40) is None
+    assert list(weights.values()) == sorted(weights.values())  # strictly growing
+    icons = Path(__file__).resolve().parents[3] / "frontend/apps/patient-web/public/icons/fluent"
+    for week in weights:
+        icon = provider.size_for_week(week)
+        assert icon is not None and (icons / f"{icon.object_icon_id}.svg").is_file()
 
 
 def test_selection_rule(tmp_path: Path) -> None:
