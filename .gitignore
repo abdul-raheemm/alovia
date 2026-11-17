@@ -17,3 +17,10 @@ graphify-out/
 
 # Test coverage data
 .coverage
+
+# Frontend build and test output
+dist/
+dev-dist/
+test-results/
+playwright-report/
+frontend/packages/shared/openapi.json

@@ -1,0 +1,118 @@
+import { CREDITS_SOURCE, useAuth, type LegalDoc } from '@alovia/shared'
+import { Button, Card, Markdown, SignInForm, ThemeSwitch } from '@alovia/ui'
+import { Link, Navigate, useNavigate } from 'react-router'
+
+export function SignInPage() {
+  const { client, session, loading } = useAuth()
+  const navigate = useNavigate()
+  if (!loading && session) return <Navigate to="/home" replace />
+  return (
+    <section className="flex max-w-md flex-col gap-4">
+      <h1>Sign in</h1>
+      <SignInForm
+        onSubmit={async (email, password) => {
+          const { error } = await client.auth.signInWithPassword({ email, password })
+          if (error) return 'Email or password is not correct, or the email is not confirmed yet.'
+          navigate('/home')
+          return null
+        }}
+      />
+      <p>New here? Ask your doctor for an invite link.</p>
+    </section>
+  )
+}
+
+export function CheckEmailPage() {
+  return (
+    <section className="flex flex-col gap-4">
+      <h1>Check your email</h1>
+      <Card>
+        <p>
+          We sent you a confirmation link. Open it on this device to finish setting up your account.
+        </p>
+      </Card>
+    </section>
+  )
+}
+
+export function LegalPage({ doc }: { doc: LegalDoc }) {
+  return (
+    <article aria-label={doc.title}>
+      <Markdown source={doc.source} />
+    </article>
+  )
+}
+
+/** About page (COMPLIANCE_CHECKLIST item 16) and credits (CREDITS.md). */
+export function AboutPage() {
+  return (
+    <article className="flex flex-col gap-4">
+      <h1>About Alovia</h1>
+      <p>A woman-centric pregnancy companion web app with a doctor dashboard.</p>
+      <p className="font-semibold">
+        Research prototype (academic capstone, MJCET AI &amp; DS). Not for clinical use. Use test
+        data only.
+      </p>
+      {/* TODO(OPEN): team names, supervisor and privacy contact email (owner to provide) */}
+      <p>Team, supervisor and contact email: to be added.</p>
+      <Markdown source={CREDITS_SOURCE} />
+    </article>
+  )
+}
+
+/** More: theme switch, legal pages, sign out. Settings (UX_FLOWS P12) grow here in later phases. */
+export function MorePage() {
+  const { client } = useAuth()
+  return (
+    <section className="flex flex-col gap-6">
+      <h1>More</h1>
+      <Card>
+        <ThemeSwitch />
+      </Card>
+      <Card>
+        <h2 className="mb-2">Legal</h2>
+        <ul className="flex flex-col gap-2">
+          <li>
+            <Link to="/privacy">Privacy Policy</Link>
+          </li>
+          <li>
+            <Link to="/terms">Terms of Use</Link>
+          </li>
+          <li>
+            <Link to="/disclaimer">Medical Disclaimer</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+        </ul>
+      </Card>
+      <Button variant="secondary" className="self-start" onClick={() => void client.auth.signOut()}>
+        Sign out
+      </Button>
+    </section>
+  )
+}
+
+/** TODO(Phase 3): the urgent check (Symptom spec §4, UX_FLOWS P6) with bundled L1/L2 advice. */
+export function UrgentPage() {
+  return (
+    <section className="flex flex-col gap-4">
+      <h1>Urgent</h1>
+      <Card>
+        <p>The urgent check is not available yet in this prototype.</p>
+        <p className="mt-2">
+          <Link to="/disclaimer">Read the medical disclaimer</Link>
+        </p>
+      </Card>
+    </section>
+  )
+}
+
+export function NotFoundPage() {
+  return (
+    <section className="flex flex-col gap-4">
+      <h1>We couldn't find this.</h1>
+      <Link to="/">Back to the start page</Link>
+    </section>
+  )
+}

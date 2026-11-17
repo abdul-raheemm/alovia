@@ -1,0 +1,8 @@
+node_modules
+dist
+dev-dist
+playwright-report
+test-results
+packages/shared/src/api-types.ts
+packages/shared/openapi.json
+package-lock.json

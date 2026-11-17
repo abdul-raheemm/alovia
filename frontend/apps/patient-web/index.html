@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" data-app="patient">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#6B4FBB" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <title>Alovia</title>
+    <script>
+      // Apply the saved theme before the page paints (same rules as packages/ui/src/theme.ts).
+      ;(function () {
+        var choice = null
+        try {
+          choice = localStorage.getItem('alovia-theme')
+        } catch (e) {}
+        var dark =
+          choice === 'dark' ||
+          (choice !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

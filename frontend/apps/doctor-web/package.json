@@ -1,0 +1,22 @@
+{
+  "name": "doctor-web",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@alovia/shared": "*",
+    "@alovia/ui": "*",
+    "@fontsource/inter": "5.3.0",
+    "@hookform/resolvers": "7.0.6",
+    "@tanstack/react-query": "5.107.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-hook-form": "7.92.0",
+    "react-router": "8.5.1",
+    "zod": "4.6.7"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@alovia/shared",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.119.0",
+    "react": "19.3.1"
+  }
+}

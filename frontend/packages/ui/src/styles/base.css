@@ -1,0 +1,99 @@
+/* Shared base styles. Each app imports this once from its own CSS entry. */
+@import 'tailwindcss';
+@import './tokens.css';
+
+/* dark: variant follows the data-theme attribute, not only the OS setting */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@layer base {
+  html {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  /* §4 Typography */
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  @media (min-width: 1024px) {
+    h1 {
+      font-size: 32px;
+    }
+  }
+  /* §9, §16: visible keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Long-form legal and about pages rendered from Markdown */
+.prose-legal {
+  max-width: 72ch;
+}
+.prose-legal h1,
+.prose-legal h2,
+.prose-legal h3 {
+  margin: 1.5rem 0 0.75rem;
+}
+.prose-legal p,
+.prose-legal ul,
+.prose-legal ol,
+.prose-legal blockquote,
+.prose-legal table {
+  margin: 0.75rem 0;
+}
+.prose-legal ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+.prose-legal ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+.prose-legal blockquote {
+  border-left: 4px solid var(--color-border);
+  padding-left: 1rem;
+  color: var(--color-muted);
+}
+.prose-legal table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+.prose-legal th,
+.prose-legal td {
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-legal code {
+  font-size: 0.9em;
+}

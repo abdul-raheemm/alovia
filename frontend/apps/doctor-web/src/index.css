@@ -1,0 +1,3 @@
+@import '@alovia/ui/styles.css';
+/* let Tailwind find the classes used inside the shared UI package */
+@source '../../../packages/ui/src';
