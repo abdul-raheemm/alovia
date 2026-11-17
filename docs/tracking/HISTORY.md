@@ -343,3 +343,39 @@ Suggestions raised (not implemented): none
 Docs updated: API, DECISIONS, DESIGN_SYSTEM, DEPLOYMENT, TESTING, README, CHANGELOG, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: doctor/admin consent; 405 error code; sign-in audit entry; visual review of colours and fonts (DEC-015); legal placeholders
 Next step: owner review of Phase 1; then the Phase 2 plan.
+
+## Session 10 — 2026-11-17 — Phase 2 tasks 1-2: migration 0002 and the date engine
+Who: Raheem + agent: Claude Code (owner: build tasks 1 and 2 without asking)
+Phase / task: Phase 2 — migration; GA/month/trimester calculations
+Goal: the Journey tables and the pregnancy-date engine everything else depends on.
+
+Done:
+- Phase 1 merged into `main` (fast-forward to 11f1b07) and pushed.
+- Phase 2 plan posted; owner answers recorded (DEC-015 confirmed, DEC-040 … DEC-044).
+- Column helpers (`uuid_pk`, `created_now`, `fk`) moved to `app/core/database.py` (users models now use them; generated SQL unchanged); `app/models.py` registers every model.
+- Models: `app/modules/journey/models.py` (pregnancy_date_history, appointments, notifications with NULLS NOT DISTINCT uniqueness), `app/modules/dashboard/models.py` (doctor_notes, inbox_items).
+- Migration `0002` (hand-written, full downgrade); applied to the main project.
+- `rules/journey/config.yaml` (Journey §14.4 defaults, month map, six nav items) checked at startup by `app/modules/journey/config.py`.
+- `app/modules/journey/engine.py`: GA, completed weeks/days, days to go, content week (stops at 42), trimester, month from config, home states, due date from LMP and ultrasound, local "today" (Asia/Kolkata), calendar range, milestones.
+- `tzdata` pinned.
+
+Files changed:
+- added: `backend/app/models.py`, `backend/app/modules/{journey,dashboard}/*`, `backend/migrations/versions/20261117_0002_phase2_journey.py`, `backend/rules/journey/config.yaml`, `backend/tests/unit/test_journey_engine.py`
+- modified: `backend/app/core/database.py`, `backend/app/modules/users/models.py`, `backend/app/main.py`, `backend/app/api/health.py`, `backend/migrations/env.py`, `backend/requirements.txt`, `backend/tests/integration/{test_migrations,test_app_basics}.py`
+- docs: DECISIONS, DATABASE, DESIGN_SYSTEM, PROGRESS, CONTEXT, HISTORY
+
+Decisions made (with owner approval): DEC-015 confirmed; DEC-040 nav items; DEC-041 message placeholder; DEC-042 content option C; DEC-043 size-reference draft; DEC-044 inbox_items moved to Phase 2.
+
+Checks run (exact commands and results):
+- users/predictions SQL before vs after the helper refactor → identical
+- `alembic upgrade 0001:0002 --sql` vs the models' SQL → 10/10 statements identical; downgrade drops exactly the 5 new tables
+- `pytest -W error::DeprecationWarning -W error::ResourceWarning -W error::pytest.PytestUnraisableExceptionWarning --cov=app` → 123 passed; journey and dashboard modules 100% covered (total 99%: the 3 known ML fallback lines)
+- migration tests on alovia-test: upgrade → downgrade to 0001 (only Phase 1 tables left) → base → upgrade; database == models; new CHECK, length and NULLS NOT DISTINCT rules reject bad rows
+- main project: `alembic current` 0001 → `alembic upgrade head` → `0002 (head)`; tables listed; compare_metadata → none
+- `ruff check .`, `ruff format --check .`, `mypy app tests migrations scripts` → pass
+
+Errors met: none
+Suggestions raised (not implemented): seed one test patient per home state (no date, 39, 40, 42+)
+Docs updated: DECISIONS, DATABASE (§3.6, §13), DESIGN_SYSTEM §11, PROGRESS, CONTEXT, HISTORY
+Open questions for the owner: how the home header shows weeks past 42 (the engine stops the content week at 42; the display wording is decided in task 5 with the messages)
+Next step: Phase 2 task 0 (Phase 1 follow-ups) or task 3 (dates) — plan first.

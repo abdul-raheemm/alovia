@@ -15,14 +15,13 @@ from fastapi.testclient import TestClient
 from sqlalchemy import Connection, Engine, inspect, text
 from sqlalchemy.exc import IntegrityError
 
-import app.modules.predictions.models
-import app.modules.users.models  # noqa: F401  (registers the tables)
+import app.models  # noqa: F401  (registers every table)
 from app.core.database import Base
 from app.main import create_app
 from tests.conftest import alembic_config, project_ref
 from tests.helpers import make_settings
 
-TABLES = {
+PHASE1_TABLES = {
     "users",
     "consents",
     "doctors",
@@ -33,6 +32,14 @@ TABLES = {
     "fetal_results",
     "maternal_results",
 }
+PHASE2_TABLES = {  # migration 0002 (inbox_items moved forward, DEC-044)
+    "pregnancy_date_history",
+    "appointments",
+    "notifications",
+    "doctor_notes",
+    "inbox_items",
+}
+TABLES = PHASE1_TABLES | PHASE2_TABLES
 
 
 def _app_tables(engine: Engine) -> set[str]:
@@ -42,6 +49,8 @@ def _app_tables(engine: Engine) -> set[str]:
 def test_upgrade_downgrade_upgrade(test_db_url: str, engine: Engine) -> None:
     cfg = alembic_config(test_db_url)
     assert _app_tables(engine) == TABLES
+    command.downgrade(cfg, "0001")  # 0002's downgrade removes only its own tables
+    assert _app_tables(engine) == PHASE1_TABLES
     command.downgrade(cfg, "base")
     assert _app_tables(engine) == set()
     command.upgrade(cfg, "head")
@@ -205,3 +214,67 @@ def test_health_reports_db_ok(test_db_url: str, engine: Engine) -> None:
 def test_project_ref_same_for_direct_and_pooler(url: str, ref: str | None) -> None:
     # the safety check depends on this: both connection styles of one project give one id
     assert project_ref(url) == ref
+
+
+def test_phase2_enumerations_and_lengths(conn: Connection) -> None:
+    patient, user = _patient(conn), _user(conn)
+    appointment = (
+        "INSERT INTO appointments (patient_id, appointment_at, has_time, title, note, "
+        "created_by, source) VALUES (:p, now(), false, :title, :note, :u, :source)"
+    )
+    ok = {"p": patient, "u": user, "title": "x" * 100, "note": "n" * 500, "source": "patient"}
+    conn.execute(text(appointment), ok)  # the limits themselves are allowed
+    _rejects(conn, appointment, **{**ok, "title": "x" * 101})
+    _rejects(conn, appointment, **{**ok, "note": "n" * 501})
+    _rejects(conn, appointment, **{**ok, "source": "admin"})
+    history = (
+        "INSERT INTO pregnancy_date_history (patient_id, changed_by, new_source, new_status) "
+        "VALUES (:p, :u, :source, :status)"
+    )
+    conn.execute(
+        text(history), {"p": patient, "u": user, "source": "ultrasound", "status": "active"}
+    )
+    _rejects(conn, history, p=patient, u=user, source="guess", status="active")
+    _rejects(conn, history, p=patient, u=user, source="ultrasound", status="paused")
+    _rejects(
+        conn,
+        "INSERT INTO notifications (patient_id, type) VALUES (:p, 'push')",
+        p=patient,
+    )
+    _rejects(
+        conn,
+        "INSERT INTO inbox_items (patient_id, type, ref_table, ref_id) "
+        "VALUES (:p, 'unknown', 'patients', :p)",
+        p=patient,
+    )
+
+
+def test_notifications_never_duplicate(conn: Connection) -> None:
+    patient = _patient(conn)
+    add = "INSERT INTO notifications (patient_id, type, target_ref) VALUES (:p, :type, :ref)"
+    conn.execute(text(add), {"p": patient, "type": "new_week", "ref": "24"})
+    _rejects(conn, add, p=patient, type="new_week", ref="24")
+    conn.execute(text(add), {"p": patient, "type": "new_week", "ref": "25"})
+    # an empty target counts as the same target (NULLS NOT DISTINCT)
+    conn.execute(text(add), {"p": patient, "type": "dates_updated", "ref": None})
+    _rejects(conn, add, p=patient, type="dates_updated", ref=None)
+
+
+def test_phase2_defaults(conn: Connection) -> None:
+    patient = _patient(conn)
+    note = conn.execute(
+        text(
+            "INSERT INTO doctor_notes (patient_id, doctor_id, body) "
+            "VALUES (:p, :d, 'Test note') RETURNING visible_to_patient"
+        ),
+        {"p": patient, "d": _doctor(conn)},
+    ).scalar_one()
+    assert note is False  # private until the doctor shares it
+    item = conn.execute(
+        text(
+            "INSERT INTO inbox_items (patient_id, type, ref_table, ref_id) "
+            "VALUES (:p, 'pregnancy_ended', 'patients', :p) RETURNING seen_at"
+        ),
+        {"p": patient},
+    ).scalar_one()
+    assert item is None

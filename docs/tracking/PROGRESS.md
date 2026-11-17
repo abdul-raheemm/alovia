@@ -25,11 +25,12 @@ Update after every task. Each line: status, task, who, date, notes.
 - [x] Patient app PWA manifest + icons — Raheem + Claude Code — 2026-11-17
 - [x] Seed script (synthetic data) — Raheem + Claude Code — 2026-11-17 (Phase 1 tables only; later phases add their rows)
 - [x] `scripts/check_all` runs every check — Raheem + Claude Code — 2026-11-17
-- [~] Phase 1 review + CHANGELOG 0.1.0 — CHANGELOG written 2026-11-17; owner review open
+- [x] Phase 1 review + CHANGELOG 0.1.0 — Raheem — 2026-11-17 (approved; merged into `main`)
 
 ## Phase 2 — Pregnancy Journey
-- [ ] Migration (date history, appointments, notifications, doctor_notes)
-- [ ] GA/month/trimester calculations + tests
+- [ ] Phase 1 follow-ups: doctors/admins accept the consent at first sign-in; standard 405 error code; "sign-in" in the audit log (owner decisions 2026-11-17)
+- [x] Migration (date history, appointments, notifications, doctor_notes) + inbox_items (DEC-044) — Raheem + Claude Code — 2026-11-17 (migration 0002; tested on alovia-test; applied to the main project: `alembic current` = 0002)
+- [x] GA/month/trimester calculations + tests — Raheem + Claude Code — 2026-11-17 (`app/modules/journey/engine.py`, `rules/journey/config.yaml`; 42 engine tests)
 - [ ] Dates onboarding + validation
 - [ ] Content provider interface + prototype YAML content + size reference (sourced)
 - [ ] Home screen blocks; month cards + detail; illustrations (licensed or placeholders)

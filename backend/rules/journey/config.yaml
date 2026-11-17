@@ -1,0 +1,33 @@
+# Pregnancy Journey settings (pregnancy_journey_module_spec.md §14.4, all [CONFIGURABLE]).
+# Checked at startup by app/modules/journey/config.py; a wrong value stops the backend.
+
+content_source: prototype          # prototype | knowledge_base (§8.2: switching is config only)
+show_prototype_banner: true        # §8.3: required while prototype content is active
+assistant_enabled: false           # §8.5: hidden until the RAG module is built (Phase 7)
+suggested_checkups_enabled: false  # §9.2: only after the official schedule is copied (R3)
+timezone: Asia/Kolkata             # §6.1: "today" is the patient's local date
+
+# §6.3 week-to-month mapping, display only. [CONFIRM AT REVIEW] (R1)
+month_map:
+  - { month: 1, weeks: [0, 4] }
+  - { month: 2, weeks: [5, 8] }
+  - { month: 3, weeks: [9, 13] }
+  - { month: 4, weeks: [14, 17] }
+  - { month: 5, weeks: [18, 22] }
+  - { month: 6, weeks: [23, 27] }
+  - { month: 7, weeks: [28, 31] }
+  - { month: 8, weeks: [32, 35] }
+  - { month: 9, weeks: [36, 42] }
+
+term_from_week: 37                 # §6.4 calendar marker
+appointment_notice_hours: 24       # §10.1 appointment_soon
+resume_window_days: 7              # §11.6 "I marked this by mistake"
+
+# §4.1 nav bar (owner decision 2026-11-17: the spec's six items, served from here)
+nav_items:
+  - { key: home, label: Home }
+  - { key: calendar, label: Calendar }
+  - { key: log_symptoms, label: Log symptoms }
+  - { key: appointments, label: Appointments }
+  - { key: doctor_notes, label: Doctor notes }
+  - { key: more, label: More }

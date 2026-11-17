@@ -1,10 +1,14 @@
 """Database engine and model base (DATABASE.md). Only the backend connects (DEC-001)."""
 
+import uuid
 from collections.abc import Iterator
+from datetime import datetime
+from typing import Any
 
 from fastapi import Request
-from sqlalchemy import Engine, MetaData, create_engine, make_url
-from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy import DateTime, Engine, ForeignKey, MetaData, create_engine, func, make_url
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 
 # fixed constraint names, so migrations are predictable and reviewable
 NAMING = {
@@ -18,6 +22,22 @@ NAMING = {
 
 class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=NAMING)
+
+
+# Column helpers shared by every module (DATABASE.md §2 conventions)
+def uuid_pk() -> Mapped[uuid.UUID]:
+    return mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
+    )
+
+
+def created_now() -> Mapped[datetime]:
+    return mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+def fk(target: str, **kwargs: Any) -> Any:
+    """Foreign key with ON DELETE RESTRICT (DATABASE.md §2)."""
+    return mapped_column(ForeignKey(target, ondelete="RESTRICT"), **kwargs)
 
 
 def make_engine(url: str) -> Engine:

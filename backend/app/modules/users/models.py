@@ -9,33 +9,17 @@ from sqlalchemy import (
     CheckConstraint,
     Date,
     DateTime,
-    ForeignKey,
     Index,
     Integer,
     Text,
     false,
-    func,
     text,
     true,
 )
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.core.database import Base
-
-
-def _uuid_pk() -> Mapped[uuid.UUID]:
-    return mapped_column(
-        UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
-    )
-
-
-def _now() -> Mapped[datetime]:
-    return mapped_column(DateTime(timezone=True), server_default=func.now())
-
-
-def _fk(target: str, **kwargs: Any) -> Any:
-    return mapped_column(ForeignKey(target, ondelete="RESTRICT"), **kwargs)
+from app.core.database import Base, created_now, fk, uuid_pk
 
 
 class User(Base):
@@ -45,14 +29,14 @@ class User(Base):
     email: Mapped[str] = mapped_column(Text, unique=True)
     role: Mapped[str] = mapped_column(Text)
     is_active: Mapped[bool] = mapped_column(Boolean, server_default=true())
-    created_at: Mapped[datetime] = _now()
+    created_at: Mapped[datetime] = created_now()
     __table_args__ = (CheckConstraint("role IN ('patient', 'doctor', 'admin')", name="role"),)
 
 
 class Consent(Base):
     __tablename__ = "consents"
-    id: Mapped[uuid.UUID] = _uuid_pk()
-    user_id: Mapped[uuid.UUID] = _fk("users.id")
+    id: Mapped[uuid.UUID] = uuid_pk()
+    user_id: Mapped[uuid.UUID] = fk("users.id")
     consent_version: Mapped[str] = mapped_column(Text)
     age_confirmed_18_plus: Mapped[bool] = mapped_column(Boolean, server_default=false())
     accepted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
@@ -60,18 +44,18 @@ class Consent(Base):
 
 class Doctor(Base):
     __tablename__ = "doctors"
-    id: Mapped[uuid.UUID] = _uuid_pk()
-    user_id: Mapped[uuid.UUID] = _fk("users.id", unique=True)
+    id: Mapped[uuid.UUID] = uuid_pk()
+    user_id: Mapped[uuid.UUID] = fk("users.id", unique=True)
     name: Mapped[str] = mapped_column(Text)
     specialty: Mapped[str | None] = mapped_column(Text)
     is_active: Mapped[bool] = mapped_column(Boolean, server_default=true())
-    created_at: Mapped[datetime] = _now()
+    created_at: Mapped[datetime] = created_now()
 
 
 class Patient(Base):
     __tablename__ = "patients"
-    id: Mapped[uuid.UUID] = _uuid_pk()
-    user_id: Mapped[uuid.UUID | None] = _fk("users.id", unique=True)
+    id: Mapped[uuid.UUID] = uuid_pk()
+    user_id: Mapped[uuid.UUID | None] = fk("users.id", unique=True)
     name: Mapped[str] = mapped_column(Text)
     age: Mapped[int | None] = mapped_column(Integer)
     notes: Mapped[str | None] = mapped_column(Text)  # doctor-private, never shown to the patient
@@ -81,9 +65,9 @@ class Patient(Base):
     pregnancy_status: Mapped[str] = mapped_column(Text, server_default=text("'active'"))
     pregnancy_ended_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     doctor_informed_of_end: Mapped[bool | None] = mapped_column(Boolean)
-    created_by: Mapped[uuid.UUID | None] = _fk("users.id")
-    created_at: Mapped[datetime] = _now()
-    updated_at: Mapped[datetime] = _now()  # the backend sets it on every change
+    created_by: Mapped[uuid.UUID | None] = fk("users.id")
+    created_at: Mapped[datetime] = created_now()
+    updated_at: Mapped[datetime] = created_now()  # the backend sets it on every change
     __table_args__ = (
         CheckConstraint(
             "due_date_source IN ('lmp_estimate', 'clinician_confirmed', 'ultrasound')",
@@ -98,11 +82,11 @@ class Patient(Base):
 
 class DoctorPatientAssignment(Base):
     __tablename__ = "doctor_patient_assignments"
-    id: Mapped[uuid.UUID] = _uuid_pk()
-    doctor_id: Mapped[uuid.UUID] = _fk("doctors.id")
-    patient_id: Mapped[uuid.UUID] = _fk("patients.id", index=True)
+    id: Mapped[uuid.UUID] = uuid_pk()
+    doctor_id: Mapped[uuid.UUID] = fk("doctors.id")
+    patient_id: Mapped[uuid.UUID] = fk("patients.id", index=True)
     is_primary: Mapped[bool] = mapped_column(Boolean, server_default=false())
-    assigned_by: Mapped[uuid.UUID] = _fk("users.id")
+    assigned_by: Mapped[uuid.UUID] = fk("users.id")
     assigned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     removed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     __table_args__ = (
@@ -130,24 +114,24 @@ class DoctorPatientAssignment(Base):
 
 class PatientInvite(Base):
     __tablename__ = "patient_invites"
-    id: Mapped[uuid.UUID] = _uuid_pk()
-    patient_id: Mapped[uuid.UUID] = _fk("patients.id", index=True)
+    id: Mapped[uuid.UUID] = uuid_pk()
+    patient_id: Mapped[uuid.UUID] = fk("patients.id", index=True)
     code_hash: Mapped[str] = mapped_column(Text, unique=True)  # never the code itself
-    created_by: Mapped[uuid.UUID] = _fk("users.id")
-    created_at: Mapped[datetime] = _now()
+    created_by: Mapped[uuid.UUID] = fk("users.id")
+    created_at: Mapped[datetime] = created_now()
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    used_by_user_id: Mapped[uuid.UUID | None] = _fk("users.id")
+    used_by_user_id: Mapped[uuid.UUID | None] = fk("users.id")
 
 
 class AuditLog(Base):
     __tablename__ = "audit_log"  # append-only
-    id: Mapped[uuid.UUID] = _uuid_pk()
-    actor_user_id: Mapped[uuid.UUID | None] = _fk("users.id")
+    id: Mapped[uuid.UUID] = uuid_pk()
+    actor_user_id: Mapped[uuid.UUID | None] = fk("users.id")
     action: Mapped[str] = mapped_column(Text)
     entity_type: Mapped[str] = mapped_column(Text)
     entity_id: Mapped[str | None] = mapped_column(Text)
     # no FK on purpose: the row is kept after deletion requests
     patient_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), index=True)
     details: Mapped[dict[str, Any] | None] = mapped_column(JSONB)  # never clinical values
-    created_at: Mapped[datetime] = _now()
+    created_at: Mapped[datetime] = created_now()

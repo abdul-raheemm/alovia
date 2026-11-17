@@ -191,7 +191,7 @@ Unique: (`result_type`, `result_id`).
 
 ### 3.6 Doctor Dashboard — Module 6 (Phase 5)
 
-**`inbox_items`**
+**`inbox_items`** (created in Phase 2, DEC-044)
 `id` uuid PK · `patient_id` FK · `type` text (`symptom_l1`, `symptom_l2`, `pattern_p1`…`pattern_p5`, `genetic_pending`, `genetic_high_priority`, `pregnancy_ended`, `record_uploaded`, `ai_note_flag`, `chat_urgent`) · `ref_table` text · `ref_id` uuid · `created_at` · `seen_by` FK doctors N · `seen_at` N. Never deleted.
 
 **`medical_records`**
@@ -285,8 +285,8 @@ All patient tables are sensitive health data (pregnancy, symptoms, genetic findi
 | Phase | Migration creates |
 |---|---|
 | 1 Foundation | users, consents, doctors, patients, doctor_patient_assignments, patient_invites, audit_log, fetal_results, maternal_results |
-| 2 Journey | pregnancy_date_history, appointments, notifications, doctor_notes |
-| 3 Symptoms | symptom_checkins, symptom_logs, inbox_items |
+| 2 Journey | pregnancy_date_history, appointments, notifications, doctor_notes, inbox_items (moved from Phase 3, DEC-044) |
+| 3 Symptoms | symptom_checkins, symptom_logs |
 | 4 Genetic | genetic_assessments |
 | 5 Dashboard | result_shares, medical_records, rule_signoffs; new columns on result tables |
 | 6 AI drafts | ai_drafts |

@@ -4,8 +4,7 @@ tests) passes another URL in config.attributes["database_url"]."""
 from alembic import context
 from sqlalchemy import make_url
 
-import app.modules.predictions.models
-import app.modules.users.models  # noqa: F401  (registers the tables on Base.metadata)
+import app.models  # noqa: F401  (registers every table on Base.metadata)
 from app.core.database import Base, make_engine
 
 config = context.config
