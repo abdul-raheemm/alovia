@@ -14,18 +14,18 @@ Update after every task. Each line: status, task, who, date, notes.
 - [x] Copy `rag/alovia-knowledge-base/` (`clean/`, `raw/`, CSVs, `PROGRESS.md`) into `knowledge-base/` and `rag/*.py` into `knowledge-base/tools/` (copy only; `rag/` untouched; licence and attribution details stay with each file as `docs/knowledge-base/knowledgebase.md` requires). Ask the owner before copying the four `rag/` root CSVs. Collection continues in `knowledge-base/` afterwards. The RAG module stays in Phase 7. — Raheem + Claude Code — 2026-11-17 (401 identical, 3 scripts one line changed, validator 196/0/10)
 - [x] Backend skeleton (Python 3.14 venv, FastAPI app factory, config, logging, error envelope, `/health`) — Raheem + Claude Code — 2026-11-17 (11 tests pass, 100% coverage; `/health` gains `db`, models, rules in later tasks; 405 error code `TODO(OPEN)`)
 - [x] Agree ML reference inputs with the owner; run the old `ml-test` backend (from a copy) and save outputs to `backend/tests/fixtures/ml_reference_outputs.json` before any change — Raheem + Claude Code — 2026-11-17 (12 cases: 3 fetal, 3 maternal + 6 High→Mid; two runs byte-identical)
-- [~] **Owner action:** create fresh Supabase project (done 2026-11-17, Mumbai); fill `backend/.env` (open)
+- [x] **Owner action:** create fresh Supabase project (done 2026-11-17, Mumbai); fill `backend/.env` — Raheem — 2026-11-17
 - [x] Auth part 1: token check (`app/core/auth.py`, JWKS signature, issuer, audience, expiry) — Raheem + Claude Code — 2026-11-17 (27 tests pass)
 - [x] Alembic setup + Phase 1 migration (identity + result tables; no RLS until Phase 8) — ask before applying — Raheem + Claude Code — 2026-11-17 (39 tests pass on alovia-test; applied to the main project with owner approval: `alembic current` = 0001)
 - [x] Auth part 2: `/me` + consent route + role lookup (needs the Phase 1 tables; consent version per DEC-031; user rows per DEC-032) — Raheem + Claude Code — 2026-11-17 (51 tests pass; sign-in audit entry `TODO(OPEN)`)
 - [x] Move ML code + model files; regression tests identical to reference outputs — Raheem + Claude Code — 2026-11-17 (12/12 reference cases identical; model files byte-identical; routes are Phase 5)
-- [ ] Frontend workspace: patient-web, doctor-web, packages/ui (tokens, themes, fonts), packages/shared (API client)
-- [ ] Sign-up through invite link only (18+ + consent), sign-in, sign-out; role routing. Note: invite creation UI is Phase 5 — until then the seed script creates invite links for testing
-- [ ] App shells: nav bars, urgent button placeholder, theme switch, legal pages, about page
-- [ ] Patient app PWA manifest + icons
-- [ ] Seed script (synthetic data)
-- [ ] `scripts/check_all` runs every check
-- [ ] Phase 1 review + CHANGELOG 0.1.0
+- [x] Frontend workspace: patient-web, doctor-web, packages/ui (tokens, themes, fonts), packages/shared (API client) — Raheem + Claude Code — 2026-11-17 (versions DEC-037)
+- [x] Sign-up through invite link only (18+ + consent), sign-in, sign-out; role routing. Note: invite creation UI is Phase 5 — until then the seed script creates invite links for testing — Raheem + Claude Code — 2026-11-17 (backend `/invites/{code}/check`, `/patient/link`; real sign-up needs the owner's frontend `.env` and Supabase redirect URLs)
+- [x] App shells: nav bars, urgent button placeholder, theme switch, legal pages, about page — Raheem + Claude Code — 2026-11-17
+- [x] Patient app PWA manifest + icons — Raheem + Claude Code — 2026-11-17
+- [x] Seed script (synthetic data) — Raheem + Claude Code — 2026-11-17 (Phase 1 tables only; later phases add their rows)
+- [x] `scripts/check_all` runs every check — Raheem + Claude Code — 2026-11-17
+- [~] Phase 1 review + CHANGELOG 0.1.0 — CHANGELOG written 2026-11-17; owner review open
 
 ## Phase 2 — Pregnancy Journey
 - [ ] Migration (date history, appointments, notifications, doctor_notes)

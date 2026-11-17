@@ -95,6 +95,7 @@ Status backgrounds use the same hue at about 10% opacity, with the text in the f
 | Doctor light: urgent on bg | 6.14 |
 | Patient light: primary / text on primary-soft | 5.12 / 12.40 |
 | Patient dark: text on primary-soft | 12.37 |
+| Dark: urgent button text (`--color-bg`) on urgent, patient / doctor | 6.52 / 6.55 (same pair as urgent on bg; white on dark urgent would fail) |
 
 All pairs pass AA for normal text (≥ 4.5). Any new colour pair must be checked before use and added here.
 

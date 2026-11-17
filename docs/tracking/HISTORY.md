@@ -314,3 +314,32 @@ Suggestions raised (not implemented): none
 Docs updated: ml_models_spec §6, PROGRESS, CONTEXT, HISTORY
 Open questions for the owner: none
 Next step: frontend workspace.
+
+## Session 9 — 2026-11-17 — Sign-up, frontend, seed, check_all, Phase 1 release
+Who: Raheem + agent: Claude Code (Phase 1 permission, no per-task approval)
+Phase / task: Phase 1 — invite sign-up (backend + frontend), frontend workspace, app shells, PWA, seed, check_all, review
+Goal: finish Phase 1.
+
+Done:
+- Backend: `GET /invites/{code}/check`, `POST /patient/link` (creates the patient's users row, DEC-036; one transaction; audit entries); invite settings in `backend/rules/dashboard/config.yaml`; `scripts/export_openapi.py`; `scripts/seed_dev.py`.
+- Frontend workspace (`frontend/`): `apps/patient-web`, `apps/doctor-web`, `packages/ui` (tokens copied from DESIGN_SYSTEM, Button/Field/Card/Logo/Markdown/SignInForm/ThemeSwitch/states), `packages/shared` (API client with the ERROR_HANDLING retry and timeout rules, user messages, auth-only Supabase client, legal texts read from `docs/legal`, generated API types).
+- Patient app: landing with disclaimer and no open sign-up, invite check, sign-up with the exact consent checkboxes (Continue only when both are ticked), check-email page, sign-in, account gate (link → consent → app), shell with bottom/side nav and urgent placeholder, More (theme, legal, sign-out), legal and about pages, PWA manifest and icons.
+- Doctor app: sign-in, account gate (doctor/admin only), side bar (Admin only for admins), top bar with theme switch and sign-out, placeholders, legal and about pages.
+- `scripts/check_all.ps1` / `.sh`; version 0.1.0; CHANGELOG 0.1.0.
+
+Files changed:
+- `backend/app/modules/users/{invites,router,schemas}.py`, `backend/rules/dashboard/config.yaml`, `backend/scripts/*`, `backend/tests/integration/{test_invites,test_seed}.py`, `backend/requirements*.txt`, version files — added/modified
+- `frontend/**` — added; `scripts/check_all.*` — added; `.gitignore` — modified
+- docs: API, DECISIONS (DEC-037…039), DESIGN_SYSTEM §3.4, DEPLOYMENT, TESTING §7, README, CHANGELOG, tracking/*
+
+Decisions made (with owner approval): 403 for missing accounts and sign-in audit left open (owner, this session); DEC-037, DEC-038, DEC-039 under the owner's Phase 1 permission.
+
+Checks run (exact commands and results):
+- `powershell -ExecutionPolicy Bypass -File scripts\check_all.ps1` → backend lint/format/types pass, 78 backend tests passed; frontend format/lint/types pass, 23 unit tests passed, both builds pass (PWA precache 36 entries), 26 E2E tests passed with axe (375px light, 1280px dark) → "All checks passed.", exit code 0
+- failure probe (copy of check_all with a failing first step) → stopped, exit code 1
+
+Errors met: 9 (ERR-019 … ERR-027)
+Suggestions raised (not implemented): none
+Docs updated: API, DECISIONS, DESIGN_SYSTEM, DEPLOYMENT, TESTING, README, CHANGELOG, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: doctor/admin consent; 405 error code; sign-in audit entry; visual review of colours and fonts (DEC-015); legal placeholders
+Next step: owner review of Phase 1; then the Phase 2 plan.

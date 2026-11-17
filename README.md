@@ -16,7 +16,7 @@ knowledge-base/  RAG source library   assets/     illustration and animation sou
 Full structure: `docs/ARCHITECTURE.md` §7.
 
 ## Status
-See `docs/tracking/PROGRESS.md` and `docs/ROADMAP.md`. Current phase: **0 (documentation) complete → Phase 1 (foundation) next.**
+See `docs/tracking/PROGRESS.md` and `docs/ROADMAP.md`. Current phase: **1 (foundation) complete — release 0.1.0, awaiting owner review → Phase 2 (Pregnancy Journey) next.**
 
 ## Requirements (development, Windows)
 - Python **3.14** (`py -3.14`)
@@ -25,7 +25,7 @@ See `docs/tracking/PROGRESS.md` and `docs/ROADMAP.md`. Current phase: **0 (docum
 - A Supabase project (created by the owner; values go in `.env` files, see `docs/ENVIRONMENT.md`)
 
 ## Getting started
-_Commands are filled in during Phase 1 and must stay correct._
+_Checked at the end of Phase 1; keep them correct._
 
 ```powershell
 # Backend
@@ -35,17 +35,21 @@ py -3.14 -m venv .venv
 pip install -r requirements.txt -r requirements-dev.txt
 copy .env.example .env      # then fill values (see docs/ENVIRONMENT.md)
 alembic upgrade head        # only after the owner approves
+python scripts\seed_dev.py  # optional: fake test data + invite links (DATABASE.md §12)
 uvicorn app.main:create_app --factory --reload
 
 # Frontends (new terminal)
 cd frontend
 npm install
+npx playwright install chromium   # once, for the end-to-end tests
+copy apps\patient-web\.env.example apps\patient-web\.env   # then fill (public values only)
+copy apps\doctor-web\.env.example apps\doctor-web\.env
 npm run dev:patient         # http://localhost:5173
 npm run dev:doctor          # http://localhost:5174
 ```
 
 ## Checks
-See `docs/TESTING.md` §7. Run everything with `scripts\check_all.ps1`.
+See `docs/TESTING.md` §7. Run everything with `powershell -ExecutionPolicy Bypass -File scripts\check_all.ps1` (or `bash scripts/check_all.sh`). After a backend API change, regenerate the frontend types with `cd frontend && npm run gen:api`.
 
 ## Working with Claude Code
 Open the repo in Claude Code and paste the prompt in `docs/START_PROMPT.md`. The agent follows `CLAUDE.md`, plans before coding, asks permission, and records its work in `docs/tracking/`.

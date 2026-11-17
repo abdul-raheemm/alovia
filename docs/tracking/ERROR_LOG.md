@@ -3,6 +3,8 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Never pipe a check into `tail`/`grep` inside an `&&` chain before a commit; run the check alone and read its exit code.
+- On Windows, start frontend tools through the npm scripts (`scripts/run.mjs`), not a shell and not a lowercase `c:\` path.
 - Dispose every SQLAlchemy engine you create (tests, scripts, `migrations/env.py`); run tests with `-W error::ResourceWarning`.
 - Never chain a commit or push after file edits with `&&` alone: check that the edit step succeeded (git diff) before committing.
 - Before the first commit of any repo, write `.gitignore` and read `git status`.
@@ -11,7 +13,7 @@ Every error the agent meets (failed command, failing test, bug found, wrong assu
 
 | Phase | Errors logged | Caused by agent mistake | Caught by tests | Caught by owner review | Repeat of an earlier lesson |
 |---|---|---|---|---|---|
-| 1 | | | | | |
+| 1 | 27 (ERR-001 … ERR-027) | 24 | 13 | 1 (ERR-001, before the agent started) | 1 (ERR-027 repeats the unchecked-chain pattern of ERR-009) |
 
 ## Entry template
 
@@ -206,4 +208,94 @@ Cause: the check looked for the text `_project_ref`, which also appears inside t
 Fix: check for `def _project_ref` and ` _project_ref(` instead. The script stops before writing, so no file was changed by the failed run.
 Verified by: `git status` before the rerun showed only the intended files; rerun → full suite 39 passed.
 Prevention: write leftover checks against definitions and calls, not bare names.
+Category: tooling
+
+### ERR-019 — 2026-11-17 — npm peer-dependency conflicts while installing the frontend toolchain
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: `ERESOLVE`: openapi-typescript needs TypeScript ^5; eslint-plugin-jsx-a11y supports ESLint ≤ 9; @eslint/js 10 needs ESLint 10.
+Cause: newest major versions do not all fit together yet.
+Fix: TypeScript 5.9.3 and ESLint 9.39.5 / @eslint/js 9 (recorded in DEC-037).
+Verified by: `npm install` → added 571 packages, no conflicts.
+Prevention: check `npm view <pkg> peerDependencies` before choosing majors.
+Category: dependency
+
+### ERR-020 — 2026-11-17 — Vitest: "failed to find the current suite"
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: every test file failed with no tests run, from the Git Bash shell.
+Cause: the shell's working directory was `c:\...` while Node resolved packages under `C:\...`, so Vitest was loaded twice.
+Fix: `frontend/scripts/run.mjs` starts Vitest/Playwright from the real path spelling; `npm test` and `npm run test:e2e` use it. A config-file `chdir` was tried first and did not help (Vitest loads before its config).
+Verified by: `npm test` from the lowercase shell → 23 passed.
+Prevention: lesson line above.
+Category: tooling
+
+### ERR-021 — 2026-11-17 — "Invalid hook call" in the consent form test
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: `Invalid hook call` / `Cannot read properties of null (reading 'useMemo')`.
+Cause: React was resolved twice: directly and through the `packages/ui` workspace link.
+Fix: `resolve.dedupe: ['react', 'react-dom']` in the Vitest config and both app Vite configs.
+Verified by: `npm test` → 23 passed; both apps build and run in the E2E tests.
+Prevention: keep the dedupe in every Vite config.
+Category: tooling
+
+### ERR-022 — 2026-11-17 — Landing page crashed: Button asChild with two children
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: E2E: `Slot failed to slot onto its children` on `/`.
+Cause: the Button passed the (empty) spinner slot plus the link to Radix `Slot`, which needs exactly one child.
+Fix: when `asChild` is set, only the child is passed.
+Verified by: E2E landing test passes in both projects.
+Prevention: E2E covers every public page.
+Category: logic
+
+### ERR-023 — 2026-11-17 — Accessibility violations on legal pages
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: axe: `label` (unlabelled inputs) on `/consent`; `scrollable-region-focusable` on wide tables at 375px.
+Cause: Markdown task lists render as `<input type=checkbox>`; tables scroll sideways without being focusable.
+Fix: task-list boxes render as ☐/☑ text; tables get `tabindex="0"` (packages/ui Markdown).
+Verified by: E2E with axe → 26 passed.
+Prevention: axe runs on every E2E page at 375px and 1280px.
+Category: logic
+
+### ERR-024 — 2026-11-17 — Launcher passed arguments through cmd.exe
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: `'about' is not recognized as an internal or external command` when a test filter contained `|`.
+Cause: `spawnSync(..., { shell: true })` on Windows let cmd.exe interpret `|`.
+Fix: run each tool's JS entry with `node` directly, no shell.
+Verified by: `npm test` and filtered Playwright runs work.
+Prevention: never use `shell: true` for tool launchers.
+Category: tooling
+
+### ERR-025 — 2026-11-17 — Contrast: white text on the dark-mode urgent colour
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: found in self-review: white on `#F97066` is below 4.5:1.
+Cause: only `urgent on bg` was contrast-checked in DESIGN_SYSTEM §3.4.
+Fix: dark mode uses `--color-bg` as text on urgent (6.52 / 6.55); added to DESIGN_SYSTEM §3.4.
+Verified by: axe colour-contrast passes in the laptop-dark E2E project.
+Prevention: check every new colour pair (DESIGN_SYSTEM rule).
+Category: logic
+
+### ERR-026 — 2026-11-17 — Seed script: doctor inserted before its user; seed check matched other tests' data
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: `ForeignKeyViolation ... fk_doctors_user_id_users`; earlier the test hit "already exists" because other tests also create "Test Patient 1".
+Cause: no ORM relationships, so SQLAlchemy did not order the inserts; the "already seeded" check used a patient name that is not unique to the seed.
+Fix: flush each user right after adding it; detect the seed by its own account domain `seed.alovia.test`.
+Verified by: `pytest` → 78 passed.
+Prevention: flush parent rows explicitly when models have no relationships.
+Category: logic
+
+### ERR-027 — 2026-11-17 — Commit dfea277 included an unformatted `.prettierrc.json`
+Who: Claude Code
+Phase / task: Phase 1 — frontend, seed, checks
+What happened: `format:check` printed a warning, but the chain went on to commit because its output was piped into `tail`.
+Cause: a pipe's exit code is the last command's (`tail`), so the failure was hidden.
+Fix: formatted the file and committed the fix (cd42fe2); `check_all` runs each step separately and stops on a non-zero exit.
+Verified by: `npm run format:check` → exit 0; `check_all.ps1` → All checks passed (and a probe step proves it fails with exit 1).
+Prevention: lesson line above.
 Category: tooling

@@ -65,10 +65,11 @@ Practical target: **â‰¥ 90% line coverage for rule engines and calculations**, â
 
 | Task | Command |
 |---|---|
-| Backend tests | `cd backend && pytest` |
+| Backend tests | `cd backend && pytest -W error::DeprecationWarning -W error::ResourceWarning -W error::pytest.PytestUnraisableExceptionWarning` (database tests need `TEST_DATABASE_URL`) |
 | Backend lint/format | `ruff check . && ruff format --check .` |
-| Backend types | `mypy app` |
+| Backend types | `mypy app tests migrations scripts` |
 | Frontend tests | `cd frontend && npm test` |
+| Frontend format | `npm run format:check` |
 | Frontend lint | `npm run lint` |
 | Frontend types | `npm run typecheck` |
 | Frontend build | `npm run build` |

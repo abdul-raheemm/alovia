@@ -53,6 +53,10 @@ Error:
 | GET | `/invites/{code}/check` | none | Check an invite link is valid before sign-up (returns only valid/invalid; rate-limited in Phase 8) |
 | POST | `/patient/link` | patient | Link the new login to the invited patient record (code from the link), right after sign-up |
 
+**`GET /invites/{code}/check`** → `data`: `{valid}`. Valid only if the code exists, is unused, not expired, and its patient record is not linked yet. Codes are case-insensitive.
+
+**`POST /patient/link`** (valid token; no `users` row needed yet) body `{code}` → creates the `users` row (role `patient`, email from the token), links `patients.user_id`, marks the invite used, writes `audit_log` "invite used" — all in one transaction (DEC-036). Errors: every invalid invite → 404 `NOT_FOUND` "This invite link isn't valid. Please ask your doctor for a new one." (DEC-038); account already set up, or email already used → 409 `CONFLICT`; token without email → 400. Success → `data`: same shape as `GET /me`.
+
 **`GET /me`** → `data`: `{user: {id, email, role}, patient: {id, name} | null, doctor: {id, name, specialty} | null, consent: {current_version, accepted}}`. `accepted` is true only for the current consent version. Never includes `patients.notes`. A valid token without a `users` row, or with `is_active = false`, gets 403 `FORBIDDEN` ("Your account is not set up yet.").
 
 **`POST /me/consent`** body `{consent_version, age_confirmed_18_plus}` (no other fields; boolean must be a real boolean). 400 `VALIDATION_ERROR` with `fields.consent_version` if not the current version, or `fields.age_confirmed_18_plus` if not true (DEC-023). Success → `data`: `{current_version, accepted: true}`; repeating it adds no second row.

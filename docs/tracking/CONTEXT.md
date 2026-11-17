@@ -41,5 +41,8 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 - `/me` and `/me/consent` done; `get_account` (in `app/modules/users/service.py`) loads the users row for any route that needs the role.
 - Owner permission (2026-11-17): finish the rest of Phase 1 without asking per task; normal approvals resume with Phase 2.
 - ML moved: `backend/ml_models/` (8 files, byte-identical), `app/modules/predictions/risk_model.py` (logic unchanged), loaded once at startup; `/health` `models_loaded: true`. Prediction routes come in Phase 5.
-- Next: frontend workspace (see `PROGRESS.md`).
-- Open owner actions: fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).
+- Frontend done (`frontend/`): patient-web (port 5173, installable PWA) and doctor-web (port 5174), `packages/ui` (tokens from DESIGN_SYSTEM, components, themes, fonts), `packages/shared` (API client, auth-only Supabase client, generated API types, legal texts from `docs/legal`). Invite-only sign-up with consent, sign-in/out, role routing, shells with placeholders for later phases.
+- Seed: `backend/scripts/seed_dev.py` (1 admin, 2 doctors, 5 patients, invite links). Every check: `scripts/check_all.ps1`.
+- **Phase 1 complete (release 0.1.0), awaiting owner review.** Work is on stacked branches `phase-1/*` (last: `phase-1/signup`); merge into `main` after approval. Per-task approvals resume with Phase 2.
+- Next: Phase 2 — Pregnancy Journey (plan first; read the Journey spec in full).
+- Open owner actions: fill `frontend/apps/*/.env` (Supabase URL + publishable key); Supabase Auth → URL Configuration (site URL and redirect URLs for http://localhost:5173 and :5174); optionally create your own admin/doctor logins in Supabase and run the seed with their ids; review colours and fonts in the running apps (DEC-015 `[CONFIRM visually]`); decide whether doctors/admins must accept the consent too; error code for 405 (`TODO(OPEN)`); fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).
