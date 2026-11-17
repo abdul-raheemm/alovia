@@ -49,6 +49,9 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-042 | 2026-11-17 | Prototype Journey content (Journey §8.3) is built by the agent from pages it fetches from womenshealth.gov (S1) and OpenStax (S2), with source URL and access date on every item, for owner review (option C) | Owner choice | Accepted |
 | DEC-043 | 2026-11-17 | The agent fetches the WHO fetal growth chart values (S3) and the Microsoft Fluent Emoji icons (S6) and prepares a draft size-reference table; each week's comparison object is then reviewed by a doctor (R2) | Owner choice | Accepted |
 | DEC-044 | 2026-11-17 | `inbox_items` moves from the Phase 3 migration into migration 0002, so the pregnancy-end flow can notify the doctor (Journey §11.3) | The table is needed one phase earlier | Accepted |
+| DEC-046 | 2026-11-17 | Doctors and admins accept the app-wide consent (same text and version) once, at their first sign-in; the doctor app shows it before anything else | Owner decision (Phase 1 follow-up) | Accepted |
+| DEC-047 | 2026-11-17 | HTTP 405 uses the error code `METHOD_NOT_ALLOWED` (API.md §3) | Owner decision: the standard code | Accepted |
+| DEC-048 | 2026-11-17 | Sign-ins are written to `audit_log` ("signed in"): sign-in happens in Supabase, so the backend logs the first `GET /me` of each new Supabase session (`session_id` claim) | Owner decision; Dashboard spec §20 lists sign-in | Accepted |
 | DEC-045 | 2026-11-17 | Phase 2 frontend additions pinned exactly: motion 14.14.0, react-day-picker 9.14.0 (the 9.x line, not 10.x: stable API the agent knows well) | ARCHITECTURE §3 names both libraries | Accepted (owner approved both installs) |
 
 ## Template for new entries

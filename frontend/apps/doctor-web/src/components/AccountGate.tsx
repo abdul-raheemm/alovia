@@ -6,9 +6,11 @@ import { Navigate } from 'react-router'
 
 import { doctorGateStep } from '../app/gate'
 import { api } from '../app/services'
+import { ConsentStep } from './ConsentStep'
 import { DoctorShell } from './DoctorShell'
 
-/** Signed-in area guard: needs a session and an active doctor or admin account. */
+/** Signed-in area guard: needs a session, an active doctor or admin account and the
+ * current consent. */
 export function AccountGate() {
   const { session, loading, client } = useAuth()
   const me = useQuery({ queryKey: ['me'], queryFn: () => api.get<Me>('/me'), enabled: !!session })
@@ -18,6 +20,8 @@ export function AccountGate() {
   if (!session) return <Navigate to="/signin" replace />
   const step = doctorGateStep(me.data, me.error)
   switch (step) {
+    case 'consent':
+      return <ConsentStep />
     case 'ready':
       return <DoctorShell me={me.data as Me} />
     case 'error':

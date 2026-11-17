@@ -17,6 +17,7 @@ STATUS_CODES = {
     401: "AUTH_REQUIRED",
     403: "FORBIDDEN",
     404: "NOT_FOUND",
+    405: "METHOD_NOT_ALLOWED",
     409: "CONFLICT",
     413: "FILE_TOO_LARGE",
     415: "UNSUPPORTED_FILE_TYPE",
@@ -54,8 +55,7 @@ async def _validation_error(_: Request, exc: Exception) -> JSONResponse:
 
 async def _http_error(_: Request, exc: Exception) -> JSONResponse:
     assert isinstance(exc, StarletteHTTPException)
-    # TODO(OPEN): docs/API.md §3 has no code for statuses outside its table (e.g. 405);
-    # they keep their HTTP status and use VALIDATION_ERROR until the owner decides.
+    # a status outside API.md §3 keeps its HTTP status and uses VALIDATION_ERROR
     code = STATUS_CODES.get(exc.status_code, "VALIDATION_ERROR")
     return JSONResponse(
         error_body(code, str(exc.detail)), status_code=exc.status_code, headers=exc.headers

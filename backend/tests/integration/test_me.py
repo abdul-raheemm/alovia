@@ -133,3 +133,51 @@ def test_consent_recorded_once(client: TestClient, engine: Engine) -> None:
             {"u": uid},
         ).all()
     assert [tuple(r) for r in rows] == [(CONSENT_VERSION, True)]
+
+
+def sign_ins(engine: Engine, uid: uuid.UUID) -> list[Any]:
+    with engine.connect() as conn:
+        return list(
+            conn.execute(
+                text(
+                    "SELECT entity_type, entity_id, patient_id, details FROM audit_log "
+                    "WHERE actor_user_id = :u AND action = 'signed in' ORDER BY created_at"
+                ),
+                {"u": uid},
+            ).mappings()
+        )
+
+
+def test_each_sign_in_session_is_logged_once(client: TestClient, engine: Engine) -> None:
+    """Dashboard spec §20 "sign-in" (owner decision 2026-11-17): logged the first time the
+    backend sees a new Supabase session; repeat calls in the same session add nothing."""
+    uid = add_user(engine, "doctor")
+    for _ in range(2):
+        assert (
+            client.get("/api/v1/me", headers=bearer(sub=str(uid), session_id="s-1")).status_code
+            == 200
+        )
+    assert (
+        client.get("/api/v1/me", headers=bearer(sub=str(uid), session_id="s-2")).status_code == 200
+    )
+    rows = sign_ins(engine, uid)
+    assert [(r["entity_type"], r["entity_id"]) for r in rows] == [
+        ("session", "s-1"),
+        ("session", "s-2"),
+    ]
+    assert rows[0]["details"] == {"role": "doctor"} and rows[0]["patient_id"] is None
+
+
+def test_patient_sign_in_carries_the_patient_and_no_session_is_not_logged(
+    client: TestClient, engine: Engine
+) -> None:
+    uid = add_user(engine, "patient")
+    pid = add_row(
+        engine,
+        "INSERT INTO patients (user_id, name) VALUES (:u, 'Test Patient 4') RETURNING id",
+        u=uid,
+    )
+    me(client, uid)  # a token without session_id: nothing to log
+    assert sign_ins(engine, uid) == []
+    client.get("/api/v1/me", headers=bearer(sub=str(uid), session_id="p-1"))
+    assert [r["patient_id"] for r in sign_ins(engine, uid)] == [pid]

@@ -432,3 +432,13 @@ Fix: `signInAsPatient` now also answers `notifications` and `doctor-notes` with 
 Verified by: `bash scripts/check_all.sh` → exit 0 (Playwright 58 passed).
 Prevention: when a placeholder page becomes real, add its baseline mock to the shared sign-in helper in the same change.
 Category: test
+
+### ERR-041 — 2026-11-17 — Doctor consent E2E failed on the phone project only
+Who: Claude Code
+Phase / task: Phase 2 — task 0
+What happened: after Continue, the check for the "Main" navigation found no element at 375px.
+Cause: on phones the doctor shell keeps its navigation inside a closed menu, so the side nav is hidden and not in the accessibility tree; the test, not the app, was wrong.
+Fix: check the Home page heading instead, which shows on both sizes.
+Verified by: `e2e/doctor.spec.ts` 8 passed (phone-light + laptop-dark).
+Prevention: in responsive layouts assert on page content, not on navigation that changes per screen size.
+Category: test

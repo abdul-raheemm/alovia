@@ -12,7 +12,7 @@ from app.core.database import get_db
 from app.modules.users.invites import invite_is_valid, link_patient
 from app.modules.users.models import User
 from app.modules.users.schemas import ConsentIn, ConsentStatus, InviteCheckOut, LinkIn, MeOut
-from app.modules.users.service import get_account, get_me, record_consent
+from app.modules.users.service import get_account, get_me, record_consent, record_sign_in
 
 router = APIRouter(prefix=API_PREFIX)
 
@@ -21,8 +21,13 @@ Db = Annotated[Session, Depends(get_db)]
 
 
 @router.get("/me", response_model=Envelope[MeOut])
-def me(user: Account, db: Db) -> dict[str, Any]:
-    return ok(get_me(db, user).model_dump(mode="json"))
+def me(
+    user: Account, current: Annotated[CurrentUser, Depends(get_current_user)], db: Db
+) -> dict[str, Any]:
+    """Both apps call this first after sign-in, so a new sign-in session is logged here."""
+    out = get_me(db, user)
+    record_sign_in(db, user, current.session_id, out.patient.id if out.patient else None)
+    return ok(out.model_dump(mode="json"))
 
 
 @router.post("/me/consent", response_model=Envelope[ConsentStatus])

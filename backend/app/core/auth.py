@@ -26,6 +26,7 @@ _bearer = HTTPBearer(auto_error=False)
 class CurrentUser:
     id: str
     email: str | None
+    session_id: str | None = None  # Supabase sign-in session (sign-in audit)
 
 
 def _reject(reason: str) -> AppError:
@@ -58,4 +59,6 @@ def get_current_user(
         ) from exc
     except jwt.PyJWTError as exc:
         raise _reject(type(exc).__name__) from exc
-    return CurrentUser(id=claims["sub"], email=claims.get("email"))
+    return CurrentUser(
+        id=claims["sub"], email=claims.get("email"), session_id=claims.get("session_id")
+    )

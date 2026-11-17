@@ -13,7 +13,7 @@ from app.core.config import CONSENT_VERSION
 from app.core.database import get_db
 from app.core.errors import AppError
 from app.core.logging import logger
-from app.modules.users.models import Consent, Doctor, Patient, User
+from app.modules.users.models import AuditLog, Consent, Doctor, Patient, User
 from app.modules.users.schemas import (
     ConsentIn,
     ConsentStatus,
@@ -123,3 +123,36 @@ def record_consent(db: Session, user: User, body: ConsentIn) -> ConsentStatus:
         )
         db.commit()
     return ConsentStatus(current_version=CONSENT_VERSION, accepted=True)
+
+
+def record_sign_in(
+    db: Session, user: User, session_id: str | None, patient_id: uuid.UUID | None
+) -> None:
+    """Dashboard spec §20 "sign-in": sign-in happens in Supabase, so the backend logs it the
+    first time it sees a new sign-in session (the token's session_id). Tokens without one
+    are not logged.
+    shortcut: two first requests at the same moment may both log the session; harmless for
+    an activity log; a unique index would stop it if it ever matters."""
+    if not session_id:
+        return
+    seen = db.scalar(
+        select(
+            exists().where(
+                AuditLog.actor_user_id == user.id,
+                AuditLog.action == "signed in",
+                AuditLog.entity_id == session_id,
+            )
+        )
+    )
+    if not seen:
+        db.add(
+            AuditLog(
+                actor_user_id=user.id,
+                action="signed in",
+                entity_type="session",
+                entity_id=session_id,
+                patient_id=patient_id,
+                details={"role": user.role},
+            )
+        )
+        db.commit()

@@ -556,3 +556,27 @@ Suggestions raised (not implemented): none
 Docs updated: API, PROGRESS, CONTEXT, HISTORY
 Open questions for the owner: OpenStax licence (spec S2/D9); the interpretations above
 Next step: task 0 (doctor/admin consent once at first sign-in, standard 405 code, sign-in audit), then task 9 (phase review, CHANGELOG 0.2.0).
+
+## Session 17 — 2026-11-17 — Phase 2 task 0: Phase 1 follow-ups
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 2 — task 0 (owner decisions from the Phase 1 review)
+Goal: close the three Phase 1 TODO(OPEN) items the owner decided.
+
+Done:
+- Doctor/admin consent (DEC-046): the doctor app's gate has a `consent` step; `ConsentStep` shows the consent text word for word with both boxes unticked and posts to the existing `POST /me/consent` (it already accepted every role). Gate unit test and a signed-in doctor E2E test added.
+- 405 (DEC-047): `METHOD_NOT_ALLOWED` in the status→code map and API.md §3; TODO(OPEN) removed; integration test.
+- Sign-in audit (DEC-048): `CurrentUser` carries the token's `session_id`; `GET /me` calls `record_sign_in`, which writes one "signed in" row per session (patient_id for patients, details `{role}`, never clinical values). Tests: same session twice → one row; a new session → a second row; no session_id → none.
+
+Files changed:
+- backend: `app/core/{auth,errors}.py`, `app/modules/users/{service,router}.py`, `tests/integration/{test_me,test_app_basics}.py`
+- frontend: `apps/doctor-web/src/components/{ConsentStep,AccountGate}.tsx`, `apps/doctor-web/src/app/{gate,gate.test}.ts`, `e2e/doctor.spec.ts`
+- docs: API.md, DECISIONS (DEC-046 to DEC-048), PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+
+Checks run (exact commands and results):
+- `bash scripts/check_all.sh` → exit 0: pytest (strict warnings) 227 passed; ruff, mypy pass; frontend typecheck, lint, format pass; Vitest 38 passed; Playwright 66 passed (phone-light + laptop-dark, axe)
+
+Errors met: 1 (ERR-041)
+Suggestions raised (not implemented): write audit_log rows for the patient-side changes Dashboard spec §20 lists (appointment created/edited/deleted, dates changed, pregnancy status changed) — asked as a decision in the task report
+Docs updated: API, DECISIONS, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: OpenStax licence (spec S2/D9); patient-side audit entries (above); branch merge to main before the phase review
+Next step: task 9 (E2E + accessibility review, §15 manual checks, CHANGELOG 0.2.0).

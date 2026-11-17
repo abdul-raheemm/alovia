@@ -33,6 +33,7 @@ Error:
 | 401 | `AUTH_REQUIRED` | Missing/expired/invalid token |
 | 403 | `FORBIDDEN` | Wrong role, or patient not assigned to this doctor |
 | 404 | `NOT_FOUND` | Resource missing or not visible to this user (same message either way) |
+| 405 | `METHOD_NOT_ALLOWED` | The route exists but not for this HTTP method (owner decision 2026-11-17) |
 | 409 | `CONFLICT` | e.g. genetic assessment already reviewed; invite already used |
 | 413 | `FILE_TOO_LARGE` | Upload over the limit |
 | 415 | `UNSUPPORTED_FILE_TYPE` | Upload format not allowed |
@@ -57,7 +58,7 @@ Error:
 
 **`POST /patient/link`** (valid token; no `users` row needed yet) body `{code}` → creates the `users` row (role `patient`, email from the token), links `patients.user_id`, marks the invite used, writes `audit_log` "invite used" — all in one transaction (DEC-036). Errors: every invalid invite → 404 `NOT_FOUND` "This invite link isn't valid. Please ask your doctor for a new one." (DEC-038); account already set up, or email already used → 409 `CONFLICT`; token without email → 400. Success → `data`: same shape as `GET /me`.
 
-**`GET /me`** → `data`: `{user: {id, email, role}, patient: {id, name} | null, doctor: {id, name, specialty} | null, consent: {current_version, accepted}}`. `accepted` is true only for the current consent version. Never includes `patients.notes`. A valid token without a `users` row, or with `is_active = false`, gets 403 `FORBIDDEN` ("Your account is not set up yet.").
+**`GET /me`** → `data`: `{user: {id, email, role}, patient: {id, name} | null, doctor: {id, name, specialty} | null, consent: {current_version, accepted}}`. `accepted` is true only for the current consent version. Never includes `patients.notes`. A valid token without a `users` row, or with `is_active = false`, gets 403 `FORBIDDEN` ("Your account is not set up yet."). Sign-in audit (Dashboard spec §20, owner decision 2026-11-17): the first `/me` call of a new Supabase sign-in session (the token's `session_id`) writes one `audit_log` row (`action` "signed in", `entity_type` "session", `entity_id` the session id, `patient_id` for patients, `details` `{role}`); later calls in the same session add nothing. Doctors and admins must accept the current consent once too: the doctor app shows the consent before anything else when `consent.accepted` is false (owner decision 2026-11-17).
 
 **`POST /me/consent`** body `{consent_version, age_confirmed_18_plus}` (no other fields; boolean must be a real boolean). 400 `VALIDATION_ERROR` with `fields.consent_version` if not the current version, or `fields.age_confirmed_18_plus` if not true (DEC-023). Success → `data`: `{current_version, accepted: true}`; repeating it adds no second row.
 

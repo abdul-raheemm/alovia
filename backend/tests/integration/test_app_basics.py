@@ -75,6 +75,14 @@ def test_unknown_route_is_not_found_envelope(client: TestClient) -> None:
     assert res.json()["error"]["code"] == "NOT_FOUND"
 
 
+def test_wrong_method_is_405_with_its_own_code(client: TestClient) -> None:
+    """Owner decision 2026-11-17: the standard 405 status gets the METHOD_NOT_ALLOWED code."""
+    res = client.post("/api/v1/health")
+    assert res.status_code == 405
+    assert res.json()["error"]["code"] == "METHOD_NOT_ALLOWED"
+    assert res.json()["data"] is None
+
+
 def test_validation_error_lists_fields(client: TestClient) -> None:
     res = client.get("/test/needs-int", params={"n": "abc"})
     assert res.status_code == 400
