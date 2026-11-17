@@ -30,7 +30,7 @@ const FALLBACK_NAV = [
 ]
 
 /** Signed-in patient layout: bottom nav on phones, side bar on laptops, urgent button pinned
- * top-right on every screen. TODO(Phase 2 task 7): notification bar under the header. */
+ * top-right on every screen. The notification bar is on the home screen (Journey §4.2). */
 export function PatientShell() {
   const home = useJourneyHome()
   const items = (home.data?.nav_items ?? FALLBACK_NAV).filter((item) => item.key in NAV_ROUTES)

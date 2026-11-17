@@ -13,10 +13,11 @@ import {
   StageSection,
   WeekStrip,
 } from '../components/journey/JourneyBlocks'
+import { NotificationBar } from '../components/journey/NotificationBar'
 
 /** Journey home in the §4.3 block order: header, baby card, this stage, quick log, week strip
  * (§9.1), next appointment, month cards. Still to come: weekly summary (Phase 3), status cards
- * (Phases 4-5), notification bar (task 7), ended screens (task 8). */
+ * (Phases 4-5), ended screens (task 8). The notification bar (§4.2) sits at the top. */
 export function HomePage() {
   const home = useJourneyHome()
   if (home.isPending) return <PageSkeleton />
@@ -34,6 +35,7 @@ export function HomePage() {
   return (
     <section className="flex flex-col gap-6">
       <h1 className="sr-only">Home</h1>
+      <NotificationBar />
       {data.notices.map((key) => (
         <Notice key={key}>{messageText(data.messages, key)}</Notice>
       ))}

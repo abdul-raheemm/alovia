@@ -87,6 +87,10 @@ Task 5 additions to the home payload: `months: [{month, week_start, week_end}]` 
 
 **`GET /patient/appointments`** → `data`: `{upcoming, past}`; upcoming soonest first, past most recent first; a date-only appointment is upcoming for its whole day. **`POST`** body `{date, time?, title, note?}` (no other fields; title 1-100 characters after trimming, note up to 500, an empty note is stored as none) → 201 with the appointment; `source` is always `patient`. **`PUT /{id}`** same body → the appointment. **`DELETE /{id}`** → `data: null` (hard delete, DATABASE.md §8). Editing or deleting a doctor-added appointment → 403 `FORBIDDEN`; another patient's or a missing one → 404 `NOT_FOUND`.
 
+**`GET /patient/notifications`** → first creates the notifications that are due (Journey §10.2: on app open; at most one per `(patient, type, target_ref)`), then `data`: unread, undismissed `[{id, type, target_ref, created_at}]`, newest first. Created now: `new_week` / `new_month` (`target_ref` = the current content week / month; active pregnancy with a usable due date only; not back-filled), `appointment_soon` (appointment id; within `appointment_notice_hours`, a date-only one while its day has not passed), `doctor_note` (note id; each shared note). After the pregnancy ends, `new_week`/`new_month` are neither created nor returned (§11.3). `result_available`, `genetic_reviewed`, `dates_updated` come with the doctor actions (Phases 4-5). **`POST /patient/notifications/{id}/read`** and **`/dismiss`** → `data: null`; either removes it from the bar; another patient's or a missing id → 404.
+
+**`GET /patient/doctor-notes`** → `data`: `[{id, body, doctor_name, created_on, related_ref}]`, only `visible_to_patient` notes, newest first; `created_on` is the local day (config timezone). Read-only.
+
 **`GET /patient/journey/months/{month}`** (1-9; linked patient with consent) → `data`: `{month, week_start, week_end, is_current, items}` with all content types for that month. 404 once the pregnancy has ended (§11.3: month cards stop).
 
 ### 4.3 Symptom Tracking — Module 7 (Phase 3)

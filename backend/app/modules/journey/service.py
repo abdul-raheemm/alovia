@@ -6,20 +6,23 @@ from datetime import UTC, date, datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
 from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from app.core.errors import AppError
 from app.core.logging import logger
+from app.modules.dashboard import service as dashboard
 from app.modules.journey import engine
 from app.modules.journey.config import JourneyConfig, Message
 from app.modules.journey.content import ContentProvider, select_for_home
-from app.modules.journey.models import Appointment, PregnancyDateHistory
+from app.modules.journey.models import Appointment, Notification, PregnancyDateHistory
 from app.modules.journey.schemas import (
     AppointmentIn,
     AppointmentOut,
     AppointmentsOut,
     CalendarOut,
     DatesOut,
+    DoctorNoteOut,
     DueDateIn,
     HomeOut,
     LmpDatesIn,
@@ -27,6 +30,7 @@ from app.modules.journey.schemas import (
     MonthDetailOut,
     MonthSummary,
     NavItemOut,
+    NotificationOut,
     PregnancyOut,
     UltrasoundDatesIn,
 )
@@ -329,3 +333,99 @@ def set_dates(
     if old_source == "lmp_estimate" and new.source != "lmp_estimate":
         return ["msg_dates_updated_by_clinician"]
     return []
+
+
+# ---- §10 notifications (in-app only) and doctor notes ----
+
+BABY_STAGE_TYPES = ("new_week", "new_month")  # stop when the pregnancy is not active (§10.2)
+
+
+def _notifications_due(
+    db: Session, patient: Patient, cfg: JourneyConfig, today: date, now: datetime
+) -> list[tuple[str, str]]:
+    """(type, target_ref) pairs that should exist now. Old weeks are not back-filled: the
+    notification is for the week or month she is in when she opens the app."""
+    due: list[tuple[str, str]] = []
+    if patient.pregnancy_status == "active":
+        ga = _current_ga(patient, cfg, today)  # bad stored date -> none (guard above)
+        if ga is not None:
+            due += [("new_week", str(ga.content_week)), ("new_month", str(ga.month))]
+    # §10.1 appointment_soon: within appointment_notice_hours; a date-only appointment
+    # (local 00:00) counts while its day has not passed
+    tz = ZoneInfo(cfg.timezone)
+    soon = db.scalars(
+        select(Appointment).where(
+            Appointment.patient_id == patient.id,
+            Appointment.appointment_at >= datetime.combine(today, time(0, 0), tzinfo=tz),
+            Appointment.appointment_at <= now + timedelta(hours=cfg.appointment_notice_hours),
+        )
+    )
+    due += [
+        ("appointment_soon", str(a.id)) for a in soon if not a.has_time or a.appointment_at >= now
+    ]
+    # doctor_note: each note her doctor has shared (the doctor side arrives in Phase 5)
+    due += [("doctor_note", str(n.id)) for n in dashboard.shared_notes(db, patient.id)]
+    # TODO(Phases 4-5): result_available, genetic_reviewed, dates_updated (doctor actions)
+    return due
+
+
+def get_notifications(
+    db: Session, patient: Patient, cfg: JourneyConfig, today: date
+) -> list[NotificationOut]:
+    """§10.2: generated when she opens the app; the unique (patient, type, target) constraint
+    keeps each one single, even when two requests arrive at once. Returns the unread,
+    undismissed ones, newest first."""
+    due = _notifications_due(db, patient, cfg, today, datetime.now(UTC))
+    if due:
+        db.execute(
+            insert(Notification)
+            .values([{"patient_id": patient.id, "type": t, "target_ref": ref} for t, ref in due])
+            .on_conflict_do_nothing()
+        )
+        db.commit()
+    query = select(Notification).where(
+        Notification.patient_id == patient.id,
+        Notification.read_at.is_(None),
+        Notification.dismissed_at.is_(None),
+    )
+    if patient.pregnancy_status != "active":  # no baby-stage notices after the end (§11.3)
+        query = query.where(Notification.type.not_in(BABY_STAGE_TYPES))
+    rows = db.scalars(query.order_by(Notification.created_at.desc(), Notification.type))
+    return [
+        NotificationOut(id=n.id, type=n.type, target_ref=n.target_ref, created_at=n.created_at)
+        for n in rows
+    ]
+
+
+def mark_notification(
+    db: Session, patient: Patient, notification_id: uuid.UUID, action: str
+) -> None:
+    """Mark her own notification read or dismissed (the first time counts)."""
+    row = db.scalar(
+        select(Notification).where(
+            Notification.id == notification_id, Notification.patient_id == patient.id
+        )
+    )
+    if row is None:
+        raise AppError("NOT_FOUND", "We couldn't find this.", status=404)
+    now = datetime.now(UTC)
+    if action == "read" and row.read_at is None:
+        row.read_at = now
+    if action == "dismiss" and row.dismissed_at is None:
+        row.dismissed_at = now
+    db.commit()
+
+
+def list_doctor_notes(db: Session, patient: Patient, timezone: str) -> list[DoctorNoteOut]:
+    """§10.3 / UX_FLOWS P10: notes her doctors chose to share, newest first."""
+    tz = ZoneInfo(timezone)
+    return [
+        DoctorNoteOut(
+            id=n.id,
+            body=n.body,
+            doctor_name=n.doctor_name,
+            created_on=n.created_at.astimezone(tz).date(),
+            related_ref=n.related_ref,
+        )
+        for n in dashboard.shared_notes(db, patient.id)
+    ]

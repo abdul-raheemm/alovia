@@ -412,3 +412,23 @@ Fix: import removed; check_all re-run in the foreground → exit 0.
 Verified by: `bash scripts/check_all.sh` → "All checks passed.", exit code 0.
 Prevention: existing Lesson (read the check's own exit code); re-run lint after every follow-up fix.
 Category: tooling
+
+### ERR-039 — 2026-11-17 — E2E: doctor-notes list locator matched the nav bar too
+Who: Claude Code
+Phase / task: Phase 2 — task 7
+What happened: `getByRole('listitem')` found 8 items instead of 2.
+Cause: the 6 main-navigation items are list items as well.
+Fix: scope to the page: `getByRole('main').getByRole('listitem')`.
+Verified by: `e2e/notifications.spec.ts` 8 passed.
+Prevention: scope list locators to `main` or a named region (same kind as ERR-037 (3)).
+Category: test
+
+### ERR-040 — 2026-11-17 — Older navigation E2E test failed once Doctor notes became a real page
+Who: Claude Code
+Phase / task: Phase 2 — task 7
+What happened: "navigation shows the six items (DEC-040)" timed out waiting for the "Doctor notes" heading.
+Cause: the page now calls `GET /patient/doctor-notes`, which that test did not mock, so it ended in the error state (the placeholder needed no data).
+Fix: `signInAsPatient` now also answers `notifications` and `doctor-notes` with empty lists (tests that need data route them again); the test's assertions are unchanged.
+Verified by: `bash scripts/check_all.sh` → exit 0 (Playwright 58 passed).
+Prevention: when a placeholder page becomes real, add its baseline mock to the shared sign-in helper in the same change.
+Category: test

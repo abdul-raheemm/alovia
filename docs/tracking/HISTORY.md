@@ -503,3 +503,29 @@ Suggestions raised (not implemented): none
 Docs updated: API, DECISIONS, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: OpenStax licence (spec S2/D9) still open
 Next step: task 7 (notifications bar + doctor notes, patient side).
+
+## Session 15 — 2026-11-17 — Phase 2 task 7: notification bar and doctor notes (patient side)
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 2 — notifications + doctor notes (Journey §4.2, §10.1-10.3, §11.3; UX_FLOWS P10)
+Goal: in-app notifications generated on app open, and the read-only Doctor notes tab.
+
+Done:
+- Backend: `get_notifications` creates due notifications with one insert that skips existing ones (unique (patient, type, target_ref)), then lists unread; read/dismiss own only; `list_doctor_notes`. New `app/modules/dashboard/service.py` (`shared_notes`) so the journey module reads doctor notes through a service (ARCHITECTURE §8).
+- Patient app: notification bar at the top of home (tap = open target + mark read, X = dismiss, hidden when empty or while loading); Doctor notes tab (doctor name, local day, body; empty state).
+- Notification wording is neutral and never celebratory ("Week 28 has started", "Your doctor shared a note with you"); a unit test checks there are no exclamation marks.
+
+Files changed:
+- backend: `app/modules/journey/{schemas,service,router}.py`, `app/modules/dashboard/service.py` (new), `app/main.py`, `tests/integration/test_journey_notifications.py` (new)
+- frontend: `components/journey/NotificationBar.tsx`, `pages/DoctorNotesPage.tsx`, `app/useNotifications.ts`, `app/notifications.test.ts` (new); `app/{App.tsx,journey.ts}`, `pages/HomePage.tsx`, `components/PatientShell.tsx`, `packages/shared/src/{types,index,api-types}.ts`, `e2e/{helpers.ts,notifications.spec.ts}`
+- docs: API.md, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+
+Interpretations (spec silent, flagged for review): new_week/new_month are for the week/month she is in when she opens the app (no back-fill; the first open after entering dates creates them); unread baby-stage notices are hidden after the pregnancy ends; appointment_soon for a date-only appointment counts while its day has not passed; the bar is on the home screen only (§4.2).
+
+Checks run (exact commands and results):
+- `bash scripts/check_all.sh` → exit 0: pytest (strict warnings) 211 passed; ruff, mypy pass; frontend typecheck, lint, format pass; Vitest 37 passed; Playwright 58 passed (phone-light + laptop-dark, axe)
+
+Errors met: 2 (ERR-039, ERR-040)
+Suggestions raised (not implemented): none
+Docs updated: API, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: OpenStax licence (spec S2/D9) still open
+Next step: task 8 (pregnancy-end flow + undo).

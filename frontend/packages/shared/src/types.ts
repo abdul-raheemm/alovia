@@ -22,3 +22,7 @@ export type AppointmentInput = components['schemas']['AppointmentIn']
 export type AppointmentList = components['schemas']['AppointmentsOut']
 export type JourneyCalendar = components['schemas']['CalendarOut']
 export type Milestone = components['schemas']['MilestoneOut']
+
+/** Notification bar (Journey §4.2, §10.1) and shared doctor notes (§10.3). */
+export type Notification = components['schemas']['NotificationOut']
+export type DoctorNote = components['schemas']['DoctorNoteOut']

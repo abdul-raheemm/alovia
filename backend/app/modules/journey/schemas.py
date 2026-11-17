@@ -167,3 +167,34 @@ class MonthDetailOut(BaseModel):
     week_end: int
     is_current: bool
     items: list[ContentItem]  # all content types for this month; empty until task 4
+
+
+NotificationType = Literal[
+    "new_week",
+    "new_month",
+    "appointment_soon",
+    "doctor_note",
+    "result_available",
+    "genetic_reviewed",
+    "dates_updated",
+]
+
+
+class NotificationOut(BaseModel):
+    """One unread notification for the bar (§4.2, §10.1). `target_ref`: the week or month
+    number for new_week/new_month, the appointment or note id for the others."""
+
+    id: uuid.UUID
+    type: NotificationType
+    target_ref: str | None
+    created_at: datetime
+
+
+class DoctorNoteOut(BaseModel):
+    """A note her doctor shared (§10.3); read-only for the patient."""
+
+    id: uuid.UUID
+    body: str
+    doctor_name: str
+    created_on: dt.date  # in the patient's time zone (config)
+    related_ref: str | None  # e.g. a genetic assessment id (Phase 4)

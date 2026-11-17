@@ -111,6 +111,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/patient/doctor-notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Doctor Notes */
+        get: operations["doctor_notes_api_v1_patient_doctor_notes_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/patient/journey/calendar": {
         parameters: {
             query?: never;
@@ -199,6 +216,60 @@ export interface paths {
          * @description Right after sign-up: create the patient's account from the invite (DEC-036).
          */
         post: operations["link_api_v1_patient_link_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Notifications
+         * @description Creates any notifications that are due (§10.2), then returns the unread ones.
+         */
+        get: operations["notifications_api_v1_patient_notifications_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/notifications/{notification_id}/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dismiss Notification */
+        post: operations["dismiss_notification_api_v1_patient_notifications__notification_id__dismiss_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/notifications/{notification_id}/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Read Notification */
+        post: operations["read_notification_api_v1_patient_notifications__notification_id__read_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -370,6 +441,28 @@ export interface components {
             /** Lmp Date */
             lmp_date: string | null;
         };
+        /**
+         * DoctorNoteOut
+         * @description A note her doctor shared (§10.3); read-only for the patient.
+         */
+        DoctorNoteOut: {
+            /** Body */
+            body: string;
+            /**
+             * Created On
+             * Format: date
+             */
+            created_on: string;
+            /** Doctor Name */
+            doctor_name: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Related Ref */
+            related_ref: string | null;
+        };
         /** DoctorRef */
         DoctorRef: {
             /**
@@ -455,6 +548,20 @@ export interface components {
         Envelope_NoneType_: {
             /** Data */
             data: null;
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[DoctorNoteOut]] */
+        Envelope_list_DoctorNoteOut__: {
+            /** Data */
+            data: components["schemas"]["DoctorNoteOut"][];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[NotificationOut]] */
+        Envelope_list_NotificationOut__: {
+            /** Data */
+            data: components["schemas"]["NotificationOut"][];
             /** Error */
             error?: null;
         };
@@ -594,6 +701,30 @@ export interface components {
             key: string;
             /** Label */
             label: string;
+        };
+        /**
+         * NotificationOut
+         * @description One unread notification for the bar (§4.2, §10.1). `target_ref`: the week or month
+         *     number for new_week/new_month, the appointment or note id for the others.
+         */
+        NotificationOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Target Ref */
+            target_ref: string | null;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "new_week" | "new_month" | "appointment_soon" | "doctor_note" | "result_available" | "genetic_reviewed" | "dates_updated";
         };
         /** PatientRef */
         PatientRef: {
@@ -931,6 +1062,26 @@ export interface operations {
             };
         };
     };
+    doctor_notes_api_v1_patient_doctor_notes_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_DoctorNoteOut__"];
+                };
+            };
+        };
+    };
     calendar_api_v1_patient_journey_calendar_get: {
         parameters: {
             query: {
@@ -1067,6 +1218,88 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_MeOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    notifications_api_v1_patient_notifications_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_NotificationOut__"];
+                };
+            };
+        };
+    };
+    dismiss_notification_api_v1_patient_notifications__notification_id__dismiss_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_NoneType_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_notification_api_v1_patient_notifications__notification_id__read_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                notification_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_NoneType_"];
                 };
             };
             /** @description Validation Error */

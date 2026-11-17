@@ -154,6 +154,11 @@ export async function signInAsPatient(page: Page, me: unknown = TEST_PATIENT_ME)
     localStorage.setItem('sb-e2e-test-auth-token', value)
   }, JSON.stringify(session))
   await page.route('**/api/v1/me', (route) => route.fulfill({ json: { data: me, error: null } }))
-  // the home week strip asks for calendar markers; tests that need markers route it again
+  // baseline empty replies for the patient app's lists; tests that need data route again
   await mockCalendar(page)
+  for (const list of ['notifications', 'doctor-notes']) {
+    await page.route(`**/api/v1/patient/${list}`, (route) =>
+      route.fulfill({ json: { data: [], error: null } }),
+    )
+  }
 }

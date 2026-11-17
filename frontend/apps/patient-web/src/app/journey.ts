@@ -149,3 +149,47 @@ export function milestoneLabel(m: { kind: string; value: number }): string {
       return 'Milestone'
   }
 }
+
+// ---- notification bar (Journey §4.2, §10.1) ----
+
+/** Neutral wording for each notification (never celebratory: §10.2). */
+export function notificationText(n: { type: string; target_ref?: string | null }): string {
+  switch (n.type) {
+    case 'new_week':
+      return `Week ${n.target_ref} has started`
+    case 'new_month':
+      return `Month ${n.target_ref} has started`
+    case 'appointment_soon':
+      return 'You have an appointment coming up soon'
+    case 'doctor_note':
+      return 'Your doctor shared a note with you'
+    case 'result_available':
+      return 'A new result is available'
+    case 'genetic_reviewed':
+      return 'Your genetic check has been reviewed'
+    case 'dates_updated':
+      return 'Your doctor updated your pregnancy dates'
+    default:
+      return 'New notification'
+  }
+}
+
+/** Where tapping a notification leads (§10.1 "Target"). TODO(Phases 4-5): My results and
+ * Genetic risk pages; until then those open More. */
+export function notificationTarget(n: { type: string; target_ref?: string | null }): string {
+  switch (n.type) {
+    case 'new_month':
+      return `/months/${n.target_ref}`
+    case 'appointment_soon':
+      return '/appointments'
+    case 'doctor_note':
+      return '/doctor-notes'
+    case 'dates_updated':
+      return '/dates'
+    case 'result_available':
+    case 'genetic_reviewed':
+      return '/more'
+    default:
+      return '/home'
+  }
+}

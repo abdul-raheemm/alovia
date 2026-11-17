@@ -19,14 +19,18 @@ from app.modules.journey.schemas import (
     AppointmentsOut,
     CalendarOut,
     DatesIn,
+    DoctorNoteOut,
     HomeOut,
     MonthDetailOut,
+    NotificationOut,
 )
 from app.modules.users.models import Patient, User
 from app.modules.users.service import get_account, get_patient
 
 router = APIRouter(prefix=f"{API_PREFIX}/patient/journey")
 appointments_router = APIRouter(prefix=f"{API_PREFIX}/patient/appointments")
+notifications_router = APIRouter(prefix=f"{API_PREFIX}/patient/notifications")
+notes_router = APIRouter(prefix=f"{API_PREFIX}/patient/doctor-notes")
 
 OwnPatient = Annotated[Patient, Depends(get_patient)]
 Db = Annotated[Session, Depends(get_db)]
@@ -134,3 +138,32 @@ def update_appointment(
 def delete_appointment(appointment_id: uuid.UUID, patient: OwnPatient, db: Db) -> dict[str, Any]:
     service.delete_appointment(db, patient, appointment_id)
     return ok(None)
+
+
+# ---- §10 notification bar and shared doctor notes ----
+
+
+@notifications_router.get("", response_model=Envelope[list[NotificationOut]])
+def notifications(request: Request, patient: OwnPatient, db: Db) -> dict[str, Any]:
+    """Creates any notifications that are due (§10.2), then returns the unread ones."""
+    cfg = request.app.state.journey_config
+    out = service.get_notifications(db, patient, cfg, local_today(cfg.timezone))
+    return ok([n.model_dump(mode="json") for n in out])
+
+
+@notifications_router.post("/{notification_id}/read", response_model=Envelope[None])
+def read_notification(notification_id: uuid.UUID, patient: OwnPatient, db: Db) -> dict[str, Any]:
+    service.mark_notification(db, patient, notification_id, "read")
+    return ok(None)
+
+
+@notifications_router.post("/{notification_id}/dismiss", response_model=Envelope[None])
+def dismiss_notification(notification_id: uuid.UUID, patient: OwnPatient, db: Db) -> dict[str, Any]:
+    service.mark_notification(db, patient, notification_id, "dismiss")
+    return ok(None)
+
+
+@notes_router.get("", response_model=Envelope[list[DoctorNoteOut]])
+def doctor_notes(request: Request, patient: OwnPatient, db: Db) -> dict[str, Any]:
+    tz = request.app.state.journey_config.timezone
+    return ok([n.model_dump(mode="json") for n in service.list_doctor_notes(db, patient, tz)])

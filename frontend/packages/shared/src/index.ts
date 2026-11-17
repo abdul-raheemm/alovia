@@ -5,6 +5,7 @@ export type {
   AppointmentInput,
   AppointmentList,
   ConsentStatus,
+  DoctorNote,
   InviteCheck,
   JourneyContentItem,
   JourneyDatesInput,
@@ -13,6 +14,7 @@ export type {
   Me,
   Milestone,
   MonthDetail,
+  Notification,
 } from './types'
 export {
   CONSENT_SOURCE,
