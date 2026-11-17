@@ -10,6 +10,7 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 CONFIG_FILE = Path(__file__).resolve().parents[3] / "rules" / "journey" / "config.yaml"
+MESSAGES_FILE = CONFIG_FILE.with_name("messages.yaml")
 MAX_WEEKS = 42  # §4.5: the week counter stops at 42
 
 
@@ -82,3 +83,25 @@ def parse_journey_config(text: str) -> JourneyConfig:
 @lru_cache
 def load_journey_config() -> JourneyConfig:
     return parse_journey_config(CONFIG_FILE.read_text(encoding="utf-8"))
+
+
+class Message(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    intent: str = Field(min_length=1)  # from the spec, for reviewers; never shown to patients
+    text: str | None  # None until a doctor approves the wording (DEC-041)
+
+
+class _MessagesFile(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    messages: dict[str, Message] = Field(min_length=1)
+
+
+def parse_journey_messages(text: str) -> dict[str, Message]:
+    return _MessagesFile.model_validate(yaml.safe_load(text)).messages
+
+
+@lru_cache
+def load_journey_messages() -> dict[str, Message]:
+    return parse_journey_messages(MESSAGES_FILE.read_text(encoding="utf-8"))

@@ -28,16 +28,18 @@ Update after every task. Each line: status, task, who, date, notes.
 - [x] Phase 1 review + CHANGELOG 0.1.0 — Raheem — 2026-11-17 (approved; merged into `main`)
 
 ## Phase 2 — Pregnancy Journey
-- [ ] Phase 1 follow-ups: doctors/admins accept the consent at first sign-in; standard 405 error code; "sign-in" in the audit log (owner decisions 2026-11-17)
 - [x] Migration (date history, appointments, notifications, doctor_notes) + inbox_items (DEC-044) — Raheem + Claude Code — 2026-11-17 (migration 0002; tested on alovia-test; applied to the main project: `alembic current` = 0002)
 - [x] GA/month/trimester calculations + tests — Raheem + Claude Code — 2026-11-17 (`app/modules/journey/engine.py`, `rules/journey/config.yaml`; 42 engine tests)
-- [ ] Dates onboarding + validation
+- [x] Dates onboarding + validation — Raheem + Claude Code — 2026-11-17 (D1-D3, §5.3 override confirmation, date history; messages.yaml with all §13.2 keys pending approval; home header + onboarding + dates screens; nav from config, DEC-040)
 - [ ] Content provider interface + prototype YAML content + size reference (sourced)
 - [ ] Home screen blocks; month cards + detail; illustrations (licensed or placeholders)
 - [ ] Calendar + appointments (patient side)
 - [ ] Notifications bar
 - [ ] Pregnancy-end flow + undo
+- [ ] Phase 1 follow-ups moved here (task 0): doctor/admin consent, 405 code, sign-in audit — before the phase review
 - [ ] E2E + accessibility; review; CHANGELOG 0.2.0
+
+Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month cards (task 5) **before** the content provider (task 4); then calendar/appointments, notifications, pregnancy end, task 0, review.
 
 ## Phase 3 — Symptom Tracking
 - [ ] Migration; vocabulary YAML; red-flag YAML; PUQE; pattern rules

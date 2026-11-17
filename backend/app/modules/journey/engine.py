@@ -133,3 +133,65 @@ def milestones(
     found.append(Milestone(week_day(term_from_week), "term", term_from_week))
     found.append(Milestone(due_date, "due_date", 0))
     return sorted((m for m in found if start <= m.on <= end), key=lambda m: (m.on, m.kind))
+
+
+# ---- §5 entering and changing dates ----
+
+DateSource = Literal["lmp_estimate", "clinician_confirmed", "ultrasound"]
+MAX_GA_DAYS = MAX_WEEKS * 7  # 294: rule D2's upper limit
+
+
+class DateRuleError(ValueError):
+    """A §5.2 validation rule failed. `code` is D1, D2 or D3; `field` is the input to mark."""
+
+    def __init__(self, code: Literal["D1", "D2", "D3"], field: str) -> None:
+        super().__init__(f"{code} on {field}")
+        self.code = code
+        self.field = field
+
+
+@dataclass(frozen=True)
+class ResolvedDates:
+    due_date: date
+    source: DateSource
+    lmp_date: date | None  # stored only when the patient gave it (§5.1)
+
+
+def _check_resulting_ga(due_date: date, today: date, field: str) -> None:
+    # D2: resulting GA below 0 days or above 294 days (42 weeks)
+    if not 0 <= gestational_age_days(due_date, today) <= MAX_GA_DAYS:
+        raise DateRuleError("D2", field)
+
+
+def dates_from_lmp(lmp_date: date, today: date) -> ResolvedDates:
+    """Option A (§5.1): due date = LMP + 280 days, source `lmp_estimate`."""
+    if lmp_date > today:  # D1: any date in the future except a due date
+        raise DateRuleError("D1", "lmp_date")
+    due = due_date_from_lmp(lmp_date)
+    _check_resulting_ga(due, today, "lmp_date")
+    return ResolvedDates(due, "lmp_estimate", lmp_date)
+
+
+def dates_from_due_date(due_date: date, today: date) -> ResolvedDates:
+    """Option B (§5.1): the doctor's due date as entered, source `clinician_confirmed`."""
+    _check_resulting_ga(due_date, today, "due_date")
+    return ResolvedDates(due_date, "clinician_confirmed", None)
+
+
+def dates_from_ultrasound(
+    scan_date: date, ga_weeks: int, ga_days: int, today: date
+) -> ResolvedDates:
+    """Option C (§5.1): scan date + (280 − GA at scan), source `ultrasound`."""
+    if scan_date > today:  # D1
+        raise DateRuleError("D1", "scan_date")
+    if not 0 <= ga_weeks * 7 + ga_days <= MAX_GA_DAYS or not 0 <= ga_days <= 6:
+        raise DateRuleError("D3", "ga_weeks")  # D3: ultrasound GA outside 0-42 weeks
+    due = due_date_from_ultrasound(scan_date, ga_weeks, ga_days)
+    _check_resulting_ga(due, today, "scan_date")
+    return ResolvedDates(due, "ultrasound", None)
+
+
+def needs_override_confirmation(old_source: str | None, new_source: DateSource) -> bool:
+    """§5.3: a date set by a clinician or a scan is replaced by an LMP estimate only after
+    the patient confirms (`msg_confirm_override_clinician_date`)."""
+    return old_source in ("clinician_confirmed", "ultrasound") and new_source == "lmp_estimate"

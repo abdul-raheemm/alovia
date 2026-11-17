@@ -5,9 +5,19 @@ from datetime import UTC, date, datetime, timedelta
 import pytest
 from pydantic import ValidationError
 
-from app.modules.journey.config import load_journey_config, parse_journey_config
+from app.modules.journey.config import (
+    load_journey_config,
+    load_journey_messages,
+    parse_journey_config,
+)
 from app.modules.journey.engine import (
+    DateRuleError,
+    DateSource,
+    ResolvedDates,
     calendar_range,
+    dates_from_due_date,
+    dates_from_lmp,
+    dates_from_ultrasound,
     due_date_from_lmp,
     due_date_from_ultrasound,
     gestational_age,
@@ -15,6 +25,7 @@ from app.modules.journey.engine import (
     local_today,
     milestones,
     month_for_week,
+    needs_override_confirmation,
     trimester,
 )
 
@@ -210,3 +221,109 @@ def _config_text(**changes: str) -> str:
 def test_bad_config_is_refused(old: str, new: str) -> None:
     with pytest.raises(ValidationError):
         parse_journey_config(_config_text(**{old: new}))
+
+
+# ---- §5.2 validation D1-D3 and §5.3 override rule (spec tests §15 items 2 and 10) ----
+
+
+def rule(call: object) -> tuple[str, str]:
+    """Run a zero-argument callable that must fail a date rule; return (code, field)."""
+    with pytest.raises(DateRuleError) as err:
+        call()  # type: ignore[operator]
+    return err.value.code, err.value.field
+
+
+def days_ago(n: int) -> date:
+    return TODAY - timedelta(days=n)
+
+
+def test_option_a_stores_lmp_and_estimate_source() -> None:
+    lmp = days_ago(70)
+    assert dates_from_lmp(lmp, TODAY) == ResolvedDates(
+        lmp + timedelta(days=280), "lmp_estimate", lmp
+    )
+
+
+def test_d1_future_lmp_rejected_but_today_allowed() -> None:
+    assert rule(lambda: dates_from_lmp(TODAY + timedelta(days=1), TODAY)) == ("D1", "lmp_date")
+    assert dates_from_lmp(TODAY, TODAY).due_date == TODAY + timedelta(days=280)
+
+
+def test_d2_lmp_limits_are_0_and_294_days() -> None:
+    assert dates_from_lmp(days_ago(294), TODAY).source == "lmp_estimate"  # exactly 42 weeks
+    assert rule(lambda: dates_from_lmp(days_ago(295), TODAY)) == ("D2", "lmp_date")
+
+
+def test_option_b_due_date_may_be_in_the_future() -> None:
+    due = TODAY + timedelta(days=100)
+    assert dates_from_due_date(due, TODAY) == ResolvedDates(due, "clinician_confirmed", None)
+
+
+def test_d2_due_date_limits() -> None:
+    assert dates_from_due_date(TODAY + timedelta(days=280), TODAY).due_date  # GA 0: allowed
+    assert rule(lambda: dates_from_due_date(TODAY + timedelta(days=281), TODAY)) == (
+        "D2",
+        "due_date",
+    )
+    assert dates_from_due_date(days_ago(14), TODAY).due_date  # GA 294: allowed
+    assert rule(lambda: dates_from_due_date(days_ago(15), TODAY)) == ("D2", "due_date")
+
+
+def test_option_c_ultrasound() -> None:
+    scan = days_ago(10)
+    got = dates_from_ultrasound(scan, 12, 4, TODAY)
+    assert got == ResolvedDates(scan + timedelta(days=280 - 88), "ultrasound", None)
+
+
+def test_d1_future_scan_date_rejected() -> None:
+    assert rule(lambda: dates_from_ultrasound(TODAY + timedelta(days=1), 12, 0, TODAY)) == (
+        "D1",
+        "scan_date",
+    )
+
+
+def test_d3_ultrasound_ga_must_be_0_to_42_weeks() -> None:
+    assert dates_from_ultrasound(TODAY, 42, 0, TODAY).source == "ultrasound"
+    assert dates_from_ultrasound(TODAY, 0, 0, TODAY).due_date == TODAY + timedelta(days=280)
+    for weeks, days in ((42, 1), (43, 0), (-1, 0), (10, 7), (10, -1)):
+        assert rule(lambda w=weeks, d=days: dates_from_ultrasound(TODAY, w, d, TODAY)) == (
+            "D3",
+            "ga_weeks",
+        )
+
+
+def test_d2_old_scan_that_now_exceeds_42_weeks() -> None:
+    # 40 weeks at a scan 15 days ago is 42 weeks 1 day today
+    assert rule(lambda: dates_from_ultrasound(days_ago(15), 40, 0, TODAY)) == ("D2", "scan_date")
+    assert dates_from_ultrasound(days_ago(14), 40, 0, TODAY).source == "ultrasound"
+
+
+@pytest.mark.parametrize(
+    ("old", "new", "expected"),
+    [
+        ("clinician_confirmed", "lmp_estimate", True),
+        ("ultrasound", "lmp_estimate", True),
+        ("lmp_estimate", "lmp_estimate", False),
+        (None, "lmp_estimate", False),
+        ("lmp_estimate", "clinician_confirmed", False),
+        ("clinician_confirmed", "ultrasound", False),
+        ("ultrasound", "clinician_confirmed", False),
+    ],
+)
+def test_only_an_lmp_estimate_over_a_clinician_date_needs_confirmation(
+    old: str | None, new: DateSource, expected: bool
+) -> None:
+    assert needs_override_confirmation(old, new) is expected
+
+
+def test_messages_file_lists_every_spec_key_with_no_unapproved_text() -> None:
+    messages = load_journey_messages()
+    assert set(messages) == {
+        "msg_onboarding", "msg_estimate_label", "msg_dates_updated_by_clinician",
+        "msg_confirm_override_clinician_date", "msg_past_due_date", "msg_beyond_42_weeks",
+        "msg_typical_not_yours", "msg_prototype_content", "msg_loss_support",
+        "msg_after_pregnancy_danger_signs", "msg_birth_congratulations",
+    }  # fmt: skip
+    # DEC-041: no wording until a doctor approves it; this fails when text is added
+    # without updating the review record
+    assert all(m.text is None for m in messages.values())

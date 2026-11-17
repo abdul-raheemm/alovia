@@ -2,16 +2,17 @@
 locally signed tokens (no Supabase call)."""
 
 import time
+import uuid
 from typing import Any
 
 import jwt
 import psycopg
 from cryptography.hazmat.primitives.asymmetric import ec
 from fastapi import FastAPI
-from sqlalchemy import Engine, create_engine
+from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.pool import StaticPool
 
-from app.core.config import Settings
+from app.core.config import CONSENT_VERSION, Settings
 from app.main import create_app
 
 UNREACHABLE_DB = "postgresql://alovia:unused@127.0.0.1:1/alovia"  # refused at once
@@ -92,3 +93,29 @@ def make_app(**settings: Any) -> FastAPI:
     app = create_app(make_settings(**settings))
     app.state.jwks_client = FakeJWKClient(jwks_for(KEY))
     return app
+
+
+def add_linked_patient(
+    engine: Engine, *, consent: bool = True, role: str = "patient", link: bool = True
+) -> tuple[uuid.UUID, uuid.UUID]:
+    """A signed-up test patient: users row, linked patients row and (by default) the current
+    consent. Returns (user_id, patient_id)."""
+    user_id = uuid.uuid4()
+    with engine.begin() as conn:
+        conn.execute(
+            text("INSERT INTO users (id, email, role) VALUES (:id, :e, :r)"),
+            {"id": user_id, "e": f"{user_id}@example.test", "r": role},
+        )
+        patient_id: uuid.UUID = conn.execute(
+            text("INSERT INTO patients (user_id, name) VALUES (:u, 'Test Patient 3') RETURNING id"),
+            {"u": user_id if link else None},
+        ).scalar_one()
+        if consent:
+            conn.execute(
+                text(
+                    "INSERT INTO consents (user_id, consent_version, age_confirmed_18_plus, "
+                    "accepted_at) VALUES (:u, :v, true, now())"
+                ),
+                {"u": user_id, "v": CONSENT_VERSION},
+            )
+    return user_id, patient_id

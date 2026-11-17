@@ -1,0 +1,39 @@
+# Pregnancy Journey messages (pregnancy_journey_module_spec.md §13.2).
+# text: null  = not approved by a doctor yet. The apps then show
+#               "[Text pending doctor approval]" (DEC-041) — never wording written by the agent.
+# intent      = copied from the spec, for the reviewing doctor. It is never shown to patients.
+# Phone numbers stay [OPEN] until copied from an official page with URL and date (§13.3).
+messages:
+  msg_onboarding:
+    intent: Enter your dates so we can show your journey
+    text: null
+  msg_estimate_label:
+    intent: This date is an estimate from your last period; your doctor may confirm a different date
+    text: null
+  msg_dates_updated_by_clinician:
+    intent: Your doctor's date is now used
+    text: null
+  msg_confirm_override_clinician_date:
+    intent: Your current date was set by your doctor or a scan; are you sure you want to change it?
+    text: null
+  msg_past_due_date:
+    intent: You are past your estimated due date; stay in touch with your doctor
+    text: null
+  msg_beyond_42_weeks:
+    intent: Please contact your doctor
+    text: null
+  msg_typical_not_yours:
+    intent: Pictures and sizes show a typical baby; every pregnancy is different
+    text: null
+  msg_prototype_content:
+    intent: Sample content for testing; not reviewed by a doctor
+    text: null
+  msg_loss_support:
+    intent: Sympathy; you are not alone; talk to your doctor; support helpline
+    text: null
+  msg_after_pregnancy_danger_signs:
+    intent: Go to hospital for heavy bleeding, high fever or severe pain
+    text: null
+  msg_birth_congratulations:
+    intent: Warm congratulations; postpartum features come later
+    text: null

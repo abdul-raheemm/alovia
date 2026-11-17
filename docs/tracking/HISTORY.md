@@ -379,3 +379,36 @@ Suggestions raised (not implemented): seed one test patient per home state (no d
 Docs updated: DECISIONS, DATABASE (§3.6, §13), DESIGN_SYSTEM §11, PROGRESS, CONTEXT, HISTORY
 Open questions for the owner: how the home header shows weeks past 42 (the engine stops the content week at 42; the display wording is decided in task 5 with the messages)
 Next step: Phase 2 task 0 (Phase 1 follow-ups) or task 3 (dates) — plan first.
+
+## Session 11 — 2026-11-17 — Phase 2 task 3: dates and onboarding
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 2 — dates onboarding + validation (spec §5; §15 items 2, 10)
+Goal: entering and changing pregnancy dates, end to end.
+
+Done:
+- Engine: `dates_from_lmp/due_date/ultrasound` with rules D1-D3 (`DateRuleError` carries code + field), `needs_override_confirmation` (§5.3).
+- `rules/journey/messages.yaml`: every §13.2 message key with intent copied from the spec and `text: null` (DEC-041); loader validates it at startup.
+- `get_patient` dependency (users service): patient role + linked record + current consent, 403 otherwise.
+- Routes `GET /patient/journey/home` and `PUT /patient/journey/dates` (shapes now in API.md): home states, derived pregnancy numbers, nav items from config, notices; date changes write `pregnancy_date_history`; same-dates writes nothing.
+- Patient app: Home header/onboarding card (estimate label, past-due and 42+ notices, counter stops at 42), Dates screen (3 options, field errors from D-codes, §5.3 confirmation dialog, skip allowed), nav bar driven by the backend's six items (DEC-040), More → Pregnancy dates. `put` added to the shared API client; API types regenerated.
+- Pure helpers split from the data hook so they are unit-testable.
+
+Files changed:
+- backend: `app/modules/journey/{engine,config,schemas,service,router}.py`, `rules/journey/messages.yaml`, `app/modules/users/service.py`, `app/main.py`, tests (`test_journey_engine.py` +17, new `tests/integration/test_journey_dates.py`, `tests/helpers.py` add_linked_patient)
+- frontend: `apps/patient-web/src/app/{journey,useJourneyHome}.ts(+test)`, `pages/{HomePage,DatesPage}.tsx`, `components/PatientShell.tsx`, `pages/SimplePages.tsx`, `app/App.tsx`; `packages/shared` (put, journey types); `e2e/helpers.ts` (fake session + journey mocks), `e2e/journey.spec.ts`
+- docs: API, PROGRESS, CONTEXT, ERROR_LOG, HISTORY
+
+Decisions made (with owner approval): build order rest of Phase 2 = 5 → 4 → 6 → 7 → 8 → 0 → 9 (owner, this session); no new DEC numbers.
+
+Checks run (exact commands and results):
+- backend `pytest -q` (strict warnings) → 167 passed (59 engine tests incl. D1-D3 boundaries; 27 route tests incl. access, limits-accepted, history rows, 409 flow, no-op saves)
+- `ruff check .` / `ruff format --check .` / `mypy app tests migrations scripts` → pass
+- frontend `npm test` → 27 passed; `typecheck`, `lint`, `format:check` → pass
+- `npm run test:e2e` → 36 passed (onboarding flow, D1 at the field, §5.3 confirm dialog, six nav items, 42+ counter stop; axe on each at 375px light and 1280px dark)
+- full `scripts/check_all.ps1` → All checks passed, exit 0 (run before commit)
+
+Errors met: 2 (ERR-028, ERR-029)
+Suggestions raised (not implemented): seed one test patient per home state (still open)
+Docs updated: API, PROGRESS, CONTEXT, ERROR_LOG, HISTORY
+Open questions for the owner: batched task-5 questions (sent in chat)
+Next step: review of task 2 (owner request), then task 5 (home screen + month cards).

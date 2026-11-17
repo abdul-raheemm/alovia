@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import { AccountGate } from '../components/AccountGate'
 import { PatientShell } from '../components/PatientShell'
 import { PublicLayout } from '../components/PublicLayout'
+import { DatesPage } from '../pages/DatesPage'
+import { HomePage } from '../pages/HomePage'
 import { JoinPage } from '../pages/JoinPage'
 import { LandingPage } from '../pages/LandingPage'
 import {
@@ -39,11 +41,13 @@ const router = createBrowserRouter([
       </AccountGate>
     ),
     children: [
-      // TODO(Phase 2): Journey home, calendar and appointments; TODO(Phase 3): symptom log
-      { path: '/home', element: <PlaceholderPage title="Home" /> },
+      { path: '/home', element: <HomePage /> },
+      { path: '/dates', element: <DatesPage /> },
+      // TODO(Phase 2 tasks 6-7): calendar, appointments, doctor notes; TODO(Phase 3): log
       { path: '/calendar', element: <PlaceholderPage title="Calendar" /> },
-      { path: '/log', element: <PlaceholderPage title="Log" /> },
+      { path: '/log', element: <PlaceholderPage title="Log symptoms" /> },
       { path: '/appointments', element: <PlaceholderPage title="Appointments" /> },
+      { path: '/doctor-notes', element: <PlaceholderPage title="Doctor notes" /> },
       { path: '/more', element: <MorePage /> },
       { path: '/urgent', element: <UrgentPage /> },
     ],

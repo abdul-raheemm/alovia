@@ -75,6 +75,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/patient/journey/dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Put Dates
+         * @description Set or change pregnancy dates (Journey §5); returns the refreshed home data.
+         */
+        put: operations["put_dates_api_v1_patient_journey_dates_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/journey/home": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Home */
+        get: operations["home_api_v1_patient_journey_home_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/patient/link": {
         parameters: {
             query?: never;
@@ -113,6 +150,15 @@ export interface components {
             /** Current Version */
             current_version: string;
         };
+        /** DatesOut */
+        DatesOut: {
+            /** Due Date */
+            due_date: string | null;
+            /** Due Date Source */
+            due_date_source: ("lmp_estimate" | "clinician_confirmed" | "ultrasound") | null;
+            /** Lmp Date */
+            lmp_date: string | null;
+        };
         /** DoctorRef */
         DoctorRef: {
             /**
@@ -125,9 +171,36 @@ export interface components {
             /** Specialty */
             specialty: string | null;
         };
+        /**
+         * DueDateIn
+         * @description Option B: due date given by her doctor.
+         */
+        DueDateIn: {
+            /**
+             * Confirm Override
+             * @default false
+             */
+            confirm_override: boolean;
+            /**
+             * Due Date
+             * Format: date
+             */
+            due_date: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            option: "due_date";
+        };
         /** Envelope[ConsentStatus] */
         Envelope_ConsentStatus_: {
             data: components["schemas"]["ConsentStatus"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[HomeOut] */
+        Envelope_HomeOut_: {
+            data: components["schemas"]["HomeOut"];
             /** Error */
             error?: null;
         };
@@ -148,6 +221,32 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /**
+         * HomeOut
+         * @description GET /patient/journey/home. Task 5 adds the baby card, content and status cards.
+         */
+        HomeOut: {
+            dates: components["schemas"]["DatesOut"];
+            /** Messages */
+            messages: {
+                [key: string]: string | null;
+            };
+            /** Nav Items */
+            nav_items: components["schemas"]["NavItemOut"][];
+            /**
+             * Notices
+             * @default []
+             */
+            notices: string[];
+            pregnancy: components["schemas"]["PregnancyOut"] | null;
+            /** Show Prototype Banner */
+            show_prototype_banner: boolean;
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "no_date" | "active" | "past_due" | "beyond_42" | "ended";
+        };
         /** InviteCheckOut */
         InviteCheckOut: {
             /** Valid */
@@ -158,12 +257,40 @@ export interface components {
             /** Code */
             code: string;
         };
+        /**
+         * LmpDatesIn
+         * @description Option A: first day of the last period.
+         */
+        LmpDatesIn: {
+            /**
+             * Confirm Override
+             * @default false
+             */
+            confirm_override: boolean;
+            /**
+             * Lmp Date
+             * Format: date
+             */
+            lmp_date: string;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            option: "lmp";
+        };
         /** MeOut */
         MeOut: {
             consent: components["schemas"]["ConsentStatus"];
             doctor: components["schemas"]["DoctorRef"] | null;
             patient: components["schemas"]["PatientRef"] | null;
             user: components["schemas"]["UserOut"];
+        };
+        /** NavItemOut */
+        NavItemOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
         };
         /** PatientRef */
         PatientRef: {
@@ -174,6 +301,51 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /**
+         * PregnancyOut
+         * @description Derived from the due date on every request; never stored (DEC-002).
+         */
+        PregnancyOut: {
+            /** Completed Weeks */
+            completed_weeks: number;
+            /** Content Week */
+            content_week: number;
+            /** Days */
+            days: number;
+            /** Days To Go */
+            days_to_go: number | null;
+            /** Is Estimate */
+            is_estimate: boolean;
+            /** Month */
+            month: number;
+            /** Trimester */
+            trimester: number;
+        };
+        /**
+         * UltrasoundDatesIn
+         * @description Option C: gestational age from an ultrasound, and the scan date.
+         */
+        UltrasoundDatesIn: {
+            /**
+             * Confirm Override
+             * @default false
+             */
+            confirm_override: boolean;
+            /** Ga Days */
+            ga_days: number;
+            /** Ga Weeks */
+            ga_weeks: number;
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            option: "ultrasound";
+            /**
+             * Scan Date
+             * Format: date
+             */
+            scan_date: string;
         };
         /** UserOut */
         UserOut: {
@@ -311,6 +483,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    put_dates_api_v1_patient_journey_dates_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LmpDatesIn"] | components["schemas"]["DueDateIn"] | components["schemas"]["UltrasoundDatesIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_HomeOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    home_api_v1_patient_journey_home_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_HomeOut_"];
                 };
             };
         };

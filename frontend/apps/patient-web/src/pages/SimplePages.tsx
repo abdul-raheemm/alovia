@@ -70,6 +70,10 @@ export function MorePage() {
         <ThemeSwitch />
       </Card>
       <Card>
+        <h2 className="mb-2">My pregnancy</h2>
+        <Link to="/dates">Pregnancy dates</Link>
+      </Card>
+      <Card>
         <h2 className="mb-2">Legal</h2>
         <ul className="flex flex-col gap-2">
           <li>

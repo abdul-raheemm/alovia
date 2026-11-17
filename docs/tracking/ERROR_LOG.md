@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Write multi-file or quote-heavy edits as a script file in the scratchpad and run it; a long inline heredoc chain dies on one unmatched quote (nothing runs) and is unreadable in the transcript.
 - Never pipe a check into `tail`/`grep` inside an `&&` chain before a commit; run the check alone and read its exit code.
 - On Windows, start frontend tools through the npm scripts (`scripts/run.mjs`), not a shell and not a lowercase `c:\` path.
 - Dispose every SQLAlchemy engine you create (tests, scripts, `migrations/env.py`); run tests with `-W error::ResourceWarning`.
@@ -297,5 +298,25 @@ What happened: `format:check` printed a warning, but the chain went on to commit
 Cause: a pipe's exit code is the last command's (`tail`), so the failure was hidden.
 Fix: formatted the file and committed the fix (cd42fe2); `check_all` runs each step separately and stops on a non-zero exit.
 Verified by: `npm run format:check` → exit 0; `check_all.ps1` → All checks passed (and a probe step proves it fails with exit 1).
+Prevention: lesson line above.
+Category: tooling
+
+### ERR-028 — 2026-11-17 — E2E onboarding test failed: static /home mock
+Who: Claude Code
+Phase / task: Phase 2 — task 3 (dates)
+What happened: after saving dates the test expected the new header, but the page showed the onboarding card again (2 projects failed).
+Cause: the test's `/home` mock always returned the "no dates" answer; on arriving at /home, TanStack Query refetches on mount and overwrote the fresh data the save had put in the cache. The app is correct — a real backend returns the saved dates.
+Fix: the mock now answers like the real backend (returns the active home after the save succeeded).
+Verified by: `npm run test:e2e` → 36 passed.
+Prevention: route mocks that model state changes must change state like the backend would.
+Category: test
+
+### ERR-029 — 2026-11-17 — Two shell commands failed to parse (unexpected EOF)
+Who: Claude Code
+Phase / task: Phase 2 — tasks 1-3
+What happened: two long inline heredoc chains failed with `unexpected EOF while looking for matching quote`; nothing in them ran (verified with git status both times).
+Cause: multi-file edits with nested quotes written as one giant shell command.
+Fix: redone as script files in the scratchpad, run with one short command.
+Verified by: the reruns applied cleanly; `git diff --stat` matched the intended files.
 Prevention: lesson line above.
 Category: tooling

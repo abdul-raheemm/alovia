@@ -40,6 +40,7 @@ export interface ApiClientOptions {
 export interface ApiClient {
   get<T>(path: string): Promise<T>
   post<T>(path: string, body: unknown): Promise<T>
+  put<T>(path: string, body: unknown): Promise<T>
 }
 
 interface Envelope {
@@ -96,7 +97,11 @@ export function createApiClient({
     )
   }
 
-  async function request<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<T> {
+  async function request<T>(
+    method: 'GET' | 'POST' | 'PUT',
+    path: string,
+    body?: unknown,
+  ): Promise<T> {
     const delays = method === 'GET' ? retryDelaysMs : []
     for (let attempt = 0; ; attempt++) {
       try {
@@ -116,5 +121,6 @@ export function createApiClient({
   return {
     get: <T>(path: string) => request<T>('GET', path),
     post: <T>(path: string, body: unknown) => request<T>('POST', path, body),
+    put: <T>(path: string, body: unknown) => request<T>('PUT', path, body),
   }
 }

@@ -58,6 +58,29 @@ def _consent_accepted(db: Session, user_id: uuid.UUID) -> bool:
     )
 
 
+def get_patient(
+    user: Annotated[User, Depends(get_account)],
+    db: Annotated[Session, Depends(get_db)],
+) -> Patient:
+    """The signed-in patient's own record, for every /patient/... data route.
+
+    Patient-entered data exists only after she has linked her account and accepted the
+    app-wide consent (Dashboard spec §8), so all three are checked here, in the backend.
+    """
+    patient = (
+        db.scalar(select(Patient).where(Patient.user_id == user.id))
+        if user.role == "patient"
+        else None
+    )
+    if patient is None:
+        logger.warning("permission denied", extra={"reason": "not a linked patient"})
+        raise AppError("FORBIDDEN", "You don't have access to this.", status=403)
+    if not _consent_accepted(db, user.id):
+        logger.warning("permission denied", extra={"reason": "consent not accepted"})
+        raise AppError("FORBIDDEN", "Please accept the consent first.", status=403)
+    return patient
+
+
 def get_me(db: Session, user: User) -> MeOut:
     patient = db.scalar(select(Patient).where(Patient.user_id == user.id))
     doctor = db.scalar(select(Doctor).where(Doctor.user_id == user.id))

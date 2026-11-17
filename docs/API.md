@@ -75,6 +75,10 @@ Error:
 | GET | `/patient/doctor-notes` | Shared notes |
 | POST | `/patient/pregnancy-end` · `/patient/pregnancy-end/undo` | Journey §11 |
 
+**`GET /patient/journey/home`** (linked patient with current consent; others 403) → `data`: `{state: no_date|active|past_due|beyond_42|ended, dates: {due_date, lmp_date, due_date_source}, pregnancy: {completed_weeks, days, days_to_go, content_week, trimester, month, is_estimate} | null, nav_items: [{key, label}], show_prototype_banner, messages: {key: approved text | null}, notices: [keys]}`. `pregnancy` is null when there is no due date or the pregnancy has ended; message texts are null until a doctor approves them (DEC-041), and the apps then show "[Text pending doctor approval]".
+
+**`PUT /patient/journey/dates`** body is one of (Journey §5.1) `{option: "lmp", lmp_date}`, `{option: "due_date", due_date}`, `{option: "ultrasound", scan_date, ga_weeks, ga_days}`, each with optional `confirm_override` (boolean). 400 `VALIDATION_ERROR` with `fields.<input> = D1|D2|D3` (Journey §5.2); replacing a clinician/ultrasound date with an LMP estimate without `confirm_override: true` → 409 `CONFLICT` with `fields.confirm_override = msg_confirm_override_clinician_date` (§5.3). Success → the refreshed home data; `notices` carries `msg_dates_updated_by_clinician` when a clinician/scan date replaces an estimate. Every change is written to `pregnancy_date_history`.
+
 ### 4.3 Symptom Tracking — Module 7 (Phase 3)
 | Method | Path | Purpose |
 |---|---|---|
