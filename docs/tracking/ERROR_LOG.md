@@ -320,3 +320,33 @@ Fix: redone as script files in the scratchpad, run with one short command.
 Verified by: the reruns applied cleanly; `git diff --stat` matched the intended files.
 Prevention: lesson line above.
 Category: tooling
+
+### ERR-030 — 2026-11-17 — npm workspace install crashed ("reading 'location'")
+Who: Claude Code
+Phase / task: Phase 2 — task 5 (installing motion)
+What happened: `npm install -w patient-web motion` failed with `Cannot read properties of null (reading 'location')`.
+Cause: a stale npm workspace tree state (known npm arborist glitch).
+Fix: a plain `npm install` repaired the tree; the motion install then succeeded.
+Verified by: `motion 14.14.0` resolves; full E2E suite passes.
+Prevention: when a workspace install crashes inside npm itself, repair with a plain install before retrying.
+Category: tooling
+
+### ERR-031 — 2026-11-17 — Edit script failed mid-run, leaving a half-edited test file
+Who: Claude Code
+Phase / task: Phase 2 — task 5 (content tests)
+What happened: a multi-substitution script asserted on its third pattern after already writing two files.
+Cause: each substitution wrote immediately instead of checking every pattern first (and the pattern had drifted from the file).
+Fix: finished the edit with the Edit tool; the later record scripts now assert all patterns before writing anything.
+Verified by: `ruff`/`mypy`/`pytest` green afterwards.
+Prevention: edit scripts verify every match first, write second (repeat of the ERR-029 lesson class).
+Category: tooling
+
+### ERR-032 — 2026-11-17 — Four E2E failures from ambiguous locators
+Who: Claude Code
+Phase / task: Phase 2 — task 5 (E2E)
+What happened: strict-mode violations: the current month's drawing appears twice (baby card + strip) and two role=status elements exist (notice + prototype banner).
+Cause: the new blocks made previously unique selectors ambiguous.
+Fix: count-based and filtered selectors.
+Verified by: `npm run test:e2e` → 42 passed.
+Prevention: none needed — strict mode caught exactly what it should.
+Category: test

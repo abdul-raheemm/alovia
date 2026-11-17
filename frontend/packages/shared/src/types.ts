@@ -11,3 +11,7 @@ export type JourneyDatesInput =
   | components['schemas']['LmpDatesIn']
   | components['schemas']['DueDateIn']
   | components['schemas']['UltrasoundDatesIn']
+
+/** GET /patient/journey/months/{month} and the content shapes nested in the home payload. */
+export type MonthDetail = components['schemas']['MonthDetailOut']
+export type JourneyContentItem = components['schemas']['ContentItem']

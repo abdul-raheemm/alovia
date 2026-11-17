@@ -49,3 +49,31 @@ export function dateRuleText(code: string | undefined): string | undefined {
       return 'Please check this value.'
   }
 }
+
+/** "Weeks 23–27" (month card and detail header; data from the config month map). */
+export function weekRangeLabel(weekStart: number, weekEnd: number): string {
+  return `Weeks ${weekStart}–${weekEnd}`
+}
+
+/** Placeholder month illustrations (spec §7.1): simple shapes labelled "placeholder",
+ * allowed only while the prototype banner is shown; replaced by openly licensed drawings. */
+export function illustrationSrc(month: number): string {
+  return `/illustrations/month_${month}.svg`
+}
+
+export function illustrationAlt(month: number): string {
+  return `Placeholder drawing for month ${month}`
+}
+
+/** §7.2 wording: "about the size of a [object]" plus the typical value — never "your baby". */
+export function sizeLine(size: {
+  object_name: string
+  length_cm?: number | null
+  weight_g?: number | null
+}): string {
+  const values = [
+    size.length_cm != null ? `about ${size.length_cm} cm` : null,
+    size.weight_g != null ? `about ${size.weight_g} g` : null,
+  ].filter(Boolean)
+  return `About the size of a ${size.object_name} (${values.join(', ')})`
+}

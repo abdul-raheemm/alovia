@@ -79,6 +79,10 @@ Error:
 
 **`PUT /patient/journey/dates`** body is one of (Journey §5.1) `{option: "lmp", lmp_date}`, `{option: "due_date", due_date}`, `{option: "ultrasound", scan_date, ga_weeks, ga_days}`, each with optional `confirm_override` (boolean). 400 `VALIDATION_ERROR` with `fields.<input> = D1|D2|D3` (Journey §5.2); replacing a clinician/ultrasound date with an LMP estimate without `confirm_override: true` → 409 `CONFLICT` with `fields.confirm_override = msg_confirm_override_clinician_date` (§5.3). Success → the refreshed home data; `notices` carries `msg_dates_updated_by_clinician` when a clinician/scan date replaces an estimate. Every change is written to `pregnancy_date_history`.
 
+Task 5 additions to the home payload: `months: [{month, week_start, week_end}]` (empty unless the pregnancy is active with a usable due date), `stage_items` (§8.1 content items for the content week, types `fetal_development`/`body_changes`; week item beats a month item of the same type), `size` (§7.2 row or null — no sourced value means no comparison), `next_appointment` (`{appointment_at, has_time, title}` or null; a date-only appointment counts for its whole day). A stored due date outside rule D2's range never crashes `/home`: it falls back to the onboarding state and is logged (defensive guard, owner 2026-11-17).
+
+**`GET /patient/journey/months/{month}`** (1-9; linked patient with consent) → `data`: `{month, week_start, week_end, is_current, items}` with all content types for that month. 404 once the pregnancy has ended (§11.3: month cards stop).
+
 ### 4.3 Symptom Tracking — Module 7 (Phase 3)
 | Method | Path | Purpose |
 |---|---|---|

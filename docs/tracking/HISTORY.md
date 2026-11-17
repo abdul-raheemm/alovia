@@ -412,3 +412,35 @@ Suggestions raised (not implemented): seed one test patient per home state (stil
 Docs updated: API, PROGRESS, CONTEXT, ERROR_LOG, HISTORY
 Open questions for the owner: batched task-5 questions (sent in chat)
 Next step: review of task 2 (owner request), then task 5 (home screen + month cards).
+
+## Session 12 — 2026-11-17 — Phase 2 task 5: home screen blocks and month cards
+Who: Raheem + agent: Claude Code (owner: run task 5 through; decisions a/b/c approved)
+Phase / task: Phase 2 — home screen blocks; month cards + detail; illustrations
+Goal: the §4.3 home screen and §4.4 month cards, with content plumbing ready for task 4.
+
+Done:
+- Content provider (§8): §8.1 `ContentItem`/`SizeReference` models (shape-validated, duplicate ids and double size-weeks refused), `PrototypeContentProvider` reading `backend/content/*.yaml` (EMPTY until task 4), §8.1 home selection rule (week item beats month item of the same type), `provider_for` refusing `knowledge_base` until Phase 7; loaded at startup (fail fast).
+- Home payload: `months` (9 cards from the config map; empty when not active/dated or ended §11.3), `stage_items` (fetal_development + body_changes), `size` (null without a sourced row, §15 test 7), `next_appointment` (soonest upcoming; date-only counts all day). Defensive guard (owner decision c): an out-of-range stored due date logs an error and falls back to the onboarding state instead of a 500.
+- `GET /patient/journey/months/{month}` (1-9 validated; 404 after the pregnancy ends; `is_current`).
+- Patient app: baby card (placeholder drawing, gentle float via `motion`, honours reduced motion, §13.1 "typical" wording with source), This stage cards (Learn marking + source line, D15), prototype banner on every content screen (§8.3), quick log card, next appointment card, months strip (scroll-snap, current highlighted, aria-current), month detail page (banner, items, warning-signs link, typical note). 9 placeholder SVGs (simple shapes labelled "Placeholder", §7.1) + the script that makes them.
+- `motion` 14.14.0 (exact pin, owner approval a); API types regenerated; shared exports MonthDetail/JourneyContentItem.
+
+Files changed:
+- backend: `app/modules/journey/content.py` (new), `schemas.py`, `service.py`, `router.py`, `app/main.py`, `content/prototype_content.yaml` + `content/size_reference.yaml` (new, empty), tests `unit/test_journey_content.py` (11) + `integration/test_journey_home_blocks.py` (8)
+- frontend: `components/journey/JourneyBlocks.tsx`, `pages/MonthDetailPage.tsx` (new), `pages/HomePage.tsx`, `app/{journey,useJourneyHome}.ts`, `app/App.tsx`, `public/illustrations/month_1..9.svg`, `scripts/make-placeholder-illustrations.mjs`, `packages/shared` types, `e2e/helpers.ts`, `e2e/journey-home.spec.ts` (new), `e2e/journey.spec.ts`
+- docs: API, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+
+Decisions made (with owner approval): a) install `motion`; b) empty content files until task 4; c) defensive guard — all recorded this session, no new DEC numbers.
+
+Checks run (exact commands and results):
+- backend `pytest` (strict warnings) → 186 passed (content selection/validation, home blocks, guard, month detail, ended-pregnancy 404)
+- `ruff check .` / `ruff format --check .` / `mypy app tests migrations scripts` → pass
+- frontend `typecheck` exit 0, `lint` exit 0, `npm test` → 27 passed
+- `npm run test:e2e` → 42 passed (blocks incl. "never 'your baby'" page check, strip → detail navigation, empty-content state; axe at 375px light and 1280px dark)
+- `scripts/check_all.ps1` before commit → All checks passed, exit 0
+
+Errors met: 3 (ERR-030 … ERR-032)
+Suggestions raised (not implemented): none new
+Docs updated: API, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: none — task 4 (fetch S1/S2/S3/S6 content, DEC-042/043) is next and already approved
+Next step: task 4 — fill the content and size files from the approved sources.

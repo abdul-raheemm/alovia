@@ -1,6 +1,14 @@
 export { ApiError, NETWORK_ERROR, createApiClient, type ApiClient } from './api'
 export { AuthProvider, createAuthClient, useAuth } from './auth'
-export type { ConsentStatus, InviteCheck, JourneyDatesInput, JourneyHome, Me } from './types'
+export type {
+  ConsentStatus,
+  InviteCheck,
+  JourneyContentItem,
+  JourneyDatesInput,
+  JourneyHome,
+  Me,
+  MonthDetail,
+} from './types'
 export {
   CONSENT_SOURCE,
   CONSENT_VERSION,

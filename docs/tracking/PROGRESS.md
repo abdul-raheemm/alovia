@@ -32,7 +32,7 @@ Update after every task. Each line: status, task, who, date, notes.
 - [x] GA/month/trimester calculations + tests — Raheem + Claude Code — 2026-11-17 (`app/modules/journey/engine.py`, `rules/journey/config.yaml`; 42 engine tests)
 - [x] Dates onboarding + validation — Raheem + Claude Code — 2026-11-17 (D1-D3, §5.3 override confirmation, date history; messages.yaml with all §13.2 keys pending approval; home header + onboarding + dates screens; nav from config, DEC-040)
 - [ ] Content provider interface + prototype YAML content + size reference (sourced)
-- [ ] Home screen blocks; month cards + detail; illustrations (licensed or placeholders)
+- [x] Home screen blocks; month cards + detail; illustrations (licensed or placeholders) — Raheem + Claude Code — 2026-11-17 (§4.3 order: header, baby card with float, This stage, quick log, next appointment, months strip; month detail; content provider interface with EMPTY files until task 4; placeholder drawings labelled "Placeholder"; defensive bad-date guard)
 - [ ] Calendar + appointments (patient side)
 - [ ] Notifications bar
 - [ ] Pregnancy-end flow + undo

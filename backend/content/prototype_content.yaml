@@ -1,0 +1,5 @@
+# Prototype Journey content (journey spec §8.3). EMPTY until Phase 2 task 4 fills it from the
+# approved sources (womenshealth.gov, OpenStax, Tier A KB files, WHO sizes — DEC-042).
+# Items must follow the §8.1 shape exactly; every item carries its source and
+# is_prototype: true. No content may be written from memory (CLAUDE.md rule 5).
+items: []

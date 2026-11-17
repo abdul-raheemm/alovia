@@ -112,6 +112,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/patient/journey/months/{month}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Month Detail */
+        get: operations["month_detail_api_v1_patient_journey_months__month__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/patient/link": {
         parameters: {
             query?: never;
@@ -136,6 +153,21 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AppointmentOut
+         * @description The "next appointment" home block (§4.3). Full appointment routes come in task 6.
+         */
+        AppointmentOut: {
+            /**
+             * Appointment At
+             * Format: date-time
+             */
+            appointment_at: string;
+            /** Has Time */
+            has_time: boolean;
+            /** Title */
+            title: string;
+        };
         /** ConsentIn */
         ConsentIn: {
             /** Age Confirmed 18 Plus */
@@ -149,6 +181,60 @@ export interface components {
             accepted: boolean;
             /** Current Version */
             current_version: string;
+        };
+        /**
+         * ContentItem
+         * @description One piece of stage content, exactly the §8.1 shape (same for every provider).
+         */
+        ContentItem: {
+            /** Body */
+            body: string;
+            /** Content Type */
+            content_type: string;
+            /**
+             * Granularity
+             * @enum {string}
+             */
+            granularity: "month" | "week" | "week_range";
+            /** Id */
+            id: string;
+            /** Is Prototype */
+            is_prototype: boolean;
+            /** Month */
+            month?: number | null;
+            /**
+             * Review Status
+             * @enum {string}
+             */
+            review_status: "unreviewed" | "doctor_reviewed";
+            source: components["schemas"]["ContentSource"];
+            /** Title */
+            title: string;
+            /** Week End */
+            week_end?: number | null;
+            /** Week Start */
+            week_start?: number | null;
+        };
+        /**
+         * ContentSource
+         * @description Every item and size carries its source (§8.1); cards show it (D15, §13.1).
+         */
+        ContentSource: {
+            /**
+             * Date Accessed
+             * Format: date
+             */
+            date_accessed: string;
+            /** Kb Doc Id */
+            kb_doc_id?: string | null;
+            /** Licence */
+            licence: string;
+            /** Publisher */
+            publisher: string;
+            /** Title */
+            title: string;
+            /** Url */
+            url: string;
         };
         /** DatesOut */
         DatesOut: {
@@ -216,6 +302,12 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[MonthDetailOut] */
+        Envelope_MonthDetailOut_: {
+            data: components["schemas"]["MonthDetailOut"];
+            /** Error */
+            error?: null;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -223,7 +315,10 @@ export interface components {
         };
         /**
          * HomeOut
-         * @description GET /patient/journey/home. Task 5 adds the baby card, content and status cards.
+         * @description GET /patient/journey/home (shape in docs/API.md §4.2).
+         *
+         *     Still to come: quick-log state and weekly summary (Phase 3), result and genetic status
+         *     cards (Phases 4-5), notification bar (task 7).
          */
         HomeOut: {
             dates: components["schemas"]["DatesOut"];
@@ -231,8 +326,14 @@ export interface components {
             messages: {
                 [key: string]: string | null;
             };
+            /**
+             * Months
+             * @default []
+             */
+            months: components["schemas"]["MonthSummary"][];
             /** Nav Items */
             nav_items: components["schemas"]["NavItemOut"][];
+            next_appointment?: components["schemas"]["AppointmentOut"] | null;
             /**
              * Notices
              * @default []
@@ -241,6 +342,12 @@ export interface components {
             pregnancy: components["schemas"]["PregnancyOut"] | null;
             /** Show Prototype Banner */
             show_prototype_banner: boolean;
+            size?: components["schemas"]["SizeReference"] | null;
+            /**
+             * Stage Items
+             * @default []
+             */
+            stage_items: components["schemas"]["ContentItem"][];
             /**
              * State
              * @enum {string}
@@ -285,6 +392,34 @@ export interface components {
             patient: components["schemas"]["PatientRef"] | null;
             user: components["schemas"]["UserOut"];
         };
+        /**
+         * MonthDetailOut
+         * @description GET /patient/journey/months/{month} (§4.4 detail view).
+         */
+        MonthDetailOut: {
+            /** Is Current */
+            is_current: boolean;
+            /** Items */
+            items: components["schemas"]["ContentItem"][];
+            /** Month */
+            month: number;
+            /** Week End */
+            week_end: number;
+            /** Week Start */
+            week_start: number;
+        };
+        /**
+         * MonthSummary
+         * @description One of the 9 month cards (§4.4); week ranges come from the config month map.
+         */
+        MonthSummary: {
+            /** Month */
+            month: number;
+            /** Week End */
+            week_end: number;
+            /** Week Start */
+            week_start: number;
+        };
         /** NavItemOut */
         NavItemOut: {
             /** Key */
@@ -321,6 +456,28 @@ export interface components {
             month: number;
             /** Trimester */
             trimester: number;
+        };
+        /**
+         * SizeReference
+         * @description A typical size for one week, with its source and comparison object (§7.2).
+         */
+        SizeReference: {
+            /** Length Cm */
+            length_cm?: number | null;
+            /** Object Icon Id */
+            object_icon_id: string;
+            /** Object Name */
+            object_name: string;
+            /**
+             * Review Status
+             * @enum {string}
+             */
+            review_status: "unreviewed" | "doctor_reviewed";
+            source: components["schemas"]["ContentSource"];
+            /** Week */
+            week: number;
+            /** Weight G */
+            weight_g?: number | null;
         };
         /**
          * UltrasoundDatesIn
@@ -536,6 +693,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_HomeOut_"];
+                };
+            };
+        };
+    };
+    month_detail_api_v1_patient_journey_months__month__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                month: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_MonthDetailOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

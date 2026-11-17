@@ -1,10 +1,11 @@
 """Request and response shapes for the Journey routes (docs/API.md §4.2)."""
 
-from datetime import date
+from datetime import date, datetime
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
+from app.modules.journey.content import ContentItem, SizeReference
 from app.modules.journey.engine import DateSource, HomeState
 
 
@@ -64,8 +65,28 @@ class NavItemOut(BaseModel):
     label: str
 
 
+class MonthSummary(BaseModel):
+    """One of the 9 month cards (§4.4); week ranges come from the config month map."""
+
+    month: int
+    week_start: int
+    week_end: int
+
+
+class AppointmentOut(BaseModel):
+    """The "next appointment" home block (§4.3). Full appointment routes come in task 6."""
+
+    appointment_at: datetime
+    has_time: bool
+    title: str
+
+
 class HomeOut(BaseModel):
-    """GET /patient/journey/home. Task 5 adds the baby card, content and status cards."""
+    """GET /patient/journey/home (shape in docs/API.md §4.2).
+
+    Still to come: quick-log state and weekly summary (Phase 3), result and genetic status
+    cards (Phases 4-5), notification bar (task 7).
+    """
 
     state: HomeState
     dates: DatesOut
@@ -76,3 +97,18 @@ class HomeOut(BaseModel):
     messages: dict[str, str | None]
     # message keys to show right after a change (e.g. msg_dates_updated_by_clinician)
     notices: list[str] = []
+    # §4.3 blocks (empty/null until there is data; content arrives with task 4)
+    months: list[MonthSummary] = []  # empty when there is no active dated pregnancy (§4.5, §11.3)
+    stage_items: list[ContentItem] = []  # "This stage": fetal_development + body_changes
+    size: SizeReference | None = None  # no sourced value -> no size comparison (§7.2)
+    next_appointment: AppointmentOut | None = None
+
+
+class MonthDetailOut(BaseModel):
+    """GET /patient/journey/months/{month} (§4.4 detail view)."""
+
+    month: int
+    week_start: int
+    week_end: int
+    is_current: bool
+    items: list[ContentItem]  # all content types for this month; empty until task 4

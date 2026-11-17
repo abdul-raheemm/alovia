@@ -9,6 +9,7 @@ import { PublicLayout } from '../components/PublicLayout'
 import { DatesPage } from '../pages/DatesPage'
 import { HomePage } from '../pages/HomePage'
 import { JoinPage } from '../pages/JoinPage'
+import { MonthDetailPage } from '../pages/MonthDetailPage'
 import { LandingPage } from '../pages/LandingPage'
 import {
   AboutPage,
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/home', element: <HomePage /> },
       { path: '/dates', element: <DatesPage /> },
+      { path: '/months/:month', element: <MonthDetailPage /> },
       // TODO(Phase 2 tasks 6-7): calendar, appointments, doctor notes; TODO(Phase 3): log
       { path: '/calendar', element: <PlaceholderPage title="Calendar" /> },
       { path: '/log', element: <PlaceholderPage title="Log symptoms" /> },

@@ -57,8 +57,52 @@ export function journeyHome(overrides: Record<string, unknown> = {}) {
       msg_confirm_override_clinician_date: null,
       msg_past_due_date: null,
       msg_beyond_42_weeks: null,
+      msg_typical_not_yours: null,
+      msg_prototype_content: null,
     },
     notices: [],
+    months: [],
+    stage_items: [],
+    size: null,
+    next_appointment: null,
+    ...overrides,
+  }
+}
+
+/** The 9 month summaries exactly as the backend derives them from the default month map. */
+export const MONTHS = [
+  [1, 0, 4],
+  [2, 5, 8],
+  [3, 9, 13],
+  [4, 14, 17],
+  [5, 18, 22],
+  [6, 23, 27],
+  [7, 28, 31],
+  [8, 32, 35],
+  [9, 36, 42],
+].map(([month, week_start, week_end]) => ({ month, week_start, week_end }))
+
+/** A content item in the §8.1 shape with obviously fake test wording (never medical text). */
+export function testContentItem(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'test_week_24',
+    granularity: 'week',
+    month: null,
+    week_start: 24,
+    week_end: 24,
+    content_type: 'fetal_development',
+    title: 'Example stage content',
+    body: 'Example prototype body text for tests.',
+    source: {
+      publisher: 'Test Publisher',
+      title: 'Test source page',
+      url: 'https://example.test/source',
+      licence: 'CC0',
+      date_accessed: '2026-11-17',
+      kb_doc_id: null,
+    },
+    review_status: 'unreviewed',
+    is_prototype: true,
     ...overrides,
   }
 }

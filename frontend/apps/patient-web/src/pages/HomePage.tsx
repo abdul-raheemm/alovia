@@ -5,9 +5,17 @@ import { Link } from 'react-router'
 
 import { formatDay, messageText, weeksLabel } from '../app/journey'
 import { useJourneyHome } from '../app/useJourneyHome'
+import {
+  BabyCard,
+  MonthsStrip,
+  NextAppointmentCard,
+  QuickLogCard,
+  StageSection,
+} from '../components/journey/JourneyBlocks'
 
-/** Journey home (spec §4.3, §4.5). This task: onboarding card and the header.
- * TODO(Phase 2 tasks 5-8): baby card, this stage, appointments, status cards, ended screens. */
+/** Journey home in the §4.3 block order: header, baby card, this stage, quick log, next
+ * appointment, month cards. Still to come: weekly summary (Phase 3), status cards
+ * (Phases 4-5), notification bar (task 7), ended screens (task 8). */
 export function HomePage() {
   const home = useJourneyHome()
   if (home.isPending) return <PageSkeleton />
@@ -21,16 +29,31 @@ export function HomePage() {
   }
   const data = home.data
   if (data.state === 'ended') return <PlaceholderPage title="Home" />
+  const pregnancy = data.pregnancy
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-6">
       <h1 className="sr-only">Home</h1>
       {data.notices.map((key) => (
         <Notice key={key}>{messageText(data.messages, key)}</Notice>
       ))}
-      {data.state === 'no_date' || !data.pregnancy ? (
+      {data.state === 'no_date' || !pregnancy ? (
         <OnboardingCard data={data} />
       ) : (
-        <Header data={data} pregnancy={data.pregnancy} />
+        <>
+          <Header data={data} pregnancy={pregnancy} />
+          <BabyCard pregnancy={pregnancy} size={data.size} messages={data.messages} />
+          <StageSection
+            items={data.stage_items}
+            month={pregnancy.month}
+            messages={data.messages}
+            showBanner={data.show_prototype_banner}
+          />
+        </>
+      )}
+      <QuickLogCard />
+      {data.next_appointment && <NextAppointmentCard appointment={data.next_appointment} />}
+      {pregnancy && data.months.length > 0 && (
+        <MonthsStrip months={data.months} currentMonth={pregnancy.month} />
       )}
     </section>
   )

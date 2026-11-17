@@ -177,5 +177,6 @@ test('past 42 weeks the counter stops and the pending message is shown', async (
   await page.goto(`${PATIENT}/home`)
   await expect(page.getByRole('heading', { name: '42 weeks pregnant' })).toBeVisible()
   await expect(page.getByText('to go')).toHaveCount(0)
-  await expect(page.getByRole('status')).toContainText(PENDING) // msg_beyond_42_weeks
+  // msg_beyond_42_weeks notice (the prototype banner also carries the pending text)
+  await expect(page.getByRole('status').filter({ hasText: PENDING }).first()).toBeVisible()
 })
