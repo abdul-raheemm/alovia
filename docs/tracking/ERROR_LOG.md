@@ -3,6 +3,8 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- `npm install -w <app> <pkg>` failing with "reading 'location'" (ERR-030, ERR-034): run a plain `npm install` first, then the workspace install.
+- A date-only value stored as local midnight must be read in the patient's time zone, never sliced from a UTC timestamp (ERR-036).
 - Write multi-file or quote-heavy edits as a script file in the scratchpad and run it; a long inline heredoc chain dies on one unmatched quote (nothing runs) and is unreadable in the transcript.
 - Never pipe a check into `tail`/`grep` inside an `&&` chain before a commit; run the check alone and read its exit code.
 - On Windows, start frontend tools through the npm scripts (`scripts/run.mjs`), not a shell and not a lowercase `c:\` path.
@@ -359,4 +361,54 @@ Cause: the shell's $TEMP is C:\Users\Engineer\AppData\Local\Temp, not the sessio
 Fix: read the real path after checking `echo $TEMP`.
 Verified by: the image opened and the table was transcribed.
 Prevention: print the resolved path once before reading downloaded files.
+Category: tooling
+
+### ERR-034 — 2026-11-17 — `npm install -w patient-web react-day-picker` failed again with "reading 'location'"
+Who: Claude Code
+Phase / task: Phase 2 — task 6
+What happened: same npm error as ERR-030; nothing was installed.
+Cause: npm's workspace install trips on the lockfile tree state (as in ERR-030).
+Fix: plain `npm install` first, then the workspace install — worked; `react-day-picker` 9.14.0 pinned.
+Verified by: package.json shows the exact version; typecheck and tests pass.
+Prevention: second occurrence → Lesson added (always repair with `npm install` first).
+Category: tooling
+
+### ERR-035 — 2026-11-17 — Inline heredoc with quotes died again (nothing ran)
+Who: Claude Code
+Phase / task: Phase 2 — task 6 (service edits)
+What happened: a long inline Python heredoc failed with "unexpected EOF while looking for matching `''"; no file was changed.
+Cause: the existing Lesson (scratchpad script files for quote-heavy edits) was not followed.
+Fix: the same edits written to a scratchpad script that asserts every pattern before writing; applied cleanly.
+Verified by: "service ok"; ruff, mypy and tests pass.
+Prevention: follow the existing Lesson; no new rule needed.
+Category: tooling
+
+### ERR-036 — 2026-11-17 — Date-only appointments would show the previous day on the home card (latent, task 5)
+Who: Claude Code
+Phase / task: Phase 2 — task 6 (found while reading task 5 code)
+What happened: a date-only appointment is stored at local (Asia/Kolkata) midnight; the database returns UTC, and the home card took the day from the first 10 characters of that UTC value — the previous day. No user saw it: no appointment could be created before task 6.
+Cause: the API sent the raw UTC moment and the app derived the day from it; the task 5 test stored UTC midnight, which hid the bug.
+Fix: the API now sends `date` and `time` already converted to the config timezone; the app shows them as they are. The test now stores local midnight and asserts the day.
+Verified by: `test_next_appointment_picks_the_soonest_upcoming` (fails on the old code: no `date` field, and the UTC day would be wrong) and the calendar local-day test pass.
+Prevention: Lesson added.
+Category: bug
+
+### ERR-037 — 2026-11-17 — E2E: accessibility and test-locator failures on the new calendar screens
+Who: Claude Code
+Phase / task: Phase 2 — task 6
+What happened: (1) axe `label-content-name-mismatch` on the home week strip (aria-label "17 November 2026" did not contain the visible "Tue 17") and on react-day-picker's own day labels ("November 1st" does not contain "1"); (2) axe `color-contrast` on today's day in dark mode; (3) a week-strip test counted 8 links instead of 7.
+Cause: (1) labels that replaced the visible text instead of extending it (WCAG 2.5.3); (2) the library stylesheet loads after ours, so its blue accent overrode our token rule of equal specificity; (3) the locator also matched the "Open the calendar" link.
+Fix: (1) week strip keeps its visible text and adds screen-reader-only words; calendar days use our own label that starts with the day number ("17 November 2026, Tuesday, today, selected, milestone"); (2) the token rule now targets `.rdp-root.alovia-calendar`; (3) count links inside the list only.
+Verified by: `e2e/calendar.spec.ts` and `e2e/journey-home.spec.ts` pass on phone-light and laptop-dark with no axe violations.
+Prevention: the axe check on every new screen caught all three; keep it.
+Category: accessibility / test
+
+### ERR-038 — 2026-11-17 — Unused import after the week-strip fix; first check_all run failed on lint
+Who: Claude Code
+Phase / task: Phase 2 — task 6
+What happened: `scripts/check_all.sh` stopped at ESLint: `formatDay` unused in JourneyBlocks.tsx. The background-task notice said "exit 0" because that was the exit code of the logging wrapper, not of the checks; the log itself showed exit 1.
+Cause: the ERR-037 fix removed the last use of `formatDay`; lint was not re-run after that edit.
+Fix: import removed; check_all re-run in the foreground → exit 0.
+Verified by: `bash scripts/check_all.sh` → "All checks passed.", exit code 0.
+Prevention: existing Lesson (read the check's own exit code); re-run lint after every follow-up fix.
 Category: tooling

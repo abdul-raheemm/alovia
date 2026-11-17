@@ -75,6 +75,62 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/patient/appointments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Appointments */
+        get: operations["list_appointments_api_v1_patient_appointments_get"];
+        put?: never;
+        /** Create Appointment */
+        post: operations["create_appointment_api_v1_patient_appointments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/appointments/{appointment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update Appointment */
+        put: operations["update_appointment_api_v1_patient_appointments__appointment_id__put"];
+        post?: never;
+        /** Delete Appointment */
+        delete: operations["delete_appointment_api_v1_patient_appointments__appointment_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/journey/calendar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Calendar
+         * @description Calendar markers for the days from..to, inclusive (Journey §9.1-9.2).
+         */
+        get: operations["calendar_api_v1_patient_journey_calendar_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/patient/journey/dates": {
         parameters: {
             query?: never;
@@ -154,8 +210,29 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         /**
+         * AppointmentIn
+         * @description Create or edit an appointment (§9.3): date, optional time, title (max 100 characters),
+         *     optional note (max 500). Date and time are the patient's local time (config timezone).
+         */
+        AppointmentIn: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Note */
+            note?: string | null;
+            /** Time */
+            time?: string | null;
+            /** Title */
+            title: string;
+        };
+        /**
          * AppointmentOut
-         * @description The "next appointment" home block (§4.3). Full appointment routes come in task 6.
+         * @description One appointment (§9.3), used by the home block, the list and the calendar.
+         *
+         *     `date` and `time` are already in the patient's local time (config timezone), so the apps
+         *     show them as they are; a date-only appointment has `time` null.
          */
         AppointmentOut: {
             /**
@@ -163,10 +240,58 @@ export interface components {
              * Format: date-time
              */
             appointment_at: string;
+            /** Can Edit */
+            can_edit: boolean;
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
             /** Has Time */
             has_time: boolean;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Note */
+            note: string | null;
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "patient" | "doctor";
+            /** Time */
+            time: string | null;
             /** Title */
             title: string;
+        };
+        /**
+         * AppointmentsOut
+         * @description GET /patient/appointments: upcoming soonest first, past most recent first (UX P8).
+         */
+        AppointmentsOut: {
+            /** Past */
+            past: components["schemas"]["AppointmentOut"][];
+            /** Upcoming */
+            upcoming: components["schemas"]["AppointmentOut"][];
+        };
+        /**
+         * CalendarOut
+         * @description GET /patient/journey/calendar (§9.1-9.2) for the requested days.
+         *
+         *     TODO(Phase 3): symptom-day dots and red-flag icons (Module 7). Suggested check-ups stay
+         *     off while `suggested_checkups_enabled` is false (R3, [OPEN]).
+         */
+        CalendarOut: {
+            /** Appointments */
+            appointments: components["schemas"]["AppointmentOut"][];
+            /** End */
+            end: string | null;
+            /** Milestones */
+            milestones: components["schemas"]["MilestoneOut"][];
+            /** Start */
+            start: string | null;
         };
         /** ConsentIn */
         ConsentIn: {
@@ -278,6 +403,24 @@ export interface components {
              */
             option: "due_date";
         };
+        /** Envelope[AppointmentOut] */
+        Envelope_AppointmentOut_: {
+            data: components["schemas"]["AppointmentOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[AppointmentsOut] */
+        Envelope_AppointmentsOut_: {
+            data: components["schemas"]["AppointmentsOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[CalendarOut] */
+        Envelope_CalendarOut_: {
+            data: components["schemas"]["CalendarOut"];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[ConsentStatus] */
         Envelope_ConsentStatus_: {
             data: components["schemas"]["ConsentStatus"];
@@ -305,6 +448,13 @@ export interface components {
         /** Envelope[MonthDetailOut] */
         Envelope_MonthDetailOut_: {
             data: components["schemas"]["MonthDetailOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[NoneType] */
+        Envelope_NoneType_: {
+            /** Data */
+            data: null;
             /** Error */
             error?: null;
         };
@@ -391,6 +541,24 @@ export interface components {
             doctor: components["schemas"]["DoctorRef"] | null;
             patient: components["schemas"]["PatientRef"] | null;
             user: components["schemas"]["UserOut"];
+        };
+        /**
+         * MilestoneOut
+         * @description A §6.4 calendar marker, derived from the due date (never stored).
+         */
+        MilestoneOut: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "new_week" | "new_month" | "new_trimester" | "term" | "due_date";
+            /** Value */
+            value: number;
         };
         /**
          * MonthDetailOut
@@ -631,6 +799,157 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_ConsentStatus_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_appointments_api_v1_patient_appointments_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AppointmentsOut_"];
+                };
+            };
+        };
+    };
+    create_appointment_api_v1_patient_appointments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppointmentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AppointmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_appointment_api_v1_patient_appointments__appointment_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppointmentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AppointmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_appointment_api_v1_patient_appointments__appointment_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_NoneType_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    calendar_api_v1_patient_journey_calendar_get: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_CalendarOut_"];
                 };
             };
             /** @description Validation Error */

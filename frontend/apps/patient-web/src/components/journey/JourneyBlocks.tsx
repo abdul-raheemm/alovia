@@ -5,13 +5,17 @@ import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router'
 
 import {
-  formatDay,
+  appointmentWhen,
   illustrationAlt,
+  isoDay,
   illustrationSrc,
   messageText,
   sizeLine,
+  weekDays,
   weekRangeLabel,
 } from '../../app/journey'
+import { useCalendar } from '../../app/useAppointments'
+import { MarkerIcons, markersByDay, markersFor, markerWords } from './CalendarMarkers'
 
 type Messages = JourneyHome['messages']
 
@@ -190,24 +194,68 @@ export function NextAppointmentCard({
 }: {
   appointment: NonNullable<JourneyHome['next_appointment']>
 }) {
-  const day = formatDay(appointment.appointment_at.slice(0, 10))
-  // shown in the device's own time zone; the stored moment is absolute
-  const time = appointment.has_time
-    ? new Date(appointment.appointment_at).toLocaleTimeString('en-IN', {
-        hour: 'numeric',
-        minute: '2-digit',
-      })
-    : null
   return (
     <Card className="flex items-center gap-3">
       <CalendarClock aria-hidden="true" className="size-6 shrink-0 text-primary" />
       <div>
         <h2 className="text-base">Next appointment</h2>
         <p>
-          {appointment.title} — {day}
-          {time ? `, ${time}` : ''}
+          {/* date and time arrive already in the patient's local time (config timezone) */}
+          {appointment.title} — {appointmentWhen(appointment)}
         </p>
       </div>
     </Card>
+  )
+}
+
+/** §9.1 week strip on the home screen: this week's days with their markers; a day opens the
+ * calendar on that day. Markers load on their own, so the home never waits for them. */
+export function WeekStrip() {
+  const days = weekDays(new Date())
+  const today = isoDay(new Date())
+  const calendar = useCalendar(isoDay(days[0] as Date), isoDay(days[6] as Date))
+  const byDay = markersByDay(calendar.data)
+  return (
+    <section aria-labelledby="week-heading" className="flex flex-col gap-3">
+      <h2 id="week-heading">This week</h2>
+      <ol className="grid grid-cols-7 gap-1">
+        {days.map((d) => {
+          const iso = isoDay(d)
+          const markers = markersFor(byDay, d)
+          const current = iso === today
+          return (
+            <li key={iso}>
+              <Link
+                to={`/calendar?day=${iso}`}
+                aria-current={current ? 'date' : undefined}
+                className={cn(
+                  'flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-md border text-sm no-underline',
+                  current
+                    ? 'border-primary bg-primary-soft font-bold text-primary'
+                    : 'border-border bg-surface text-text',
+                )}
+              >
+                <span className="text-xs">
+                  {d.toLocaleDateString('en-IN', { weekday: 'short' })}
+                </span>
+                {/* the name starts with the visible "Tue 17" (WCAG 2.5.3), then the rest */}{' '}
+                <span>{d.getDate()}</span>{' '}
+                <span className="sr-only">
+                  {d.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
+                  {markerWords(markers)}
+                </span>
+                <MarkerIcons
+                  milestone={Boolean(markers?.milestones.length)}
+                  appointment={Boolean(markers?.appointments.length)}
+                />
+              </Link>
+            </li>
+          )
+        })}
+      </ol>
+      <p className="text-sm">
+        <Link to="/calendar">Open the calendar</Link>
+      </p>
+    </section>
   )
 }

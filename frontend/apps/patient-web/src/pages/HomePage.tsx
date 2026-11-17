@@ -11,10 +11,11 @@ import {
   NextAppointmentCard,
   QuickLogCard,
   StageSection,
+  WeekStrip,
 } from '../components/journey/JourneyBlocks'
 
-/** Journey home in the §4.3 block order: header, baby card, this stage, quick log, next
- * appointment, month cards. Still to come: weekly summary (Phase 3), status cards
+/** Journey home in the §4.3 block order: header, baby card, this stage, quick log, week strip
+ * (§9.1), next appointment, month cards. Still to come: weekly summary (Phase 3), status cards
  * (Phases 4-5), notification bar (task 7), ended screens (task 8). */
 export function HomePage() {
   const home = useJourneyHome()
@@ -51,6 +52,7 @@ export function HomePage() {
         </>
       )}
       <QuickLogCard />
+      {pregnancy && <WeekStrip />}
       {data.next_appointment && <NextAppointmentCard appointment={data.next_appointment} />}
       {pregnancy && data.months.length > 0 && (
         <MonthsStrip months={data.months} currentMonth={pregnancy.month} />

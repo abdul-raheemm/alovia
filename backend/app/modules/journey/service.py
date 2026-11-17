@@ -1,6 +1,8 @@
-"""Journey home data, month detail and pregnancy dates (spec §4, §5, §7-8; API.md §4.2)."""
+"""Journey home data, month detail, pregnancy dates, calendar and appointments
+(spec §4, §5, §7-9; API.md §4.2)."""
 
-from datetime import UTC, date, datetime
+import uuid
+from datetime import UTC, date, datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
 from sqlalchemy import select
@@ -13,11 +15,15 @@ from app.modules.journey.config import JourneyConfig, Message
 from app.modules.journey.content import ContentProvider, select_for_home
 from app.modules.journey.models import Appointment, PregnancyDateHistory
 from app.modules.journey.schemas import (
+    AppointmentIn,
     AppointmentOut,
+    AppointmentsOut,
+    CalendarOut,
     DatesOut,
     DueDateIn,
     HomeOut,
     LmpDatesIn,
+    MilestoneOut,
     MonthDetailOut,
     MonthSummary,
     NavItemOut,
@@ -44,29 +50,150 @@ def _current_ga(patient: Patient, cfg: JourneyConfig, today: date) -> engine.Ges
         return None
 
 
-def _next_appointment(
-    db: Session, patient: Patient, timezone: str, today: date
-) -> AppointmentOut | None:
-    """§4.3 "next appointment": the soonest upcoming one. A date-only appointment
-    (has_time false, stored at 00:00) counts as upcoming for its whole day."""
+# ---- §9.3 appointments ----
+
+
+def _appointment_out(row: Appointment, tz: ZoneInfo) -> AppointmentOut:
+    # the database returns UTC; a date-only appointment is local midnight, so its day must
+    # be read in the patient's time zone, never from the UTC value
+    local = row.appointment_at.astimezone(tz)
+    return AppointmentOut(
+        id=row.id,
+        appointment_at=local,
+        has_time=row.has_time,
+        date=local.date(),
+        time=local.time() if row.has_time else None,
+        title=row.title,
+        note=row.note,
+        source=row.source,  # CHECK constraint: patient | doctor
+        can_edit=row.source == "patient",
+    )
+
+
+def list_appointments(db: Session, patient: Patient, timezone: str, today: date) -> AppointmentsOut:
+    """Her appointments (her own and doctor-added). A date-only appointment (has_time false,
+    stored at local 00:00) counts as upcoming for its whole day."""
+    tz = ZoneInfo(timezone)
+    now = datetime.now(UTC)
+    upcoming: list[AppointmentOut] = []
+    past: list[AppointmentOut] = []
     rows = db.scalars(
         select(Appointment)
         .where(Appointment.patient_id == patient.id)
-        .order_by(Appointment.appointment_at)
+        .order_by(Appointment.appointment_at, Appointment.created_at)
     )
-    now = datetime.now(UTC)
-    tz = ZoneInfo(timezone)
     for row in rows:
-        upcoming = (
-            row.appointment_at >= now
-            if row.has_time
-            else row.appointment_at.astimezone(tz).date() >= today
+        out = _appointment_out(row, tz)
+        is_upcoming = row.appointment_at >= now if row.has_time else out.date >= today
+        (upcoming if is_upcoming else past).append(out)
+    return AppointmentsOut(upcoming=upcoming, past=past[::-1])
+
+
+def _next_appointment(
+    db: Session, patient: Patient, timezone: str, today: date
+) -> AppointmentOut | None:
+    """§4.3 "next appointment": the soonest upcoming one."""
+    upcoming = list_appointments(db, patient, timezone, today).upcoming
+    return upcoming[0] if upcoming else None
+
+
+def _stored_moment(body: AppointmentIn, timezone: str) -> datetime:
+    # §14.2: time optional -> store the date at 00:00 (local) with has_time = false
+    return datetime.combine(body.date, body.time or time(0, 0), tzinfo=ZoneInfo(timezone))
+
+
+def create_appointment(
+    db: Session, user: User, patient: Patient, body: AppointmentIn, timezone: str
+) -> AppointmentOut:
+    row = Appointment(
+        patient_id=patient.id,
+        appointment_at=_stored_moment(body, timezone),
+        has_time=body.time is not None,
+        title=body.title,
+        note=body.note,
+        created_by=user.id,
+        source="patient",
+    )
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return _appointment_out(row, ZoneInfo(timezone))
+
+
+def _own_editable(db: Session, patient: Patient, appointment_id: uuid.UUID) -> Appointment:
+    """§9.3: she edits and deletes only appointments she added herself. Another patient's
+    appointment is "not found" (API.md §3: same message whether missing or not visible)."""
+    row = db.scalar(
+        select(Appointment).where(
+            Appointment.id == appointment_id, Appointment.patient_id == patient.id
         )
-        if upcoming:
-            return AppointmentOut(
-                appointment_at=row.appointment_at, has_time=row.has_time, title=row.title
-            )
-    return None
+    )
+    if row is None:
+        raise AppError("NOT_FOUND", "We couldn't find this.", status=404)
+    if row.source != "patient":
+        logger.warning("permission denied", extra={"reason": "doctor-added appointment"})
+        raise AppError(
+            "FORBIDDEN",
+            "This appointment was added by your doctor and can't be changed.",
+            status=403,
+        )
+    return row
+
+
+def update_appointment(
+    db: Session, patient: Patient, appointment_id: uuid.UUID, body: AppointmentIn, timezone: str
+) -> AppointmentOut:
+    row = _own_editable(db, patient, appointment_id)
+    row.appointment_at = _stored_moment(body, timezone)
+    row.has_time = body.time is not None
+    row.title = body.title
+    row.note = body.note
+    row.updated_at = datetime.now(UTC)
+    db.commit()
+    db.refresh(row)
+    return _appointment_out(row, ZoneInfo(timezone))
+
+
+def delete_appointment(db: Session, patient: Patient, appointment_id: uuid.UUID) -> None:
+    """Hard delete: planning data, not a clinical record (DATABASE.md §8)."""
+    db.delete(_own_editable(db, patient, appointment_id))
+    db.commit()
+
+
+# ---- §9.1-9.2 calendar ----
+
+
+def get_calendar(
+    db: Session, patient: Patient, cfg: JourneyConfig, start: date, end: date, today: date
+) -> CalendarOut:
+    """Markers for the days start..end (inclusive): §6.4 milestones and appointments.
+    Milestones are baby-stage markers, so they appear only for an active pregnancy with a
+    usable due date (§11.3); appointments always stay visible."""
+    if start > end:
+        raise AppError("VALIDATION_ERROR", "Please check the dates.", fields={"to": "before from"})
+    tz = ZoneInfo(cfg.timezone)
+    rows = db.scalars(
+        select(Appointment)
+        .where(
+            Appointment.patient_id == patient.id,
+            Appointment.appointment_at >= datetime.combine(start, time(0, 0), tzinfo=tz),
+            Appointment.appointment_at
+            < datetime.combine(end + timedelta(days=1), time(0, 0), tzinfo=tz),
+        )
+        .order_by(Appointment.appointment_at, Appointment.created_at)
+    )
+    appointments = [_appointment_out(row, tz) for row in rows]
+    due = patient.due_date
+    if patient.pregnancy_status != "active" or due is None or not _current_ga(patient, cfg, today):
+        return CalendarOut(start=None, end=None, milestones=[], appointments=appointments)
+    first, last = engine.calendar_range(due)
+    found = engine.milestones(due, cfg.month_map, cfg.term_from_week, start, end)
+    return CalendarOut(
+        start=first,
+        end=last,
+        milestones=[MilestoneOut(date=m.on, kind=m.kind, value=m.value) for m in found],
+        appointments=appointments,
+    )
 
 
 def get_home(

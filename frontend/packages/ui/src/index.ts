@@ -1,7 +1,7 @@
 export { cn } from './cn'
 export { Button, type ButtonProps } from './components/Button'
 export { Card } from './components/Card'
-export { CheckboxField, FieldError, TextField } from './components/Field'
+export { CheckboxField, FieldError, TextAreaField, TextField } from './components/Field'
 export { Logo } from './components/Logo'
 export { Markdown } from './components/Markdown'
 export { SignInForm } from './components/SignInForm'

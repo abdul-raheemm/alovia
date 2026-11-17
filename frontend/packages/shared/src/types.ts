@@ -15,3 +15,10 @@ export type JourneyDatesInput =
 /** GET /patient/journey/months/{month} and the content shapes nested in the home payload. */
 export type MonthDetail = components['schemas']['MonthDetailOut']
 export type JourneyContentItem = components['schemas']['ContentItem']
+
+/** Appointments (Journey §9.3) and calendar markers (§9.1-9.2). */
+export type Appointment = components['schemas']['AppointmentOut']
+export type AppointmentInput = components['schemas']['AppointmentIn']
+export type AppointmentList = components['schemas']['AppointmentsOut']
+export type JourneyCalendar = components['schemas']['CalendarOut']
+export type Milestone = components['schemas']['MilestoneOut']

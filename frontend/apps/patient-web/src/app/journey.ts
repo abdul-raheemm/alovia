@@ -77,3 +77,75 @@ export function sizeLine(size: {
   ].filter(Boolean)
   return `About the size of a ${size.object_name} (${values.join(', ')})`
 }
+
+// ---- calendar and appointments (Journey §6.4, §9) ----
+
+/** A local calendar day as "YYYY-MM-DD" (the browser's own date, no UTC shift). */
+export function isoDay(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}
+
+/** "YYYY-MM-DD" -> a local Date at midnight (the inverse of isoDay). */
+export function parseDay(iso: string): Date {
+  const [y, m, d] = iso.split('-').map(Number)
+  return new Date(y ?? 0, (m ?? 1) - 1, d ?? 1)
+}
+
+/** First and last day of the month that contains `d`, for GET /journey/calendar. */
+export function monthBounds(d: Date): { from: string; to: string } {
+  return {
+    from: isoDay(new Date(d.getFullYear(), d.getMonth(), 1)),
+    to: isoDay(new Date(d.getFullYear(), d.getMonth() + 1, 0)),
+  }
+}
+
+/** The 7 days (Sunday to Saturday, as the month view) of the week that contains `d`. */
+export function weekDays(d: Date): Date[] {
+  const sunday = new Date(d.getFullYear(), d.getMonth(), d.getDate() - d.getDay())
+  return Array.from(
+    { length: 7 },
+    (_, i) => new Date(sunday.getFullYear(), sunday.getMonth(), sunday.getDate() + i),
+  )
+}
+
+/** Keep the shown month inside §9.1's navigation range (pregnancy start .. due date + 2 weeks). */
+export function clampMonth(month: Date, start?: string | null, end?: string | null): Date {
+  const first = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1)
+  if (start && month < first(parseDay(start))) return first(parseDay(start))
+  if (end && month > first(parseDay(end))) return first(parseDay(end))
+  return first(month)
+}
+
+/** "14:30:00" -> "2:30 pm" (the backend already sends the patient's local time). */
+export function formatTime(time: string): string {
+  const [h, m] = time.split(':').map(Number)
+  return new Date(Date.UTC(1970, 0, 1, h ?? 0, m ?? 0)).toLocaleTimeString('en-IN', {
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'UTC',
+  })
+}
+
+/** "1 March 2027, 2:30 pm", or just the day for a date-only appointment. */
+export function appointmentWhen(a: { date: string; time?: string | null }): string {
+  return a.time ? `${formatDay(a.date)}, ${formatTime(a.time)}` : formatDay(a.date)
+}
+
+/** §6.4/§9.2 small calendar labels (neutral markers, no medical claims). */
+export function milestoneLabel(m: { kind: string; value: number }): string {
+  switch (m.kind) {
+    case 'new_week':
+      return `Week ${m.value} begins`
+    case 'new_month':
+      return `Month ${m.value} begins`
+    case 'new_trimester':
+      return `Trimester ${m.value} begins`
+    case 'term':
+      return `${m.value} weeks`
+    case 'due_date':
+      return 'Due date'
+    default:
+      return 'Milestone'
+  }
+}

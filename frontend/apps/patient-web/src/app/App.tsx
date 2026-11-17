@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router'
 import { AccountGate } from '../components/AccountGate'
 import { PatientShell } from '../components/PatientShell'
 import { PublicLayout } from '../components/PublicLayout'
+import { AppointmentsPage } from '../pages/AppointmentsPage'
+import { CalendarPage } from '../pages/CalendarPage'
 import { DatesPage } from '../pages/DatesPage'
 import { HomePage } from '../pages/HomePage'
 import { JoinPage } from '../pages/JoinPage'
@@ -45,10 +47,10 @@ const router = createBrowserRouter([
       { path: '/home', element: <HomePage /> },
       { path: '/dates', element: <DatesPage /> },
       { path: '/months/:month', element: <MonthDetailPage /> },
-      // TODO(Phase 2 tasks 6-7): calendar, appointments, doctor notes; TODO(Phase 3): log
-      { path: '/calendar', element: <PlaceholderPage title="Calendar" /> },
+      // TODO(Phase 2 task 7): doctor notes; TODO(Phase 3): log
+      { path: '/calendar', element: <CalendarPage /> },
       { path: '/log', element: <PlaceholderPage title="Log symptoms" /> },
-      { path: '/appointments', element: <PlaceholderPage title="Appointments" /> },
+      { path: '/appointments', element: <AppointmentsPage /> },
       { path: '/doctor-notes', element: <PlaceholderPage title="Doctor notes" /> },
       { path: '/more', element: <MorePage /> },
       { path: '/urgent', element: <UrgentPage /> },

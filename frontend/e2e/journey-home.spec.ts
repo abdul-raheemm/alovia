@@ -6,6 +6,7 @@ import {
   MONTHS,
   PATIENT,
   signInAsPatient,
+  testAppointment,
   testContentItem,
 } from './helpers'
 
@@ -44,7 +45,7 @@ const FULL_HOME = journeyHome({
     },
     review_status: 'unreviewed',
   },
-  next_appointment: { appointment_at: '2026-11-20T04:30:00Z', has_time: true, title: 'Check-up' },
+  next_appointment: testAppointment({ title: 'Check-up' }),
 })
 
 test('home shows the §4.3 blocks: baby card, stage content with source, banner, appointment, months', async ({
@@ -69,7 +70,8 @@ test('home shows the §4.3 blocks: baby card, stage content with source, banner,
 
   // quick log, next appointment, months strip with the current month marked
   await expect(page.getByRole('link', { name: 'Log a symptom' })).toBeVisible()
-  await expect(page.getByText('Check-up —')).toBeVisible()
+  // date and time come from the API as local values, shown as they are
+  await expect(page.getByText('Check-up — 20 November 2026, 10:30 am')).toBeVisible()
   const strip = page.getByRole('list').filter({ hasText: 'You are here' })
   await expect(strip.getByRole('link')).toHaveCount(9)
   await expect(strip.getByRole('link', { name: /Month 6/ })).toHaveAttribute('aria-current', 'true')

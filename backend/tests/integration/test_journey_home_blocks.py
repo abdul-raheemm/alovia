@@ -5,6 +5,7 @@ import uuid
 from collections.abc import Iterator
 from datetime import UTC, datetime, timedelta
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import pytest
 from fastapi import FastAPI
@@ -105,12 +106,14 @@ def test_next_appointment_picks_the_soonest_upcoming(client: TestClient, engine:
             ),
             {
                 "p": patient_id,
-                "at": datetime(TODAY.year, TODAY.month, TODAY.day, tzinfo=UTC),
+                # stored at LOCAL midnight (§14.2), which is the previous day in UTC
+                "at": datetime(TODAY.year, TODAY.month, TODAY.day, tzinfo=ZoneInfo(CFG.timezone)),
                 "u": user_id,
             },
         )
     got = home(client, user_id)["next_appointment"]
     assert got["title"] == "Today visit" and got["has_time"] is False
+    assert got["date"] == TODAY.isoformat() and got["time"] is None  # never the UTC day
 
 
 def test_bad_stored_due_date_never_crashes_home(client: TestClient, engine: Engine) -> None:

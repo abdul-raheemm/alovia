@@ -475,3 +475,31 @@ Suggestions raised (not implemented): none
 Docs updated: PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: OpenStax licence (spec S2/D9); doctor review of content items and size objects (R2) before release — tracked for the rule-review flow
 Next step: task 6 (calendar + appointments, patient side) — one batched decision pending (react-day-picker install).
+
+## Session 14 — 2026-11-17 — Phase 2 task 6: calendar and appointments (patient side)
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 2 — calendar + appointments (Journey §6.4, §9.1-9.3, §14.2; UX_FLOWS P7, P8)
+Goal: the Calendar and Appointments tabs and the home week strip, with the backend routes in API.md §4.2.
+
+Done:
+- Backend: `GET /patient/journey/calendar?from=&to=` (milestones from the existing engine, only for an active dated pregnancy; appointments by local day); `/patient/appointments` GET (upcoming/past), POST, PUT, DELETE — own patient-created only (doctor-added 403, another patient's 404). Appointment output carries `date`/`time` already in the config timezone; the home next-appointment block uses the same shape (fixes ERR-036).
+- Patient app: Calendar tab (react-day-picker month view, navigation limited to pregnancy start .. due + 2 weeks, flag/clock marker icons with matching screen-reader words, tap a day for its milestones and appointments, `?day=` deep link); home week strip (this week, today marked, links into the calendar); Appointments tab (upcoming/past, add/edit with date, optional time, title ≤100, note ≤500, delete with confirmation, "Added by your doctor" read-only).
+- Shared: API client `delete` (never retried), `TextAreaField`, new generated types.
+- Milestone labels are neutral markers ("Week 29 begins", "Trimester 3 begins", "37 weeks", "Due date"); no medical wording.
+
+Files changed:
+- backend: `app/modules/journey/{schemas,service,router}.py`, `app/main.py`, `tests/integration/test_journey_calendar.py` (new), `tests/integration/test_journey_home_blocks.py`
+- frontend: `apps/patient-web/src/pages/{CalendarPage,AppointmentsPage}.tsx` (new), `components/journey/{Appointments,CalendarMarkers}.tsx` (new), `components/journey/JourneyBlocks.tsx`, `pages/HomePage.tsx`, `app/{App.tsx,journey.ts,useAppointments.ts,calendar.test.ts}`, `index.css`, `packages/shared/src/{api.ts,api.test.ts,types.ts,index.ts,api-types.ts}`, `packages/ui/src/{components/Field.tsx,index.ts}`, `e2e/{calendar.spec.ts,helpers.ts,journey-home.spec.ts}`, `package.json`, `package-lock.json`
+- docs: API.md, DECISIONS.md (DEC-045), PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+
+Decisions made (with owner approval): react-day-picker install (owner "go ahead", 2026-11-17), pinned 9.14.0 (DEC-045).
+Interpretations (spec silent, flagged for review): date/time are entered and shown in the config timezone; milestones hidden after a pregnancy ends; the week strip sits after quick log on the home screen; past appointments listed most recent first.
+
+Checks run (exact commands and results):
+- `bash scripts/check_all.sh` → All checks passed, exit 0: pytest (strict warnings) 203 passed; ruff check/format, mypy pass; frontend typecheck, lint, format pass; Vitest 34 passed; Playwright 50 passed (phone-light + laptop-dark, axe on every screen)
+
+Errors met: 5 (ERR-034 to ERR-038)
+Suggestions raised (not implemented): none
+Docs updated: API, DECISIONS, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: OpenStax licence (spec S2/D9) still open
+Next step: task 7 (notifications bar + doctor notes, patient side).

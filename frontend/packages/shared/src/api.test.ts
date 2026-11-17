@@ -71,6 +71,17 @@ describe('api client', () => {
     expect(fetchFn).toHaveBeenCalledTimes(1)
   })
 
+  it('sends DELETE once and returns null data (no retry: not idempotent for the user)', async () => {
+    const fetchFn = vi.fn(async () =>
+      jsonResponse(500, { data: null, error: { code: 'INTERNAL_ERROR', message: 'x' } }),
+    )
+    await expect(client(fetchFn).delete('/patient/appointments/1')).rejects.toBeInstanceOf(ApiError)
+    expect(fetchFn).toHaveBeenCalledTimes(1)
+    const ok = vi.fn(async () => jsonResponse(200, { data: null, error: null }))
+    await expect(client(ok).delete('/patient/appointments/1')).resolves.toBeNull()
+    expect((ok.mock.calls[0] as unknown as [string, RequestInit])[1].method).toBe('DELETE')
+  })
+
   it('gives up after the timeout with a network error', async () => {
     const fetchFn = vi.fn(
       (_url: string | URL | Request, init?: RequestInit) =>

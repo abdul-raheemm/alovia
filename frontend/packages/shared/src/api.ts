@@ -41,6 +41,7 @@ export interface ApiClient {
   get<T>(path: string): Promise<T>
   post<T>(path: string, body: unknown): Promise<T>
   put<T>(path: string, body: unknown): Promise<T>
+  delete<T>(path: string): Promise<T>
 }
 
 interface Envelope {
@@ -98,7 +99,7 @@ export function createApiClient({
   }
 
   async function request<T>(
-    method: 'GET' | 'POST' | 'PUT',
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     path: string,
     body?: unknown,
   ): Promise<T> {
@@ -122,5 +123,6 @@ export function createApiClient({
     get: <T>(path: string) => request<T>('GET', path),
     post: <T>(path: string, body: unknown) => request<T>('POST', path, body),
     put: <T>(path: string, body: unknown) => request<T>('PUT', path, body),
+    delete: <T>(path: string) => request<T>('DELETE', path),
   }
 }

@@ -1,5 +1,5 @@
 import { AlertCircle } from 'lucide-react'
-import { useId, type InputHTMLAttributes, type ReactNode } from 'react'
+import { useId, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from 'react'
 
 import { cn } from '../cn'
 
@@ -24,6 +24,37 @@ export function TextField({ label, error, className, id, ...props }: FieldProps)
         aria-describedby={error ? errorId : undefined}
         className={cn(
           'min-h-11 rounded-sm border border-border bg-surface px-3 text-base text-text',
+          error && 'border-urgent',
+          className,
+        )}
+        {...props}
+      />
+      <FieldError id={errorId} message={error} />
+    </div>
+  )
+}
+
+interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label: string
+  error?: string
+}
+
+/** Multi-line text with the same label/error layout as TextField. */
+export function TextAreaField({ label, error, className, id, ...props }: TextAreaProps) {
+  const autoId = useId()
+  const inputId = id ?? autoId
+  const errorId = `${inputId}-error`
+  return (
+    <div className="flex flex-col gap-1">
+      <label htmlFor={inputId} className="font-semibold">
+        {label}
+      </label>
+      <textarea
+        id={inputId}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? errorId : undefined}
+        className={cn(
+          'min-h-24 rounded-sm border border-border bg-surface px-3 py-2 text-base text-text',
           error && 'border-urgent',
           className,
         )}

@@ -107,6 +107,34 @@ export function testContentItem(overrides: Record<string, unknown> = {}) {
   }
 }
 
+/** An appointment in the API shape (date and time already in the patient's local time). */
+export function testAppointment(overrides: Record<string, unknown> = {}) {
+  return {
+    id: '33333333-3333-3333-3333-333333333333',
+    appointment_at: '2026-11-20T10:30:00+05:30',
+    has_time: true,
+    date: '2026-11-20',
+    time: '10:30:00',
+    title: 'Test check-up',
+    note: null,
+    source: 'patient',
+    can_edit: true,
+    ...overrides,
+  }
+}
+
+/** Answer GET /patient/journey/calendar with fixed markers (any range). */
+export async function mockCalendar(page: Page, data: Record<string, unknown> = {}): Promise<void> {
+  await page.route('**/api/v1/patient/journey/calendar?*', (route) =>
+    route.fulfill({
+      json: {
+        data: { start: null, end: null, milestones: [], appointments: [], ...data },
+        error: null,
+      },
+    }),
+  )
+}
+
 /** Sign in as a test patient without Supabase: a stored session plus a mocked GET /me.
  * The session is fake and only read locally; no request goes to Supabase. */
 export async function signInAsPatient(page: Page, me: unknown = TEST_PATIENT_ME): Promise<void> {
@@ -126,4 +154,6 @@ export async function signInAsPatient(page: Page, me: unknown = TEST_PATIENT_ME)
     localStorage.setItem('sb-e2e-test-auth-token', value)
   }, JSON.stringify(session))
   await page.route('**/api/v1/me', (route) => route.fulfill({ json: { data: me, error: null } }))
+  // the home week strip asks for calendar markers; tests that need markers route it again
+  await mockCalendar(page)
 }

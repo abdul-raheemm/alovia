@@ -1,3 +1,12 @@
 @import '@alovia/ui/styles.css';
 /* let Tailwind find the classes used inside the shared UI package */
 @source '../../../packages/ui/src';
+
+/* react-day-picker (calendar, Journey §9.1) on the design tokens, light and dark. Two
+   classes, so this wins over the library stylesheet, which loads later. */
+.rdp-root.alovia-calendar {
+  --rdp-accent-color: var(--color-primary);
+  --rdp-accent-background-color: var(--color-primary-soft);
+  --rdp-day-height: 48px;
+  --rdp-day_button-height: 46px;
+}

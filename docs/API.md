@@ -81,6 +81,12 @@ Error:
 
 Task 5 additions to the home payload: `months: [{month, week_start, week_end}]` (empty unless the pregnancy is active with a usable due date), `stage_items` (§8.1 content items for the content week, types `fetal_development`/`body_changes`; week item beats a month item of the same type), `size` (§7.2 row or null — no sourced value means no comparison), `next_appointment` (`{appointment_at, has_time, title}` or null; a date-only appointment counts for its whole day). A stored due date outside rule D2's range never crashes `/home`: it falls back to the onboarding state and is logged (defensive guard, owner 2026-11-17).
 
+**Appointment shape** (home `next_appointment`, the list and the calendar; changed in task 6): `{id, appointment_at, has_time, date, time, title, note, source: patient|doctor, can_edit}`. `date` and `time` (`HH:MM:SS`, null for date-only) are the patient's local values in the config timezone (`appointment_at` is sent in that offset too); apps show them as they are. `can_edit` is true only for her own (§9.3).
+
+**`GET /patient/journey/calendar?from=YYYY-MM-DD&to=YYYY-MM-DD`** (inclusive local days) → `data`: `{start, end, milestones: [{date, kind: new_week|new_month|new_trimester|term|due_date, value}], appointments: [...]}`. `start`/`end` are §9.1's navigation range (pregnancy start to due date + 2 weeks); they and the milestones are null/empty unless the pregnancy is active with a usable due date (§11.3: no baby markers after the end). `from` after `to` → 400 `VALIDATION_ERROR` (`fields.to`). Symptom dots arrive in Phase 3; suggested check-ups stay off (`suggested_checkups_enabled: false`, R3).
+
+**`GET /patient/appointments`** → `data`: `{upcoming, past}`; upcoming soonest first, past most recent first; a date-only appointment is upcoming for its whole day. **`POST`** body `{date, time?, title, note?}` (no other fields; title 1-100 characters after trimming, note up to 500, an empty note is stored as none) → 201 with the appointment; `source` is always `patient`. **`PUT /{id}`** same body → the appointment. **`DELETE /{id}`** → `data: null` (hard delete, DATABASE.md §8). Editing or deleting a doctor-added appointment → 403 `FORBIDDEN`; another patient's or a missing one → 404 `NOT_FOUND`.
+
 **`GET /patient/journey/months/{month}`** (1-9; linked patient with consent) → `data`: `{month, week_start, week_end, is_current, items}` with all content types for that month. 404 once the pregnancy has ended (§11.3: month cards stop).
 
 ### 4.3 Symptom Tracking — Module 7 (Phase 3)

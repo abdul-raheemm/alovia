@@ -1,12 +1,17 @@
 export { ApiError, NETWORK_ERROR, createApiClient, type ApiClient } from './api'
 export { AuthProvider, createAuthClient, useAuth } from './auth'
 export type {
+  Appointment,
+  AppointmentInput,
+  AppointmentList,
   ConsentStatus,
   InviteCheck,
   JourneyContentItem,
   JourneyDatesInput,
+  JourneyCalendar,
   JourneyHome,
   Me,
+  Milestone,
   MonthDetail,
 } from './types'
 export {

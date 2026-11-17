@@ -1,12 +1,14 @@
 """Request and response shapes for the Journey routes (docs/API.md §4.2)."""
 
+import datetime as dt
+import uuid
 from datetime import date, datetime
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StringConstraints, field_validator
 
 from app.modules.journey.content import ContentItem, SizeReference
-from app.modules.journey.engine import DateSource, HomeState
+from app.modules.journey.engine import DateSource, HomeState, MilestoneKind
 
 
 class _DatesBase(BaseModel):
@@ -73,12 +75,65 @@ class MonthSummary(BaseModel):
     week_end: int
 
 
-class AppointmentOut(BaseModel):
-    """The "next appointment" home block (§4.3). Full appointment routes come in task 6."""
+class AppointmentIn(BaseModel):
+    """Create or edit an appointment (§9.3): date, optional time, title (max 100 characters),
+    optional note (max 500). Date and time are the patient's local time (config timezone)."""
 
+    model_config = ConfigDict(extra="forbid")
+
+    date: dt.date
+    time: dt.time | None = None
+    title: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=100)]
+    note: Annotated[str, StringConstraints(strip_whitespace=True, max_length=500)] | None = None
+
+    @field_validator("note")
+    @classmethod
+    def _empty_note_is_none(cls, value: str | None) -> str | None:
+        return value or None
+
+
+class AppointmentOut(BaseModel):
+    """One appointment (§9.3), used by the home block, the list and the calendar.
+
+    `date` and `time` are already in the patient's local time (config timezone), so the apps
+    show them as they are; a date-only appointment has `time` null."""
+
+    id: uuid.UUID
     appointment_at: datetime
     has_time: bool
+    date: dt.date
+    time: dt.time | None
     title: str
+    note: str | None
+    source: Literal["patient", "doctor"]  # "doctor" -> "Added by your doctor"
+    can_edit: bool  # the patient edits and deletes only her own (§9.3)
+
+
+class AppointmentsOut(BaseModel):
+    """GET /patient/appointments: upcoming soonest first, past most recent first (UX P8)."""
+
+    upcoming: list[AppointmentOut]
+    past: list[AppointmentOut]
+
+
+class MilestoneOut(BaseModel):
+    """A §6.4 calendar marker, derived from the due date (never stored)."""
+
+    date: dt.date
+    kind: MilestoneKind
+    value: int  # week, month or trimester number; 0 for the due date
+
+
+class CalendarOut(BaseModel):
+    """GET /patient/journey/calendar (§9.1-9.2) for the requested days.
+
+    TODO(Phase 3): symptom-day dots and red-flag icons (Module 7). Suggested check-ups stay
+    off while `suggested_checkups_enabled` is false (R3, [OPEN])."""
+
+    start: dt.date | None  # §9.1 navigation: pregnancy start ... due date + 2 weeks
+    end: dt.date | None  # both null without an active, dated pregnancy
+    milestones: list[MilestoneOut]
+    appointments: list[AppointmentOut]
 
 
 class HomeOut(BaseModel):
