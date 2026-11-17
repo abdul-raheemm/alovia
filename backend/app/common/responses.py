@@ -2,6 +2,15 @@
 
 from typing import Any
 
+from pydantic import BaseModel
+
+
+class Envelope[T](BaseModel):
+    """Typed success envelope, so OpenAPI (and the generated frontend types) show `data`."""
+
+    data: T
+    error: None = None
+
 
 def ok(data: Any) -> dict[str, Any]:
     return {"data": data, "error": None}

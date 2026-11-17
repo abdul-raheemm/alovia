@@ -53,6 +53,10 @@ Error:
 | GET | `/invites/{code}/check` | none | Check an invite link is valid before sign-up (returns only valid/invalid; rate-limited in Phase 8) |
 | POST | `/patient/link` | patient | Link the new login to the invited patient record (code from the link), right after sign-up |
 
+**`GET /me`** → `data`: `{user: {id, email, role}, patient: {id, name} | null, doctor: {id, name, specialty} | null, consent: {current_version, accepted}}`. `accepted` is true only for the current consent version. Never includes `patients.notes`. A valid token without a `users` row, or with `is_active = false`, gets 403 `FORBIDDEN` ("Your account is not set up yet.").
+
+**`POST /me/consent`** body `{consent_version, age_confirmed_18_plus}` (no other fields; boolean must be a real boolean). 400 `VALIDATION_ERROR` with `fields.consent_version` if not the current version, or `fields.age_confirmed_18_plus` if not true (DEC-023). Success → `data`: `{current_version, accepted: true}`; repeating it adds no second row.
+
 ### 4.2 Pregnancy Journey — Module 4 (Phase 2)
 | Method | Path | Purpose |
 |---|---|---|

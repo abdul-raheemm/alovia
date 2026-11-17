@@ -2,7 +2,7 @@
 
 Checks the signature with the project's public keys (JWKS), plus issuer, audience and expiry.
 Only asymmetric algorithms are accepted, so "none" and HS256 tokens are refused.
-Role lookup (users.role) is added with the database task.
+The users row and role are loaded by app.modules.users.service.get_account.
 """
 
 from dataclasses import dataclass

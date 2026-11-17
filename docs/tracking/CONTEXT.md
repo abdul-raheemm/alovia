@@ -38,5 +38,7 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 - Supabase Data API is enabled and exposes tables automatically; no RLS (accepted risk DEC-022, left until Phase 8 by the owner).
 - Auth part 1 done: every protected route can use `get_current_user` (Supabase token verified with the project's public keys). The app now starts with `uvicorn app.main:create_app --factory`.
 - Database: migration 0001 applied to the main project (9 Phase 1 tables, no RLS — DEC-022). Migration tests run against the separate `alovia-test` project (DEC-034). Both URLs in `backend/.env` are Session pooler URLs.
-- Next: `/me` + consent + role lookup (see `PROGRESS.md`).
-- Open owner actions: confirm whether result tables also need a separate `patient_id` index (DATABASE.md §6; only the `(patient_id, created_at DESC)` index exists); fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).
+- `/me` and `/me/consent` done; `get_account` (in `app/modules/users/service.py`) loads the users row for any route that needs the role.
+- Owner permission (2026-11-17): finish the rest of Phase 1 without asking per task; normal approvals resume with Phase 2.
+- Next: move the ML code (see `PROGRESS.md`).
+- Open owner actions: fill legal placeholders (team, supervisor, contact email — kept as `[OPEN]` placeholders until then).

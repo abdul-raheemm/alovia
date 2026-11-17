@@ -1,7 +1,10 @@
 """Database engine and model base (DATABASE.md). Only the backend connects (DEC-001)."""
 
+from collections.abc import Iterator
+
+from fastapi import Request
 from sqlalchemy import Engine, MetaData, create_engine, make_url
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Session
 
 # fixed constraint names, so migrations are predictable and reviewable
 NAMING = {
@@ -24,3 +27,10 @@ def make_engine(url: str) -> Engine:
         pool_pre_ping=True,
         connect_args={"connect_timeout": 5},  # /health must not hang on a dead database
     )
+
+
+def get_db(request: Request) -> Iterator[Session]:
+    """One session per request. Services commit explicitly; anything not committed is rolled
+    back when the session closes, so a failed request changes nothing (ERROR_HANDLING.md §6)."""
+    with Session(request.app.state.engine, expire_on_commit=False) as session:
+        yield session

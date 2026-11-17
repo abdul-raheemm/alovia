@@ -243,7 +243,7 @@ journey_content.kb_doc_id ──> kb_documents
 ## 6. Indexes
 | Index | Reason |
 |---|---|
-| `patient_id` on every patient table | All queries are per patient |
+| `patient_id` on every patient table (result tables: covered by the composite index below, DEC-035) | All queries are per patient |
 | `(patient_id, created_at desc)` on results, check-ins, assessments, chat_history | History screens |
 | `inbox_items (patient_id) where seen_at is null` | Unseen items |
 | `genetic_assessments (review_status, priority)` | Review queue |

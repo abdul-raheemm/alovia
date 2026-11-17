@@ -10,6 +10,7 @@ from app.core.config import Settings, get_settings
 from app.core.database import make_engine
 from app.core.errors import register_error_handlers
 from app.core.logging import REQUEST_ID_HEADER, configure_logging, request_context
+from app.modules.users import router as users
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -32,4 +33,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         expose_headers=[REQUEST_ID_HEADER],
     )
     app.include_router(health.router)
+    app.include_router(users.router)
     return app

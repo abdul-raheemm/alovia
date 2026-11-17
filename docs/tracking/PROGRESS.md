@@ -17,7 +17,7 @@ Update after every task. Each line: status, task, who, date, notes.
 - [~] **Owner action:** create fresh Supabase project (done 2026-11-17, Mumbai); fill `backend/.env` (open)
 - [x] Auth part 1: token check (`app/core/auth.py`, JWKS signature, issuer, audience, expiry) — Raheem + Claude Code — 2026-11-17 (27 tests pass)
 - [x] Alembic setup + Phase 1 migration (identity + result tables; no RLS until Phase 8) — ask before applying — Raheem + Claude Code — 2026-11-17 (39 tests pass on alovia-test; applied to the main project with owner approval: `alembic current` = 0001)
-- [ ] Auth part 2: `/me` + consent route + role lookup (needs the Phase 1 tables; consent version per DEC-031; user rows per DEC-032)
+- [x] Auth part 2: `/me` + consent route + role lookup (needs the Phase 1 tables; consent version per DEC-031; user rows per DEC-032) — Raheem + Claude Code — 2026-11-17 (51 tests pass; sign-in audit entry `TODO(OPEN)`)
 - [ ] Move ML code + model files; regression tests identical to reference outputs
 - [ ] Frontend workspace: patient-web, doctor-web, packages/ui (tokens, themes, fonts), packages/shared (API client)
 - [ ] Sign-up through invite link only (18+ + consent), sign-in, sign-out; role routing. Note: invite creation UI is Phase 5 — until then the seed script creates invite links for testing

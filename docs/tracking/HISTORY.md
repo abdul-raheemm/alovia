@@ -250,3 +250,37 @@ Suggestions raised (not implemented): none
 Docs updated: DECISIONS (DEC-033, DEC-034), DATABASE, TESTING, ENVIRONMENT, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: separate `patient_id` index on the result tables (DATABASE.md §6) — only the composite index exists
 Next step: `/me` + consent + role lookup (plan first).
+
+## Session 7 — 2026-11-17 — /me + consent + role lookup
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 1 — auth part 2
+Goal: `GET /me`, `POST /me/consent`, and the users-row lookup every later route needs.
+
+Done:
+- `app/core/database.py`: `get_db` (one session per request; uncommitted work is rolled back).
+- `app/modules/users/{schemas,service,router}.py`: `get_account` (403 without an active users row), `get_me`, `record_consent` (current version only, 18+ only, no duplicate rows).
+- `CONSENT_VERSION` in `app/core/config.py`, checked against `docs/legal/CONSENT_TEXT.md` by a test (DEC-031).
+- Typed `Envelope[T]` response model so OpenAPI shows the data shapes.
+- Shared test infrastructure: `tests/conftest.py` (test-database fixtures), token helpers in `tests/helpers.py`.
+
+Files changed:
+- `backend/app/core/{config,database,auth}.py`, `backend/app/common/responses.py`, `backend/app/main.py` — modified
+- `backend/app/modules/users/{schemas,service,router}.py`, `backend/tests/conftest.py`, `backend/tests/integration/test_me.py` — added
+- `backend/tests/helpers.py`, `backend/tests/integration/{test_auth,test_migrations}.py`, `backend/tests/unit/test_config_and_logging.py` — modified (shared helpers; nothing removed or weakened)
+- docs: API, DATABASE, DECISIONS, tracking/*
+
+Decisions made (with owner approval):
+- 403 `FORBIDDEN` for a signed-in user without an active users row
+- Composite index only on result tables → DEC-035; patient users row from `/patient/link` → DEC-036
+- Sign-in audit entry stays `TODO(OPEN)` (sign-in happens in Supabase, not the backend)
+- Owner permission to finish Phase 1 without per-task approval
+
+Checks run (exact commands and results):
+- `pytest -W error::DeprecationWarning -W error::ResourceWarning -W error::pytest.PytestUnraisableExceptionWarning --cov=app` → 51 passed, coverage 100%
+- `ruff check .` → All checks passed; `ruff format --check .` → 29 files already formatted; `mypy app tests migrations` → Success: no issues found in 29 source files
+
+Errors met: 1 (ERR-018)
+Suggestions raised (not implemented): none
+Docs updated: API (`/me`, `/me/consent` shapes), DATABASE §6, DECISIONS (DEC-035, DEC-036), PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: none new
+Next step: move the ML code with regression tests.

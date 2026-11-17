@@ -39,6 +39,8 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-032 | 2026-11-17 | For now, `users` rows and roles are created by admins and the owner; later, doctor accounts come through the admin invite (Flow A1) | Owner choice; keeps Phase 1 simple | Accepted |
 | DEC-033 | 2026-11-17 | `users.id` equals the Supabase Auth user id but has **no foreign key** to `auth.users` | Keeps the schema testable on a plain test database; the backend already verifies the id from the token | Accepted |
 | DEC-034 | 2026-11-17 | Test database = a separate, empty Supabase project `alovia-test` (`TEST_DATABASE_URL`); migration tests drop and recreate its tables and refuse to run against the main project | No local Postgres or Docker on the laptop; nothing to install | Accepted |
+| DEC-035 | 2026-11-17 | Result tables (`fetal_results`, `maternal_results`) have only the `(patient_id, created_at DESC)` index; no separate `patient_id` index | The composite index already serves every lookup by `patient_id` | Accepted |
+| DEC-036 | 2026-11-17 | A patient's `users` row (role `patient`) is created by `POST /patient/link` from the doctor's invite link (completes DEC-032) | Keeps sign-up invite-only (DEC-024) | Accepted |
 
 ## Template for new entries
 

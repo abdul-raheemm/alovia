@@ -6,22 +6,20 @@ These tests drop and recreate every table, so they refuse to run against DATABAS
 
 import uuid
 from collections.abc import Iterator
-from pathlib import Path
 
 import pytest
 from alembic import command
 from alembic.autogenerate import compare_metadata
-from alembic.config import Config
 from alembic.migration import MigrationContext
 from fastapi.testclient import TestClient
-from sqlalchemy import Connection, Engine, inspect, make_url, text
+from sqlalchemy import Connection, Engine, inspect, text
 from sqlalchemy.exc import IntegrityError
 
 import app.modules.predictions.models
 import app.modules.users.models  # noqa: F401  (registers the tables)
-from app.core.config import get_settings
-from app.core.database import Base, make_engine
+from app.core.database import Base
 from app.main import create_app
+from tests.conftest import alembic_config, project_ref
 from tests.helpers import make_settings
 
 TABLES = {
@@ -35,56 +33,14 @@ TABLES = {
     "fetal_results",
     "maternal_results",
 }
-ALEMBIC_INI = Path(__file__).resolve().parents[2] / "alembic.ini"
-
-
-def _project_ref(url: str) -> str | None:
-    """Supabase project id: from user "postgres.<ref>" (pooler) or host "db.<ref>.supabase.co"."""
-    u = make_url(url)
-    if (u.username or "").startswith("postgres."):
-        return (u.username or "").split(".", 1)[1]
-    host = u.host or ""
-    if host.startswith("db.") and host.endswith(".supabase.co"):
-        return host.split(".")[1]
-    return None
-
-
-@pytest.fixture(scope="module")
-def test_db_url() -> str:
-    settings = get_settings()
-    url = settings.test_database_url
-    if not url:
-        pytest.skip("TEST_DATABASE_URL is not set in backend/.env")
-    # safety: these tests drop every table, so they must never reach the main project
-    test_ref = _project_ref(url)
-    assert test_ref, "TEST_DATABASE_URL is not a recognisable Supabase URL; refusing to run"
-    assert test_ref != _project_ref(settings.database_url), "TEST_DATABASE_URL is the main project"
-    return url
-
-
-def _alembic(url: str) -> Config:
-    cfg = Config(str(ALEMBIC_INI))
-    cfg.attributes["database_url"] = url
-    return cfg
 
 
 def _app_tables(engine: Engine) -> set[str]:
     return set(inspect(engine).get_table_names()) & TABLES
 
 
-@pytest.fixture(scope="module")
-def engine(test_db_url: str) -> Iterator[Engine]:
-    cfg = _alembic(test_db_url)
-    command.downgrade(cfg, "base")  # start from empty, even after an interrupted run
-    command.upgrade(cfg, "head")
-    eng = make_engine(test_db_url)
-    yield eng
-    eng.dispose()
-    command.downgrade(cfg, "base")  # leave the test database empty
-
-
 def test_upgrade_downgrade_upgrade(test_db_url: str, engine: Engine) -> None:
-    cfg = _alembic(test_db_url)
+    cfg = alembic_config(test_db_url)
     assert _app_tables(engine) == TABLES
     command.downgrade(cfg, "base")
     assert _app_tables(engine) == set()
@@ -248,4 +204,4 @@ def test_health_reports_db_ok(test_db_url: str, engine: Engine) -> None:
 )
 def test_project_ref_same_for_direct_and_pooler(url: str, ref: str | None) -> None:
     # the safety check depends on this: both connection styles of one project give one id
-    assert _project_ref(url) == ref
+    assert project_ref(url) == ref

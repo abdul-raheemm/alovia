@@ -10,10 +10,8 @@ import time
 from collections.abc import Iterator
 from typing import Any
 
-import jwt
 import pytest
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import ec
 from fastapi import Depends, FastAPI
 from fastapi.testclient import TestClient
 
@@ -21,48 +19,17 @@ from app.common.responses import ok
 from app.core.auth import CurrentUser, get_current_user
 from app.core.logging import LOGGER_NAME, JsonFormatter
 from app.main import create_app
-from tests.helpers import make_settings
-
-ISSUER = "https://example.test/auth/v1"
-KID = "test-key"
-KEY = ec.generate_private_key(ec.SECP256R1())
-OTHER_KEY = ec.generate_private_key(ec.SECP256R1())
-
-
-def jwks_for(private_key: ec.EllipticCurvePrivateKey, kid: str = KID) -> dict[str, Any]:
-    jwk = jwt.algorithms.ECAlgorithm.to_jwk(private_key.public_key(), as_dict=True)
-    return {"keys": [{**jwk, "kid": kid, "alg": "ES256", "use": "sig"}]}
-
-
-class FakeJWKClient(jwt.PyJWKClient):
-    """Serves a fixed key set instead of fetching it over the network."""
-
-    def __init__(self, jwks: dict[str, Any] | None) -> None:
-        super().__init__("https://example.test/jwks")
-        self._jwks = jwks
-
-    def fetch_data(self) -> Any:
-        if self._jwks is None:
-            raise jwt.PyJWKClientConnectionError("unreachable")
-        return self._jwks
-
-
-def claims(**overrides: Any) -> dict[str, Any]:
-    now = int(time.time())
-    base = {
-        "sub": "11111111-1111-1111-1111-111111111111",
-        "email": "test.patient@example.test",
-        "aud": "authenticated",
-        "iss": ISSUER,
-        "iat": now,
-        "exp": now + 600,
-    }
-    base.update(overrides)
-    return {k: v for k, v in base.items() if v is not None}
-
-
-def token(key: ec.EllipticCurvePrivateKey = KEY, kid: str = KID, **overrides: Any) -> str:
-    return jwt.encode(claims(**overrides), key, algorithm="ES256", headers={"kid": kid})
+from tests.helpers import (
+    ISSUER,
+    KEY,
+    KID,
+    OTHER_KEY,
+    FakeJWKClient,
+    claims,
+    jwks_for,
+    make_settings,
+    token,
+)
 
 
 def b64(data: bytes) -> str:

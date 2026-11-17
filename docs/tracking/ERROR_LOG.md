@@ -197,3 +197,13 @@ Fix: order `with pytest.raises(...), conn.begin_nested():`.
 Verified by: full suite → 39 passed, twice.
 Prevention: when testing for a database error inside a savepoint, the savepoint goes innermost.
 Category: test
+
+### ERR-018 — 2026-11-17 — Refactor script's leftover check was too strict
+Who: Claude Code
+Phase / task: Phase 1 — `/me` + consent (moving shared test fixtures)
+What happened: `AssertionError: leftover` from my one-off refactor script.
+Cause: the check looked for the text `_project_ref`, which also appears inside the test name `test_project_ref_same_for_direct_and_pooler`.
+Fix: check for `def _project_ref` and ` _project_ref(` instead. The script stops before writing, so no file was changed by the failed run.
+Verified by: `git status` before the rerun showed only the intended files; rerun → full suite 39 passed.
+Prevention: write leftover checks against definitions and calls, not bare names.
+Category: tooling

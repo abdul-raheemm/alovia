@@ -13,6 +13,9 @@ from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
 
+# Must equal the version in docs/legal/CONSENT_TEXT.md (DEC-031); a test checks it.
+CONSENT_VERSION = "2026-11-v1"
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")

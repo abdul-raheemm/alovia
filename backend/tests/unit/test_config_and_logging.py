@@ -1,10 +1,12 @@
 import json
 import logging
+import re
+from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
 
-from app.core.config import Settings
+from app.core.config import CONSENT_VERSION, Settings
 from app.core.logging import JsonFormatter, request_id_var
 from tests.helpers import make_settings
 
@@ -46,3 +48,11 @@ def test_json_formatter_includes_request_id_and_extras() -> None:
     assert line["request_id"] == "abc123"
     assert line["message"] == "request"
     assert line["status"] == 200
+
+
+def test_consent_version_matches_consent_text() -> None:
+    # DEC-031: the backend copy must equal the version written in the legal text
+    text = (Path(__file__).resolve().parents[3] / "docs/legal/CONSENT_TEXT.md").read_text("utf-8")
+    match = re.search(r"\*\*Consent version:\*\* `([^`]+)`", text)
+    assert match, "version line not found in CONSENT_TEXT.md"
+    assert match.group(1) == CONSENT_VERSION
