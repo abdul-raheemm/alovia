@@ -7,7 +7,7 @@ import { useJourneyHome, useMonthDetail } from '../app/useJourneyHome'
 import { ContentCard, PrototypeBanner } from '../components/journey/JourneyBlocks'
 
 /** §4.4 month detail: larger illustration, this month's content, warning-signs link and
- * sources. Content sections fill up when task 4 provides the files. */
+ * sources, from the content provider (§8). */
 export function MonthDetailPage() {
   const params = useParams()
   const month = Number(params.month)

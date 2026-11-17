@@ -53,6 +53,7 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-046 | 2026-11-17 | Doctors and admins accept the app-wide consent (same text and version) once, at their first sign-in; the doctor app shows it before anything else | Owner decision (Phase 1 follow-up) | Accepted |
 | DEC-047 | 2026-11-17 | HTTP 405 uses the error code `METHOD_NOT_ALLOWED` (API.md §3) | Owner decision: the standard code | Accepted |
 | DEC-048 | 2026-11-17 | Sign-ins are written to `audit_log` ("signed in"): sign-in happens in Supabase, so the backend logs the first `GET /me` of each new Supabase session (`session_id` claim) | Owner decision; Dashboard spec §20 lists sign-in | Accepted |
+| DEC-049 | 2026-11-17 | Patient-side changes are written to `audit_log` now (dates changed, appointment created/edited/deleted, pregnancy status changed), in the same transaction as the change, with no clinical values in `details` | Owner decision; Dashboard spec §20 | Accepted |
 
 ## Template for new entries
 

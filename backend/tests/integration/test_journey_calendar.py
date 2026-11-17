@@ -147,6 +147,9 @@ def test_create_list_edit_delete_own(client: TestClient, engine: Engine) -> None
         ({"date": "2026-12-01", "title": "Test", "time": "25:00"}, "time"),
         ({"title": "Test"}, "date"),
         ({"date": "2026-12-01", "title": "Test", "source": "doctor"}, "source"),
+        # outside 1900-2999 a local date overflows when stored or read back
+        ({"date": "0001-01-01", "title": "Test"}, "date"),
+        ({"date": "9999-12-31", "title": "Test", "time": "23:59"}, "date"),
     ],
 )
 def test_appointment_input_is_validated(
@@ -245,7 +248,7 @@ def test_calendar_without_dates_or_after_the_end(client: TestClient, engine: Eng
 
     ended, lmp = patient(engine, client, weeks=20)
     assert lmp is not None
-    with engine.begin() as conn:  # the §11 flow arrives in task 8; set the status directly
+    with engine.begin() as conn:  # set directly; the §11 route has its own tests
         conn.execute(
             text("UPDATE patients SET pregnancy_status = 'ended_not_specified' WHERE id = :p"),
             {"p": patient_id_of(engine, ended)},
@@ -263,3 +266,5 @@ def test_calendar_rejects_a_reversed_range(client: TestClient, engine: Engine) -
     )
     assert res.status_code == 400 and "to" in res.json()["error"]["fields"]
     assert client.get(CAL, params={"from": "nope", "to": "x"}, headers=headers).status_code == 400
+    edge = {"from": "9999-12-31", "to": "9999-12-31"}  # end + 1 day would overflow
+    assert client.get(CAL, params=edge, headers=headers).status_code == 400

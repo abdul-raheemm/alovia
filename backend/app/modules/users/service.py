@@ -156,3 +156,24 @@ def record_sign_in(
             )
         )
         db.commit()
+
+
+def add_audit(
+    db: Session,
+    actor: User,
+    action: str,
+    entity_type: str,
+    entity_id: uuid.UUID,
+    patient_id: uuid.UUID | None,
+) -> None:
+    """Append an activity-log row (Dashboard spec §20; never clinical values). The caller
+    commits, so the row is saved together with the change it records."""
+    db.add(
+        AuditLog(
+            actor_user_id=actor.id,
+            action=action,
+            entity_type=entity_type,
+            entity_id=str(entity_id),
+            patient_id=patient_id,
+        )
+    )

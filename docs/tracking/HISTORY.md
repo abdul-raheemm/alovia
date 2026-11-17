@@ -580,3 +580,28 @@ Suggestions raised (not implemented): write audit_log rows for the patient-side 
 Docs updated: API, DECISIONS, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: OpenStax licence (spec S2/D9); patient-side audit entries (above); branch merge to main before the phase review
 Next step: task 9 (E2E + accessibility review, §15 manual checks, CHANGELOG 0.2.0).
+
+## Session 18 — 2026-11-17 — Phase 2 task 9: phase review (agent part) and patient audit entries
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 2 — E2E + accessibility review, §15 check, CHANGELOG 0.2.0 (owner: add the audit entries now, merge after review)
+Goal: finish everything the agent can do for Phase 2 and list what is left for the owner.
+
+Done:
+- Audit entries (DEC-049): `users.service.add_audit`; dates changed, appointment created/edited/deleted, pregnancy status changed (end and undo), each in the change's own transaction, `details` empty. Integration tests: all six actions logged with the patient id; refused or unchanged actions log nothing.
+- Review: stale "until task N" comments fixed; scan of code, content and rules for "your baby weighs" / "your baby is", heartbeat, Lottie, confetti → none; §15 map: tests 1-4, 7, 9, 10 automated; 5-6 wait for the Phase 7 knowledge base; 8 for Phase 3; 11 needs the owner's manual check (automated scan clean).
+- Bug found and fixed: date overflow on appointment dates / calendar range (ERR-042).
+- CREDITS.md completed (ERR-043). CHANGELOG 0.2.0; version 0.2.0 in backend and frontend packages (lockfile workspace entries only); the /health test expects 0.2.0.
+
+Files changed:
+- backend: `app/modules/users/service.py`, `app/modules/journey/{service,router,schemas}.py`, `tests/integration/{test_journey_audit.py (new),test_journey_calendar.py,test_journey_notifications.py,test_app_basics.py}`, `app/__init__.py`, `pyproject.toml`
+- frontend: package.json files, `package-lock.json` (workspace versions), `JourneyBlocks.tsx`, `MonthDetailPage.tsx` (comments)
+- docs: CHANGELOG, legal/CREDITS, API, DECISIONS (DEC-049), PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+
+Checks run (exact commands and results):
+- `bash scripts/check_all.sh` → exit 0: pytest (strict warnings) 231 passed; ruff, mypy pass; frontend typecheck, lint, format pass; Vitest 38 passed; Playwright 66 passed (phone-light + laptop-dark, axe)
+
+Errors met: 2 (ERR-042, ERR-043)
+Suggestions raised (not implemented): a tighter product rule for appointment dates (for example within the pregnancy and a year after) instead of the technical 1900-2999 range — owner decision
+Docs updated: CHANGELOG, CREDITS, API, DECISIONS, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: see the "left for the owner" list in the task 9 report (doctor approvals, [OPEN] items, OpenStax, interpretations, merge)
+Next step: owner review of Phase 2 → merge the phase-2 branches into main → Phase 3.

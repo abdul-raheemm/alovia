@@ -3,6 +3,8 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Free date inputs need a range check at the API: a local date near year 1 or 9999 overflows when converted or shifted, and one stored bad row can break every later read (ERR-042).
+- Add every new third-party asset or data source to `docs/legal/CREDITS.md` in the same task that ships it (ERR-043).
 - `npm install -w <app> <pkg>` failing with "reading 'location'" (ERR-030, ERR-034): run a plain `npm install` first, then the workspace install.
 - A date-only value stored as local midnight must be read in the patient's time zone, never sliced from a UTC timestamp (ERR-036).
 - Write multi-file or quote-heavy edits as a script file in the scratchpad and run it; a long inline heredoc chain dies on one unmatched quote (nothing runs) and is unreadable in the transcript.
@@ -442,3 +444,23 @@ Fix: check the Home page heading instead, which shows on both sizes.
 Verified by: `e2e/doctor.spec.ts` 8 passed (phone-light + laptop-dark).
 Prevention: in responsive layouts assert on page content, not on navigation that changes per screen size.
 Category: test
+
+### ERR-042 — 2026-11-17 — Appointment dates near year 1 or 9999 could break her appointments (found in the phase review)
+Who: Claude Code
+Phase / task: Phase 2 — task 9 review (code from task 6)
+What happened: `POST /patient/appointments` accepted any date. 0001-01-01 at local midnight (Asia/Kolkata) is before year 1 in UTC, and Python cannot read such a stored value back, so her list, calendar and home would fail afterwards; `GET /calendar?to=9999-12-31` overflowed on `end + 1 day` (500).
+Cause: no range check on free dates; the date rules D1-D3 only cover pregnancy dates.
+Fix: appointment `date` and calendar `from`/`to` must be within 1900-01-01 .. 2999-12-31 (400 otherwise).
+Verified by: new cases in `test_appointment_input_is_validated` and `test_calendar_rejects_a_reversed_range`; reproduced the overflow in Python first.
+Prevention: Lesson added.
+Category: bug
+
+### ERR-043 — 2026-11-17 — CREDITS.md not updated when icons, placeholder drawings and content sources shipped
+Who: Claude Code
+Phase / task: Phase 2 — task 9 review (assets from tasks 4-5)
+What happened: CREDITS.md says every asset is listed before use; the 7 Fluent icon files, the placeholder month drawings and the WHO / OWH / NHS / MedlinePlus sources were recorded elsewhere (content files, HISTORY) but not here.
+Cause: the credits file was not on the task 4/5 checklist.
+Fix: CREDITS.md now lists the icon files, the placeholder drawings (own script, no third-party asset, replace before release) and the four content sources with licences.
+Verified by: file paths checked on disk; check_all green (the About page renders CREDITS).
+Prevention: Lesson added.
+Category: process

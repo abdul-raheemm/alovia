@@ -129,16 +129,19 @@ def update_appointment(
     appointment_id: uuid.UUID,
     body: AppointmentIn,
     patient: OwnPatient,
+    user: Account,
     db: Db,
 ) -> dict[str, Any]:
     tz = request.app.state.journey_config.timezone
-    out = service.update_appointment(db, patient, appointment_id, body, tz)
+    out = service.update_appointment(db, user, patient, appointment_id, body, tz)
     return ok(out.model_dump(mode="json"))
 
 
 @appointments_router.delete("/{appointment_id}", response_model=Envelope[None])
-def delete_appointment(appointment_id: uuid.UUID, patient: OwnPatient, db: Db) -> dict[str, Any]:
-    service.delete_appointment(db, patient, appointment_id)
+def delete_appointment(
+    appointment_id: uuid.UUID, patient: OwnPatient, user: Account, db: Db
+) -> dict[str, Any]:
+    service.delete_appointment(db, user, patient, appointment_id)
     return ok(None)
 
 

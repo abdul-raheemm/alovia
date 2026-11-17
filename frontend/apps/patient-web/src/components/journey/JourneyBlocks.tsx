@@ -99,7 +99,7 @@ export function ContentCard({ item }: { item: JourneyContentItem }) {
 }
 
 /** §4.3 "This stage": fetal development and body changes for the content week, with
- * "Read more" into the month detail. Empty until task 4 fills the content files. */
+ * "Read more" into the month detail. Shows an empty state when no item covers this week. */
 export function StageSection({
   items,
   month,

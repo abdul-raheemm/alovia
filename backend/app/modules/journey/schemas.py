@@ -75,6 +75,12 @@ class MonthSummary(BaseModel):
     week_end: int
 
 
+# Technical limits for free calendar dates (appointments, calendar range): outside them a
+# local date cannot be turned into a stored moment and read back (date overflow).
+EARLIEST_DAY = dt.date(1900, 1, 1)
+LATEST_DAY = dt.date(2999, 12, 31)
+
+
 class AppointmentIn(BaseModel):
     """Create or edit an appointment (§9.3): date, optional time, title (max 100 characters),
     optional note (max 500). Date and time are the patient's local time (config timezone)."""
@@ -85,6 +91,13 @@ class AppointmentIn(BaseModel):
     time: dt.time | None = None
     title: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=100)]
     note: Annotated[str, StringConstraints(strip_whitespace=True, max_length=500)] | None = None
+
+    @field_validator("date")
+    @classmethod
+    def _date_in_range(cls, value: dt.date) -> dt.date:
+        if not EARLIEST_DAY <= value <= LATEST_DAY:
+            raise ValueError("date out of range")
+        return value
 
     @field_validator("note")
     @classmethod
@@ -161,7 +174,7 @@ class HomeOut(BaseModel):
     """GET /patient/journey/home (shape in docs/API.md §4.2).
 
     Still to come: quick-log state and weekly summary (Phase 3), result and genetic status
-    cards (Phases 4-5), notification bar (task 7).
+    cards (Phases 4-5). Notifications have their own route (GET /patient/notifications).
     """
 
     state: HomeState
@@ -173,7 +186,7 @@ class HomeOut(BaseModel):
     messages: dict[str, str | None]
     # message keys to show right after a change (e.g. msg_dates_updated_by_clinician)
     notices: list[str] = []
-    # §4.3 blocks (empty/null until there is data; content arrives with task 4)
+    # §4.3 blocks (empty/null when there is no data for them)
     months: list[MonthSummary] = []  # empty when there is no active dated pregnancy (§4.5, §11.3)
     stage_items: list[ContentItem] = []  # "This stage": fetal_development + body_changes
     size: SizeReference | None = None  # no sourced value -> no size comparison (§7.2)
@@ -188,7 +201,7 @@ class MonthDetailOut(BaseModel):
     week_start: int
     week_end: int
     is_current: bool
-    items: list[ContentItem]  # all content types for this month; empty until task 4
+    items: list[ContentItem]  # all content types for this month
 
 
 NotificationType = Literal[

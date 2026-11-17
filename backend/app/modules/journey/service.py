@@ -17,6 +17,8 @@ from app.modules.journey.config import JourneyConfig, Message
 from app.modules.journey.content import ContentProvider, select_for_home
 from app.modules.journey.models import Appointment, Notification, PregnancyDateHistory
 from app.modules.journey.schemas import (
+    EARLIEST_DAY,
+    LATEST_DAY,
     AppointmentIn,
     AppointmentOut,
     AppointmentsOut,
@@ -37,6 +39,7 @@ from app.modules.journey.schemas import (
     UltrasoundDatesIn,
 )
 from app.modules.users.models import Patient, User
+from app.modules.users.service import add_audit
 
 # §4.3 "This stage" home block shows these content types; the rest live in the month detail
 HOME_STAGE_TYPES = ["fetal_development", "body_changes"]
@@ -121,6 +124,8 @@ def create_appointment(
         source="patient",
     )
     db.add(row)
+    db.flush()
+    add_audit(db, user, "appointment created", "appointment", row.id, patient.id)
     db.commit()
     db.refresh(row)
     return _appointment_out(row, ZoneInfo(timezone))
@@ -147,7 +152,12 @@ def _own_editable(db: Session, patient: Patient, appointment_id: uuid.UUID) -> A
 
 
 def update_appointment(
-    db: Session, patient: Patient, appointment_id: uuid.UUID, body: AppointmentIn, timezone: str
+    db: Session,
+    user: User,
+    patient: Patient,
+    appointment_id: uuid.UUID,
+    body: AppointmentIn,
+    timezone: str,
 ) -> AppointmentOut:
     row = _own_editable(db, patient, appointment_id)
     row.appointment_at = _stored_moment(body, timezone)
@@ -155,14 +165,20 @@ def update_appointment(
     row.title = body.title
     row.note = body.note
     row.updated_at = datetime.now(UTC)
+    add_audit(db, user, "appointment edited", "appointment", row.id, patient.id)
     db.commit()
     db.refresh(row)
     return _appointment_out(row, ZoneInfo(timezone))
 
 
-def delete_appointment(db: Session, patient: Patient, appointment_id: uuid.UUID) -> None:
-    """Hard delete: planning data, not a clinical record (DATABASE.md §8)."""
-    db.delete(_own_editable(db, patient, appointment_id))
+def delete_appointment(
+    db: Session, user: User, patient: Patient, appointment_id: uuid.UUID
+) -> None:
+    """Hard delete: planning data, not a clinical record (DATABASE.md §8). The audit row
+    keeps the id only."""
+    row = _own_editable(db, patient, appointment_id)
+    add_audit(db, user, "appointment deleted", "appointment", row.id, patient.id)
+    db.delete(row)
     db.commit()
 
 
@@ -175,7 +191,7 @@ def get_calendar(
     """Markers for the days start..end (inclusive): §6.4 milestones and appointments.
     Milestones are baby-stage markers, so they appear only for an active pregnancy with a
     usable due date (§11.3); appointments always stay visible."""
-    if start > end:
+    if not EARLIEST_DAY <= start <= end <= LATEST_DAY:  # also keeps end + 1 day valid
         raise AppError("VALIDATION_ERROR", "Please check the dates.", fields={"to": "before from"})
     tz = ZoneInfo(cfg.timezone)
     rows = db.scalars(
@@ -321,16 +337,17 @@ def set_dates(
     if new.lmp_date is not None:  # §5.1: the LMP is stored when given
         patient.lmp_date = new.lmp_date
     patient.updated_at = datetime.now(UTC)
-    db.add(
-        PregnancyDateHistory(
-            patient_id=patient.id,
-            changed_by=user.id,
-            old_due_date=old_due,
-            new_due_date=new.due_date,
-            old_source=old_source,
-            new_source=new.source,
-        )
+    history = PregnancyDateHistory(
+        patient_id=patient.id,
+        changed_by=user.id,
+        old_due_date=old_due,
+        new_due_date=new.due_date,
+        old_source=old_source,
+        new_source=new.source,
     )
+    db.add(history)
+    db.flush()
+    add_audit(db, user, "dates changed", "pregnancy_date_history", history.id, patient.id)
     db.commit()
     # §5.3: a clinician or scan date now replaces an LMP estimate
     if old_source == "lmp_estimate" and new.source != "lmp_estimate":
@@ -486,6 +503,9 @@ def end_pregnancy(db: Session, user: User, patient: Patient, body: PregnancyEndI
         dashboard.add_inbox_item(
             db, patient.id, "pregnancy_ended", "pregnancy_date_history", history.id
         )
+    add_audit(
+        db, user, "pregnancy status changed", "pregnancy_date_history", history.id, patient.id
+    )
     db.commit()
 
 
@@ -499,7 +519,12 @@ def undo_pregnancy_end(db: Session, user: User, patient: Patient, cfg: JourneyCo
         raise AppError(
             "CONFLICT", "This can no longer be undone here. Please contact your doctor.", 409
         )
-    db.add(_status_history(user, patient, patient.pregnancy_status, "active"))
+    history = _status_history(user, patient, patient.pregnancy_status, "active")
+    db.add(history)
+    db.flush()
+    add_audit(
+        db, user, "pregnancy status changed", "pregnancy_date_history", history.id, patient.id
+    )
     patient.pregnancy_status = "active"
     patient.pregnancy_ended_at = None
     patient.doctor_informed_of_end = None

@@ -134,7 +134,7 @@ def test_ended_pregnancy_has_no_baby_stage_notices(client: TestClient, engine: E
     headers = patient(engine, client, weeks=24)
     assert len(unread(client, headers)) == 2  # week + month, still unread
     soon = add_appointment(client, headers, datetime.now(UTC) + timedelta(hours=2))
-    with engine.begin() as conn:  # the §11 flow arrives in task 8; set the status directly
+    with engine.begin() as conn:  # set directly; the §11 route has its own tests
         conn.execute(
             text("UPDATE patients SET pregnancy_status = 'ended_loss' WHERE id = :p"),
             {"p": patient_id_of(engine, headers)},

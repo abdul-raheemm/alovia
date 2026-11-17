@@ -37,7 +37,7 @@ Update after every task. Each line: status, task, who, date, notes.
 - [x] Notifications bar + doctor notes (patient side) — Raheem + Claude Code — 2026-11-17 (generated on app open: new_week, new_month, appointment_soon, doctor_note; one per (patient, type, target); read/dismiss; baby-stage notices stop and are hidden after the end; Doctor notes tab read-only, newest first; result_available / genetic_reviewed / dates_updated wait for the doctor actions in Phases 4-5)
 - [x] Pregnancy-end flow + undo — Raheem + Claude Code — 2026-11-17 (POST /patient/pregnancy-end and /undo; status, time and answer stored; status changes logged in pregnancy_date_history; pregnancy_ended inbox item only on "yes", in the same transaction; quiet ended home with support/safety messages (pending approval), My records links and undo within resume_window_days; entry wording and helpline stay [OPEN])
 - [x] Phase 1 follow-ups moved here (task 0): doctor/admin consent, 405 code, sign-in audit — Raheem + Claude Code — 2026-11-17 (doctor app asks for the app-wide consent once before anything else; `METHOD_NOT_ALLOWED` for 405; first `/me` of each Supabase session writes a "signed in" audit row; DEC-046 to DEC-048)
-- [ ] E2E + accessibility; review; CHANGELOG 0.2.0
+- [ ] E2E + accessibility; review; CHANGELOG 0.2.0 — agent part done 2026-11-17 (full check_all green; §15 map; code review fixed a date-overflow bug; credits completed; patient audit entries added (DEC-049); CHANGELOG 0.2.0 and version 0.2.0 written) — **waiting for the owner's review, then merge to main**
 
 Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month cards (task 5) **before** the content provider (task 4); then calendar/appointments, notifications, pregnancy end, task 0, review.
 
