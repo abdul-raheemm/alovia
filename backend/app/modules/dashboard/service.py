@@ -8,7 +8,7 @@ from datetime import datetime
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.modules.dashboard.models import DoctorNote
+from app.modules.dashboard.models import DoctorNote, InboxItem
 from app.modules.users.models import Doctor
 
 
@@ -33,3 +33,11 @@ def shared_notes(db: Session, patient_id: uuid.UUID) -> list[SharedNote]:
         SharedNote(note.id, note.body, name, note.created_at, note.related_ref)
         for note, name in rows
     ]
+
+
+def add_inbox_item(
+    db: Session, patient_id: uuid.UUID, type_: str, ref_table: str, ref_id: uuid.UUID
+) -> None:
+    """Add a needs-attention item to the doctor inbox. The caller commits, so the item is
+    saved in the same transaction as the event it points to."""
+    db.add(InboxItem(patient_id=patient_id, type=type_, ref_table=ref_table, ref_id=ref_id))

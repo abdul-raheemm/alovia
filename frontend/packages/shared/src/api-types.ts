@@ -276,6 +276,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/patient/pregnancy-end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** End Pregnancy */
+        post: operations["end_pregnancy_api_v1_patient_pregnancy_end_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/pregnancy-end/undo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Undo Pregnancy End */
+        post: operations["undo_pregnancy_end_api_v1_patient_pregnancy_end_undo_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -496,6 +530,24 @@ export interface components {
              */
             option: "due_date";
         };
+        /**
+         * EndedOut
+         * @description §11.4-11.6: which ended screens to show, and the undo window.
+         */
+        EndedOut: {
+            /**
+             * Ended At
+             * Format: date-time
+             */
+            ended_at: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ended_birth" | "ended_loss" | "ended_not_specified";
+            /** Undo Until */
+            undo_until: string | null;
+        };
         /** Envelope[AppointmentOut] */
         Envelope_AppointmentOut_: {
             data: components["schemas"]["AppointmentOut"];
@@ -579,6 +631,7 @@ export interface components {
          */
         HomeOut: {
             dates: components["schemas"]["DatesOut"];
+            ended?: components["schemas"]["EndedOut"] | null;
             /** Messages */
             messages: {
                 [key: string]: string | null;
@@ -735,6 +788,20 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /**
+         * PregnancyEndIn
+         * @description §11.2: her choice and whether her doctor should be informed. The question has no
+         *     default, so `inform_doctor` must be sent as a real true/false.
+         */
+        PregnancyEndIn: {
+            /** Inform Doctor */
+            inform_doctor: boolean;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ended_birth" | "ended_loss" | "ended_not_specified";
         };
         /**
          * PregnancyOut
@@ -1309,6 +1376,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    end_pregnancy_api_v1_patient_pregnancy_end_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PregnancyEndIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_HomeOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    undo_pregnancy_end_api_v1_patient_pregnancy_end_undo_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_HomeOut_"];
                 };
             };
         };

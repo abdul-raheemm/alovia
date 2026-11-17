@@ -15,6 +15,7 @@ export type {
   Milestone,
   MonthDetail,
   Notification,
+  PregnancyEndInput,
 } from './types'
 export {
   CONSENT_SOURCE,

@@ -23,6 +23,7 @@ from app.modules.journey.schemas import (
     HomeOut,
     MonthDetailOut,
     NotificationOut,
+    PregnancyEndIn,
 )
 from app.modules.users.models import Patient, User
 from app.modules.users.service import get_account, get_patient
@@ -31,6 +32,7 @@ router = APIRouter(prefix=f"{API_PREFIX}/patient/journey")
 appointments_router = APIRouter(prefix=f"{API_PREFIX}/patient/appointments")
 notifications_router = APIRouter(prefix=f"{API_PREFIX}/patient/notifications")
 notes_router = APIRouter(prefix=f"{API_PREFIX}/patient/doctor-notes")
+end_router = APIRouter(prefix=f"{API_PREFIX}/patient/pregnancy-end")
 
 OwnPatient = Annotated[Patient, Depends(get_patient)]
 Db = Annotated[Session, Depends(get_db)]
@@ -167,3 +169,35 @@ def dismiss_notification(notification_id: uuid.UUID, patient: OwnPatient, db: Db
 def doctor_notes(request: Request, patient: OwnPatient, db: Db) -> dict[str, Any]:
     tz = request.app.state.journey_config.timezone
     return ok([n.model_dump(mode="json") for n in service.list_doctor_notes(db, patient, tz)])
+
+
+# ---- §11 pregnancy end and undo; both reply with the refreshed home data ----
+
+
+def _home_now(request: Request, db: Session, patient: Patient) -> dict[str, Any]:
+    cfg = request.app.state.journey_config
+    out = service.get_home(
+        db,
+        patient,
+        cfg,
+        load_journey_messages(),
+        request.app.state.content_provider,
+        local_today(cfg.timezone),
+    )
+    return ok(out.model_dump(mode="json"))
+
+
+@end_router.post("", response_model=Envelope[HomeOut])
+def end_pregnancy(
+    request: Request, body: PregnancyEndIn, patient: OwnPatient, user: Account, db: Db
+) -> dict[str, Any]:
+    service.end_pregnancy(db, user, patient, body)
+    return _home_now(request, db, patient)
+
+
+@end_router.post("/undo", response_model=Envelope[HomeOut])
+def undo_pregnancy_end(
+    request: Request, patient: OwnPatient, user: Account, db: Db
+) -> dict[str, Any]:
+    service.undo_pregnancy_end(db, user, patient, request.app.state.journey_config)
+    return _home_now(request, db, patient)

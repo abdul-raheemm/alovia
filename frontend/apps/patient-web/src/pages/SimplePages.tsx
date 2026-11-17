@@ -2,6 +2,9 @@ import { CREDITS_SOURCE, useAuth, type LegalDoc } from '@alovia/shared'
 import { Button, Card, Markdown, SignInForm, ThemeSwitch } from '@alovia/ui'
 import { Link, Navigate, useNavigate } from 'react-router'
 
+import { useJourneyHome } from '../app/useJourneyHome'
+import { END_TITLE } from './PregnancyEndPage'
+
 export function SignInPage() {
   const { client, session, loading } = useAuth()
   const navigate = useNavigate()
@@ -63,6 +66,7 @@ export function AboutPage() {
 /** More: theme switch, legal pages, sign out. Settings (UX_FLOWS P12) grow here in later phases. */
 export function MorePage() {
   const { client } = useAuth()
+  const home = useJourneyHome()
   return (
     <section className="flex flex-col gap-6">
       <h1>More</h1>
@@ -71,7 +75,17 @@ export function MorePage() {
       </Card>
       <Card>
         <h2 className="mb-2">My pregnancy</h2>
-        <Link to="/dates">Pregnancy dates</Link>
+        <ul className="flex flex-col gap-2">
+          <li>
+            <Link to="/dates">Pregnancy dates</Link>
+          </li>
+          {/* §11.1 entry, only while the pregnancy is active */}
+          {home.data && home.data.state !== 'ended' && (
+            <li>
+              <Link to="/pregnancy-end">{END_TITLE}</Link>
+            </li>
+          )}
+        </ul>
       </Card>
       <Card>
         <h2 className="mb-2">Legal</h2>

@@ -1,5 +1,5 @@
 import { userMessage, type JourneyHome } from '@alovia/shared'
-import { Button, Card, ErrorState, PageSkeleton, PlaceholderPage } from '@alovia/ui'
+import { Button, Card, ErrorState, PageSkeleton } from '@alovia/ui'
 import { Info } from 'lucide-react'
 import { Link } from 'react-router'
 
@@ -13,11 +13,13 @@ import {
   StageSection,
   WeekStrip,
 } from '../components/journey/JourneyBlocks'
+import { EndedHome } from '../components/journey/EndedHome'
 import { NotificationBar } from '../components/journey/NotificationBar'
 
 /** Journey home in the §4.3 block order: header, baby card, this stage, quick log, week strip
  * (§9.1), next appointment, month cards. Still to come: weekly summary (Phase 3), status cards
- * (Phases 4-5), ended screens (task 8). The notification bar (§4.2) sits at the top. */
+ * (Phases 4-5). The notification bar (§4.2) sits at the top; an ended pregnancy shows the quiet
+ * §11 home instead. */
 export function HomePage() {
   const home = useJourneyHome()
   if (home.isPending) return <PageSkeleton />
@@ -30,7 +32,7 @@ export function HomePage() {
     )
   }
   const data = home.data
-  if (data.state === 'ended') return <PlaceholderPage title="Home" />
+  if (data.state === 'ended') return <EndedHome data={data} />
   const pregnancy = data.pregnancy
   return (
     <section className="flex flex-col gap-6">

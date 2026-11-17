@@ -26,3 +26,6 @@ export type Milestone = components['schemas']['MilestoneOut']
 /** Notification bar (Journey §4.2, §10.1) and shared doctor notes (§10.3). */
 export type Notification = components['schemas']['NotificationOut']
 export type DoctorNote = components['schemas']['DoctorNoteOut']
+
+/** POST /patient/pregnancy-end body (Journey §11.2). */
+export type PregnancyEndInput = components['schemas']['PregnancyEndIn']

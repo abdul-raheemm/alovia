@@ -46,4 +46,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(journey.appointments_router)
     app.include_router(journey.notifications_router)
     app.include_router(journey.notes_router)
+    app.include_router(journey.end_router)
     return app

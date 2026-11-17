@@ -91,6 +91,8 @@ Task 5 additions to the home payload: `months: [{month, week_start, week_end}]` 
 
 **`GET /patient/doctor-notes`** → `data`: `[{id, body, doctor_name, created_on, related_ref}]`, only `visible_to_patient` notes, newest first; `created_on` is the local day (config timezone). Read-only.
 
+**`POST /patient/pregnancy-end`** body `{status: ended_birth|ended_loss|ended_not_specified, inform_doctor}` (`inform_doctor` is required and must be a real boolean: the question has no default, §11.2; no other fields) → the refreshed home data. Stores `pregnancy_status`, `pregnancy_ended_at`, `doctor_informed_of_end`, logs the status change in `pregnancy_date_history`, and only when `inform_doctor` is true adds a `pregnancy_ended` inbox item (`ref_table` `pregnancy_date_history`, `ref_id` that row) in the same transaction. Already ended → 409 `CONFLICT`. **`POST /patient/pregnancy-end/undo`** → back to `active` within `resume_window_days` of the end (§11.6), logged in `pregnancy_date_history`; an inbox item already sent stays. Not ended, or the window has passed → 409. The home data carries `ended: {status, ended_at, undo_until}` (`undo_until` null once the window has passed) when `state` is `ended`.
+
 **`GET /patient/journey/months/{month}`** (1-9; linked patient with consent) → `data`: `{month, week_start, week_end, is_current, items}` with all content types for that month. 404 once the pregnancy has ended (§11.3: month cards stop).
 
 ### 4.3 Symptom Tracking — Module 7 (Phase 3)

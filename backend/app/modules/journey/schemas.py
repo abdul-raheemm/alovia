@@ -136,6 +136,27 @@ class CalendarOut(BaseModel):
     appointments: list[AppointmentOut]
 
 
+EndStatus = Literal["ended_birth", "ended_loss", "ended_not_specified"]
+
+
+class PregnancyEndIn(BaseModel):
+    """§11.2: her choice and whether her doctor should be informed. The question has no
+    default, so `inform_doctor` must be sent as a real true/false."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    status: EndStatus
+    inform_doctor: StrictBool
+
+
+class EndedOut(BaseModel):
+    """§11.4-11.6: which ended screens to show, and the undo window."""
+
+    status: EndStatus
+    ended_at: datetime
+    undo_until: datetime | None  # null once `resume_window_days` have passed
+
+
 class HomeOut(BaseModel):
     """GET /patient/journey/home (shape in docs/API.md §4.2).
 
@@ -157,6 +178,7 @@ class HomeOut(BaseModel):
     stage_items: list[ContentItem] = []  # "This stage": fetal_development + body_changes
     size: SizeReference | None = None  # no sourced value -> no size comparison (§7.2)
     next_appointment: AppointmentOut | None = None
+    ended: EndedOut | None = None  # only when state is ended (§11)
 
 
 class MonthDetailOut(BaseModel):

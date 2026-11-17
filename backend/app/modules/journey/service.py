@@ -24,6 +24,7 @@ from app.modules.journey.schemas import (
     DatesOut,
     DoctorNoteOut,
     DueDateIn,
+    EndedOut,
     HomeOut,
     LmpDatesIn,
     MilestoneOut,
@@ -31,6 +32,7 @@ from app.modules.journey.schemas import (
     MonthSummary,
     NavItemOut,
     NotificationOut,
+    PregnancyEndIn,
     PregnancyOut,
     UltrasoundDatesIn,
 )
@@ -240,6 +242,7 @@ def get_home(
         stage_items=stage_items,
         size=size,
         next_appointment=_next_appointment(db, patient, cfg.timezone, today),
+        ended=_ended(patient, cfg) if state == "ended" else None,
         state=state,
         dates=DatesOut(
             due_date=patient.due_date,
@@ -429,3 +432,76 @@ def list_doctor_notes(db: Session, patient: Patient, timezone: str) -> list[Doct
         )
         for n in dashboard.shared_notes(db, patient.id)
     ]
+
+
+# ---- §11 when a pregnancy ends, and §11.6 undo ----
+
+
+def _undo_until(patient: Patient, cfg: JourneyConfig) -> datetime | None:
+    """End of the "I marked this by mistake" window, or None when it has passed."""
+    if patient.pregnancy_ended_at is None:
+        return None
+    until = patient.pregnancy_ended_at + timedelta(days=cfg.resume_window_days)
+    return until if datetime.now(UTC) <= until else None
+
+
+def _ended(patient: Patient, cfg: JourneyConfig) -> EndedOut | None:
+    if patient.pregnancy_ended_at is None:  # only through bad data; the home stays quiet
+        return None
+    return EndedOut(
+        status=patient.pregnancy_status,  # ended_* here (CHECK constraint); pydantic checks it
+        ended_at=patient.pregnancy_ended_at,
+        undo_until=_undo_until(patient, cfg),
+    )
+
+
+def _status_history(user: User, patient: Patient, old: str, new: str) -> PregnancyDateHistory:
+    """A status change in the date history (§11.6); the dates themselves stay the same."""
+    return PregnancyDateHistory(
+        patient_id=patient.id,
+        changed_by=user.id,
+        old_due_date=patient.due_date,
+        new_due_date=patient.due_date,
+        old_source=patient.due_date_source,
+        new_source=patient.due_date_source,
+        old_status=old,
+        new_status=new,
+    )
+
+
+def end_pregnancy(db: Session, user: User, patient: Patient, body: PregnancyEndIn) -> None:
+    """§11.2-11.3: store the status, the time and her answer; the doctor gets a
+    `pregnancy_ended` inbox item only when she chose "yes". One transaction."""
+    if patient.pregnancy_status != "active":
+        raise AppError("CONFLICT", "This pregnancy is already marked as ended.", status=409)
+    history = _status_history(user, patient, "active", body.status)
+    db.add(history)
+    db.flush()  # gives the history row its id for the inbox reference
+    now = datetime.now(UTC)
+    patient.pregnancy_status = body.status
+    patient.pregnancy_ended_at = now
+    patient.doctor_informed_of_end = body.inform_doctor
+    patient.updated_at = now
+    if body.inform_doctor:
+        dashboard.add_inbox_item(
+            db, patient.id, "pregnancy_ended", "pregnancy_date_history", history.id
+        )
+    db.commit()
+
+
+def undo_pregnancy_end(db: Session, user: User, patient: Patient, cfg: JourneyConfig) -> None:
+    """§11.6 "I marked this by mistake": back to active within `resume_window_days`,
+    logged in the date history. An inbox item already sent stays (inbox items are never
+    deleted, DATABASE.md)."""
+    if patient.pregnancy_status == "active":
+        raise AppError("CONFLICT", "This pregnancy is not marked as ended.", status=409)
+    if _undo_until(patient, cfg) is None:
+        raise AppError(
+            "CONFLICT", "This can no longer be undone here. Please contact your doctor.", 409
+        )
+    db.add(_status_history(user, patient, patient.pregnancy_status, "active"))
+    patient.pregnancy_status = "active"
+    patient.pregnancy_ended_at = None
+    patient.doctor_informed_of_end = None
+    patient.updated_at = datetime.now(UTC)
+    db.commit()

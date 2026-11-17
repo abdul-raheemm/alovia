@@ -13,6 +13,7 @@ import { DoctorNotesPage } from '../pages/DoctorNotesPage'
 import { HomePage } from '../pages/HomePage'
 import { JoinPage } from '../pages/JoinPage'
 import { MonthDetailPage } from '../pages/MonthDetailPage'
+import { PregnancyEndPage } from '../pages/PregnancyEndPage'
 import { LandingPage } from '../pages/LandingPage'
 import {
   AboutPage,
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
       { path: '/log', element: <PlaceholderPage title="Log symptoms" /> },
       { path: '/appointments', element: <AppointmentsPage /> },
       { path: '/doctor-notes', element: <DoctorNotesPage /> },
+      { path: '/pregnancy-end', element: <PregnancyEndPage /> },
       { path: '/more', element: <MorePage /> },
       { path: '/urgent', element: <UrgentPage /> },
     ],

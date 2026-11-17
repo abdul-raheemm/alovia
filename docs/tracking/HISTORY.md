@@ -529,3 +529,30 @@ Suggestions raised (not implemented): none
 Docs updated: API, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: OpenStax licence (spec S2/D9) still open
 Next step: task 8 (pregnancy-end flow + undo).
+
+## Session 16 — 2026-11-17 — Phase 2 task 8: when a pregnancy ends, and undo
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 2 — pregnancy-end flow + undo (Journey §11.1-11.6, §15 test 9; UX_FLOWS P11)
+Goal: the patient can mark her pregnancy as ended (three choices), choose whether her doctor is informed, see a quiet home, and undo within 7 days.
+
+Done:
+- Backend: `end_pregnancy` (status, time and answer stored; status change in `pregnancy_date_history`; `pregnancy_ended` inbox item only on "yes", same transaction) and `undo_pregnancy_end` (window from config, logged, inbox item kept). `dashboard.service.add_inbox_item` added (ARCHITECTURE §8). Home data gains `ended`. No migration needed (columns from Phase 1/2).
+- Patient app: More → entry (only while active) → choice → "Would you like your doctor to be informed?" (no default) → confirmation; ended home: notification bar, `msg_loss_support` or `msg_birth_congratulations`, `msg_after_pregnancy_danger_signs`, My records links, "I marked this by mistake" with a confirm step while `undo_until` is set. No images and no animation on the ended home.
+- No new wording for medical or emotional content: every §11 message is a §13.2 key (pending approval, DEC-041); the step labels are plain UI ("Choose one", "Please confirm", "Inform my doctor: Yes/No").
+
+Files changed:
+- backend: `app/modules/journey/{schemas,service,router}.py`, `app/modules/dashboard/service.py`, `app/main.py`, `tests/integration/test_journey_pregnancy_end.py` (new)
+- frontend: `pages/PregnancyEndPage.tsx`, `components/journey/EndedHome.tsx` (new); `pages/{HomePage,SimplePages}.tsx`, `app/App.tsx`, `packages/shared/src/{types,index,api-types}.ts`, `e2e/pregnancy-end.spec.ts` (new)
+- docs: API.md, PROGRESS, CONTEXT, HISTORY
+
+Open items (TODO(OPEN), unchanged): gentle wording of the entry (§11.1 — the spec's working label "My pregnancy has ended" is used); support helpline number (§13.3); all §11 message texts await doctor approval.
+Interpretations (spec silent, flagged for review): the undo does not notify the doctor and does not remove an inbox item already sent; the quiet home's "My records" is a short list of links (appointments, doctor notes) until the records pages exist; the "My pregnancy has ended" entry is hidden once the pregnancy has ended.
+
+Checks run (exact commands and results):
+- `bash scripts/check_all.sh` → exit 0: pytest (strict warnings) 224 passed; ruff, mypy pass; frontend typecheck, lint, format pass; Vitest 37 passed; Playwright 64 passed (phone-light + laptop-dark, axe)
+
+Errors met: 0 (one mypy "unused type: ignore" fixed in the same step; not a defect)
+Suggestions raised (not implemented): none
+Docs updated: API, PROGRESS, CONTEXT, HISTORY
+Open questions for the owner: OpenStax licence (spec S2/D9); the interpretations above
+Next step: task 0 (doctor/admin consent once at first sign-in, standard 405 code, sign-in audit), then task 9 (phase review, CHANGELOG 0.2.0).
