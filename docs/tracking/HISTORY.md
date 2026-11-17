@@ -215,3 +215,38 @@ Suggestions raised (not implemented): none
 Docs updated: DECISIONS (DEC-031, DEC-032), ENVIRONMENT, README, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: `DATABASE_URL` empty; confirm `aud = "authenticated"` against one real token (needs owner OK for one call to the project's key URL); which flow creates a patient's `users` row (DEC-032 covers admins/owner and doctors)
 Next step: Alembic + Phase 1 migration plan.
+
+## Session 6 — 2026-11-17 — Alembic + Phase 1 migration
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 1 — Alembic setup + Phase 1 migration
+Goal: create the 9 Phase 1 tables exactly as DATABASE.md describes, tested on a separate database first.
+
+Done:
+- `app/core/database.py` (engine, model base with fixed constraint names); models in `app/modules/users/models.py` (7 tables) and `app/modules/predictions/models.py` (2 tables; Phase 5 columns left out).
+- `alembic.ini`, `migrations/env.py`, hand-written migration `0001` with a full downgrade.
+- `/health` reports `db: ok|error`. Settings: `DATABASE_URL` (required), `TEST_DATABASE_URL` (optional).
+- Tests: shared `tests/helpers.py`; `test_migrations.py` (upgrade/downgrade/upgrade, database == models, every CHECK/unique/partial-unique rule, FK restrict, `/health` db ok, project-id safety check).
+- Owner created `alovia-test`; both URLs switched to Session pooler.
+- With owner approval, migration applied to the main project.
+
+Files changed:
+- `backend/app/core/database.py`, `backend/app/modules/**`, `backend/alembic.ini`, `backend/migrations/**`, `backend/tests/helpers.py`, `backend/tests/integration/test_migrations.py` — added
+- `backend/app/api/health.py`, `backend/app/core/config.py`, `backend/app/main.py`, `backend/pyproject.toml`, `backend/requirements.txt`, `backend/.env.example`, three existing test files (moved to the shared settings helper; `/health` expectations gained `db`; nothing removed or weakened) — modified
+- docs: DECISIONS, DATABASE, TESTING, ENVIRONMENT, tracking/* — modified
+
+Decisions made (with owner approval):
+- No FK from `users.id` to `auth.users` → DEC-033
+- Test database = separate Supabase project `alovia-test` → DEC-034
+- Packages: SQLAlchemy 2.1.9, alembic 1.20.1, psycopg[binary] 3.3.9
+
+Checks run (exact commands and results):
+- `alembic upgrade head --sql` (offline) vs the models' SQL → 17/17 statements identical
+- `pytest -W error::DeprecationWarning -W error::ResourceWarning -W error::pytest.PytestUnraisableExceptionWarning --cov=app` → 39 passed (run twice), coverage 100%; `alovia-test` left empty (only `alembic_version`)
+- `ruff check .` → All checks passed; `ruff format --check .` → 24 files already formatted; `mypy app tests migrations` → Success: no issues found in 24 source files
+- Main project: `alembic current` → (none); `alembic upgrade head`; `alembic current` → `0001 (head)`; tables → the 9 + `alembic_version`; `compare_metadata` → none; `GET /api/v1/health` → 200, `db: ok`
+
+Errors met: 8 (ERR-010 … ERR-017)
+Suggestions raised (not implemented): none
+Docs updated: DECISIONS (DEC-033, DEC-034), DATABASE, TESTING, ENVIRONMENT, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
+Open questions for the owner: separate `patient_id` index on the result tables (DATABASE.md §6) — only the composite index exists
+Next step: `/me` + consent + role lookup (plan first).

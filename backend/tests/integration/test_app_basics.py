@@ -10,21 +10,18 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from app.core.config import Settings
 from app.core.errors import AppError
 from app.core.logging import LOGGER_NAME, JsonFormatter
 from app.main import create_app
+from tests.helpers import down_engine, make_settings, working_engine
 
 ORIGIN = "http://localhost:5173"
-AUTH: dict[str, Any] = {
-    "supabase_jwks_url": "https://example.test/auth/v1/.well-known/jwks.json",
-    "supabase_jwt_issuer": "https://example.test/auth/v1",
-}
 
 
 @pytest.fixture
-def app() -> FastAPI:
-    app = create_app(Settings(_env_file=None, cors_origins=ORIGIN, **AUTH))
+def app() -> Iterator[FastAPI]:
+    app = create_app(make_settings(cors_origins=ORIGIN))
+    app.state.engine = working_engine()
 
     # test-only routes, to exercise the error paths
     @app.get("/test/app-error")
@@ -39,7 +36,8 @@ def app() -> FastAPI:
     def needs_int(n: int) -> dict[str, int]:
         return {"n": n}
 
-    return app
+    yield app
+    app.state.engine.dispose()  # close the in-memory database
 
 
 @pytest.fixture
@@ -53,6 +51,7 @@ def test_health(client: TestClient) -> None:
     assert res.json() == {
         "data": {
             "status": "ok",
+            "db": "ok",
             "models_loaded": False,
             "rules_loaded": {"genetic": False, "symptoms": False, "journey": False},
             "version": "0.0.0",
@@ -60,6 +59,13 @@ def test_health(client: TestClient) -> None:
         "error": None,
     }
     assert len(res.headers["X-Request-ID"]) == 32
+
+
+def test_health_reports_db_error_when_database_is_down(app: FastAPI, client: TestClient) -> None:
+    app.state.engine = down_engine()
+    res = client.get("/api/v1/health")
+    assert res.status_code == 200  # the service itself is up; only the database is down
+    assert res.json()["data"]["db"] == "error"
 
 
 def test_unknown_route_is_not_found_envelope(client: TestClient) -> None:

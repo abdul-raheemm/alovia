@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     # token verification (SECURITY.md §1); required, so the app refuses to start without them
     supabase_jwks_url: str
     supabase_jwt_issuer: str
+    database_url: str
+    # separate, empty database used only by the migration tests (never the main project)
+    test_database_url: str | None = None
 
     @field_validator("cors_origins", mode="before")
     @classmethod

@@ -17,7 +17,7 @@
 Rule engines, PUQE, GA calculations, unit conversions, validation, message selection. **One test per rule row** where the spec says so.
 
 ### Integration (backend: pytest + httpx against a test database)
-Every route: happy path, validation errors, role and assignment checks (403/404), database writes, inbox item creation. Test database: a local Postgres (Docker or Supabase CLI local) or a separate Supabase test project `[CONFIRM]`; never the main project.
+Every route: happy path, validation errors, role and assignment checks (403/404), database writes, inbox item creation. Test database: the separate Supabase test project `alovia-test` (`TEST_DATABASE_URL`, DEC-034); never the main project.
 
 ### Frontend unit/component (Vitest + React Testing Library)
 Forms, state handling (loading/empty/error), components with logic (calendar markers, size card, red-flag result screen).

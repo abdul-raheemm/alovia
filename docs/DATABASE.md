@@ -37,7 +37,7 @@ Legend: **PK** primary key, **FK** foreign key, **U** unique, **N** nullable. Co
 **`users`** — one row per signed-in person
 | Column | Type | Notes |
 |---|---|---|
-| id | uuid PK | = Supabase Auth user id (`auth.users.id`) |
+| id | uuid PK | = Supabase Auth user id (`auth.users.id`); no foreign key to `auth.users` (DEC-033) |
 | email | text U | |
 | role | text | `patient` / `doctor` / `admin` |
 | is_active | boolean | default true |

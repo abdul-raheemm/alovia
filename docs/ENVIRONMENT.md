@@ -9,6 +9,7 @@ Each part has its own `.env.example` (committed, empty values) and `.env` (never
 |---|---|---|
 | `APP_ENV` | `development` / `test` / `production` | 1 |
 | `DATABASE_URL` | Supabase Postgres connection string (owner provides; pooled vs direct checked at deploy) | 1 |
+| `TEST_DATABASE_URL` | Connection string of the separate, empty `alovia-test` Supabase project, used only by the migration tests (never the main project) | 1 |
 | `SUPABASE_URL` | Project URL | 1 |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-side key (Storage, admin invites) | 1 |
 | `SUPABASE_JWT_ISSUER` / `SUPABASE_JWKS_URL` | Token verification (the project uses JWT signing keys, so no JWT secret is needed) | 1 |

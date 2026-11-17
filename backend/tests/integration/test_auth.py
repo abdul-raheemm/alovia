@@ -19,9 +19,9 @@ from fastapi.testclient import TestClient
 
 from app.common.responses import ok
 from app.core.auth import CurrentUser, get_current_user
-from app.core.config import Settings
 from app.core.logging import LOGGER_NAME, JsonFormatter
 from app.main import create_app
+from tests.helpers import make_settings
 
 ISSUER = "https://example.test/auth/v1"
 KID = "test-key"
@@ -80,12 +80,7 @@ def unsigned_token(alg: str, secret: bytes | None = None) -> str:
 
 @pytest.fixture
 def app() -> FastAPI:
-    settings = Settings(
-        _env_file=None,
-        supabase_jwks_url="https://example.test/jwks",
-        supabase_jwt_issuer=ISSUER,
-    )
-    app = create_app(settings)
+    app = create_app(make_settings(supabase_jwt_issuer=ISSUER))
     app.state.jwks_client = FakeJWKClient(jwks_for(KEY))
 
     @app.get("/test/whoami")

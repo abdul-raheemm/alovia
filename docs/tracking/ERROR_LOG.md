@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Dispose every SQLAlchemy engine you create (tests, scripts, `migrations/env.py`); run tests with `-W error::ResourceWarning`.
 - Never chain a commit or push after file edits with `&&` alone: check that the edit step succeeded (git diff) before committing.
 - Before the first commit of any repo, write `.gitignore` and read `git status`.
 
@@ -116,3 +117,83 @@ Fix: the doc edits applied in a follow-up commit and pushed.
 Verified by: `git show --stat HEAD` lists the five docs; `grep DEC-031 docs/DECISIONS.md` finds the entry.
 Prevention: lesson line above — verify `git diff --stat` shows every intended file before committing.
 Category: tooling
+
+### ERR-010 — 2026-11-17 — Doubled CHECK constraint names in the migration
+Who: Claude Code
+Phase / task: Phase 1 — Alembic + Phase 1 migration
+What happened: `alembic upgrade head --sql` showed `ck_users_ck_users_role` and similar.
+Cause: the metadata naming convention (`ck_%(table_name)s_%(constraint_name)s`) was applied to names already written in full.
+Fix: mark full names as final with `op.f(...)`.
+Verified by: offline SQL vs models → 17/17 statements identical.
+Prevention: compare `--sql` output with the models before running any migration.
+Category: logic
+
+### ERR-011 — 2026-11-17 — My SQL comparison script skipped the users table
+Who: Claude Code
+Phase / task: Phase 1 — Alembic + Phase 1 migration
+What happened: the first comparison reported "only in models: CREATE TABLE users".
+Cause: the script dropped any statement starting with a `--` comment line; Alembic prints one before the first table.
+Fix: strip comment lines before splitting statements.
+Verified by: rerun → 17 statements in the migration, 17 in the models.
+Prevention: treat check scripts as code: sanity-check their counts.
+Category: tooling
+
+### ERR-012 — 2026-11-17 — Tests slowed from 1 s to 23 s
+Who: Claude Code
+Phase / task: Phase 1 — Alembic + Phase 1 migration
+What happened: `pytest` → 27 passed in 23.41 s after `/health` gained the db check.
+Cause: every `/health` test tried to connect to the unreachable test URL; refused connections are slow on Windows.
+Fix: tests use an in-memory database (`working_engine`) or an engine that fails at once (`down_engine`) from `tests/helpers.py`.
+Verified by: `pytest` → about 2 s.
+Prevention: tests never depend on network timeouts.
+Category: test
+
+### ERR-013 — 2026-11-17 — Unclosed database connections (ResourceWarning)
+Who: Claude Code
+Phase / task: Phase 1 — Alembic + Phase 1 migration
+What happened: `ResourceWarning: unclosed database` (sqlite) and `psycopg.Connection ... was deleted while still open`.
+Cause: engines created in a test fixture, in the `/health` database test and in `migrations/env.py` were never disposed.
+Fix: dispose each engine when done (fixture teardown, try/finally).
+Verified by: `pytest -W error::ResourceWarning -W error::pytest.PytestUnraisableExceptionWarning` → 39 passed.
+Prevention: lesson line above.
+Category: test
+
+### ERR-014 — 2026-11-17 — mypy found tests/helpers.py twice; scalar_one() returned Any
+Who: Claude Code
+Phase / task: Phase 1 — Alembic + Phase 1 migration
+What happened: `Source file found twice under different module names`; `Returning Any from function declared to return "UUID"`.
+Cause: no explicit package base for `tests`; SQLAlchemy `scalar_one()` is untyped.
+Fix: `mypy_path = "."` and `explicit_package_bases = true`; typed local variables.
+Verified by: `mypy app tests migrations` → Success.
+Prevention: run mypy on tests too, in every check.
+Category: tooling
+
+### ERR-015 — 2026-11-17 — Weak safety check in the migration tests (found in review)
+Who: Claude Code
+Phase / task: Phase 1 — Alembic + Phase 1 migration
+What happened: the check compared host, user and database name; a Direct URL and a pooler URL of the same project differ in both, so the destructive tests could have run on the main project.
+Cause: one Supabase project has two connection-string styles.
+Fix: compare the Supabase project id (`postgres.<ref>` user or `db.<ref>.supabase.co` host); refuse unknown URLs; 3 tests for it.
+Verified by: `pytest -k project_ref` → 3 passed.
+Prevention: a destructive test identifies its target by the most stable id available.
+Category: logic
+
+### ERR-016 — 2026-11-17 — Alembic deprecation warning failed the test setup
+Who: Claude Code
+Phase / task: Phase 1 — Alembic + Phase 1 migration
+What happened: `DeprecationWarning: No path_separator found in configuration` → 8 errors when warnings are errors.
+Cause: `alembic.ini` lacked `path_separator`.
+Fix: added `path_separator = os` (the setting Alembic recommends).
+Verified by: full suite → 39 passed.
+Prevention: none needed.
+Category: dependency
+
+### ERR-017 — 2026-11-17 — Savepoint closed in the wrong order in the constraint tests
+Who: Claude Code
+Phase / task: Phase 1 — Alembic + Phase 1 migration
+What happened: `InFailedSqlTransaction ... RELEASE SAVEPOINT sa_savepoint_1` in 4 tests (the constraints themselves did reject the rows).
+Cause: `with conn.begin_nested(), pytest.raises(...)` let pytest catch the error before the savepoint saw it, so it tried to release a failed savepoint.
+Fix: order `with pytest.raises(...), conn.begin_nested():`.
+Verified by: full suite → 39 passed, twice.
+Prevention: when testing for a database error inside a savepoint, the savepoint goes innermost.
+Category: test
