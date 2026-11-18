@@ -1,15 +1,17 @@
-# Prototype size reference (journey spec §7.2, DEC-043) — a SAMPLE of weeks; weeks without a
-# row show no size comparison (§15 test 7). review_status stays unreviewed until a doctor
-# confirms each week's comparison object (R2).
+# Prototype size reference (journey spec §7.2, DEC-043): weeks 14-40, the range of the WHO
+# chart. Weeks without a row (0-13, 41-42) show no size comparison (§15 test 7).
+# review_status stays unreviewed until a doctor confirms each week's comparison object (R2).
 #
 # Weights: WHO Fetal Growth Charts, Table 11 ("Growth chart for estimated fetal weight
-# regardless of fetal sex"), 50th percentile, grams — transcribed on 2026-11-17 from the
-# published table image (doi:10.1371/journal.pmed.1002220.t011, CC BY 4.0). No value was
+# regardless of fetal sex"), 50th percentile, grams — read from the published table image
+# (doi:10.1371/journal.pmed.1002220.t011, CC BY 4.0, downloaded 2026-11-17): weeks 14, 16, 20,
+# 24, 28, 32 and 36 transcribed on 2026-11-17, the other weeks on 2026-11-18. No value was
 # estimated or interpolated. Lengths: none (the chart gives weight only).
 #
 # Comparison objects: Microsoft Fluent Emoji (MIT), icons in
 # frontend/apps/patient-web/public/icons/fluent/. Object choices are the agent's DRAFT,
-# preferring objects familiar in India (DEC-043); a doctor reviews each one (R2).
+# preferring objects familiar in India (DEC-043); neighbouring weeks may share an object.
+# A doctor reviews each one (R2).
 sizes:
   - week: 14
     weight_g: 90
@@ -22,10 +24,34 @@ sizes:
       licence: "CC BY 4.0"
       date_accessed: 2026-11-17
     review_status: unreviewed
+  - week: 15
+    weight_g: 114
+    object_icon_id: orange
+    object_name: orange
+    source: *who
+    review_status: unreviewed
   - week: 16
     weight_g: 144
     object_icon_id: tomato
     object_name: tomato
+    source: *who
+    review_status: unreviewed
+  - week: 17
+    weight_g: 179
+    object_icon_id: apple
+    object_name: apple
+    source: *who
+    review_status: unreviewed
+  - week: 18
+    weight_g: 222
+    object_icon_id: capsicum
+    object_name: capsicum
+    source: *who
+    review_status: unreviewed
+  - week: 19
+    weight_g: 272
+    object_icon_id: corn
+    object_name: corn cob
     source: *who
     review_status: unreviewed
   - week: 20
@@ -34,10 +60,46 @@ sizes:
     object_name: mango
     source: *who
     review_status: unreviewed
+  - week: 21
+    weight_g: 398
+    object_icon_id: brinjal
+    object_name: brinjal
+    source: *who
+    review_status: unreviewed
+  - week: 22
+    weight_g: 476
+    object_icon_id: grapes
+    object_name: bunch of grapes
+    source: *who
+    review_status: unreviewed
+  - week: 23
+    weight_g: 565
+    object_icon_id: broccoli
+    object_name: broccoli
+    source: *who
+    review_status: unreviewed
   - week: 24
     weight_g: 665
     object_icon_id: coconut
     object_name: coconut
+    source: *who
+    review_status: unreviewed
+  - week: 25
+    weight_g: 778
+    object_icon_id: coconut
+    object_name: coconut
+    source: *who
+    review_status: unreviewed
+  - week: 26
+    weight_g: 902
+    object_icon_id: pineapple
+    object_name: pineapple
+    source: *who
+    review_status: unreviewed
+  - week: 27
+    weight_g: 1039
+    object_icon_id: pineapple
+    object_name: pineapple
     source: *who
     review_status: unreviewed
   - week: 28
@@ -46,15 +108,75 @@ sizes:
     object_name: pineapple
     source: *who
     review_status: unreviewed
+  - week: 29
+    weight_g: 1350
+    object_icon_id: melon
+    object_name: melon
+    source: *who
+    review_status: unreviewed
+  - week: 30
+    weight_g: 1523
+    object_icon_id: melon
+    object_name: melon
+    source: *who
+    review_status: unreviewed
+  - week: 31
+    weight_g: 1707
+    object_icon_id: melon
+    object_name: melon
+    source: *who
+    review_status: unreviewed
   - week: 32
     weight_g: 1901
     object_icon_id: melon
     object_name: melon
     source: *who
     review_status: unreviewed
+  - week: 33
+    weight_g: 2103
+    object_icon_id: melon
+    object_name: melon
+    source: *who
+    review_status: unreviewed
+  - week: 34
+    weight_g: 2312
+    object_icon_id: watermelon
+    object_name: small watermelon
+    source: *who
+    review_status: unreviewed
+  - week: 35
+    weight_g: 2527
+    object_icon_id: watermelon
+    object_name: small watermelon
+    source: *who
+    review_status: unreviewed
   - week: 36
     weight_g: 2745
     object_icon_id: watermelon
     object_name: small watermelon
+    source: *who
+    review_status: unreviewed
+  - week: 37
+    weight_g: 2966
+    object_icon_id: watermelon
+    object_name: watermelon
+    source: *who
+    review_status: unreviewed
+  - week: 38
+    weight_g: 3186
+    object_icon_id: watermelon
+    object_name: watermelon
+    source: *who
+    review_status: unreviewed
+  - week: 39
+    weight_g: 3403
+    object_icon_id: watermelon
+    object_name: watermelon
+    source: *who
+    review_status: unreviewed
+  - week: 40
+    weight_g: 3617
+    object_icon_id: watermelon
+    object_name: watermelon
     source: *who
     review_status: unreviewed

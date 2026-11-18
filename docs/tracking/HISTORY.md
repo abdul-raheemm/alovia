@@ -605,3 +605,13 @@ Suggestions raised (not implemented): a tighter product rule for appointment dat
 Docs updated: CHANGELOG, CREDITS, API, DECISIONS, PROGRESS, CONTEXT, HISTORY, ERROR_LOG
 Open questions for the owner: see the "left for the owner" list in the task 9 report (doctor approvals, [OPEN] items, OpenStax, interpretations, merge)
 Next step: owner review of Phase 2 → merge the phase-2 branches into main → Phase 3.
+
+## Session 19 — 2026-11-18 — Phase 2 follow-ups: size weeks 14-40, drawing search
+Who: Raheem + agent: Claude Code (owner approved both)
+Phase / task: Phase 2 — before the owner's review
+Done:
+- `size_reference.yaml`: every week 14-40 from WHO Table 11 (50th percentile), read again from the downloaded table image; the 7 earlier values match. Draft objects for the new weeks (orange, apple, capsicum, corn cob, brinjal, bunch of grapes, broccoli; neighbouring weeks share coconut, pineapple, melon, watermelon); 7 more Fluent Emoji SVGs (MIT), checked for scripts/links before use; unit test now checks all 27 values and that every icon file exists.
+- Month drawing search: womenshealth.gov has a 9-image stage series, but every image is marked "©peggerrity.com" (third-party copyright) → not allowed; scratch copies deleted, nothing added to the repo. Servier Medical Art (CC BY 4.0) has single images only. Wellcome Collection has public-domain engravings (1818, c.1850) in two different styles. Placeholders stay until the owner decides.
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 231 passed; Vitest 38 passed; Playwright 66 passed; ruff, mypy, typecheck, lint, format pass.
+Docs updated: CREDITS, CHANGELOG, CONTEXT, HISTORY
+Next step: owner review and decisions → merge to main.

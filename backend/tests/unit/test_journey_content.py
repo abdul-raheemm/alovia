@@ -110,7 +110,7 @@ def test_shipped_prototype_content_covers_the_sample(tmp_path: Path) -> None:
 
 
 def test_shipped_size_reference_sample() -> None:
-    """§7.2 / DEC-043: WHO Table 11 50th-percentile sample; unsampled weeks show nothing."""
+    """§7.2 / DEC-043: WHO Table 11 50th percentile, weeks 14-40; other weeks show nothing."""
     provider = PrototypeContentProvider(CONTENT_DIR)
     weights = {}
     for week in range(0, 43):
@@ -120,8 +120,14 @@ def test_shipped_size_reference_sample() -> None:
             assert size.weight_g is not None and size.length_cm is None
             assert "1002220" in size.source.url  # the WHO charts article
             weights[week] = size.weight_g
-    assert weights == {14: 90, 16: 144, 20: 330, 24: 665, 28: 1189, 32: 1901, 36: 2745}
-    assert provider.size_for_week(15) is None and provider.size_for_week(40) is None
+    # every value exactly as printed in the table (doi:10.1371/journal.pmed.1002220.t011)
+    assert weights == {
+        14: 90, 15: 114, 16: 144, 17: 179, 18: 222, 19: 272, 20: 330, 21: 398, 22: 476,
+        23: 565, 24: 665, 25: 778, 26: 902, 27: 1039, 28: 1189, 29: 1350, 30: 1523,
+        31: 1707, 32: 1901, 33: 2103, 34: 2312, 35: 2527, 36: 2745, 37: 2966, 38: 3186,
+        39: 3403, 40: 3617,
+    }  # fmt: skip
+    assert provider.size_for_week(13) is None and provider.size_for_week(41) is None
     assert list(weights.values()) == sorted(weights.values())  # strictly growing
     icons = Path(__file__).resolve().parents[3] / "frontend/apps/patient-web/public/icons/fluent"
     for week in weights:

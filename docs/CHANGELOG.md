@@ -7,7 +7,7 @@ Format: newest first. Versions: `0.<phase>.<patch>` until the first full release
 ### Added
 - Pregnancy dates: onboarding with three options (last period, doctor's due date, ultrasound), date rules D1–D3, confirmation before an estimate replaces a doctor's or scan date, full date history.
 - Journey home: weeks and days, days to go, due date with "estimate" label, baby card with a gentle floating month drawing (placeholder drawings, reduced-motion respected) and a typical-size comparison, "This stage" content, quick-log shortcut, this-week strip, next appointment, nine swipeable month cards and month detail pages.
-- Prototype content with sources on every card (Office on Women's Health, NHS under the Open Government Licence, MedlinePlus) and a WHO fetal-growth size sample with Fluent Emoji icons; a prototype banner on every content screen. All content awaits doctor review.
+- Prototype content with sources on every card (Office on Women's Health, NHS under the Open Government Licence, MedlinePlus) and WHO fetal-growth weights for weeks 14–40 with Fluent Emoji comparison icons; a prototype banner on every content screen. All content awaits doctor review.
 - Calendar tab: month view with milestone and appointment markers, day details, navigation from pregnancy start to due date plus two weeks.
 - Appointments tab: add, edit and delete her own appointments (date, optional time, title, note); doctor-added appointments are labelled and read-only.
 - Notification bar: new week, new month, appointment soon and doctor-note notices, created when the app opens, each once; tap to open, dismiss to hide.

@@ -12,7 +12,7 @@ Every third-party asset used in the apps must be listed here **before** it is us
 | Asset | Licence | Use |
 |---|---|---|
 | Lucide icons | ISC | UI icons |
-| Microsoft Fluent UI Emoji (https://github.com/microsoft/fluentui-emoji), colour SVGs: coconut, lemon, mango, melon, pineapple, tomato, watermelon — unchanged, in `frontend/apps/patient-web/public/icons/fluent/` with the MIT `LICENSE` file | MIT (include licence notice) | Baby-size comparison objects |
+| Microsoft Fluent UI Emoji (https://github.com/microsoft/fluentui-emoji), colour SVGs: apple, brinjal (Eggplant), broccoli, capsicum (Bell pepper), coconut, corn (Ear of corn), grapes, lemon, mango, melon, orange (Tangerine), pineapple, tomato, watermelon — unchanged; downloaded 2026-11-17 and 2026-11-18, in `frontend/apps/patient-web/public/icons/fluent/` with the MIT `LICENSE` file | MIT (include licence notice) | Baby-size comparison objects |
 
 ## Illustrations (Journey month cards)
 | File | Source URL | Author/publisher | Licence | Date downloaded | Changes |
@@ -20,6 +20,8 @@ Every third-party asset used in the apps must be listed here **before** it is us
 | month_1 … month_9 | `[OPEN]` | | Public domain / CC0 / CC BY / CC BY-SA only | | |
 
 Prototype only (Journey §7.1): `month_1.svg` … `month_9.svg` are simple placeholder shapes labelled "Placeholder", made by `frontend/scripts/make-placeholder-illustrations.mjs` — no third-party asset. Allowed only while the prototype banner is shown; they must be replaced by openly licensed drawings (and recorded above) before release.
+
+Checked and **not allowed** (2026-11-18): the nine fetal-stage images on womenshealth.gov "Stages of pregnancy" (`/sites/default/files/images/01months.jpg` … `09months.jpg`) carry a printed "©peggerrity.com" mark — a third-party illustrator's copyright that the site's "free of copyright restrictions" statement does not cover. Servier Medical Art (CC BY 4.0) has no month-by-month series.
 
 ## Animations
 | File | Source | Licence |
