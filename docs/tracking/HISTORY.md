@@ -615,3 +615,10 @@ Done:
 Checks: `bash scripts/check_all.sh` → exit 0: pytest 231 passed; Vitest 38 passed; Playwright 66 passed; ruff, mypy, typecheck, lint, format pass.
 Docs updated: CREDITS, CHANGELOG, CONTEXT, HISTORY
 Next step: owner review and decisions → merge to main.
+
+## Session 20 — 2026-11-18 — Owner decisions after the Phase 2 report
+Who: Raheem + agent: Claude Code
+Decisions (owner): 1a keep the placeholder drawings (DEC-050); remove OpenStax (DEC-051); keep the 1900-2999 date limits (DEC-052); interpretations from tasks 6-8 accepted (DEC-053). DEC-042 marked "OpenStax part superseded".
+Docs changed: Journey spec (D9, §7.2 weeks before 14, §8.3 sources, the OpenStax conversion note removed, S2 row marked removed with its ID kept), RAG spec licence example, DECISIONS, CONTEXT, `backend/content/prototype_content.yaml` comment.
+Checks: `pytest tests/unit/test_journey_content.py` → 12 passed (only a YAML comment changed in code).
+Next step: owner reads the explanation of items 6-14, then the merge decision (item 5).

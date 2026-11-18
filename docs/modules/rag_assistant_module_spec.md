@@ -158,7 +158,7 @@ System rules (section 7.2), the retrieved chunks numbered [1]…[k] with their t
 | Licence of the cited file | Answer shows | Sources panel shows |
 |---|---|---|
 | NHS (OGL v3.0) | "Contains public sector information licensed under the Open Government Licence v3.0." | The original chunk text **word for word**, with "Information from the NHS website as at DDMMYY" (the file's copy date) and its URL |
-| Public domain / CC BY (e.g. MedlinePlus, womenshealth.gov, OpenStax) | Normal citation numbers | Title, publisher, URL, licence; CC BY attribution text where required |
+| Public domain / CC BY (e.g. MedlinePlus, womenshealth.gov) | Normal citation numbers | Title, publisher, URL, licence; CC BY attribution text where required |
 | Tier B (e.g. WHO, NHM) | Normal citation numbers | Title, publisher, URL, licence with its conditions |
 
 The `licence` and `attribution` fields come from the chunk's labels; nothing is typed by hand.

@@ -80,7 +80,7 @@ The Pregnancy Journey is the **home screen of the patient app**. It is the first
 | D6 | Content granularity | Kept open. The data model supports month, week and week-range items without code change. | 2026-11-16 |
 | D7 | Content source | Final content comes from the knowledge base when it is ready (built last, after the RAG module). Until then, small prototype content from trusted web sources (section 8.3). | 2026-11-16 |
 | D8 | Rewiring | Content is read through a content provider interface; switching from prototype to knowledge base is a config change (`content_source`) | 2026-11-16 |
-| D9 | Content sources (knowledge base additions) | womenshealth.gov (public domain), OpenStax textbooks (CC BY 4.0); WHO fetal growth charts as size data only | 2026-11-16 |
+| D9 | Content sources (knowledge base additions) | womenshealth.gov (public domain); WHO fetal growth charts as size data only. OpenStax removed 2026-11-18 (owner, DEC-051: its licence is CC BY-NC-SA, not allowed) | 2026-11-16 |
 | D10 | Pregnancy end | Included in v1, with a compassionate, safe flow (section 11) | 2026-11-16 |
 | D11 | Notifications | In-app notification bar only | 2026-11-16 |
 | D12 | Navigation | A nav bar to Home, Calendar, Log symptoms, Appointments, Doctor notes and More; items are configurable so new features can be added | 2026-11-16 |
@@ -216,7 +216,7 @@ New week (each 7 days from GA 0), new month (first week of each month in 6.3), n
 
 ### 7.2 Size comparison
 - Shown from the `size_reference` data (section 14): for each week, a typical length and/or weight, its source, and a comparison object (icon ID + name).
-- Weeks 14–40: typical weight from the WHO fetal growth charts (S3), 50th percentile. Weeks before 14: typical size from womenshealth.gov (S1) or OpenStax (S2), as given there.
+- Weeks 14–40: typical weight from the WHO fetal growth charts (S3), 50th percentile. Weeks before 14: typical size from womenshealth.gov (S1), as given there.
 - Weeks without a sourced value show no size comparison, never a guess.
 - Comparison objects: icons from **Microsoft Fluent Emoji** only (MIT licence, S6). Include the MIT licence notice on the Credits screen and in `docs/credits.md`. Do not mix in icons from other sets. Objects familiar in India (for example mango, coconut) are preferred where the icon exists.
 - Wording: "about the size of a [object]" plus the typical value. Never "your baby weighs".
@@ -272,11 +272,10 @@ class ContentProvider(Protocol):
 `config.yaml`: `content_source: prototype | knowledge_base` `[CONFIGURABLE]`. The frontend and API never know which provider is active. **Switching is a config change only.**
 
 ### 8.3 Prototype content rules
-- Written only from these sources: womenshealth.gov (S1), OpenStax (S2), NHS and MedlinePlus pages already in the knowledge base (Tier A), WHO growth charts (S3) for sizes only.
+- Written only from these sources: womenshealth.gov (S1), NHS and MedlinePlus pages already in the knowledge base (Tier A), WHO growth charts (S3) for sizes only.
 - Small: enough to test every screen (all 9 months, a sample of weeks, each `content_type` at least once). Not full coverage.
 - Every item has a source URL and access date, `is_prototype: true`, `review_status: unreviewed`.
 - Public-domain and CC BY text may be shortened to fit a card. NHS text is used only as unchanged excerpts with the knowledge base's NHS attribution, or not at all.
-- OpenStax gives ages from fertilisation: add 2 weeks to convert to the LMP convention and note this in the item.
 - While prototype content is active, `show_prototype_banner: true` shows `msg_prototype_content` on every content screen. Prototype content is not for real patients.
 
 ### 8.4 Final content rules (knowledge base)
@@ -568,7 +567,7 @@ journey_module/
 | ID | Source |
 |---|---|
 | S1 | U.S. Office on Women's Health, "Stages of pregnancy" (public domain; reuse policy: https://womenshealth.gov/about-us/work-us/collaborate-us). https://womenshealth.gov/pregnancy/youre-pregnant-now-what/stages-pregnancy |
-| S2 | OpenStax (Rice University), Anatomy and Physiology 2e, ch. 28 (CC BY 4.0). https://openstax.org/books/anatomy-and-physiology-2e/pages/28-3-fetal-development ; Maternal Newborn Nursing, 10.4. https://openstax.org/books/maternal-newborn-nursing/pages/10-4-fetal-growth-and-development |
+| S2 | Removed 2026-11-18 (owner, DEC-051). Was OpenStax (Rice University) Anatomy and Physiology 2e ch. 28 and Maternal Newborn Nursing 10.4, cited as CC BY 4.0; the live pages state CC BY-NC-SA 4.0 and forbid LLM ingestion, which the licence rules do not allow. The ID is kept so other references stay valid. |
 | S3 | Kiserud T et al. (2017), The World Health Organization Fetal Growth Charts, PLOS Medicine 14(1): e1002220 (CC BY 4.0), with corrections (2017, 2021). https://doi.org/10.1371/journal.pmed.1002220 |
 | S4 | MoHFW / NHM, Mother and Child Protection (MCP) Card, danger signs. https://nhm.gov.in/New_Updates_2018/NHM_Components/Immunization/Guildelines_for_immunization/MCP_Card_English_version.pdf |
 | S5 | LottieFiles, Lottie Simple License. https://help.lottiefiles.com/animation-licensing-basics- |

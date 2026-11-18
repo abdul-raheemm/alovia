@@ -11,8 +11,8 @@
 #   (fetched 2026-11-17). Bodies keep only the page's stated values inside the fixed frame
 #   "Typical at this stage: ..." because spec §13.1 forbids the page's own "your baby
 #   is/weighs" phrasing on screens. No medical statement was added.
-# - OpenStax (spec S2) is NOT used: its live page is CC BY-NC-SA, which the project's
-#   licence rules do not allow (open question for the owner; see tracking/CONTEXT.md).
+# - OpenStax is not a source: removed from the spec by the owner (DEC-051; its live
+#   licence is CC BY-NC-SA, which the project's licence rules do not allow).
 items:
   # ---- fetal development: one month item per month (values from OWH "Stages of pregnancy") ----
   - id: owh_month_1
