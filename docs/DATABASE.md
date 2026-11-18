@@ -180,6 +180,8 @@ Unique: (`result_type`, `result_id`).
 **`symptom_checkins`** (append-only)
 `id` uuid PK · `patient_id` FK · `source` text (`form`/`urgent_button`) · `pregnancy_week` int N · `red_flag_level` text (`L0`/`L1`/`L2`) · `matched_rules` jsonb · `message_keys` jsonb · `pattern_changes` jsonb · `rules_version` text · `created_at`.
 
+Indexes (migration 0003): `symptom_checkins (patient_id, created_at DESC)`; `symptom_logs` on `patient_id` and on `checkin_id` (entries are read per check-in). CHECKs: `source`, `red_flag_level`, `severity`, `duration` (incl. the labour-pain ranges), `body_area`, notes ≤ 500.
+
 **`symptom_logs`** (append-only)
 `id` uuid PK · `checkin_id` FK symptom_checkins · `patient_id` FK · `symptom` text · `severity` text N · `duration` text N · `body_area` text N · `details` jsonb N · `occurred_at` time N · `notes` text N (≤500) · `created_at`.
 

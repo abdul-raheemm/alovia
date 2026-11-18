@@ -42,7 +42,7 @@ Update after every task. Each line: status, task, who, date, notes.
 Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month cards (task 5) **before** the content provider (task 4); then calendar/appointments, notifications, pregnancy end, task 0, review.
 
 ## Phase 3 — Symptom Tracking
-- [ ] Migration; vocabulary YAML; red-flag YAML; PUQE; pattern rules
+- [x] Migration; vocabulary YAML; red-flag YAML; PUQE; pattern rules — Raheem + Claude Code — 2026-11-18 (migration 0003 tested on alovia-test and applied to main; `backend/rules/symptoms/` config, symptoms, red_flags (25 rules), puqe (official wording), patterns, messages + helplines; loader `app/modules/symptoms/rules.py` checks and cross-checks at startup; /health reports symptoms rules loaded)
 - [ ] Engine + one test per rule; API; inbox items
 - [ ] Log page, urgent button (bundled advice), result screens, charts, calendar dots, weekly summary
 - [ ] E2E; review; CHANGELOG 0.3.0

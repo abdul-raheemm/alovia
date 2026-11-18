@@ -1,0 +1,24 @@
+# PUQE-24 (Symptom spec §8). Question and answer wording copied word for word on 2026-11-18 from
+# the official sheet (S5): only the printed point markers "(1)"…"(5)" were removed. Each answer
+# scores 1-5; total = sum (3-15).
+# Bands follow the spec (§8: 3-6 mild, 7-12 moderate, 13-15 severe, citing S5 and S6). Note for
+# the rule review (A2): the S5 sheet prints "4 - 6" for MILD NVP and gives no band for a total of 3.
+source:
+  publisher: Association of Ontario Midwives (scale created by Motherisk)
+  title: "Pregnancy-Unique Quantification of Emesis (PUQE-24) scale"
+  url: "https://www.ontariomidwives.ca/sites/default/files/Clinical%20Topics/NVP%20algorithm%20-%20PUQE%20score%20-%20V01.pdf"
+  date_accessed: 2026-11-18
+questions:
+  - id: nausea_hours
+    text: "In the last 24 hours, how long have you felt nauseated or sick to your stomach?"
+    answers: { 1: "Not at all", 2: "1 hour or less", 3: "2 - 3 hours", 4: "4 - 6 hours", 5: "More than 6 hours" }
+  - id: vomiting_times
+    text: "In the last 24 hours, have you vomited or thrown up?"
+    answers: { 1: "I did not throw up", 2: "1 - 2 times", 3: "3 - 4 times", 4: "5 - 6 times", 5: "7 or more times" }
+  - id: retching_times
+    text: "In the last 24 hours, how many times have you had retching or dry heaves without bringing anything up?"
+    answers: { 1: "No time", 2: "1 - 2 times", 3: "3 - 4 times", 4: "5 - 6 times", 5: "7 or more times" }
+bands:
+  - { band: mild, min: 3, max: 6 }
+  - { band: moderate, min: 7, max: 12 }
+  - { band: severe, min: 13, max: 15 }

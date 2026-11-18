@@ -18,6 +18,7 @@ from app.modules.journey.config import (
 )
 from app.modules.journey.content import load_content_provider
 from app.modules.predictions.risk_model import load_models
+from app.modules.symptoms.rules import load_symptom_rules
 from app.modules.users import router as users
 
 
@@ -33,6 +34,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     load_journey_messages()  # same for messages.yaml
     load_helplines()  # and its official helpline numbers (§13.3)
     app.state.content_provider = load_content_provider()  # and for the content files (§8.2)
+    app.state.symptom_rules = load_symptom_rules()  # red-flag rules etc. (Symptom spec §13)
     # public signing keys, fetched on first use and cached (app.core.auth)
     app.state.jwks_client = jwt.PyJWKClient(settings.supabase_jwks_url, cache_keys=True)
     register_error_handlers(app)

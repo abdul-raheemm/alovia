@@ -1,0 +1,81 @@
+# Input vocabulary (Symptom spec §5). Labels are the spec's "Shown as" wording; option labels
+# are the spec's IDs written as words. Nothing here is medical advice.
+severities: { mild: Mild, moderate: Moderate, severe: Severe }
+durations:
+  under_1_hour: Under 1 hour
+  1_to_6_hours: 1 to 6 hours
+  most_of_the_day: Most of the day
+  more_than_1_day: More than 1 day
+labour_durations: { under_12_hours: Under 12 hours, more_than_12_hours: More than 12 hours }
+body_areas:
+  head: Head
+  chest: Chest
+  upper_abdomen: Upper abdomen
+  lower_abdomen: Lower abdomen
+  back: Back
+  pelvis: Pelvis
+  legs: Legs
+  other: Other
+
+# §5.1 everyday symptoms and the details each one asks for
+common:
+  - id: nausea_vomiting
+    label: Nausea / vomiting
+    puqe: true                                   # §8 questions
+    flags: { unable_to_keep_fluids: Unable to keep fluids }
+  - id: fatigue
+    label: Tiredness
+    severity: true
+    duration: true
+  - id: headache
+    label: Headache
+    severity: true
+    duration: true
+    flags: { with_vision_problems: With vision problems, with_swelling: With swelling }
+  - id: abdominal_discomfort
+    label: Stomach / abdominal pain or discomfort
+    severity: true
+    duration: true
+    body_area: { required: true, choices: [upper_abdomen, lower_abdomen] }
+  - id: back_pain
+    label: Back pain
+    severity: true
+    duration: true
+  - id: breast_tenderness
+    label: Breast tenderness
+    severity: true
+    duration: true
+  - id: food_craving
+    label: Food craving
+    text: { field: food, label: Which food, required: false, max_length: 100 }
+  - id: appetite_change
+    label: Change in appetite
+    choice: { field: appetite, options: { more: More, less: Less } }
+  - id: mood_change
+    label: Mood change
+    severity: true
+  - id: other
+    label: Something else
+    text: { field: name, label: Name, required: true, max_length: 100 }
+    severity: true
+    duration: true
+    body_area: { required: false, choices: [head, chest, upper_abdomen, lower_abdomen, back, pelvis, legs, other] }
+
+# §5.2 warning signs: selecting is enough (no severity or duration)
+warning:
+  - { id: vaginal_bleeding, label: "Bleeding from the vagina (any amount)" }
+  - { id: fits, label: "Fits / convulsions" }
+  - { id: vision_problems, label: "Blurred vision, flashing lights or spots" }
+  - { id: fluid_leaking, label: "Water breaking or fluid leaking from the vagina" }
+  - { id: high_fever, label: "High fever" }
+  - { id: sudden_breathlessness, label: "Sudden breathlessness" }
+  - { id: chest_pain, label: "Chest pain" }
+  - { id: fainting, label: "Fainting" }
+  # shown from the week setting on, or when the week is unknown (§5.2, §14 test 3; owner decision G)
+  - { id: baby_movements_reduced, label: "Baby moving less, or movements changed", from_week_setting: movements_from_week }
+  - { id: baby_movements_never_felt, label: "Have not yet felt the baby move", from_week_setting: never_felt_from_week }
+  - { id: labour_pains, label: "Labour pains / regular tightenings", labour_duration: true }
+  - { id: severe_itching, label: "Severe itching" }
+  - { id: sudden_swelling, label: "Sudden swelling of face, hands or body" }
+  - { id: leg_pain_one_side, label: "Pain or swelling in one leg" }
+  - { id: pain_passing_urine, label: "Pain or burning when passing urine" }

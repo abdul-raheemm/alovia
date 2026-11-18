@@ -639,3 +639,20 @@ Errors met: 2 small ones in my own edit scripts (an anchor that did not match �
 Checks: `bash scripts/check_all.sh` → exit 0: pytest 238 passed; Vitest 38 passed; Playwright 66 passed; ruff, mypy, typecheck, lint, format pass.
 Open: item 9 (legal placeholders) later; doctor review using the sheet.
 Next step: owner sends the sheet to a doctor; Phase 3 planning.
+
+## Session 22 — 2026-11-18 — Phase 3 task 1: symptom tables and rule files
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 3 — migration; vocabulary YAML; red-flag YAML; PUQE; pattern rules (Symptom spec §5, §7-9, §11, §13)
+Decisions: owner approved the Phase 3 plan decisions A-H as recommended (DEC-059 to DEC-066).
+Done:
+- Official sources fetched and checked by download: PUQE-24 sheet (S5) — exact question/answer text read from the PDF's tags (agent summary not trusted alone); PIB (MoHFW) release, 29 May 2024, for Tele MANAS 14416 / 1-800-891-4416. The MCP card's ANC timing was already checked in Session 21.
+- Migration 0003: `symptom_checkins`, `symptom_logs` (append-only, CHECKs, indexes); tested on alovia-test (upgrade/downgrade/upgrade, model match, constraint test), then applied to main (`alembic current` = 0003).
+- Rule files `backend/rules/symptoms/`: config (§13.2 defaults), symptoms (§5 labels word for word), red_flags (25 rules, spec condition text kept beside each machine-readable condition), puqe (official wording; spec bands), patterns (P1-P5), messages (7 keys, text pending) + helplines (emergency = Telangana Ambulance, mental health = Tele MANAS).
+- Loader `app/modules/symptoms/rules.py`: strict models and cross-checks (symptoms, flags, severities, durations, settings, unless-rules, PUQE bands 3-15, P1-P5, exact message keys, both helplines); loaded at startup; /health `symptoms: true`.
+- `Message`/`Helpline` moved to `app/common/rule_texts.py` (journey re-uses them; ARCHITECTURE §8).
+- Spec correction noted: the plan said 33 rules; the spec has 25 (14 L1 + 11 L2).
+Files changed: backend models, migration 0003, rules/symptoms/*, app/common/rule_texts.py, journey config/service imports, main.py, health.py, tests (rule files, migrations, app basics); docs DATABASE, DECISIONS, PROGRESS, CONTEXT, HISTORY, ERROR_LOG.
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 254 passed; Vitest 38 passed; Playwright 66 passed; ruff, mypy, typecheck, lint, format pass.
+Errors met: 1 (ERR-044)
+Open for the rule review: A2 now includes the sheet's "4 - 6" mild band vs the spec's 3-6.
+Next step: task 2 (engine: validation, rules, PUQE, patterns, V3 fallback, the 10 §14 tests).

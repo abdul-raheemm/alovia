@@ -9,11 +9,12 @@ from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
+from app.common.rule_texts import Message
 from app.core.errors import AppError
 from app.core.logging import logger
 from app.modules.dashboard import service as dashboard
 from app.modules.journey import engine
-from app.modules.journey.config import JourneyConfig, Message, load_helplines
+from app.modules.journey.config import JourneyConfig, load_helplines
 from app.modules.journey.content import ContentProvider, select_for_home
 from app.modules.journey.models import Appointment, Notification, PregnancyDateHistory
 from app.modules.journey.schemas import (

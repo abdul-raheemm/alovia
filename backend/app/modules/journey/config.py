@@ -10,6 +10,8 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from app.common.rule_texts import Helpline, Message
+
 CONFIG_FILE = Path(__file__).resolve().parents[3] / "rules" / "journey" / "config.yaml"
 MESSAGES_FILE = CONFIG_FILE.with_name("messages.yaml")
 MAX_WEEKS = 42  # §4.5: the week counter stops at 42
@@ -115,33 +117,6 @@ def parse_journey_config(text: str) -> JourneyConfig:
 @lru_cache
 def load_journey_config() -> JourneyConfig:
     return parse_journey_config(CONFIG_FILE.read_text(encoding="utf-8"))
-
-
-class Message(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-
-    intent: str = Field(min_length=1)  # from the spec, for reviewers; never shown to patients
-    text: str | None  # None until a doctor approves the wording (DEC-041)
-
-
-class Helpline(BaseModel):
-    """§13.3: a phone number copied from an official Government of India or Telangana page,
-    with its URL and date. Never typed from memory."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True)
-
-    label: str = Field(min_length=1)
-    numbers: tuple[str, ...] = Field(min_length=1)
-    source_title: str = Field(min_length=1)
-    source_url: str = Field(pattern=r"^https://")
-    date_accessed: date
-
-    @field_validator("numbers")
-    @classmethod
-    def digits_only(cls, value: tuple[str, ...]) -> tuple[str, ...]:
-        if not all(n.isdigit() for n in value):
-            raise ValueError("helpline numbers are digits only")
-        return value
 
 
 class _MessagesFile(BaseModel):

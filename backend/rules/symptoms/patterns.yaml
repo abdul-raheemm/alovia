@@ -1,0 +1,17 @@
+# Pattern-change rules (Symptom spec §9) — doctor only, never shown to the patient.
+# Thresholds are settings in config.yaml, confirmed at the rule review (A3).
+# For `other`, P1-P3 compare the entry's text name, case-insensitive.
+patterns:
+  - code: P1
+    spec: "A common symptom is logged for the first time ever for this patient"
+  - code: P2
+    spec: "An entry's severity is higher than every earlier entry of the same symptom within the window"
+    settings: [pattern_window_days]
+  - code: P3
+    spec: "The same common symptom is logged on at least p3_min_days different days within the window"
+    settings: [pattern_window_days, p3_min_days]
+  - code: P4
+    spec: "The PUQE band is higher than the band of the previous PUQE score"
+  - code: P5
+    spec: "At least p5_min_l2 check-ins at L2 within the window"
+    settings: [pattern_window_days, p5_min_l2]

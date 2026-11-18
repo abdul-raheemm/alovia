@@ -16,7 +16,7 @@ router = APIRouter(prefix=API_PREFIX)
 
 @router.get("/health")
 def health(request: Request) -> dict[str, Any]:
-    # genetic and symptoms rule files arrive in Phases 4 and 3
+    # genetic rule files arrive in Phase 4
     return ok(
         {
             "status": "ok",
@@ -24,7 +24,7 @@ def health(request: Request) -> dict[str, Any]:
             "models_loaded": request.app.state.models is not None,
             "rules_loaded": {
                 "genetic": False,
-                "symptoms": False,
+                "symptoms": request.app.state.symptom_rules is not None,
                 "journey": request.app.state.journey_config is not None,
             },
             "version": __version__,

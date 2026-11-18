@@ -1,0 +1,134 @@
+# Red-flag rules (Symptom spec §7) — must match the spec tables row for row (§0 rule 4).
+# `spec` is the spec's condition text; `when` is how the engine checks it. Settings named in
+# `when` come from config.yaml. A week rule with no known week is applied as if it matches (§1.3).
+# The level of a check-in is the highest matched level (L1 > L2 > L0); every match is stored.
+# Each rule is confirmed at the rule review (§16) before release.
+rules:
+  # ---- §7.2 Level 1: "Go to hospital now" ----
+  - id: L1-01
+    level: L1
+    spec: "`vaginal_bleeding` selected"
+    sources: [S1]
+    when: { symptom: vaginal_bleeding }
+  - id: L1-02
+    level: L1
+    spec: "`fits` selected"
+    sources: [S1]
+    when: { symptom: fits }
+  - id: L1-03
+    level: L1
+    spec: "`headache` with `with_vision_problems` or `with_swelling` ticked (any severity)"
+    sources: [S1, S3]
+    when: { symptom: headache, any_flag: [with_vision_problems, with_swelling] }
+  - id: L1-04
+    level: L1
+    spec: "`headache` and `sudden_swelling` in the same check-in"
+    sources: [S1, S3]
+    when: { symptom: headache, with_symptom: sudden_swelling }
+  - id: L1-05
+    level: L1
+    spec: "`vision_problems` selected [CONFIRM AT RULE REVIEW] (A1)"
+    sources: [S3]
+    when: { symptom: vision_problems }
+  - id: L1-06
+    level: L1
+    spec: "`fluid_leaking` selected"
+    sources: [S1]
+    when: { symptom: fluid_leaking }
+  - id: L1-07
+    level: L1
+    spec: "`high_fever` selected"
+    sources: [S1]
+    when: { symptom: high_fever }
+  - id: L1-08
+    level: L1
+    spec: "`sudden_breathlessness` selected"
+    sources: [S1, S2]
+    when: { symptom: sudden_breathlessness }
+  - id: L1-09
+    level: L1
+    spec: "`chest_pain` selected"
+    sources: [S3]
+    when: { symptom: chest_pain }
+  - id: L1-10
+    level: L1
+    spec: "`fainting` selected"
+    sources: [S2]
+    when: { symptom: fainting }
+  - id: L1-11
+    level: L1
+    spec: "`abdominal_discomfort` with severity `severe` (either body area)"
+    sources: [S2, S3]
+    when: { symptom: abdominal_discomfort, severity: severe }
+  - id: L1-12
+    level: L1
+    spec: "`baby_movements_reduced` selected"
+    sources: [S4]
+    when: { symptom: baby_movements_reduced }
+  - id: L1-13
+    level: L1
+    spec: "`labour_pains` with duration `more_than_12_hours`"
+    sources: [S1]
+    when: { symptom: labour_pains, duration: more_than_12_hours }
+  - id: L1-14
+    level: L1
+    spec: "`labour_pains` and pregnancy week < `preterm_before_week` (37), or week `null`"
+    sources: [S2]
+    when: { symptom: labour_pains, week_below: preterm_before_week }
+
+  # ---- §7.3 Level 2: "Contact your doctor today" ----
+  - id: L2-01
+    level: L2
+    spec: "`severe_itching` selected"
+    sources: [S3]
+    when: { symptom: severe_itching }
+  - id: L2-02
+    level: L2
+    spec: "`sudden_swelling` selected (without `headache` in the check-in)"
+    sources: [S3]
+    when: { symptom: sudden_swelling, without_symptom: headache }
+  - id: L2-03
+    level: L2
+    spec: "`leg_pain_one_side` selected"
+    sources: [S3]
+    when: { symptom: leg_pain_one_side }
+  - id: L2-04
+    level: L2
+    spec: "`pain_passing_urine` selected"
+    sources: [S3]
+    when: { symptom: pain_passing_urine }
+  - id: L2-05
+    level: L2
+    spec: "`nausea_vomiting` with PUQE score >= 13"
+    sources: [S5, S6]
+    when: { symptom: nausea_vomiting, puqe_at_least: 13 }
+  - id: L2-06
+    level: L2
+    spec: "`nausea_vomiting` with `unable_to_keep_fluids` ticked"
+    sources: [S6]
+    when: { symptom: nausea_vomiting, any_flag: [unable_to_keep_fluids] }
+  - id: L2-07
+    level: L2
+    spec: "`headache` with severity `severe` (and no L1-03/L1-04 match)"
+    sources: [S3]
+    when: { symptom: headache, severity: severe, unless_rules: [L1-03, L1-04] }
+  - id: L2-08
+    level: L2
+    spec: "`mood_change` with severity `severe` (also shows `msg_mood_support`)"
+    sources: []
+    when: { symptom: mood_change, severity: severe }
+  - id: L2-09
+    level: L2
+    spec: "`baby_movements_never_felt` selected"
+    sources: [S4]
+    when: { symptom: baby_movements_never_felt }
+  - id: L2-10
+    level: L2
+    spec: "`labour_pains` at pregnancy week >= 37 and duration `under_12_hours`"
+    sources: []
+    when: { symptom: labour_pains, week_at_least: preterm_before_week, duration: under_12_hours }
+  - id: L2-11
+    level: L2
+    spec: "Catch-all: any entry with severity `severe` not matched by another L1 or L2 rule"
+    sources: []
+    when: { catch_all_severity: severe }

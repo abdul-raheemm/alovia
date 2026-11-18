@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- In Git Bash, never pass a Python regex with backslashes (or a long YAML/text block) through an inline heredoc; write a script or the file with the file tool (ERR-044).
 - Free date inputs need a range check at the API: a local date near year 1 or 9999 overflows when converted or shifted, and one stored bad row can break every later read (ERR-042).
 - Add every new third-party asset or data source to `docs/legal/CREDITS.md` in the same task that ships it (ERR-043).
 - `npm install -w <app> <pkg>` failing with "reading 'location'" (ERR-030, ERR-034): run a plain `npm install` first, then the workspace install.
@@ -464,3 +465,13 @@ Fix: CREDITS.md now lists the icon files, the placeholder drawings (own script, 
 Verified by: file paths checked on disk; check_all green (the About page renders CREDITS).
 Prevention: Lesson added.
 Category: process
+
+### ERR-044 — 2026-11-18 — Inline heredocs failed three times (regex escapes, long YAML)
+Who: Claude Code
+Phase / task: Phase 3 — task 1 (sources and rule files)
+What happened: (1) two inline Python heredocs with regex backslashes failed with "missing ), unterminated subpattern"; (2) a long heredoc writing four YAML files failed with "unexpected EOF while looking for matching `''". Nothing was written in any case.
+Cause: Git Bash mangles some backslash and quote sequences in long inline commands; the existing Lesson (scratchpad scripts) was not followed for these smaller-looking steps.
+Fix: the same code as scratchpad scripts and the YAML files written with the file tool.
+Verified by: the extractions ran; the rule files load and 24 rule-file tests pass.
+Prevention: Lesson tightened (any regex with backslashes or any long text block → script or file tool).
+Category: tooling

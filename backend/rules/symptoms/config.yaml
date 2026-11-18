@@ -1,0 +1,10 @@
+# Symptom Tracking settings (symptom_tracking_module_spec.md §13.2, all [CONFIGURABLE]).
+# Checked at startup by app/modules/symptoms/rules.py; a wrong value stops the backend.
+# Pattern numbers must be confirmed at the rule review (A3). Raise rules_version on any rule change.
+rules_version: "1.0.0"
+pattern_window_days: 7
+p3_min_days: 5
+p5_min_l2: 2
+movements_from_week: 16
+never_felt_from_week: 24
+preterm_before_week: 37

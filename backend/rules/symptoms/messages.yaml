@@ -1,0 +1,45 @@
+# Symptom Tracking messages (symptom_tracking_module_spec.md §11.2).
+# text: null  = not approved by a doctor yet. The apps then show
+#               "[Text pending doctor approval]" (DEC-041) — never wording written by the agent.
+# intent      = copied from the spec, for the reviewing doctor. It is never shown to patients.
+messages:
+  msg_level1_go_now:
+    intent: Go to the nearest hospital now; take your MCP card; call the emergency number if you cannot travel
+    text: null
+  msg_level2_contact_today:
+    intent: Contact your doctor today; if it gets worse, go to hospital
+    text: null
+  msg_level0_logged:
+    intent: Your symptom is saved; tell your doctor at your next visit if it continues; use the urgent button if anything changes
+    text: null
+  msg_mood_support:
+    intent: You are not alone; talk to your doctor; national helpline number (section 11.3)
+    text: null
+  msg_notes_not_read:
+    intent: Notes are not checked automatically; use the warning signs list for anything urgent
+    text: null
+  msg_not_monitored_live:
+    intent: Your doctor does not see entries in real time; in an emergency go to hospital (shown on the log page and the urgent button page)
+    text: null
+  msg_safe_fallback:
+    intent: Something went wrong; if you feel unwell, contact your doctor or go to hospital
+    text: null
+
+# §11.3 phone numbers, copied word for word from official pages (never from memory).
+helplines:
+  # emergency number for the L1 screen: the same official Telangana page as the Journey (DEC-057)
+  - key: emergency
+    label: Ambulance
+    numbers: ["102", "108"]
+    source_title: Telangana Emergency Contacts – Official Helplines
+    source_url: https://www.telangana.gov.in/contacts/emergency-contacts/
+    date_accessed: 2026-11-18
+  # D15 national mental-health helpline for msg_mood_support. PIB (Ministry of Health and Family
+  # Welfare) release of 29 May 2024: "The Tele MANAS toll-free helpline numbers 14416 or
+  # 1-800-891-4416 offer multi-language support"
+  - key: mental_health
+    label: Tele MANAS (national mental health helpline)
+    numbers: ["14416", "18008914416"]
+    source_title: Press Information Bureau, Ministry of Health and Family Welfare (29 May 2024)
+    source_url: https://pib.gov.in/PressReleasePage.aspx?PRID=2022057
+    date_accessed: 2026-11-18

@@ -39,7 +39,8 @@ PHASE2_TABLES = {  # migration 0002 (inbox_items moved forward, DEC-044)
     "doctor_notes",
     "inbox_items",
 }
-TABLES = PHASE1_TABLES | PHASE2_TABLES
+PHASE3_TABLES = {"symptom_checkins", "symptom_logs"}  # migration 0003
+TABLES = PHASE1_TABLES | PHASE2_TABLES | PHASE3_TABLES
 
 
 def _app_tables(engine: Engine) -> set[str]:
@@ -49,6 +50,8 @@ def _app_tables(engine: Engine) -> set[str]:
 def test_upgrade_downgrade_upgrade(test_db_url: str, engine: Engine) -> None:
     cfg = alembic_config(test_db_url)
     assert _app_tables(engine) == TABLES
+    command.downgrade(cfg, "0002")  # 0003's downgrade removes only its own tables
+    assert _app_tables(engine) == PHASE1_TABLES | PHASE2_TABLES
     command.downgrade(cfg, "0001")  # 0002's downgrade removes only its own tables
     assert _app_tables(engine) == PHASE1_TABLES
     command.downgrade(cfg, "base")
@@ -278,3 +281,26 @@ def test_phase2_defaults(conn: Connection) -> None:
         {"p": patient},
     ).scalar_one()
     assert item is None
+
+
+def test_symptom_tables_check_their_values(conn: Connection) -> None:
+    """Migration 0003 (Symptom spec §13.3): levels, sources and entry values are checked."""
+    patient = _patient(conn)
+    checkin = (
+        "INSERT INTO symptom_checkins (patient_id, source, red_flag_level, matched_rules, "
+        "message_keys, pattern_changes, rules_version) "
+        "VALUES (:p, :s, :l, '[]', '[]', '[]', '1.0.0') RETURNING id"
+    )
+    _rejects(conn, checkin, p=patient, s="form", l="L3")
+    _rejects(conn, checkin, p=patient, s="sms", l="L0")
+    checkin_id = conn.execute(text(checkin), {"p": patient, "s": "form", "l": "L0"}).scalar_one()
+    log = (
+        "INSERT INTO symptom_logs (checkin_id, patient_id, symptom, severity, duration, "
+        "body_area, notes) VALUES (:c, :p, 'fatigue', :sev, :dur, :area, :n)"
+    )
+    ok = {"c": checkin_id, "p": patient, "sev": "mild", "dur": "under_1_hour", "area": None}
+    conn.execute(text(log), {**ok, "n": "x" * 500})
+    _rejects(conn, log, **{**ok, "sev": "extreme", "n": None})
+    _rejects(conn, log, **{**ok, "dur": "a_week", "n": None})
+    _rejects(conn, log, **{**ok, "area": "elbow", "n": None})
+    _rejects(conn, log, **{**ok, "n": "x" * 501})
