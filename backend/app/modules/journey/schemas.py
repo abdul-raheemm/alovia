@@ -137,16 +137,40 @@ class MilestoneOut(BaseModel):
     value: int  # week, month or trimester number; 0 for the due date
 
 
+class SourceOut(BaseModel):
+    """An official source shown with a rule or number (§9.2, §13.3)."""
+
+    publisher: str
+    title: str
+    url: str
+    date_accessed: dt.date
+
+
+class SuggestedCheckupOut(BaseModel):
+    date: dt.date
+    label: str
+
+
+class HelplineOut(BaseModel):
+    label: str
+    numbers: list[str]
+    source_title: str
+    source_url: str
+    date_accessed: dt.date
+
+
 class CalendarOut(BaseModel):
     """GET /patient/journey/calendar (§9.1-9.2) for the requested days.
 
-    TODO(Phase 3): symptom-day dots and red-flag icons (Module 7). Suggested check-ups stay
-    off while `suggested_checkups_enabled` is false (R3, [OPEN])."""
+    TODO(Phase 3): symptom-day dots and red-flag icons (Module 7)."""
 
     start: dt.date | None  # §9.1 navigation: pregnancy start ... due date + 2 weeks
     end: dt.date | None  # both null without an active, dated pregnancy
     milestones: list[MilestoneOut]
     appointments: list[AppointmentOut]
+    # §9.2 dashed "suggested" markers from the official schedule in config.yaml (R3)
+    suggested_checkups: list[SuggestedCheckupOut] = []
+    suggested_source: SourceOut | None = None
 
 
 EndStatus = Literal["ended_birth", "ended_loss", "ended_not_specified"]
@@ -192,6 +216,7 @@ class HomeOut(BaseModel):
     size: SizeReference | None = None  # no sourced value -> no size comparison (§7.2)
     next_appointment: AppointmentOut | None = None
     ended: EndedOut | None = None  # only when state is ended (§11)
+    helplines: list[HelplineOut] = []  # §13.3, official numbers for the support screen
 
 
 class MonthDetailOut(BaseModel):

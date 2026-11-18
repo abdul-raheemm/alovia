@@ -195,3 +195,20 @@ def needs_override_confirmation(old_source: str | None, new_source: DateSource) 
     """§5.3: a date set by a clinician or a scan is replaced by an LMP estimate only after
     the patient confirms (`msg_confirm_override_clinician_date`)."""
     return old_source in ("clinician_confirmed", "ultrasound") and new_source == "lmp_estimate"
+
+
+def suggested_checkup_days(
+    due_date: date, day_of_month: int, from_week: int, start: date, end: date
+) -> list[date]:
+    """§9.2 suggested check-ups: the given day of each month from `from_week` of pregnancy
+    to the end of the calendar range (due date + 2 weeks), within start..end."""
+    first = max(start, due_date - timedelta(days=PREGNANCY_DAYS - from_week * 7))
+    last = min(end, calendar_range(due_date)[1])
+    days: list[date] = []
+    year, month = first.year, first.month
+    while date(year, month, 1) <= last:
+        day = date(year, month, day_of_month)
+        if first <= day <= last:
+            days.append(day)
+        year, month = (year + 1, 1) if month == 12 else (year, month + 1)
+    return days

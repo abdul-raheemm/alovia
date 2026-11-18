@@ -622,3 +622,20 @@ Decisions (owner): 1a keep the placeholder drawings (DEC-050); remove OpenStax (
 Docs changed: Journey spec (D9, §7.2 weeks before 14, §8.3 sources, the OpenStax conversion note removed, S2 row marked removed with its ID kept), RAG spec licence example, DECISIONS, CONTEXT, `backend/content/prototype_content.yaml` comment.
 Checks: `pytest tests/unit/test_journey_content.py` → 12 passed (only a YAML comment changed in code).
 Next step: owner reads the explanation of items 6-14, then the merge decision (item 5).
+
+## Session 21 — 2026-11-18 — Owner items 6, 7, 8, 10, 12, 13, review sheet, merge
+Who: Raheem + agent: Claude Code
+Goal: carry out the owner's answers to the Phase 2 open items; make the doctor review sheet; merge.
+Done:
+- Merged `phase-2/review` into `main` (fast-forward to 1e3d2bb) after the owner's review; follow-ups on `phase-2/owner-items`.
+- 6: "My pregnancy has ended" approved (DEC-054); TODO(OPEN) removed.
+- 7: official Telangana State Portal emergency contacts page (checked by download, word for word): "Ambulance | 102,108", "Women Helpline | 181" → `messages.yaml` `helplines` (validated at startup: digits only, https source, date) → home data → tap-to-call list with the source on the §11.4 support screen (not on the birth screen). No official Telangana counselling/mental-health line was found.
+- 8: MCP card PDF (S4) downloaded and read: no week-by-week ANC timing ("Have at least 3 antenatal checkups, after registration"). The official NHM Maternal Health page (checked by download) states PMSMA's fixed day; `config.yaml` now holds the schedule with URL, quote and date, and the backend refuses to start with check-ups on but no schedule. Engine `suggested_checkup_days` (9th of each month from week 14 to due + 2 weeks); calendar shows a dashed "suggested" label, an icon, screen-reader words and the source link. The shipped-config test now expects the feature on with its NHM source (the spec default was off only until a schedule existed).
+- 10: `scripts/make_admin.py` (refuses another role; idempotent) + ENVIRONMENT.md steps; Dashboard spec §21 [OPEN] closed (DEC-055).
+- 12/13: recorded as owner acceptance for the prototype; doctor sign-off stays a release requirement (DEC-058).
+- Review sheet: `scripts/export_review_sheet.py` → `docs/review/journey_doctor_review.csv` (72 rows: 11 messages, 21 content items, 27 size objects, 9 month ranges, the check-up schedule, the safety message, 2 helplines; empty verdict/comment columns).
+Files changed: backend config/engine/schemas/service/main, rules (config.yaml, messages.yaml), scripts (make_admin, export_review_sheet), tests (engine, calendar, home blocks, make_admin, review sheet); frontend calendar markers/page, week strip, ended home, end page, e2e; docs (Journey + Dashboard specs, API, ENVIRONMENT, DECISIONS DEC-054..058, CHANGELOG, CONTEXT, HISTORY, review CSV).
+Errors met: 2 small ones in my own edit scripts (an anchor that did not match — nothing written; an escaped "\n" that became a line break in a test file — fixed before any run). No ERR entry: caught by the scripts' checks and the linter before tests ran.
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 238 passed; Vitest 38 passed; Playwright 66 passed; ruff, mypy, typecheck, lint, format pass.
+Open: item 9 (legal placeholders) later; doctor review using the sheet.
+Next step: owner sends the sheet to a doctor; Phase 3 planning.

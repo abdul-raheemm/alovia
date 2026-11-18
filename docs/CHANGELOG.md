@@ -8,11 +8,12 @@ Format: newest first. Versions: `0.<phase>.<patch>` until the first full release
 - Pregnancy dates: onboarding with three options (last period, doctor's due date, ultrasound), date rules D1–D3, confirmation before an estimate replaces a doctor's or scan date, full date history.
 - Journey home: weeks and days, days to go, due date with "estimate" label, baby card with a gentle floating month drawing (placeholder drawings, reduced-motion respected) and a typical-size comparison, "This stage" content, quick-log shortcut, this-week strip, next appointment, nine swipeable month cards and month detail pages.
 - Prototype content with sources on every card (Office on Women's Health, NHS under the Open Government Licence, MedlinePlus) and WHO fetal-growth weights for weeks 14–40 with Fluent Emoji comparison icons; a prototype banner on every content screen. All content awaits doctor review.
-- Calendar tab: month view with milestone and appointment markers, day details, navigation from pregnancy start to due date plus two weeks.
+- Calendar tab: month view with milestone and appointment markers, day details, navigation from pregnancy start to due date plus two weeks; dashed "suggested" PMSMA check-up days (the 9th of each month in the 2nd and 3rd trimesters, from the official NHM page).
 - Appointments tab: add, edit and delete her own appointments (date, optional time, title, note); doctor-added appointments are labelled and read-only.
 - Notification bar: new week, new month, appointment soon and doctor-note notices, created when the app opens, each once; tap to open, dismiss to hide.
 - Doctor notes tab: notes her doctor shared, newest first, read-only.
-- "My pregnancy has ended": three choices, a no-default question about informing the doctor, a quiet home with support and safety messages, and undo within 7 days.
+- "My pregnancy has ended": three choices, a no-default question about informing the doctor, a quiet home with support and safety messages, official Telangana helpline numbers (tap to call), and undo within 7 days.
+- A doctor review sheet for every message, content item, size object and rule (`docs/review/journey_doctor_review.csv`), and a script for the owner to create admin accounts.
 - Doctor app: doctors and admins accept the app-wide consent once at first sign-in.
 - Activity log entries for sign-ins and for patient changes to dates, appointments and pregnancy status (never clinical values).
 - Patient-facing messages show "[Text pending doctor approval]" until a doctor approves their wording.

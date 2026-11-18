@@ -13,7 +13,7 @@ from app.core.errors import AppError
 from app.core.logging import logger
 from app.modules.dashboard import service as dashboard
 from app.modules.journey import engine
-from app.modules.journey.config import JourneyConfig, Message
+from app.modules.journey.config import JourneyConfig, Message, load_helplines
 from app.modules.journey.content import ContentProvider, select_for_home
 from app.modules.journey.models import Appointment, Notification, PregnancyDateHistory
 from app.modules.journey.schemas import (
@@ -27,6 +27,7 @@ from app.modules.journey.schemas import (
     DoctorNoteOut,
     DueDateIn,
     EndedOut,
+    HelplineOut,
     HomeOut,
     LmpDatesIn,
     MilestoneOut,
@@ -36,6 +37,8 @@ from app.modules.journey.schemas import (
     NotificationOut,
     PregnancyEndIn,
     PregnancyOut,
+    SourceOut,
+    SuggestedCheckupOut,
     UltrasoundDatesIn,
 )
 from app.modules.users.models import Patient, User
@@ -210,11 +213,23 @@ def get_calendar(
         return CalendarOut(start=None, end=None, milestones=[], appointments=appointments)
     first, last = engine.calendar_range(due)
     found = engine.milestones(due, cfg.month_map, cfg.term_from_week, start, end)
+    checkups: list[SuggestedCheckupOut] = []
+    source = None
+    plan = cfg.suggested_checkups
+    if cfg.suggested_checkups_enabled and plan is not None:
+        days = engine.suggested_checkup_days(due, plan.day_of_month, plan.from_week, start, end)
+        checkups = [SuggestedCheckupOut(date=d, label=plan.label) for d in days]
+        s = plan.source
+        source = SourceOut(
+            publisher=s.publisher, title=s.title, url=s.url, date_accessed=s.date_accessed
+        )
     return CalendarOut(
         start=first,
         end=last,
         milestones=[MilestoneOut(date=m.on, kind=m.kind, value=m.value) for m in found],
         appointments=appointments,
+        suggested_checkups=checkups,
+        suggested_source=source,
     )
 
 
@@ -259,6 +274,16 @@ def get_home(
         size=size,
         next_appointment=_next_appointment(db, patient, cfg.timezone, today),
         ended=_ended(patient, cfg) if state == "ended" else None,
+        helplines=[
+            HelplineOut(
+                label=h.label,
+                numbers=list(h.numbers),
+                source_title=h.source_title,
+                source_url=h.source_url,
+                date_accessed=h.date_accessed,
+            )
+            for h in load_helplines()
+        ],
         state=state,
         dates=DatesOut(
             due_date=patient.due_date,

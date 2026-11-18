@@ -37,3 +37,18 @@ messages:
   msg_birth_congratulations:
     intent: Warm congratulations; postpartum features come later
     text: null
+
+# §13.3 helplines: copied word for word on 2026-11-18 from the official Telangana State Portal
+# emergency contacts table ("Ambulance | 102,108", "Women Helpline | 181"). The page lists no
+# counselling or mental-health line. Shown on the §11.4 support screen.
+helplines:
+  - label: Ambulance
+    numbers: ["102", "108"]
+    source_title: Telangana Emergency Contacts – Official Helplines
+    source_url: https://www.telangana.gov.in/contacts/emergency-contacts/
+    date_accessed: 2026-11-18
+  - label: Women Helpline
+    numbers: ["181"]
+    source_title: Telangana Emergency Contacts – Official Helplines
+    source_url: https://www.telangana.gov.in/contacts/emergency-contacts/
+    date_accessed: 2026-11-18

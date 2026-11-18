@@ -24,8 +24,7 @@ export function EndedHome({ data }: { data: JourneyHome }) {
           <p>
             {messageText(data.messages, isBirth ? 'msg_birth_congratulations' : 'msg_loss_support')}
           </p>
-          {/* TODO(OPEN): support helpline number (§13.3) — only after it is copied from an
-              official Government of India or Telangana page with URL and date */}
+          {!isBirth && <Helplines helplines={data.helplines ?? []} />}
         </Card>
       )}
       {ended && (
@@ -86,5 +85,38 @@ function UndoCard() {
         </Button>
       )}
     </Card>
+  )
+}
+
+/** §11.4 support helplines (§13.3): only numbers copied from an official page, with it named. */
+function Helplines({ helplines }: { helplines: NonNullable<JourneyHome['helplines']> }) {
+  if (helplines.length === 0) return null
+  const source = helplines[0]
+  return (
+    <div className="flex flex-col gap-2">
+      <ul className="flex flex-col gap-1">
+        {helplines.map((h) => (
+          <li key={h.label}>
+            {h.label}:{' '}
+            {h.numbers.map((n, i) => (
+              <span key={n}>
+                {i > 0 && ', '}
+                <a href={`tel:${n}`} className="font-semibold">
+                  {n}
+                </a>
+              </span>
+            ))}
+          </li>
+        ))}
+      </ul>
+      {source && (
+        <p className="text-sm text-muted">
+          Source:{' '}
+          <a href={source.source_url} target="_blank" rel="noreferrer">
+            {source.source_title}
+          </a>
+        </p>
+      )}
+    </div>
   )
 }

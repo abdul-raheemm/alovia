@@ -1,6 +1,7 @@
 """Loads and checks rules/journey/config.yaml (Journey spec §14.4). Wrong settings stop the
 backend at startup (ARCHITECTURE.md §12), so a bad month map can never reach a patient."""
 
+from datetime import date
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -28,6 +29,29 @@ class NavItem(BaseModel):
     label: str = Field(min_length=1)
 
 
+class OfficialSource(BaseModel):
+    """Where an official rule was copied from (spec §9.2, §13.3): URL, exact quote, date."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    publisher: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    url: str = Field(pattern=r"^https://")
+    quote: str = Field(min_length=1)
+    date_accessed: date
+
+
+class SuggestedCheckups(BaseModel):
+    """§9.2 suggested check-up markers, copied from an official schedule (R3)."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    label: str = Field(min_length=1)
+    day_of_month: int = Field(ge=1, le=28)  # 28: every month has the day
+    from_week: int = Field(ge=0, le=MAX_WEEKS)
+    source: OfficialSource
+
+
 class JourneyConfig(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
@@ -41,6 +65,7 @@ class JourneyConfig(BaseModel):
     appointment_notice_hours: int = Field(gt=0)
     resume_window_days: int = Field(gt=0)
     nav_items: tuple[NavItem, ...] = Field(min_length=1)
+    suggested_checkups: SuggestedCheckups | None = None
 
     @field_validator("timezone")
     @classmethod
@@ -69,6 +94,13 @@ class JourneyConfig(BaseModel):
         return value
 
     @model_validator(mode="after")
+    def checkups_need_a_schedule(self) -> JourneyConfig:
+        """§9.2: suggested check-ups appear only once an official schedule is in this file."""
+        if self.suggested_checkups_enabled and self.suggested_checkups is None:
+            raise ValueError("suggested_checkups_enabled needs a suggested_checkups schedule")
+        return self
+
+    @model_validator(mode="after")
     def nav_keys_unique(self) -> JourneyConfig:
         keys = [item.key for item in self.nav_items]
         if len(keys) != len(set(keys)):
@@ -92,10 +124,31 @@ class Message(BaseModel):
     text: str | None  # None until a doctor approves the wording (DEC-041)
 
 
+class Helpline(BaseModel):
+    """§13.3: a phone number copied from an official Government of India or Telangana page,
+    with its URL and date. Never typed from memory."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    label: str = Field(min_length=1)
+    numbers: tuple[str, ...] = Field(min_length=1)
+    source_title: str = Field(min_length=1)
+    source_url: str = Field(pattern=r"^https://")
+    date_accessed: date
+
+    @field_validator("numbers")
+    @classmethod
+    def digits_only(cls, value: tuple[str, ...]) -> tuple[str, ...]:
+        if not all(n.isdigit() for n in value):
+            raise ValueError("helpline numbers are digits only")
+        return value
+
+
 class _MessagesFile(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     messages: dict[str, Message] = Field(min_length=1)
+    helplines: tuple[Helpline, ...] = ()
 
 
 def parse_journey_messages(text: str) -> dict[str, Message]:
@@ -105,3 +158,11 @@ def parse_journey_messages(text: str) -> dict[str, Message]:
 @lru_cache
 def load_journey_messages() -> dict[str, Message]:
     return parse_journey_messages(MESSAGES_FILE.read_text(encoding="utf-8"))
+
+
+@lru_cache
+def load_helplines() -> tuple[Helpline, ...]:
+    """§13.3 helplines from messages.yaml (checked at startup with the messages)."""
+    return _MessagesFile.model_validate(
+        yaml.safe_load(MESSAGES_FILE.read_text(encoding="utf-8"))
+    ).helplines

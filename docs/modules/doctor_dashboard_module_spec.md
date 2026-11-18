@@ -336,7 +336,7 @@ As defined in Module 7 §12: timeline with levels and rule IDs, pattern badges, 
 | Assignments | Search patients by name; add/remove assigned doctors; set primary doctor |
 | Activity log | View and filter all entries (no clinical values) |
 
-- Admin accounts are created only by the project owner directly in the database / Supabase console `[OPEN]` (no admin self-signup).
+- Admin accounts are created only by the project owner: add the user in the Supabase dashboard, then run `python scripts/make_admin.py --user-id <UID> --email <email>` from `backend/` (owner decision 2026-11-18, DEC-055; steps in ENVIRONMENT.md). No admin self-signup.
 - A patient must always keep at least one assigned doctor; removing the last one is blocked.
 - Access: one "Admin" item in the navigation, visible only to the admin role.
 

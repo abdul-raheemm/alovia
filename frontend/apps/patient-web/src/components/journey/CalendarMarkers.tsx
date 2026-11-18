@@ -1,23 +1,25 @@
 import type { Appointment, JourneyCalendar, Milestone } from '@alovia/shared'
-import { CalendarClock, Flag } from 'lucide-react'
+import { CalendarClock, CircleDashed, Flag } from 'lucide-react'
 
 import { isoDay } from '../../app/journey'
 
 export interface DayMarkers {
   milestones: Milestone[]
   appointments: Appointment[]
+  suggested: string[] // §9.2 suggested check-up labels (official schedule)
 }
 
 /** Calendar data grouped by local day ("YYYY-MM-DD"). */
 export function markersByDay(data: JourneyCalendar | undefined): Map<string, DayMarkers> {
   const byDay = new Map<string, DayMarkers>()
   const entry = (day: string) => {
-    const found = byDay.get(day) ?? { milestones: [], appointments: [] }
+    const found = byDay.get(day) ?? { milestones: [], appointments: [], suggested: [] }
     byDay.set(day, found)
     return found
   }
   for (const m of data?.milestones ?? []) entry(m.date).milestones.push(m)
   for (const a of data?.appointments ?? []) entry(a.date).appointments.push(a)
+  for (const s of data?.suggested_checkups ?? []) entry(s.date).suggested.push(s.label)
   return byDay
 }
 
@@ -26,6 +28,7 @@ export function markerWords(markers: DayMarkers | undefined): string {
   const words = [
     markers?.milestones.length ? 'milestone' : null,
     markers?.appointments.length ? 'appointment' : null,
+    markers?.suggested.length ? 'suggested check-up' : null,
   ].filter(Boolean)
   return words.length ? `, ${words.join(', ')}` : ''
 }
@@ -34,19 +37,23 @@ export function markersFor(byDay: Map<string, DayMarkers>, day: Date): DayMarker
   return byDay.get(isoDay(day))
 }
 
-/** The small §9.2 icons: flag = milestone, clock = appointment (decorative; see markerWords).
+/** The small §9.2 icons: flag = milestone, clock = appointment, dashed circle = suggested
+ * check-up (decorative; see markerWords).
  * TODO(Phase 3): symptom-day dot and a distinct red-flag icon (Module 7, §15 test 8). */
 export function MarkerIcons({
   milestone,
   appointment,
+  suggested = false,
 }: {
   milestone: boolean
   appointment: boolean
+  suggested?: boolean
 }) {
   return (
     <span aria-hidden="true" className="flex h-3 items-center gap-0.5 text-primary">
       {milestone && <Flag className="size-3" />}
       {appointment && <CalendarClock className="size-3" />}
+      {suggested && <CircleDashed className="size-3" />}
     </span>
   )
 }

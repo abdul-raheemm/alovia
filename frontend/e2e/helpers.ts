@@ -65,6 +65,7 @@ export function journeyHome(overrides: Record<string, unknown> = {}) {
     stage_items: [],
     size: null,
     next_appointment: null,
+    helplines: [],
     ...overrides,
   }
 }
@@ -128,7 +129,15 @@ export async function mockCalendar(page: Page, data: Record<string, unknown> = {
   await page.route('**/api/v1/patient/journey/calendar?*', (route) =>
     route.fulfill({
       json: {
-        data: { start: null, end: null, milestones: [], appointments: [], ...data },
+        data: {
+          start: null,
+          end: null,
+          milestones: [],
+          appointments: [],
+          suggested_checkups: [],
+          suggested_source: null,
+          ...data,
+        },
         error: null,
       },
     }),

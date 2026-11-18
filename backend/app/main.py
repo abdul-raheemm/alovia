@@ -11,7 +11,11 @@ from app.core.database import make_engine
 from app.core.errors import register_error_handlers
 from app.core.logging import REQUEST_ID_HEADER, configure_logging, request_context
 from app.modules.journey import router as journey
-from app.modules.journey.config import load_journey_config, load_journey_messages
+from app.modules.journey.config import (
+    load_helplines,
+    load_journey_config,
+    load_journey_messages,
+)
 from app.modules.journey.content import load_content_provider
 from app.modules.predictions.risk_model import load_models
 from app.modules.users import router as users
@@ -27,6 +31,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.models = load_models()  # fails fast if a model file is missing (ARCHITECTURE §12)
     app.state.journey_config = load_journey_config()  # fails fast on a wrong config.yaml
     load_journey_messages()  # same for messages.yaml
+    load_helplines()  # and its official helpline numbers (§13.3)
     app.state.content_provider = load_content_provider()  # and for the content files (§8.2)
     # public signing keys, fetched on first use and cached (app.core.auth)
     app.state.jwks_client = jwt.PyJWKClient(settings.supabase_jwks_url, cache_keys=True)

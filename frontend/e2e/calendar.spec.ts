@@ -33,6 +33,13 @@ const CALENDAR = {
     { date: '2026-11-23', kind: 'new_trimester', value: 3 },
   ],
   appointments: [testAppointment({ title: 'Test scan' }), DOCTOR_VISIT],
+  suggested_checkups: [{ date: '2026-11-09', label: 'Test suggested check-up' }],
+  suggested_source: {
+    publisher: 'Test Publisher',
+    title: 'Test schedule page',
+    url: 'https://example.test/schedule',
+    date_accessed: '2026-11-18',
+  },
 }
 
 const ACTIVE_HOME = journeyHome({
@@ -87,6 +94,13 @@ test('calendar month view shows markers and the tapped day details (§9.1-9.2)',
   await expect(details.getByText('Trimester 3 begins')).toBeVisible()
   await expect(details.getByText('Test doctor visit')).toBeVisible()
   await expect(details.getByText('Added by your doctor')).toBeVisible()
+
+  // §9.2 suggested check-up: dashed marker, labelled "suggested", with its official source
+  await page.getByRole('button', { name: /^9 November 2026.*suggested check-up/ }).click()
+  const ninth = page.getByRole('region', { name: '9 November 2026' })
+  await expect(ninth.getByText('suggested', { exact: true })).toBeVisible()
+  await expect(ninth.getByText('Test suggested check-up')).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Test schedule page' })).toBeVisible()
 
   await page.getByRole('button', { name: /^20 November 2026/ }).click()
   await expect(page.getByText('10:30 am — Test scan')).toBeVisible()

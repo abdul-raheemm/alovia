@@ -33,6 +33,12 @@ Anything starting with `VITE_` ends up in the browser. **Never put a private val
 ## 3. Feature settings (not secrets)
 Module settings live in YAML (`backend/rules/*/config.yaml`, `backend/content/`), as defined in each spec — not in `.env`.
 
+## 3a. Creating an admin (owner only, DEC-055)
+1. Supabase dashboard → Authentication → Users → Add user → Create new user (tick "Auto confirm"); copy the user's UID.
+2. From `backend/` with the venv active and `backend/.env` filled: `python scripts/make_admin.py --user-id <UID> --email <their email>`.
+3. The person signs in to the doctor app and accepts the consent once (DEC-046).
+The script refuses to change an account that already has another role, and does nothing for an existing admin.
+
 ## 4. Rules
 - Never commit real secrets; `.env` is in `.gitignore` from the first commit.
 - Keep development, test and production values separate.

@@ -26,6 +26,7 @@ from app.modules.journey.engine import (
     milestones,
     month_for_week,
     needs_override_confirmation,
+    suggested_checkup_days,
     trimester,
 )
 
@@ -187,7 +188,11 @@ def test_shipped_config_matches_the_spec_defaults() -> None:
     assert CFG.content_source == "prototype"
     assert CFG.show_prototype_banner is True
     assert CFG.assistant_enabled is False
-    assert CFG.suggested_checkups_enabled is False
+    # §9.2 / R3: on only because an official schedule with its source is in config.yaml
+    # (owner decision 2026-11-18, DEC-056); the spec default was false until then
+    assert CFG.suggested_checkups_enabled is True
+    assert CFG.suggested_checkups is not None
+    assert CFG.suggested_checkups.source.url.startswith("https://nhm.gov.in/")
     assert CFG.timezone == "Asia/Kolkata"
     assert (CFG.term_from_week, CFG.appointment_notice_hours, CFG.resume_window_days) == (37, 24, 7)
     assert [i.key for i in CFG.nav_items] == [
@@ -216,11 +221,42 @@ def _config_text(**changes: str) -> str:
         ("content_source: prototype", "content_source: guesses"),
         ("term_from_week: 37", "term_from_week: 50"),
         ("{ key: more, label: More }", "{ key: home, label: More }"),  # duplicate nav key
+        ("day_of_month: 9", "day_of_month: 30"),  # not every month has the day
+        ("url: https://nhm.gov.in", "url: http://nhm.gov.in"),  # official source over https
     ],
 )
 def test_bad_config_is_refused(old: str, new: str) -> None:
     with pytest.raises(ValidationError):
         parse_journey_config(_config_text(**{old: new}))
+
+
+def test_checkups_cannot_be_on_without_an_official_schedule() -> None:
+    """§9.2 / R3: suggested check-ups only after the official schedule is in config.yaml."""
+    text = _config_text()
+    without_schedule = text[: text.index("suggested_checkups:\n")]  # the block is last
+    with pytest.raises(ValidationError, match="needs a suggested_checkups schedule"):
+        parse_journey_config(without_schedule)
+    off = without_schedule.replace(
+        "suggested_checkups_enabled: true", "suggested_checkups_enabled: false"
+    )
+    assert parse_journey_config(off).suggested_checkups is None
+
+
+def test_suggested_checkup_days() -> None:
+    """PMSMA (config): the 9th of each month from week 14 to due date + 2 weeks."""
+    due = date(2027, 3, 1)  # GA 0 on 2026-05-25; week 14 starts 2026-08-31
+    days = suggested_checkup_days(due, 9, 14, date(2026, 1, 1), date(2028, 1, 1))
+    assert days[0] == date(2026, 9, 9) and days[-1] == date(2027, 3, 9)  # last within due + 14
+    assert len(days) == 7 and all(d.day == 9 for d in days)
+    # the requested range limits the result; a 9th before week 14 is never included
+    assert suggested_checkup_days(due, 9, 14, date(2026, 11, 1), date(2026, 11, 30)) == [
+        date(2026, 11, 9)
+    ]
+    assert suggested_checkup_days(due, 9, 14, date(2026, 8, 1), date(2026, 8, 31)) == []
+    # boundary: week 14 starting on the 9th includes it; starting on the 10th does not
+    sept = (date(2026, 9, 1), date(2026, 9, 30))
+    assert suggested_checkup_days(date(2027, 3, 10), 9, 14, *sept) == [date(2026, 9, 9)]
+    assert suggested_checkup_days(date(2027, 3, 11), 9, 14, *sept) == []
 
 
 # ---- §5.2 validation D1-D3 and §5.3 override rule (spec tests §15 items 2 and 10) ----

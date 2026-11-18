@@ -4,7 +4,7 @@
 content_source: prototype          # prototype | knowledge_base (§8.2: switching is config only)
 show_prototype_banner: true        # §8.3: required while prototype content is active
 assistant_enabled: false           # §8.5: hidden until the RAG module is built (Phase 7)
-suggested_checkups_enabled: false  # §9.2: only after the official schedule is copied (R3)
+suggested_checkups_enabled: true   # §9.2: on since the official schedule below was copied (R3, owner 2026-11-18)
 timezone: Asia/Kolkata             # §6.1: "today" is the patient's local date
 
 # §6.3 week-to-month mapping, display only. [CONFIRM AT REVIEW] (R1)
@@ -31,3 +31,18 @@ nav_items:
   - { key: appointments, label: Appointments }
   - { key: doctor_notes, label: Doctor notes }
   - { key: more, label: More }
+
+# §9.2 suggested check-ups (R3). Copied 2026-11-18 from the official NHM (MoHFW) Maternal Health
+# page. The MCP card (S4) gives no week-by-week visit timing ("Have at least 3 antenatal
+# checkups, after registration"), so only PMSMA's fixed day is used. "2nd & 3rd trimesters"
+# = from week 14 (§6.2). Shown as a dashed "suggested" label, never as an appointment.
+suggested_checkups:
+  label: PMSMA check-up day
+  day_of_month: 9
+  from_week: 14
+  source:
+    publisher: National Health Mission, Ministry of Health and Family Welfare, Government of India
+    title: Maternal Health
+    url: https://nhm.gov.in/index1.php?lang=1&level=2&sublinkid=822&lid=218
+    quote: "provides fixed-day assured, comprehensive and quality antenatal care to all pregnant women in 2nd& 3rd trimesters on the 9th of every month"
+    date_accessed: 2026-11-18

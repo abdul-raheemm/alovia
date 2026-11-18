@@ -66,6 +66,15 @@ def test_home_blocks_with_a_dated_pregnancy(client: TestClient, engine: Engine) 
     # WHO Table 11, 50th percentile at week 24 (DEC-043 sample)
     assert data["size"]["weight_g"] == 665 and data["size"]["object_icon_id"] == "coconut"
     assert data["next_appointment"] is None
+    # §13.3 helplines copied from the official Telangana State Portal (messages.yaml)
+    assert [(x["label"], x["numbers"]) for x in data["helplines"]] == [
+        ("Ambulance", ["102", "108"]),
+        ("Women Helpline", ["181"]),
+    ]
+    assert all(
+        x["source_url"] == "https://www.telangana.gov.in/contacts/emergency-contacts/"
+        for x in data["helplines"]
+    )
 
 
 def test_home_without_dates_has_no_month_cards(client: TestClient, engine: Engine) -> None:

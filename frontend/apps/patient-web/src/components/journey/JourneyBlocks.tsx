@@ -247,6 +247,7 @@ export function WeekStrip() {
                 <MarkerIcons
                   milestone={Boolean(markers?.milestones.length)}
                   appointment={Boolean(markers?.appointments.length)}
+                  suggested={Boolean(markers?.suggested.length)}
                 />
               </Link>
             </li>

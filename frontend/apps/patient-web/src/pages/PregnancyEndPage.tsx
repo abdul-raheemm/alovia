@@ -16,8 +16,7 @@ export const END_CHOICES: { value: Status; label: string }[] = [
   { value: 'ended_not_specified', label: 'I prefer not to say' },
 ]
 
-// TODO(OPEN): gentle wording of the entry and this heading (§11.1, doctor-approved);
-// the spec's working label is used until then.
+// §11.1 entry and heading: the spec's wording, approved by the owner (2026-11-18, DEC-054)
 export const END_TITLE = 'My pregnancy has ended'
 
 /** Pregnancy-end flow (Journey §11.2, UX_FLOWS P11): choice → "inform my doctor?" (no

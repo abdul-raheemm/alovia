@@ -58,6 +58,11 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-051 | 2026-11-18 | OpenStax is removed as a Journey content source (spec D9, §7.2, §8.3, S2) | Its live licence is CC BY-NC-SA 4.0 and forbids LLM ingestion; NC licences are not allowed | Accepted |
 | DEC-052 | 2026-11-18 | Appointment dates and calendar ranges stay limited to 1900-01-01 .. 2999-12-31 (technical limit, no stricter product rule) | Owner choice | Accepted |
 | DEC-053 | 2026-11-18 | The agent's interpretations where the Journey spec is silent are accepted: appointment date/time in the config timezone; calendar milestones hidden after the end; week strip after quick log; past appointments newest first; new_week/new_month for the current week only, hidden after the end; a date-only appointment is "soon" until its day passes; undo does not notify the doctor and keeps any inbox item; "My records" is a short list of links until the records pages exist; the end entry is hidden after the end | Owner review | Accepted |
+| DEC-054 | 2026-11-18 | The pregnancy-end entry and heading keep the spec's wording "My pregnancy has ended" (§11.1) | Owner approval | Accepted |
+| DEC-055 | 2026-11-18 | Admins are created only by the owner: Supabase dashboard user + `scripts/make_admin.py` (closes the Dashboard spec §21 [OPEN]) | Owner choice; simplest for the prototype | Accepted |
+| DEC-056 | 2026-11-18 | Suggested check-ups are on: PMSMA, the 9th of every month from week 14 (2nd and 3rd trimesters), copied with URL, quote and date from the official NHM Maternal Health page into config.yaml (R3); the MCP card gives no week-by-week timing | Owner: use any official source | Accepted |
+| DEC-057 | 2026-11-18 | Support helplines: "Ambulance 102, 108" and "Women Helpline 181" from the official Telangana State Portal emergency contacts page (§13.3), shown on the §11.4 support screen; no official counselling line was found | Owner: take the Telangana page | Accepted |
+| DEC-058 | 2026-11-18 | The owner accepts R1 (month mapping), R2 (content items and size objects) and R4 (after-pregnancy safety basis) for the prototype. Doctor sign-off (spec §16) is still required before any release; items stay `unreviewed` until then | Owner approval; the owner is not a doctor | Accepted |
 
 ## Template for new entries
 

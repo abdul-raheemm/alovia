@@ -303,7 +303,7 @@ Month view (default) and week strip on the home screen. Navigation from the preg
 | Red-flag day | Check-in with level L1 or L2 | Distinct icon (never the same colour as ordinary dots) |
 | Suggested check-up | Official antenatal schedule `[OPEN]` (R3) | Dashed label "suggested" |
 
-Suggested check-ups (for example from the MCP card schedule and PMSMA) are shown **only** after the schedule is copied from an official page with URL and date in `config.yaml`. Until then this marker is disabled (`suggested_checkups_enabled: false`).
+Suggested check-ups (for example from the MCP card schedule and PMSMA) are shown **only** after the schedule is copied from an official page with URL and date in `config.yaml`. Until then this marker is disabled (`suggested_checkups_enabled: false`). **Done 2026-11-18 (owner, DEC-056):** the PMSMA fixed day (the 9th of every month in the 2nd and 3rd trimesters) was copied from the official NHM Maternal Health page with URL, exact quote and date; the MCP card gives no week-by-week visit timing. The marker is on.
 
 Tapping a day shows that day's appointments, check-ins (with their levels) and milestones.
 
@@ -350,7 +350,7 @@ Notes a doctor chooses to share with the patient (`doctor_notes.visible_to_patie
 ## 11. When a pregnancy ends (birth or loss)
 
 ### 11.1 Entry
-"More → My pregnancy has ended" (gentle wording `[OPEN]`, doctor-approved). The doctor can also set it from the Dashboard.
+"More → My pregnancy has ended" (wording approved by the owner 2026-11-18, DEC-054). The doctor can also set it from the Dashboard.
 
 ### 11.2 Patient flow
 1. Screen with calm wording and three choices: `My baby was born`, `I have lost my pregnancy`, `I prefer not to say`.
@@ -415,7 +415,7 @@ Notes a doctor chooses to share with the patient (`doctor_notes.visible_to_patie
 | `msg_birth_congratulations` | Warm congratulations; postpartum features come later |
 
 ### 13.3 Phone numbers
-Any helpline or emergency number is `[OPEN]` until copied from an official Government of India or Telangana page, with URL and date recorded in `messages.yaml`. The same numbers are used by Module 7.
+Any helpline or emergency number is `[OPEN]` until copied from an official Government of India or Telangana page, with URL and date recorded in `messages.yaml`. The same numbers are used by Module 7. **Done 2026-11-18 (owner, DEC-057):** "Ambulance | 102,108" and "Women Helpline | 181", copied word for word from the official Telangana State Portal emergency contacts page; it lists no counselling or mental-health line.
 
 ---
 

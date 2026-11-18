@@ -48,7 +48,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Me */
+        /**
+         * Me
+         * @description Both apps call this first after sign-in, so a new sign-in session is logged here.
+         */
         get: operations["me_api_v1_me_get"];
         put?: never;
         post?: never;
@@ -385,8 +388,7 @@ export interface components {
          * CalendarOut
          * @description GET /patient/journey/calendar (§9.1-9.2) for the requested days.
          *
-         *     TODO(Phase 3): symptom-day dots and red-flag icons (Module 7). Suggested check-ups stay
-         *     off while `suggested_checkups_enabled` is false (R3, [OPEN]).
+         *     TODO(Phase 3): symptom-day dots and red-flag icons (Module 7).
          */
         CalendarOut: {
             /** Appointments */
@@ -397,6 +399,12 @@ export interface components {
             milestones: components["schemas"]["MilestoneOut"][];
             /** Start */
             start: string | null;
+            /**
+             * Suggested Checkups
+             * @default []
+             */
+            suggested_checkups: components["schemas"]["SuggestedCheckupOut"][];
+            suggested_source?: components["schemas"]["SourceOut"] | null;
         };
         /** ConsentIn */
         ConsentIn: {
@@ -622,16 +630,37 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** HelplineOut */
+        HelplineOut: {
+            /**
+             * Date Accessed
+             * Format: date
+             */
+            date_accessed: string;
+            /** Label */
+            label: string;
+            /** Numbers */
+            numbers: string[];
+            /** Source Title */
+            source_title: string;
+            /** Source Url */
+            source_url: string;
+        };
         /**
          * HomeOut
          * @description GET /patient/journey/home (shape in docs/API.md §4.2).
          *
          *     Still to come: quick-log state and weekly summary (Phase 3), result and genetic status
-         *     cards (Phases 4-5), notification bar (task 7).
+         *     cards (Phases 4-5). Notifications have their own route (GET /patient/notifications).
          */
         HomeOut: {
             dates: components["schemas"]["DatesOut"];
             ended?: components["schemas"]["EndedOut"] | null;
+            /**
+             * Helplines
+             * @default []
+             */
+            helplines: components["schemas"]["HelplineOut"][];
             /** Messages */
             messages: {
                 [key: string]: string | null;
@@ -844,6 +873,33 @@ export interface components {
             week: number;
             /** Weight G */
             weight_g?: number | null;
+        };
+        /**
+         * SourceOut
+         * @description An official source shown with a rule or number (§9.2, §13.3).
+         */
+        SourceOut: {
+            /**
+             * Date Accessed
+             * Format: date
+             */
+            date_accessed: string;
+            /** Publisher */
+            publisher: string;
+            /** Title */
+            title: string;
+            /** Url */
+            url: string;
+        };
+        /** SuggestedCheckupOut */
+        SuggestedCheckupOut: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Label */
+            label: string;
         };
         /**
          * UltrasoundDatesIn

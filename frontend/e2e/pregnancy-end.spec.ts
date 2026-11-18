@@ -100,16 +100,33 @@ test('end flow: choice, inform-doctor question with no default, confirmation (§
 test('after a loss: support and safety messages; after a birth: its own message (§11.4-11.5)', async ({
   page,
 }) => {
-  const setHome = await withHome(page, endedHome('ended_loss', null, MESSAGES))
+  const HELPLINES = [
+    {
+      label: 'Test Ambulance',
+      numbers: ['111', '222'],
+      source_title: 'Test official page',
+      source_url: 'https://example.test/helplines',
+      date_accessed: '2026-11-18',
+    },
+  ]
+  const setHome = await withHome(page, {
+    ...endedHome('ended_loss', null, MESSAGES),
+    helplines: HELPLINES,
+  })
   await page.goto(`${PATIENT}/home`)
+  // §11.4 / §13.3: official helplines on the support screen, tap-to-call, with their source
+  await expect(page.getByRole('link', { name: '111' })).toHaveAttribute('href', 'tel:111')
+  await expect(page.getByRole('link', { name: '222' })).toHaveAttribute('href', 'tel:222')
+  await expect(page.getByRole('link', { name: 'Test official page' })).toBeVisible()
   await expect(page.getByText('TEST support message')).toBeVisible()
   await expect(page.getByText('TEST safety message')).toBeVisible()
   await expect(page.getByText('TEST birth message')).toHaveCount(0)
   // the undo window has passed: no undo button
   await expect(page.getByRole('button', { name: 'I marked this by mistake' })).toHaveCount(0)
 
-  setHome(endedHome('ended_birth', null, MESSAGES))
+  setHome({ ...endedHome('ended_birth', null, MESSAGES), helplines: HELPLINES })
   await page.reload()
+  await expect(page.getByRole('link', { name: '111' })).toHaveCount(0) // §11.5: not on the birth screen
   await expect(page.getByText('TEST birth message')).toBeVisible()
   await expect(page.getByText('TEST safety message')).toBeVisible()
   await expect(page.getByText('TEST support message')).toHaveCount(0)

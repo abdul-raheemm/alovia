@@ -2,7 +2,7 @@ import 'react-day-picker/style.css'
 
 import { userMessage } from '@alovia/shared'
 import { Card, cn, ErrorState, PageSkeleton } from '@alovia/ui'
-import { CalendarClock, Flag } from 'lucide-react'
+import { CalendarClock, CircleDashed, Flag } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DayPicker, type DayButtonProps } from 'react-day-picker'
 import { Link, useSearchParams } from 'react-router'
@@ -70,7 +70,11 @@ export function CalendarPage() {
           }}
           startMonth={data.start ? parseDay(data.start) : undefined}
           endMonth={data.end ? parseDay(data.end) : undefined}
-          modifiers={{ milestone: has('milestones'), appointment: has('appointments') }}
+          modifiers={{
+            milestone: has('milestones'),
+            appointment: has('appointments'),
+            suggested: has('suggested'),
+          }}
           components={{ DayButton: MarkerDayButton }}
           labels={{
             // starts with the visible day number (WCAG 2.5.3), e.g. "17 November 2026, Tuesday"
@@ -93,7 +97,21 @@ export function CalendarPage() {
         <span className="flex items-center gap-1">
           <CalendarClock aria-hidden="true" className="size-4 text-primary" /> Appointment
         </span>
+        {data.suggested_source && (
+          <span className="flex items-center gap-1">
+            <CircleDashed aria-hidden="true" className="size-4 text-primary" /> Suggested check-up
+          </span>
+        )}
       </p>
+      {/* §9.2: suggested check-ups come only from the official schedule in config.yaml */}
+      {data.suggested_source && (
+        <p className="text-sm text-muted">
+          Suggested check-ups: {data.suggested_source.publisher} —{' '}
+          <a href={data.suggested_source.url} target="_blank" rel="noreferrer">
+            {data.suggested_source.title}
+          </a>
+        </p>
+      )}
       <DayDetails day={selected} markers={selected ? markersFor(byDay, selected) : undefined} />
     </section>
   )
@@ -116,6 +134,7 @@ function MarkerDayButton({ day, modifiers, className, children, ...props }: DayB
       <MarkerIcons
         milestone={Boolean(modifiers.milestone)}
         appointment={Boolean(modifiers.appointment)}
+        suggested={Boolean(modifiers.suggested)}
       />
     </button>
   )
@@ -131,7 +150,11 @@ function DayDetails({ day, markers }: { day?: Date; markers?: DayMarkers }) {
       </Card>
     )
   }
-  const empty = !markers || (markers.milestones.length === 0 && markers.appointments.length === 0)
+  const empty =
+    !markers ||
+    (markers.milestones.length === 0 &&
+      markers.appointments.length === 0 &&
+      markers.suggested.length === 0)
   return (
     <section aria-labelledby="day-heading" className="flex flex-col gap-3">
       <h2 id="day-heading">{formatDay(isoDay(day))}</h2>
@@ -147,6 +170,18 @@ function DayDetails({ day, markers }: { day?: Date; markers?: DayMarkers }) {
                 <li key={`${m.kind}-${m.value}`} className="flex items-center gap-2">
                   <Flag aria-hidden="true" className="size-4 shrink-0 text-primary" />
                   {milestoneLabel(m)}
+                </li>
+              ))}
+            </ul>
+          )}
+          {markers.suggested.length > 0 && (
+            <ul className="flex flex-col gap-1">
+              {markers.suggested.map((label) => (
+                <li key={label} className="flex items-center gap-2">
+                  <span className="rounded-md border border-dashed border-primary px-2 py-0.5 text-sm">
+                    suggested
+                  </span>
+                  {label}
                 </li>
               ))}
             </ul>

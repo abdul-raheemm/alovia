@@ -223,6 +223,18 @@ def test_calendar_milestones_and_range(client: TestClient, engine: Engine) -> No
         (week28.isoformat(), "new_month", 7),
         (week28.isoformat(), "new_trimester", 3),
     }
+    # §9.2 suggested check-ups (R3): PMSMA, the 9th of each month from week 14 (config)
+    plan = CFG.suggested_checkups
+    assert plan is not None
+    window = calendar(client, headers, TODAY, TODAY + timedelta(days=62))
+    expected = [
+        d.isoformat()
+        for d in (TODAY + timedelta(days=i) for i in range(63))
+        if d.day == plan.day_of_month
+    ]
+    assert [c["date"] for c in window["suggested_checkups"]] == expected
+    assert {c["label"] for c in window["suggested_checkups"]} == {plan.label}
+    assert window["suggested_source"]["url"].startswith("https://nhm.gov.in/")
     term = lmp + timedelta(days=CFG.term_from_week * 7)
     kinds = {m["kind"] for m in calendar(client, headers, term, due)["milestones"]}
     assert {"term", "due_date"} <= kinds
@@ -244,6 +256,7 @@ def test_calendar_without_dates_or_after_the_end(client: TestClient, engine: Eng
     add(client, headers, date=TODAY.isoformat(), title="Test visit")
     data = calendar(client, headers, TODAY, TODAY)
     assert (data["start"], data["end"], data["milestones"]) == (None, None, [])
+    assert data["suggested_checkups"] == [] and data["suggested_source"] is None
     assert [a["title"] for a in data["appointments"]] == ["Test visit"]
 
     ended, lmp = patient(engine, client, weeks=20)
@@ -255,6 +268,7 @@ def test_calendar_without_dates_or_after_the_end(client: TestClient, engine: Eng
         )
     data = calendar(client, ended, lmp, lmp + timedelta(days=294))
     assert data["milestones"] == [] and data["start"] is None  # no baby markers (§11.3)
+    assert data["suggested_checkups"] == []  # no pregnancy check-ups after the end
 
 
 def test_calendar_rejects_a_reversed_range(client: TestClient, engine: Engine) -> None:
