@@ -18,6 +18,7 @@ from app.modules.journey.config import (
 )
 from app.modules.journey.content import load_content_provider
 from app.modules.predictions.risk_model import load_models
+from app.modules.symptoms import router as symptoms
 from app.modules.symptoms.rules import load_symptom_rules
 from app.modules.users import router as users
 
@@ -54,4 +55,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(journey.notifications_router)
     app.include_router(journey.notes_router)
     app.include_router(journey.end_router)
+    app.include_router(symptoms.router)
     return app

@@ -43,7 +43,7 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 
 ## Phase 3 — Symptom Tracking
 - [x] Migration; vocabulary YAML; red-flag YAML; PUQE; pattern rules — Raheem + Claude Code — 2026-11-18 (migration 0003 tested on alovia-test and applied to main; `backend/rules/symptoms/` config, symptoms, red_flags (25 rules), puqe (official wording), patterns, messages + helplines; loader `app/modules/symptoms/rules.py` checks and cross-checks at startup; /health reports symptoms rules loaded)
-- [ ] Engine + one test per rule; API; inbox items
+- [x] Engine + one test per rule; API; inbox items — Raheem + Claude Code — 2026-11-18 (`app/modules/symptoms/engine.py`: V1/V2 validation, 25 rules as data, highest level wins, PUQE, P1-P5, V3 fallback; 66 engine tests incl. a guard that every rule ID has a test; routes vocabulary / checkins (POST, GET) / charts; inbox items symptom_l1/l2 + pattern_p1..p5 in the same transaction; 13 API tests)
 - [ ] Log page, urgent button (bundled advice), result screens, charts, calendar dots, weekly summary
 - [ ] E2E; review; CHANGELOG 0.3.0
 

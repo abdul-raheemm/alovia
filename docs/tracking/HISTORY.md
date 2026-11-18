@@ -656,3 +656,16 @@ Checks: `bash scripts/check_all.sh` → exit 0: pytest 254 passed; Vitest 38 pas
 Errors met: 1 (ERR-044)
 Open for the rule review: A2 now includes the sheet's "4 - 6" mild band vs the spec's 3-6.
 Next step: task 2 (engine: validation, rules, PUQE, patterns, V3 fallback, the 10 §14 tests).
+
+## Session 23 — 2026-11-18 — Phase 3 tasks 2-3: symptom engine, API, inbox items
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 3 — engine + one test per rule; API; inbox items (Symptom spec §5-10, §14)
+Done:
+- Engine (pure): V1/V2 validation against the rule files (field named, e.g. entries.0.severity); warning signs offered by week (unknown week offers all, §1.3/DEC-065); the 25 rules read as data with a small fixed set of condition kinds; plain rules, then "unless" rules (L2-07), then the catch-all (L2-11) per entry; highest level wins, all matches kept in spec order; message keys (level, mood support, notes notice); PUQE score/band; P1-P5 (P1 first ever; P2 needs an earlier entry in the window; P3 distinct local days incl. today; P4 vs the previous PUQE band; P5 a plain count of L2 check-ins in the window incl. this one); V3 fallback constant.
+- Tests: 66 engine tests — every rule, L1-03 vs L2-07, L1-04 vs L2-02, highest-level-wins, unknown week, boundaries 15/16, 23/24, 36/37, catch-all (back pain, other), PUQE 3/6/7/12/13/15, notes ignored, 20 V1/V2 cases, P1-P5 pass/fail with defaults and a changed setting, and a guard that every rule ID in red_flags.yaml is named in the test file.
+- API: vocabulary, POST/GET checkins, charts; one transaction for check-in + entries + inbox items; V3 on any engine exception (logged); 409 after the end; pregnancy week from the journey service. 13 integration tests (§14 tests 8 and 10, inbox items incl. P5, details/notes/charts, consent).
+- Interpretations (flagged): pattern changes stored as [{code, symptom}] so §12 can name the symptom (spec §10 shows bare codes); P2 does not fire without an earlier entry in the window; duplicate symptoms in one check-in are refused (except `other`); the urgent button accepts warning signs only.
+Conflict found (owner question): Symptom spec §10 and API.md §5 show a severe headache with vision problems matching ["L1-03", "L2-07"], but rule L2-07 excludes an L1-03/L1-04 match and §14 test 1 tests "L1-03 vs L2-07". The rule table was followed (§0 rule 4); the examples need correcting.
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 333 passed; Vitest 38 passed; Playwright 66 passed; ruff, mypy, typecheck, lint, format pass.
+Errors met: 0 (two line-length lint fixes during writing)
+Next step: task 4 (patient screens: log page, result screens, urgent button with bundled advice).

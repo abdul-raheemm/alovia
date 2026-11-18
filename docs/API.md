@@ -171,6 +171,8 @@ Appointment dates and calendar `from`/`to` must be between 1900-01-01 and 2999-1
 
 ---
 
+**Symptom routes (Phase 3, details):** `GET /patient/symptoms/vocabulary` → `{logging_open, pregnancy_week, severities, durations, labour_durations, body_areas, common: [...], warning: [... offered at this week], puqe_questions, puqe_source}`. `POST /patient/symptoms/checkins` body `{source: form|urgent_button, entries: [{symptom, severity?, duration?, body_area?, with_vision_problems?, with_swelling?, unable_to_keep_fluids?, puqe_answers?: [3 × 1-5], food?, name?, appetite?, occurred_at?: "HH:MM", notes? (≤500)}]}` (unknown fields refused) → 201 `{checkin_id, created_at, pregnancy_week, red_flag_level, matched_rules, message_keys}`. Errors: 400 `VALIDATION_ERROR` with `fields.<entries.N.field> = V1|V2` (nothing saved); 409 after the pregnancy has ended (DEC-064). An engine failure saves L2 with `["ERR"]` and `msg_safe_fallback` (V3). The check-in, its entries and the doctor inbox items (`symptom_l1`/`symptom_l2`, one `pattern_pN` per pattern code) are saved in one transaction. `GET /patient/symptoms/checkins` → own check-ins newest first with `entries` and `local_date`; `GET /patient/symptoms/charts` → `{symptoms: [{symptom, label, points: [{local_date, pregnancy_week, severity, duration}]}], puqe: [{local_date, pregnancy_week, score, band}]}`. Pattern changes never appear in patient responses (§14 test 8).
+
 ## 5. Example — create a symptom check-in
 
 Request:

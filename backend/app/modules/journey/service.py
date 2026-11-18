@@ -63,6 +63,13 @@ def _current_ga(patient: Patient, cfg: JourneyConfig, today: date) -> engine.Ges
         return None
 
 
+def pregnancy_week(patient: Patient, cfg: JourneyConfig, today: date) -> int | None:
+    """Whole gestational weeks today (Symptom spec §5.5, glossary "pregnancy week"), or None
+    when there is no usable due date. Used by other modules through this service."""
+    ga = _current_ga(patient, cfg, today)
+    return ga.completed_weeks if ga is not None else None
+
+
 # ---- §9.3 appointments ----
 
 
