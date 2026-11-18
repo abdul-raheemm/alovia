@@ -11,6 +11,7 @@ export default tseslint.config(
       '**/dist',
       '**/dev-dist',
       'packages/shared/src/api-types.ts',
+      'apps/patient-web/src/app/symptomBundle.generated.ts',
       'playwright-report',
       'test-results',
     ],

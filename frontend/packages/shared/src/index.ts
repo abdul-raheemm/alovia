@@ -4,8 +4,12 @@ export type {
   Appointment,
   AppointmentInput,
   AppointmentList,
+  CheckinHistory,
+  CheckinInput,
+  CheckinResult,
   ConsentStatus,
   DoctorNote,
+  EntryInput,
   InviteCheck,
   JourneyContentItem,
   JourneyDatesInput,
@@ -16,6 +20,8 @@ export type {
   MonthDetail,
   Notification,
   PregnancyEndInput,
+  SymptomCharts,
+  SymptomVocabulary,
 } from './types'
 export {
   CONSENT_SOURCE,

@@ -669,3 +669,17 @@ Conflict found (owner question): Symptom spec §10 and API.md §5 show a severe 
 Checks: `bash scripts/check_all.sh` → exit 0: pytest 333 passed; Vitest 38 passed; Playwright 66 passed; ruff, mypy, typecheck, lint, format pass.
 Errors met: 0 (two line-length lint fixes during writing)
 Next step: task 4 (patient screens: log page, result screens, urgent button with bundled advice).
+
+## Session 24 — 2026-11-18 — Phase 3 task 4: log page, urgent button, advice screens
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 3 — patient screens (Symptom spec §4.1-4.2, §11; UX_FLOWS P5-P6; ERROR_HANDLING bundled advice)
+Done:
+- Bundle: `backend/scripts/export_symptom_bundle.py` writes the warning signs, the 7 messages and the 2 official helplines to `apps/patient-web/src/app/symptomBundle.generated.ts` (excluded from prettier/eslint); `tests/unit/test_symptom_bundle.py` fails when it is stale.
+- Log page: warning signs first, everyday symptoms below with only the details each asks for (severity, duration, body area, flags, PUQE questions with their source, text, choice, optional time and notes); client checks for missing details, backend V1/V2 shown at the field; the not-monitored notice.
+- Advice screens: spec level names as headings (DEC-061); L1 large, high contrast, emergency number (tap to call, source shown), "I understand"; L2/L0 calmer; mood support with Tele MANAS; notes notice; role alert/status; no animation.
+- Urgent page: "I have an urgent symptom", warning signs only, list from the bundle until the week-filtered list loads; backend unreachable → L1 advice + in-memory queue retried every 30 s and on `online` (DEC-060); after the end → after-pregnancy notice (DEC-064, also on the log page).
+- Fix ERR-045 (entry order in history).
+- Tests: 5 unit (helpers), 12 E2E (phone-light + laptop-dark, axe): L0 flow with field errors, L1 screen with emergency number, PUQE + mood helpline, urgent flow, urgent with the backend down, after-end notice.
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 334 passed; Vitest 43 passed; Playwright 78 passed; ruff, mypy, typecheck, lint, format pass.
+Errors met: 1 (ERR-045) plus one test locator ("14416" also matched the 1800 number — exact match).
+Next step: task 5 (history charts, Recharts install per DEC-059) and task 6 (Journey links).

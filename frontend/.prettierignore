@@ -4,5 +4,6 @@ dev-dist
 playwright-report
 test-results
 packages/shared/src/api-types.ts
+apps/patient-web/src/app/symptomBundle.generated.ts
 packages/shared/openapi.json
 package-lock.json

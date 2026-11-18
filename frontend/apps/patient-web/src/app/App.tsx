@@ -1,5 +1,4 @@
 import { AuthProvider, LEGAL_DOCS } from '@alovia/shared'
-import { PlaceholderPage } from '@alovia/ui'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 
@@ -15,6 +14,7 @@ import { JoinPage } from '../pages/JoinPage'
 import { MonthDetailPage } from '../pages/MonthDetailPage'
 import { PregnancyEndPage } from '../pages/PregnancyEndPage'
 import { LandingPage } from '../pages/LandingPage'
+import { LogPage } from '../pages/LogPage'
 import {
   AboutPage,
   CheckEmailPage,
@@ -22,8 +22,8 @@ import {
   MorePage,
   NotFoundPage,
   SignInPage,
-  UrgentPage,
 } from '../pages/SimplePages'
+import { UrgentPage } from '../pages/UrgentPage'
 import { authClient, queryClient } from './services'
 
 const router = createBrowserRouter([
@@ -49,9 +49,8 @@ const router = createBrowserRouter([
       { path: '/home', element: <HomePage /> },
       { path: '/dates', element: <DatesPage /> },
       { path: '/months/:month', element: <MonthDetailPage /> },
-      // TODO(Phase 3): log symptoms
       { path: '/calendar', element: <CalendarPage /> },
-      { path: '/log', element: <PlaceholderPage title="Log symptoms" /> },
+      { path: '/log', element: <LogPage /> },
       { path: '/appointments', element: <AppointmentsPage /> },
       { path: '/doctor-notes', element: <DoctorNotesPage /> },
       { path: '/pregnancy-end', element: <PregnancyEndPage /> },

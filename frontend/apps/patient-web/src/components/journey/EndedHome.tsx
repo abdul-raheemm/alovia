@@ -89,7 +89,7 @@ function UndoCard() {
 }
 
 /** §11.4 support helplines (§13.3): only numbers copied from an official page, with it named. */
-function Helplines({ helplines }: { helplines: NonNullable<JourneyHome['helplines']> }) {
+export function Helplines({ helplines }: { helplines: NonNullable<JourneyHome['helplines']> }) {
   if (helplines.length === 0) return null
   const source = helplines[0]
   return (

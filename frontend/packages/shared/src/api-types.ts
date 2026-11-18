@@ -313,6 +313,62 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/patient/symptoms/charts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Charts */
+        get: operations["charts_api_v1_patient_symptoms_charts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/symptoms/checkins": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Checkins */
+        get: operations["list_checkins_api_v1_patient_symptoms_checkins_get"];
+        put?: never;
+        /**
+         * Create Checkin
+         * @description Validate, run the rules, save; returns the level and message keys (never pattern
+         *     changes). The advice is shown at once, never delayed for doctor review (§11.1).
+         */
+        post: operations["create_checkin_api_v1_patient_symptoms_checkins_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/symptoms/vocabulary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Vocabulary */
+        get: operations["vocabulary_api_v1_patient_symptoms_vocabulary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -384,6 +440,13 @@ export interface components {
             /** Upcoming */
             upcoming: components["schemas"]["AppointmentOut"][];
         };
+        /** BodyAreaDetail */
+        BodyAreaDetail: {
+            /** Choices */
+            choices: string[];
+            /** Required */
+            required: boolean;
+        };
         /**
          * CalendarOut
          * @description GET /patient/journey/calendar (§9.1-9.2) for the requested days.
@@ -405,6 +468,136 @@ export interface components {
              */
             suggested_checkups: components["schemas"]["SuggestedCheckupOut"][];
             suggested_source?: components["schemas"]["SourceOut"] | null;
+        };
+        /**
+         * ChartsOut
+         * @description §4.3 history charts: per symptom (how often, severity, duration) and PUQE over time.
+         */
+        ChartsOut: {
+            /** Puqe */
+            puqe: components["schemas"]["PuqePoint"][];
+            /** Symptoms */
+            symptoms: components["schemas"]["SymptomSeries"][];
+        };
+        /**
+         * CheckinHistoryOut
+         * @description Own history (patient view): the check-in and its entries, no pattern changes.
+         */
+        CheckinHistoryOut: {
+            /**
+             * Checkin Id
+             * Format: uuid
+             */
+            checkin_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Entries */
+            entries: components["schemas"]["EntryOut"][];
+            /**
+             * Local Date
+             * Format: date
+             */
+            local_date: string;
+            /** Matched Rules */
+            matched_rules: string[];
+            /** Message Keys */
+            message_keys: string[];
+            /** Pregnancy Week */
+            pregnancy_week: number | null;
+            /**
+             * Red Flag Level
+             * @enum {string}
+             */
+            red_flag_level: "L0" | "L1" | "L2";
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "form" | "urgent_button";
+        };
+        /** CheckinIn */
+        CheckinIn: {
+            /** Entries */
+            entries: components["schemas"]["EntryIn"][];
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "form" | "urgent_button";
+        };
+        /**
+         * CheckinOut
+         * @description POST reply (API.md §5). Never includes pattern changes (doctor only, §9).
+         */
+        CheckinOut: {
+            /**
+             * Checkin Id
+             * Format: uuid
+             */
+            checkin_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Matched Rules */
+            matched_rules: string[];
+            /** Message Keys */
+            message_keys: string[];
+            /** Pregnancy Week */
+            pregnancy_week: number | null;
+            /**
+             * Red Flag Level
+             * @enum {string}
+             */
+            red_flag_level: "L0" | "L1" | "L2";
+        };
+        /** ChoiceDetail */
+        ChoiceDetail: {
+            /** Field */
+            field: string;
+            /** Options */
+            options: {
+                [key: string]: string;
+            };
+        };
+        /**
+         * CommonSymptom
+         * @description §5.1 everyday symptom and the details it asks for.
+         */
+        CommonSymptom: {
+            body_area?: components["schemas"]["BodyAreaDetail"] | null;
+            choice?: components["schemas"]["ChoiceDetail"] | null;
+            /**
+             * Duration
+             * @default false
+             */
+            duration: boolean;
+            /**
+             * Flags
+             * @default {}
+             */
+            flags: {
+                [key: string]: string;
+            };
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /**
+             * Puqe
+             * @default false
+             */
+            puqe: boolean;
+            /**
+             * Severity
+             * @default false
+             */
+            severity: boolean;
+            text?: components["schemas"]["TextDetail"] | null;
         };
         /** ConsentIn */
         ConsentIn: {
@@ -556,6 +749,57 @@ export interface components {
             /** Undo Until */
             undo_until: string | null;
         };
+        /**
+         * EntryIn
+         * @description One symptom entry (§5). Only the details its symptom asks for may be sent.
+         */
+        EntryIn: {
+            /** Appetite */
+            appetite?: string | null;
+            /** Body Area */
+            body_area?: string | null;
+            /** Duration */
+            duration?: string | null;
+            /** Food */
+            food?: string | null;
+            /** Name */
+            name?: string | null;
+            /** Notes */
+            notes?: string | null;
+            /** Occurred At */
+            occurred_at?: string | null;
+            /** Puqe Answers */
+            puqe_answers?: number[] | null;
+            /** Severity */
+            severity?: string | null;
+            /** Symptom */
+            symptom: string;
+            /** Unable To Keep Fluids */
+            unable_to_keep_fluids?: boolean | null;
+            /** With Swelling */
+            with_swelling?: boolean | null;
+            /** With Vision Problems */
+            with_vision_problems?: boolean | null;
+        };
+        /** EntryOut */
+        EntryOut: {
+            /** Body Area */
+            body_area: string | null;
+            /** Details */
+            details: {
+                [key: string]: unknown;
+            } | null;
+            /** Duration */
+            duration: string | null;
+            /** Notes */
+            notes: string | null;
+            /** Occurred At */
+            occurred_at: string | null;
+            /** Severity */
+            severity: string | null;
+            /** Symptom */
+            symptom: string;
+        };
         /** Envelope[AppointmentOut] */
         Envelope_AppointmentOut_: {
             data: components["schemas"]["AppointmentOut"];
@@ -571,6 +815,18 @@ export interface components {
         /** Envelope[CalendarOut] */
         Envelope_CalendarOut_: {
             data: components["schemas"]["CalendarOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[ChartsOut] */
+        Envelope_ChartsOut_: {
+            data: components["schemas"]["ChartsOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[CheckinOut] */
+        Envelope_CheckinOut_: {
+            data: components["schemas"]["CheckinOut"];
             /** Error */
             error?: null;
         };
@@ -608,6 +864,19 @@ export interface components {
         Envelope_NoneType_: {
             /** Data */
             data: null;
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[VocabularyOut] */
+        Envelope_VocabularyOut_: {
+            data: components["schemas"]["VocabularyOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[CheckinHistoryOut]] */
+        Envelope_list_CheckinHistoryOut__: {
+            /** Data */
+            data: components["schemas"]["CheckinHistoryOut"][];
             /** Error */
             error?: null;
         };
@@ -852,6 +1121,45 @@ export interface components {
             /** Trimester */
             trimester: number;
         };
+        /** PuqePoint */
+        PuqePoint: {
+            /** Band */
+            band: string;
+            /**
+             * Local Date
+             * Format: date
+             */
+            local_date: string;
+            /** Pregnancy Week */
+            pregnancy_week: number | null;
+            /** Score */
+            score: number;
+        };
+        /** PuqeQuestion */
+        PuqeQuestion: {
+            /** Answers */
+            answers: {
+                [key: string]: string;
+            };
+            /** Id */
+            id: string;
+            /** Text */
+            text: string;
+        };
+        /** PuqeSource */
+        PuqeSource: {
+            /**
+             * Date Accessed
+             * Format: date
+             */
+            date_accessed: string;
+            /** Publisher */
+            publisher: string;
+            /** Title */
+            title: string;
+            /** Url */
+            url: string;
+        };
         /**
          * SizeReference
          * @description A typical size for one week, with its source and comparison object (§7.2).
@@ -900,6 +1208,40 @@ export interface components {
             date: string;
             /** Label */
             label: string;
+        };
+        /** SymptomPoint */
+        SymptomPoint: {
+            /** Duration */
+            duration: string | null;
+            /**
+             * Local Date
+             * Format: date
+             */
+            local_date: string;
+            /** Pregnancy Week */
+            pregnancy_week: number | null;
+            /** Severity */
+            severity: string | null;
+        };
+        /** SymptomSeries */
+        SymptomSeries: {
+            /** Label */
+            label: string;
+            /** Points */
+            points: components["schemas"]["SymptomPoint"][];
+            /** Symptom */
+            symptom: string;
+        };
+        /** TextDetail */
+        TextDetail: {
+            /** Field */
+            field: string;
+            /** Label */
+            label: string;
+            /** Max Length */
+            max_length: number;
+            /** Required */
+            required: boolean;
         };
         /**
          * UltrasoundDatesIn
@@ -950,6 +1292,56 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
+        };
+        /**
+         * VocabularyOut
+         * @description The log form (§5), filtered by pregnancy week (§5.2).
+         */
+        VocabularyOut: {
+            /** Body Areas */
+            body_areas: {
+                [key: string]: string;
+            };
+            /** Common */
+            common: components["schemas"]["CommonSymptom"][];
+            /** Durations */
+            durations: {
+                [key: string]: string;
+            };
+            /** Labour Durations */
+            labour_durations: {
+                [key: string]: string;
+            };
+            /** Logging Open */
+            logging_open: boolean;
+            /** Pregnancy Week */
+            pregnancy_week: number | null;
+            /** Puqe Questions */
+            puqe_questions: components["schemas"]["PuqeQuestion"][];
+            puqe_source: components["schemas"]["PuqeSource"];
+            /** Severities */
+            severities: {
+                [key: string]: string;
+            };
+            /** Warning */
+            warning: components["schemas"]["WarningSymptom"][];
+        };
+        /**
+         * WarningSymptom
+         * @description §5.2 warning sign: selecting is enough (labour pains also ask a duration).
+         */
+        WarningSymptom: {
+            /** From Week Setting */
+            from_week_setting?: ("movements_from_week" | "never_felt_from_week" | "preterm_before_week") | null;
+            /** Id */
+            id: string;
+            /** Label */
+            label: string;
+            /**
+             * Labour Duration
+             * @default false
+             */
+            labour_duration: boolean;
         };
     };
     responses: never;
@@ -1485,6 +1877,99 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_HomeOut_"];
+                };
+            };
+        };
+    };
+    charts_api_v1_patient_symptoms_charts_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ChartsOut_"];
+                };
+            };
+        };
+    };
+    list_checkins_api_v1_patient_symptoms_checkins_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_CheckinHistoryOut__"];
+                };
+            };
+        };
+    };
+    create_checkin_api_v1_patient_symptoms_checkins_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckinIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_CheckinOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    vocabulary_api_v1_patient_symptoms_vocabulary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_VocabularyOut_"];
                 };
             };
         };

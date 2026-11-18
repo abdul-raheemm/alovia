@@ -475,3 +475,13 @@ Fix: the same code as scratchpad scripts and the YAML files written with the fil
 Verified by: the extractions ran; the rule files load and 24 rule-file tests pass.
 Prevention: Lesson tightened (any regex with backslashes or any long text block → script or file tool).
 Category: tooling
+
+### ERR-045 — 2026-11-18 — A check-in's entries came back in random order
+Who: Claude Code
+Phase / task: Phase 3 — task 4 (found by check_all; code from task 3)
+What happened: `test_details_notes_history_and_charts` failed in one full run: the history returned the `other` entry before the nausea entry.
+Cause: all entries of a check-in are inserted in one transaction, so they share `created_at`; the tie-break on the random UUID made the order arbitrary. The test had passed by chance before.
+Fix: `list_checkins` returns each check-in's entries in form order (warning signs, then everyday symptoms, as in the rule files).
+Verified by: the test passed three runs in a row, then check_all exit 0.
+Prevention: never rely on `created_at` to order rows written in the same transaction.
+Category: bug

@@ -95,7 +95,8 @@ def create_checkin(
 @router.get("/checkins", response_model=Envelope[list[CheckinHistoryOut]])
 def list_checkins(request: Request, patient: OwnPatient, db: Db) -> dict[str, Any]:
     tz = request.app.state.journey_config.timezone
-    return ok([c.model_dump(mode="json") for c in service.list_checkins(db, patient, tz)])
+    out = service.list_checkins(db, patient, _rules(request), tz)
+    return ok([c.model_dump(mode="json") for c in out])
 
 
 @router.get("/charts", response_model=Envelope[ChartsOut])

@@ -29,3 +29,11 @@ export type DoctorNote = components['schemas']['DoctorNoteOut']
 
 /** POST /patient/pregnancy-end body (Journey §11.2). */
 export type PregnancyEndInput = components['schemas']['PregnancyEndIn']
+
+/** Symptom tracking (Module 7, API.md §4.3). */
+export type SymptomVocabulary = components['schemas']['VocabularyOut']
+export type CheckinInput = components['schemas']['CheckinIn']
+export type EntryInput = components['schemas']['EntryIn']
+export type CheckinResult = components['schemas']['CheckinOut']
+export type CheckinHistory = components['schemas']['CheckinHistoryOut']
+export type SymptomCharts = components['schemas']['ChartsOut']

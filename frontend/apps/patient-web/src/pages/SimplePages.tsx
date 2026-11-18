@@ -111,21 +111,6 @@ export function MorePage() {
   )
 }
 
-/** TODO(Phase 3): the urgent check (Symptom spec §4, UX_FLOWS P6) with bundled L1/L2 advice. */
-export function UrgentPage() {
-  return (
-    <section className="flex flex-col gap-4">
-      <h1>Urgent</h1>
-      <Card>
-        <p>The urgent check is not available yet in this prototype.</p>
-        <p className="mt-2">
-          <Link to="/disclaimer">Read the medical disclaimer</Link>
-        </p>
-      </Card>
-    </section>
-  )
-}
-
 export function NotFoundPage() {
   return (
     <section className="flex flex-col gap-4">

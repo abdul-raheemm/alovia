@@ -155,10 +155,15 @@ def create_checkin(
     )
 
 
-def list_checkins(db: Session, patient: Patient, timezone: str) -> list[CheckinHistoryOut]:
-    """Her own check-ins, newest first, with their entries. Pattern changes are never returned
-    to the patient (§9, §14 test 8)."""
+def list_checkins(
+    db: Session, patient: Patient, rules: SymptomRules, timezone: str
+) -> list[CheckinHistoryOut]:
+    """Her own check-ins, newest first, with their entries in form order (warning signs, then
+    everyday symptoms; entries of one check-in share a timestamp). Pattern changes are never
+    returned to the patient (§9, §14 test 8)."""
     tz = ZoneInfo(timezone)
+    form_order = [s.id for s in rules.vocabulary.warning] + [s.id for s in rules.vocabulary.common]
+    position = {symptom: i for i, symptom in enumerate(form_order)}
     checkins = list(
         db.scalars(
             select(SymptomCheckin)
@@ -193,7 +198,7 @@ def list_checkins(db: Session, patient: Patient, timezone: str) -> list[CheckinH
                     occurred_at=log.occurred_at,
                     notes=log.notes,
                 )
-                for log in logs[c.id]
+                for log in sorted(logs[c.id], key=lambda g: position.get(g.symptom, 99))
             ],
         )
         for c in checkins
