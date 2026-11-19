@@ -763,3 +763,14 @@ Done:
 - Tests: 8 E2E (form + exact request, boy/girl + no 0% in visible text, hidden numbers + doctor note, home card; phone-light + laptop-dark, axe).
 Checks: `bash scripts/check_all.sh` → exit 0: pytest 479 passed; Vitest 52 passed; Playwright 94 passed; ruff, mypy, typecheck, lint, format pass.
 Next step: task 4 (review: rule-review sheet, CHANGELOG 0.4.0).
+
+## Session 32 — 2026-11-19 — Phase 4 task 4: review (agent part), rule-review sheet, 0.4.0
+Who: Raheem + agent: Claude Code
+Done:
+- Genetic spec §14 map: tests 1-9 automated (engine unit tests incl. the 45 pairs and the rule-coverage guard; API integration; E2E for boy+girl together and no 0%); test 10 (doctor correction) is Phase 5 (DEC-074).
+- Rule review (§13): `scripts/export_genetic_rule_review.py` → `docs/modules/reviews/genetic_rule_review.csv` (66 rows: 17 haemoglobin rows with their pairs, 7 haemophilia rows with boy/girl outcomes, 4 Marfan rows, 3 evidence rules, C1/C2/F1/F2/E3/E4, 25 messages, A1-A4) + `genetic_rule_review_signoff.md`; completeness test.
+- Sweeps: no "will / safe / no risk / 0%" in patient-facing genetic text (only code comments saying "never 0%"); the stale "TODO(Phase 4)" on Doctor notes moved to Phase 5 (the genetic doctor note is written in the doctor review).
+- CHANGELOG 0.4.0; version 0.4.0 (backend, 5 package.json, 6 lockfile lines, /health test).
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 480 passed; Vitest 52 passed; Playwright 94 passed; ruff, mypy, typecheck, lint, format pass.
+Open for the owner / doctor: rule review and sign-off (A1-A4) and the 24 pending genetic messages; merge after the owner's review.
+Next step: owner review → merge `phase-4/genetic` into main → Phase 5 (Doctor Dashboard + Admin) planning.

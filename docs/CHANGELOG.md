@@ -3,6 +3,14 @@
 User-visible changes per release (one release per finished phase). Work-session details go in `tracking/HISTORY.md`, not here.
 Format: newest first. Versions: `0.<phase>.<patch>` until the first full release.
 
+## [0.4.0] — 2026-11-19 — Phase 4: Genetic Risk
+### Added
+- Genetic risk check (More → Genetic risk): what the patient knows about her own and her husband's status for haemoglobin conditions (β-thalassaemia, sickle cell, HbE/HbD; always asked), haemophilia and Marfan syndrome (behind entry questions), with "how do you know?" evidence and a consent reminder about the father's data.
+- Fixed inheritance rules from the spec (45 haemoglobin pairings, 7 haemophilia and 4 Marfan rows): a chance ("1 in 4 (25%)", "not expected" — never 0%) only when the information is confirmed and consistent; otherwise the next step (testing, counselling, doctor review). Weak evidence counts as unknown; conflicts are sent to the doctor. Haemophilia always shows "if the baby is a boy" and "if the baby is a girl" together — the baby's sex is never asked or shown (PCPNDT Act).
+- Result screen with the fixed disclaimer, next steps, and the doctor's note set apart; earlier checks; a "Genetic check" status card on the home screen.
+- Doctor side (data only, screens in Phase 5): every assessment waits for doctor review and creates an inbox item, marked high priority when risk is indicated.
+- A rule-review sheet for the reviewing doctor (`docs/modules/reviews/`).
+
 ## [0.3.0] — 2026-11-19 — Phase 3: Symptom Tracking
 ### Added
 - Log symptoms: warning signs at the top (one tap) and everyday symptoms with only the details each asks for (severity, duration, body area, PUQE-24 nausea questions in the official wording, optional time and notes).

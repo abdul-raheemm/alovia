@@ -1,0 +1,67 @@
+﻿section,item_id,what_to_check,current_value,source,checked,comment,reviewer,date,rules_version
+1 Haemoglobin rule,HBB-01,Correct against its sources?,N+N -> calculated | Affected: not expected; Carrier: not expected,S1,,,,,1.0.0
+1 Haemoglobin rule,HBB-02,Correct against its sources?,N+B -> calculated | Affected: not expected; β-thal carrier: 1 in 2 (50%); Neither: 1 in 2 (50%),S1,,,,,1.0.0
+1 Haemoglobin rule,HBB-03,Correct against its sources?,N+S -> calculated | Affected: not expected; Sickle carrier: 1 in 2 (50%); Neither: 1 in 2 (50%),"S1, S2",,,,,1.0.0
+1 Haemoglobin rule,HBB-04,Correct against its sources? (A2),N+E -> calculated | Affected: not expected; HbE carrier: 1 in 2 (50%); Neither: 1 in 2 (50%),S2,,,,,1.0.0
+1 Haemoglobin rule,HBB-05,Correct against its sources? (A2),N+D -> calculated | Affected: not expected; HbD carrier: 1 in 2 (50%); Neither: 1 in 2 (50%),S2,,,,,1.0.0
+1 Haemoglobin rule,HBB-06,Correct against its sources? (A4),N+BB -> calculated | Affected: not expected; β-thal carrier: all children,S1,,,,,1.0.0
+1 Haemoglobin rule,HBB-07,Correct against its sources? (A4),N+SS -> calculated | Affected: not expected; Sickle carrier: all children,S2,,,,,1.0.0
+1 Haemoglobin rule,HBB-08,Correct against its sources?,N+O -> counselling_flag,(no source in the spec),,,,,1.0.0
+1 Haemoglobin rule,HBB-09,Correct against its sources?,N+U -> calculated | Affected: not expected; Carrier: cannot be calculated,S1,,,,,1.0.0
+1 Haemoglobin rule,HBB-10,Correct against its sources?,B+B -> calculated | β-thalassaemia major: 1 in 4 (25%); β-thal carrier: 1 in 2 (50%); Neither: 1 in 4 (25%),S1,,,,,1.0.0
+1 Haemoglobin rule,HBB-11,Correct against its sources?,S+S -> calculated | Sickle cell disease: 1 in 4 (25%); Sickle carrier: 1 in 2 (50%); Neither: 1 in 4 (25%),S2,,,,,1.0.0
+1 Haemoglobin rule,HBB-12,Correct against its sources?,B+S -> calculated | Sickle cell disease: 1 in 4 (25%); β-thal carrier: 1 in 4 (25%); Sickle carrier: 1 in 4 (25%); Neither: 1 in 4 (25%),S1,,,,,1.0.0
+1 Haemoglobin rule,HBB-13,Correct against its sources?,"B+E, B+D, S+E, S+D, E+E, E+D, D+D -> counselling_flag",S2,,,,,1.0.0
+1 Haemoglobin rule,HBB-14,Correct against its sources?,"BB+B, BB+S, BB+E, BB+D, BB+BB, BB+SS, SS+B, SS+S, SS+E, SS+D, SS+SS -> counselling_flag",(no source in the spec),,,,,1.0.0
+1 Haemoglobin rule,HBB-15,Correct against its sources?,"O+B, O+S, O+E, O+D, O+BB, O+SS, O+O -> counselling_flag",(no source in the spec),,,,,1.0.0
+1 Haemoglobin rule,HBB-16,Correct against its sources?,"U+B, U+S, U+E, U+D, U+BB, U+SS, U+U -> needs_testing_or_counselling","S6, S7",,,,,1.0.0
+1 Haemoglobin rule,HBB-17,Correct against its sources?,U+O -> counselling_flag,(no source in the spec),,,,,1.0.0
+2 Haemophilia rule,HEM-01,Correct against its sources? (A3),mother tested_negative + father not_affected -> calculated | boy: Haemophilia: not expected | girl: Carrier: not expected,S3,,,,,1.0.0
+2 Haemophilia rule,HEM-02,Correct against its sources? (A3),mother carrier + father not_affected -> calculated | boy: Haemophilia: 1 in 2 (50%); Unaffected: 1 in 2 (50%) | girl: Carrier: 1 in 2 (50%); Neither: 1 in 2 (50%); Haemophilia: not expected,S3,,,,,1.0.0
+2 Haemophilia rule,HEM-03,Correct against its sources? (A3),mother tested_negative + father affected -> calculated | boy: Haemophilia: not expected | girl: Carrier: all children,S3,,,,,1.0.0
+2 Haemophilia rule,HEM-04,Correct against its sources? (A3),mother carrier + father affected -> counselling_flag,S3,,,,,1.0.0
+2 Haemophilia rule,HEM-05,Correct against its sources? (A3),mother affected + father any -> counselling_flag,(no source in the spec),,,,,1.0.0
+2 Haemophilia rule,HEM-06,Correct against its sources? (A3),mother unknown + father not_affected -> needs_testing_or_counselling,S3,,,,,1.0.0
+2 Haemophilia rule,HEM-07,Correct against its sources? (A3),mother unknown + father affected -> needs_testing_or_counselling,S3,,,,,1.0.0
+3 Marfan rule,MAR-01,Correct against its sources?,not_affected + not_affected -> calculated | Inheriting from a parent: not expected,S4,,,,,1.0.0
+3 Marfan rule,MAR-02,Correct against its sources?,affected + not_affected -> calculated | Inheriting the condition: 1 in 2 (50%),S4,,,,,1.0.0
+3 Marfan rule,MAR-03,Correct against its sources?,affected + affected -> counselling_flag,(no source in the spec),,,,,1.0.0
+3 Marfan rule,MAR-04,Correct against its sources?,unknown + any -> needs_testing_or_counselling,(no source in the spec),,,,,1.0.0
+4 Evidence rule,blood_count_only,Treat as unknown?,"blood_count_only -> unknown, warning warn_blood_count_not_enough",Genetic spec §6.2,,,,,1.0.0
+4 Evidence rule,family_history_only,Treat as unknown?,"family_history_only -> unknown, warning warn_family_history_not_enough",Genetic spec §6.2,,,,,1.0.0
+4 Evidence rule,sickle_status_card with tested_negative,Treat as unknown? (A1),"sickle_status_card with tested_negative -> unknown, warning warn_card_checks_sickle_only",Genetic spec §6.2,,,,,1.0.0
+5 Conflict,C1,Correct?,"A previous child has thalassaemia major or sickle cell disease (yes), but either parent is tested_negative -> conflict",Genetic spec §6.3,,,,,1.0.0
+5 Conflict,C2,Correct?,"Father marked carrier or unknown (only possible through the API, not the form) -> conflict",Genetic spec §6.3,,,,,1.0.0
+5 Conflict,F1,Correct?,"A previous son has haemophilia (yes) and the mother is tested_negative (new mutations happen, S3) -> counselling_flag",Genetic spec §6.3,,,,,1.0.0
+5 Conflict,F2,Correct?,"A previous child has Marfan (yes) and both parents are not_affected (new mutations happen, S4) -> counselling_flag",Genetic spec §6.3,,,,,1.0.0
+5 Error,E3,Correct?,"Rule file missing, or no rule row matches -> error",Genetic spec §6.3,,,,,1.0.0
+5 Error,E4,Correct?,Any unexpected engine failure (safe fallback message) -> error,Genetic spec §6.3,,,,,1.0.0
+6 Message,review_with_doctor,Write or approve the text. Intent: Shown with calculated results: review these results with your doctor; do not rely on them alone,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,results_after_review,Write or approve the text. Intent: Shown when show_numbers_to_patient = false: results will appear after your doctor reviews them,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_sent_for_review,Write or approve the text. Intent: Conflict or error: some answers need your doctor's review; sent to your doctor; no result shown until then,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_counselling_flag,Write or approve the text. Intent: Your combination needs a specialist's advice; please discuss with your doctor,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_needs_testing,Write or approve the text. Intent: Some information is missing; testing or counselling can help,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_not_assessed,Write or approve the text. Intent: No family history given for this condition; mention to your doctor if anything changes,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_hplc_test_suggested,"Write or approve the text. Intent: Ask your doctor about a haemoglobin (HPLC) test, ideally early in pregnancy",(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_partner_test_suggested,"Write or approve the text. Intent: Because you are a carrier, your husband's test result is needed",(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_haemophilia_carrier_test_suggested,Write or approve the text. Intent: Carrier testing for women is available; discuss with your doctor,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_marfan_assessment_suggested,Write or approve the text. Intent: A doctor can assess this; discuss with your doctor,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_consanguinity_counselling,Write or approve the text. Intent: Related couples are advised to discuss genetic counselling with their doctor,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_speak_to_doctor_soon,Write or approve the text. Intent: Some tests in pregnancy can only be done at certain stages; please speak to your doctor soon (no procedures or week numbers),(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,msg_safe_fallback,Write or approve the text. Intent: Something went wrong; your doctor has been informed,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,result_hbb_calculated,Write or approve the text. Intent: Short plain-language explanation of the calculated haemoglobin group outcomes,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,result_hem_calculated,Write or approve the text. Intent: Short plain-language explanation of the calculated haemophilia outcomes,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,result_mar_calculated,Write or approve the text. Intent: Short plain-language explanation of the calculated Marfan outcomes,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,warn_blood_count_not_enough,Write or approve the text. Intent: A blood count alone cannot confirm carrier status,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,warn_family_history_not_enough,Write or approve the text. Intent: Family history alone cannot confirm status,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,warn_card_checks_sickle_only,Write or approve the text. Intent: The sickle cell card may not check for β-thalassaemia,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,warn_carrier_depends_on_partner,Write or approve the text. Intent: The carrier chance depends on the other parent's result,(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,note_carrier_girls_may_bleed,Write or approve the text. Intent: Girls who are carriers sometimes have bleeding symptoms (S3),(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,note_no_family_history_not_no_risk,Write or approve the text. Intent: Haemophilia can appear in families with no history (S3),(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,note_new_cases_can_occur,Write or approve the text. Intent: Marfan can appear for the first time in a child (S4),(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,note_severity_varies,"Write or approve the text. Intent: How the condition affects a person varies, even within a family (S4)",(no approved text yet),Genetic spec §11.4,,,,,1.0.0
+6 Message,disclaimer_main,"Write or approve the text. Intent: Fixed disclaimer, section 11.2 (shown on every result screen)",This is for knowledge only and is not medical advice. Counselling is recommended.,Genetic spec §11.4,,,,,1.0.0
+7 Assumption,A1,Confirm or change.,"A ""normal"" sickle cell status card does not rule out β-thalassaemia carrier status, so it is treated as `unknown` for the haemoglobin group.",Genetic spec §13.1,,,,,1.0.0
+7 Assumption,A2,Confirm or change.,HbE or HbD carrier × tested-negative partner: no affected child expected; 1 in 2 carrier.,Genetic spec §13.1,,,,,1.0.0
+7 Assumption,A3,Confirm or change.,Haemophilia A and B follow the same rules in this module.,Genetic spec §13.1,,,,,1.0.0
+7 Assumption,A4,Confirm or change.,"β-thalassaemia major or sickle cell disease parent × tested-negative partner: all children are carriers, no affected child expected.",Genetic spec §13.1,,,,,1.0.0

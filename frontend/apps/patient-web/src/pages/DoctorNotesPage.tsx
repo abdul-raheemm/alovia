@@ -6,7 +6,8 @@ import { formatDay } from '../app/journey'
 import { useDoctorNotes } from '../app/useNotifications'
 
 /** Doctor notes tab (Journey §10.3, UX_FLOWS P10): notes her doctors shared, newest first.
- * Read-only. TODO(Phase 4): link a genetic-assessment note (related_ref) to its assessment. */
+ * Read-only. TODO(Phase 5): link a genetic-assessment note (related_ref) to its assessment —
+ * the doctor writes it in the genetic review (Genetic spec §10.3). */
 export function DoctorNotesPage() {
   const notes = useDoctorNotes()
   if (notes.isPending) return <PageSkeleton />
