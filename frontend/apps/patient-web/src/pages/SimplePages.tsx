@@ -88,6 +88,11 @@ export function MorePage() {
         </ul>
       </Card>
       <Card>
+        {/* Journey §4.1: More holds Genetic risk (Module 3) */}
+        <h2 className="mb-2">Checks</h2>
+        <Link to="/genetic">Genetic risk</Link>
+      </Card>
+      <Card>
         <h2 className="mb-2">Legal</h2>
         <ul className="flex flex-col gap-2">
           <li>

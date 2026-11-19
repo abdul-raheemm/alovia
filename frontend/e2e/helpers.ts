@@ -68,6 +68,7 @@ export function journeyHome(overrides: Record<string, unknown> = {}) {
     helplines: [],
     logged_today: false,
     weekly_summary: null,
+    genetic_check: null,
     ...overrides,
   }
 }

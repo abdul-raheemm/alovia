@@ -37,3 +37,7 @@ export type EntryInput = components['schemas']['EntryIn']
 export type CheckinResult = components['schemas']['CheckinOut']
 export type CheckinHistory = components['schemas']['CheckinHistoryOut']
 export type SymptomCharts = components['schemas']['ChartsOut']
+
+/** Genetic risk (Module 3, API.md §4.4). */
+export type GeneticAssessment = components['schemas']['AssessmentOut']
+export type GeneticInput = components['schemas']['AssessmentIn']

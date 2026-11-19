@@ -1,6 +1,6 @@
 import type { JourneyContentItem, JourneyHome } from '@alovia/shared'
 import { Card, cn } from '@alovia/ui'
-import { BookOpen, CalendarClock, Check, PenLine, TriangleAlert } from 'lucide-react'
+import { BookOpen, CalendarClock, Check, Dna, PenLine, TriangleAlert } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router'
 
@@ -15,6 +15,7 @@ import {
   weekDays,
   weekRangeLabel,
 } from '../../app/journey'
+import { GENETIC_CHECK_LABEL } from '../../app/genetic'
 import { useCalendar } from '../../app/useAppointments'
 import { hasRedFlag, MarkerIcons, markersByDay, markersFor, markerWords } from './CalendarMarkers'
 
@@ -314,5 +315,19 @@ export function WeekStrip() {
         <Link to="/calendar">Open the calendar</Link>
       </p>
     </section>
+  )
+}
+
+/** §4.3 / §10.4 status card "Genetic check: …", shown only when she has an assessment. */
+export function GeneticCheckCard({ check }: { check: string }) {
+  return (
+    <Card>
+      <Link to="/genetic" className="flex items-center gap-3 no-underline">
+        <Dna aria-hidden="true" className="size-6 shrink-0 text-primary" />
+        <span className="text-text">
+          Genetic check: <strong>{GENETIC_CHECK_LABEL[check] ?? check}</strong>
+        </span>
+      </Link>
+    </Card>
   )
 }

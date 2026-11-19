@@ -7,6 +7,7 @@ import { formatDay, messageText, weeksLabel } from '../app/journey'
 import { useJourneyHome } from '../app/useJourneyHome'
 import {
   BabyCard,
+  GeneticCheckCard,
   MonthsStrip,
   NextAppointmentCard,
   QuickLogCard,
@@ -60,6 +61,7 @@ export function HomePage() {
       {data.weekly_summary && <WeeklySummary summary={data.weekly_summary} />}
       {pregnancy && <WeekStrip />}
       {data.next_appointment && <NextAppointmentCard appointment={data.next_appointment} />}
+      {data.genetic_check && <GeneticCheckCard check={data.genetic_check} />}
       {pregnancy && data.months.length > 0 && (
         <MonthsStrip months={data.months} currentMonth={pregnancy.month} />
       )}

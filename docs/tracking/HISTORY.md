@@ -752,3 +752,14 @@ Done:
 - Tests: 10 API integration tests (submit + inbox, normal priority, E1/E2 save nothing, unknown fields and a baby-sex field refused, history/one/404, numbers hidden then shown after a simulated review, the Journey card in all 4 states, consent).
 Checks: `bash scripts/check_all.sh` → exit 0: pytest 478 passed; Vitest 46 passed; Playwright 86 passed; ruff, mypy, typecheck, lint, format pass.
 Next step: task 3 frontend (form, result screen, history, More link, home card).
+
+## Session 31 — 2026-11-19 — Phase 4 task 3 (frontend): genetic form and results
+Who: Raheem + agent: Claude Code
+Done:
+- Bundle `apps/patient-web/src/app/geneticBundle.generated.ts` from `backend/scripts/export_genetic_bundle.py` (labels, questions, statuses per condition/parent without the API-only values, evidence "allowed with", messages); sync test; excluded from prettier/eslint.
+- Helpers `app/genetic.ts` (evidence by status, D14/DEC-069 defaults, missing answers as API paths, request with nothing after entry "no", card labels DEC-073, chance labels) + 6 unit tests.
+- `/genetic`: consent reminder (DEC-072) with the consent link; haemoglobin section always, haemophilia/Marfan behind entry questions; status and "How do you know?" selects (evidence filtered by §5.4); previous child; consanguinity; client and server (E1/E2) field errors. Result: disclaimer (spec text), whole-assessment messages, per condition outcomes "Label: 1 in 4 (25%)" / "not expected", haemophilia "If the baby is a boy" and "If the baby is a girl" together, next-step messages, warnings and notes (pending texts), numbers hidden when not shown, doctor's note in a distinct card; earlier checks. More → "Genetic risk"; home "Genetic check: …" card after the next appointment.
+- Bug found by E2E and fixed: after submitting, the page waited for the history list to include the new assessment and showed the form again meanwhile; it now shows the returned result at once.
+- Tests: 8 E2E (form + exact request, boy/girl + no 0% in visible text, hidden numbers + doctor note, home card; phone-light + laptop-dark, axe).
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 479 passed; Vitest 52 passed; Playwright 94 passed; ruff, mypy, typecheck, lint, format pass.
+Next step: task 4 (review: rule-review sheet, CHANGELOG 0.4.0).

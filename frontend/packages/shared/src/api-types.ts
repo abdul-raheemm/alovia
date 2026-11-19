@@ -131,6 +131,44 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/patient/genetic/assessments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Assessments */
+        get: operations["list_assessments_api_v1_patient_genetic_assessments_get"];
+        put?: never;
+        /**
+         * Create Assessment
+         * @description Submit, run the engine, save (pending doctor review).
+         */
+        post: operations["create_assessment_api_v1_patient_genetic_assessments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/genetic/assessments/{assessment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Assessment */
+        get: operations["get_assessment_api_v1_patient_genetic_assessments__assessment_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/patient/journey/calendar": {
         parameters: {
             query?: never;
@@ -440,6 +478,55 @@ export interface components {
             /** Upcoming */
             upcoming: components["schemas"]["AppointmentOut"][];
         };
+        /** AssessmentIn */
+        AssessmentIn: {
+            /** Consanguinity */
+            consanguinity?: string | null;
+            haemoglobin_group?: components["schemas"]["SectionIn"] | null;
+            haemophilia?: components["schemas"]["SectionIn"] | null;
+            marfan?: components["schemas"]["SectionIn"] | null;
+        };
+        /**
+         * AssessmentOut
+         * @description The patient's view of one assessment (§8.2, §10.4). Numbers are left out while
+         *     `show_numbers_to_patient` is false; the doctor-only priority is not included.
+         */
+        AssessmentOut: {
+            /**
+             * Assessment Id
+             * Format: uuid
+             */
+            assessment_id: string;
+            /** Conditions */
+            conditions: components["schemas"]["ConditionResult"][];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Disclaimer Key */
+            disclaimer_key: string;
+            /** Doctor Note */
+            doctor_note: string | null;
+            flags: components["schemas"]["Flags"];
+            /** Inputs */
+            inputs: {
+                [key: string]: unknown;
+            };
+            /** Message Keys */
+            message_keys: string[];
+            /**
+             * Review Status
+             * @enum {string}
+             */
+            review_status: "pending_review" | "reviewed";
+            /** Reviewed At */
+            reviewed_at: string | null;
+            /** Rules Version */
+            rules_version: string;
+            /** Show Numbers To Patient */
+            show_numbers_to_patient: boolean;
+        };
         /** BodyAreaDetail */
         BodyAreaDetail: {
             /** Choices */
@@ -449,9 +536,8 @@ export interface components {
         };
         /**
          * CalendarOut
-         * @description GET /patient/journey/calendar (§9.1-9.2) for the requested days.
-         *
-         *     TODO(Phase 3): symptom-day dots and red-flag icons (Module 7).
+         * @description GET /patient/journey/calendar (§9.1-9.2) for the requested days, including the
+         *     Module 7 symptom days (dots and red-flag icons).
          */
         CalendarOut: {
             /** Appointments */
@@ -603,6 +689,42 @@ export interface components {
              */
             severity: boolean;
             text?: components["schemas"]["TextDetail"] | null;
+        };
+        /** ConditionResult */
+        ConditionResult: {
+            /**
+             * Condition
+             * @enum {string}
+             */
+            condition: "haemoglobin_group" | "haemophilia" | "marfan";
+            /**
+             * Message Keys
+             * @default []
+             */
+            message_keys: string[];
+            /**
+             * Notes
+             * @default []
+             */
+            notes: string[];
+            /** Outcomes */
+            outcomes?: components["schemas"]["OutcomeOut"][] | null;
+            /** Outcomes If Boy */
+            outcomes_if_boy?: components["schemas"]["OutcomeOut"][] | null;
+            /** Outcomes If Girl */
+            outcomes_if_girl?: components["schemas"]["OutcomeOut"][] | null;
+            /** Rule Id */
+            rule_id: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "calculated" | "needs_testing_or_counselling" | "counselling_flag" | "conflict" | "error" | "not_assessed";
+            /**
+             * Warnings
+             * @default []
+             */
+            warnings: string[];
         };
         /** ConsentIn */
         ConsentIn: {
@@ -817,6 +939,12 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[AssessmentOut] */
+        Envelope_AssessmentOut_: {
+            data: components["schemas"]["AssessmentOut"];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[CalendarOut] */
         Envelope_CalendarOut_: {
             data: components["schemas"]["CalendarOut"];
@@ -878,6 +1006,13 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[list[AssessmentOut]] */
+        Envelope_list_AssessmentOut__: {
+            /** Data */
+            data: components["schemas"]["AssessmentOut"][];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[list[CheckinHistoryOut]] */
         Envelope_list_CheckinHistoryOut__: {
             /** Data */
@@ -898,6 +1033,15 @@ export interface components {
             data: components["schemas"]["NotificationOut"][];
             /** Error */
             error?: null;
+        };
+        /** Flags */
+        Flags: {
+            /** Consanguinity */
+            consanguinity: boolean;
+            /** Risk Indicated */
+            risk_indicated: boolean;
+            /** Timing Prompt */
+            timing_prompt: boolean;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -924,12 +1068,14 @@ export interface components {
          * HomeOut
          * @description GET /patient/journey/home (shape in docs/API.md §4.2).
          *
-         *     Still to come: quick-log state and weekly summary (Phase 3), result and genetic status
-         *     cards (Phases 4-5). Notifications have their own route (GET /patient/notifications).
+         *     Still to come: result and genetic status cards (Phases 4-5). Notifications have their
+         *     own route (GET /patient/notifications).
          */
         HomeOut: {
             dates: components["schemas"]["DatesOut"];
             ended?: components["schemas"]["EndedOut"] | null;
+            /** Genetic Check */
+            genetic_check?: ("reviewed" | "sent_to_doctor" | "needs_testing" | "pending_review") | null;
             /**
              * Helplines
              * @default []
@@ -1088,6 +1234,22 @@ export interface components {
              */
             type: "new_week" | "new_month" | "appointment_soon" | "doctor_note" | "result_available" | "genetic_reviewed" | "dates_updated";
         };
+        /** OutcomeOut */
+        OutcomeOut: {
+            /** Chance */
+            chance: string;
+            /** Outcome */
+            outcome: string;
+            /** Percent */
+            percent: number | null;
+        };
+        /** ParentIn */
+        ParentIn: {
+            /** Evidence */
+            evidence?: string | null;
+            /** Status */
+            status?: string | null;
+        };
         /** PatientRef */
         PatientRef: {
             /**
@@ -1170,6 +1332,18 @@ export interface components {
             title: string;
             /** Url */
             url: string;
+        };
+        /**
+         * SectionIn
+         * @description One condition section (§4.1). `entry` is asked for haemophilia and Marfan only.
+         */
+        SectionIn: {
+            /** Entry */
+            entry?: string | null;
+            father?: components["schemas"]["ParentIn"] | null;
+            mother?: components["schemas"]["ParentIn"] | null;
+            /** Previous Child */
+            previous_child?: string | null;
         };
         /**
          * SizeReference
@@ -1648,6 +1822,90 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_list_DoctorNoteOut__"];
+                };
+            };
+        };
+    };
+    list_assessments_api_v1_patient_genetic_assessments_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_AssessmentOut__"];
+                };
+            };
+        };
+    };
+    create_assessment_api_v1_patient_genetic_assessments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssessmentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AssessmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_assessment_api_v1_patient_genetic_assessments__assessment_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                assessment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AssessmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

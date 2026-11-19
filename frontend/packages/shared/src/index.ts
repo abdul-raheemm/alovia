@@ -10,6 +10,8 @@ export type {
   ConsentStatus,
   DoctorNote,
   EntryInput,
+  GeneticAssessment,
+  GeneticInput,
   InviteCheck,
   JourneyContentItem,
   JourneyDatesInput,
