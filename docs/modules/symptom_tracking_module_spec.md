@@ -279,7 +279,7 @@ For `other`, P1–P3 compare by the exact text name (case-insensitive).
     }
   ],
   "red_flag_level": "L1",
-  "matched_rules": ["L1-03", "L2-07"],
+  "matched_rules": ["L1-03"],
   "message_keys": ["msg_level1_go_now"],
   "pattern_changes": ["P1"]
 }

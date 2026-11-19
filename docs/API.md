@@ -96,6 +96,8 @@ Appointment dates and calendar `from`/`to` must be between 1900-01-01 and 2999-1
 
 **`POST /patient/pregnancy-end`** body `{status: ended_birth|ended_loss|ended_not_specified, inform_doctor}` (`inform_doctor` is required and must be a real boolean: the question has no default, §11.2; no other fields) → the refreshed home data. Stores `pregnancy_status`, `pregnancy_ended_at`, `doctor_informed_of_end`, logs the status change in `pregnancy_date_history`, and only when `inform_doctor` is true adds a `pregnancy_ended` inbox item (`ref_table` `pregnancy_date_history`, `ref_id` that row) in the same transaction. Already ended → 409 `CONFLICT`. **`POST /patient/pregnancy-end/undo`** → back to `active` within `resume_window_days` of the end (§11.6), logged in `pregnancy_date_history`; an inbox item already sent stays. Not ended, or the window has passed → 409. The home data also carries `helplines: [{label, numbers, source_title, source_url, date_accessed}]` (§13.3, from `messages.yaml`, DEC-057). The home data carries `ended: {status, ended_at, undo_until}` (`undo_until` null once the window has passed) when `state` is `ended`.
 
+Phase 3 additions to the Journey: the home data carries `logged_today` (a check-in exists on her local day) and `weekly_summary: {week_start, week_end, days_logged, top_symptoms: [{symptom, label, count}] (up to 3), red_flag_days, common_at_stage: [content items]} | null` (null after the end; the week is Sunday to Saturday); the calendar carries `symptom_days: [{date, levels}]` (Journey §9.2: a dot for any check-in, a red-flag icon when a level is L1 or L2).
+
 **`GET /patient/journey/months/{month}`** (1-9; linked patient with consent) → `data`: `{month, week_start, week_end, is_current, items}` with all content types for that month. 404 once the pregnancy has ended (§11.3: month cards stop).
 
 ### 4.3 Symptom Tracking — Module 7 (Phase 3)
@@ -189,7 +191,7 @@ POST /api/v1/patient/symptoms/checkins
 Response:
 ```json
 { "data": { "checkin_id": "…", "red_flag_level": "L1",
-            "matched_rules": ["L1-03", "L2-07"],
+            "matched_rules": ["L1-03"],
             "message_keys": ["msg_level1_go_now"] },
   "error": null }
 ```

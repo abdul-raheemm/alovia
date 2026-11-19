@@ -34,6 +34,10 @@ const CALENDAR = {
   ],
   appointments: [testAppointment({ title: 'Test scan' }), DOCTOR_VISIT],
   suggested_checkups: [{ date: '2026-11-09', label: 'Test suggested check-up' }],
+  symptom_days: [
+    { date: '2026-11-12', levels: ['L0'] },
+    { date: '2026-11-13', levels: ['L0', 'L1'] },
+  ],
   suggested_source: {
     publisher: 'Test Publisher',
     title: 'Test schedule page',
@@ -212,4 +216,26 @@ test('appointments: add, edit and delete her own; doctor-added ones are read-onl
   await page.getByRole('button', { name: 'Delete', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Test blood test 2' })).toHaveCount(0)
   await expect(page.getByText('Test doctor visit')).toBeVisible()
+})
+
+test('calendar shows symptom dots and distinct red-flag icons (Journey §15 test 8)', async ({
+  page,
+}) => {
+  await setUp(page)
+  await mockCalendar(page, CALENDAR)
+  await page.goto(`${PATIENT}/calendar`)
+  await expect(
+    page.getByRole('button', { name: /^12 November 2026.*symptoms logged$/ }),
+  ).toBeVisible()
+  const redDay = page.getByRole('button', {
+    name: /^13 November 2026.*symptoms logged, red-flag check-in/,
+  })
+  await expect(redDay).toBeVisible()
+  await expect(redDay.locator('svg.text-urgent')).toHaveCount(1) // distinct icon and colour
+  await redDay.click()
+  const details = page.getByRole('region', { name: '13 November 2026' })
+  await expect(details.getByText('Check-in: Saved')).toBeVisible()
+  await expect(details.getByText('Check-in: Go to hospital now')).toBeVisible()
+  await expect(page.getByText('Red flag', { exact: true })).toBeVisible() // legend
+  await expectNoA11yViolations(page)
 })

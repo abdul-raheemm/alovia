@@ -1,7 +1,7 @@
 """Pregnancy Journey routes for the patient (docs/API.md §4.2). Patient role, own record only."""
 
 import uuid
-from datetime import date
+from datetime import date, timedelta
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Path, Query, Request
@@ -12,6 +12,7 @@ from app.common.responses import Envelope, ok
 from app.core.database import get_db
 from app.modules.journey import service
 from app.modules.journey.config import load_journey_messages
+from app.modules.journey.content import select_for_home
 from app.modules.journey.engine import local_today
 from app.modules.journey.schemas import (
     AppointmentIn,
@@ -24,7 +25,10 @@ from app.modules.journey.schemas import (
     MonthDetailOut,
     NotificationOut,
     PregnancyEndIn,
+    SymptomDayOut,
+    WeeklySummaryOut,
 )
+from app.modules.symptoms import service as symptoms
 from app.modules.users.models import Patient, User
 from app.modules.users.service import get_account, get_patient
 
@@ -39,20 +43,37 @@ Db = Annotated[Session, Depends(get_db)]
 Account = Annotated[User, Depends(get_account)]
 
 
-@router.get("/home", response_model=Envelope[HomeOut])
-def home(
-    request: Request, patient: OwnPatient, db: Annotated[Session, Depends(get_db)]
+def _home(
+    request: Request, db: Session, patient: Patient, notices: list[str] | None = None
 ) -> dict[str, Any]:
+    """The home data (§4.3) plus what the symptom module adds: "logged today" and the §9.4
+    weekly summary for this calendar week (Sunday to Saturday, as the week strip)."""
     cfg = request.app.state.journey_config
-    out = service.get_home(
-        db,
-        patient,
-        cfg,
-        load_journey_messages(),
-        request.app.state.content_provider,
-        local_today(cfg.timezone),
-    )
+    today = local_today(cfg.timezone)
+    provider = request.app.state.content_provider
+    out = service.get_home(db, patient, cfg, load_journey_messages(), provider, today, notices)
+    if out.state != "ended":
+        start = today - timedelta(days=(today.weekday() + 1) % 7)
+        end = start + timedelta(days=6)
+        rules = request.app.state.symptom_rules
+        summary = symptoms.week_summary(db, patient.id, rules, start, end, cfg.timezone)
+        common = (
+            select_for_home(
+                provider, out.pregnancy.content_week, out.pregnancy.month, ["common_symptoms"]
+            )
+            if out.pregnancy
+            else []
+        )
+        out.logged_today = symptoms.logged_on(db, patient.id, today, cfg.timezone)
+        out.weekly_summary = WeeklySummaryOut(
+            week_start=start, week_end=end, common_at_stage=common, **summary
+        )
     return ok(out.model_dump(mode="json"))
+
+
+@router.get("/home", response_model=Envelope[HomeOut])
+def home(request: Request, patient: OwnPatient, db: Db) -> dict[str, Any]:
+    return _home(request, db, patient)
 
 
 @router.get("/months/{month}", response_model=Envelope[MonthDetailOut])
@@ -76,18 +97,8 @@ def put_dates(
 ) -> dict[str, Any]:
     """Set or change pregnancy dates (Journey §5); returns the refreshed home data."""
     cfg = request.app.state.journey_config
-    today = local_today(cfg.timezone)
-    notices = service.set_dates(db, user, patient, body, today)
-    out = service.get_home(
-        db,
-        patient,
-        cfg,
-        load_journey_messages(),
-        request.app.state.content_provider,
-        today,
-        notices,
-    )
-    return ok(out.model_dump(mode="json"))
+    notices = service.set_dates(db, user, patient, body, local_today(cfg.timezone))
+    return _home(request, db, patient, notices)
 
 
 @router.get("/calendar", response_model=Envelope[CalendarOut])
@@ -101,6 +112,9 @@ def calendar(
     """Calendar markers for the days from..to, inclusive (Journey §9.1-9.2)."""
     cfg = request.app.state.journey_config
     out = service.get_calendar(db, patient, cfg, start, end, local_today(cfg.timezone))
+    # §9.2 / Journey §15 test 8: symptom dots and red-flag icons from Module 7 data
+    days = symptoms.symptom_days(db, patient.id, start, end, cfg.timezone)
+    out.symptom_days = [SymptomDayOut(**d) for d in days]
     return ok(out.model_dump(mode="json"))
 
 
@@ -177,25 +191,12 @@ def doctor_notes(request: Request, patient: OwnPatient, db: Db) -> dict[str, Any
 # ---- §11 pregnancy end and undo; both reply with the refreshed home data ----
 
 
-def _home_now(request: Request, db: Session, patient: Patient) -> dict[str, Any]:
-    cfg = request.app.state.journey_config
-    out = service.get_home(
-        db,
-        patient,
-        cfg,
-        load_journey_messages(),
-        request.app.state.content_provider,
-        local_today(cfg.timezone),
-    )
-    return ok(out.model_dump(mode="json"))
-
-
 @end_router.post("", response_model=Envelope[HomeOut])
 def end_pregnancy(
     request: Request, body: PregnancyEndIn, patient: OwnPatient, user: Account, db: Db
 ) -> dict[str, Any]:
     service.end_pregnancy(db, user, patient, body)
-    return _home_now(request, db, patient)
+    return _home(request, db, patient)
 
 
 @end_router.post("/undo", response_model=Envelope[HomeOut])
@@ -203,4 +204,4 @@ def undo_pregnancy_end(
     request: Request, patient: OwnPatient, user: Account, db: Db
 ) -> dict[str, Any]:
     service.undo_pregnancy_end(db, user, patient, request.app.state.journey_config)
-    return _home_now(request, db, patient)
+    return _home(request, db, patient)

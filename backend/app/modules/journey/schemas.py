@@ -159,6 +159,29 @@ class HelplineOut(BaseModel):
     date_accessed: dt.date
 
 
+class SymptomDayOut(BaseModel):
+    date: dt.date
+    levels: list[str]  # the day's check-in levels (L0/L1/L2), oldest first
+
+
+class TopSymptomOut(BaseModel):
+    symptom: str
+    label: str
+    count: int
+
+
+class WeeklySummaryOut(BaseModel):
+    """§9.4: "You logged" (her data) next to "Common at this stage" (content); the app shows
+    them visually apart and never compares them."""
+
+    week_start: dt.date
+    week_end: dt.date
+    days_logged: int
+    top_symptoms: list[TopSymptomOut]
+    red_flag_days: list[dt.date]
+    common_at_stage: list[ContentItem]  # common_symptoms for the content week (or month)
+
+
 class CalendarOut(BaseModel):
     """GET /patient/journey/calendar (§9.1-9.2) for the requested days.
 
@@ -170,6 +193,7 @@ class CalendarOut(BaseModel):
     appointments: list[AppointmentOut]
     # §9.2 dashed "suggested" markers from the official schedule in config.yaml (R3)
     suggested_checkups: list[SuggestedCheckupOut] = []
+    symptom_days: list[SymptomDayOut] = []  # §9.2 dots; L1/L2 days get a red-flag icon
     suggested_source: SourceOut | None = None
 
 
@@ -217,6 +241,8 @@ class HomeOut(BaseModel):
     next_appointment: AppointmentOut | None = None
     ended: EndedOut | None = None  # only when state is ended (§11)
     helplines: list[HelplineOut] = []  # §13.3, official numbers for the support screen
+    logged_today: bool = False  # §4.3 quick log
+    weekly_summary: WeeklySummaryOut | None = None  # §9.4; not after the end
 
 
 class MonthDetailOut(BaseModel):

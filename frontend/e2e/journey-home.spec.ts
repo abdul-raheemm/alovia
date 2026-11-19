@@ -135,3 +135,41 @@ test('without content or size, home shows the empty stage state and no size line
   await expect(page.getByText('Next appointment')).toHaveCount(0)
   await expectNoA11yViolations(page)
 })
+
+test("home: logged today and this week's summary, her data apart from the content (§9.4)", async ({
+  page,
+}) => {
+  await signInAsPatient(page)
+  const summaryHome = {
+    ...FULL_HOME,
+    logged_today: true,
+    weekly_summary: {
+      week_start: '2026-11-15',
+      week_end: '2026-11-21',
+      days_logged: 2,
+      top_symptoms: [{ symptom: 'fatigue', label: 'Tiredness', count: 3 }],
+      red_flag_days: ['2026-11-17'],
+      common_at_stage: [
+        testContentItem({
+          id: 'test_common',
+          content_type: 'common_symptoms',
+          title: 'Example common content',
+        }),
+      ],
+    },
+  }
+  await page.route(HOME_URL, (route) => route.fulfill({ json: { data: summaryHome, error: null } }))
+  await page.goto(`${PATIENT}/home`)
+  await expect(page.getByText('Logged today')).toBeVisible()
+  const summary = page.getByRole('region', { name: "This week's summary" })
+  await expect(summary.getByRole('heading', { name: 'You logged' })).toBeVisible()
+  await expect(summary.getByText('Days with check-ins: 2')).toBeVisible()
+  await expect(summary.getByText('Tiredness: 3')).toBeVisible()
+  await expect(summary.getByText('Red-flag days: 17 November 2026')).toBeVisible()
+  // the content part is a separate Learn card (D15), and nothing compares the two
+  await expect(
+    summary.getByRole('article').filter({ hasText: 'Example common content' }),
+  ).toBeVisible()
+  expect(await summary.textContent()).not.toMatch(/normal|typical for|nothing to worry/i)
+  await expectNoA11yViolations(page)
+})

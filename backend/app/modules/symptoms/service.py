@@ -243,3 +243,79 @@ def charts(db: Session, patient: Patient, rules: SymptomRules, timezone: str) ->
         ],
         puqe=puqe,
     )
+
+
+# ---- what the Journey shows (Journey spec §4.3, §9.2, §9.4) ----
+
+
+def _day_levels(
+    db: Session, patient_id: uuid.UUID, start: date, end: date, timezone: str
+) -> dict[date, list[str]]:
+    """Levels of her check-ins on each local day from start to end (inclusive)."""
+    tz = ZoneInfo(timezone)
+    lo = datetime.combine(start, datetime.min.time(), tzinfo=tz)
+    hi = datetime.combine(end + timedelta(days=1), datetime.min.time(), tzinfo=tz)
+    days: dict[date, list[str]] = {}
+    rows = db.execute(
+        select(SymptomCheckin.created_at, SymptomCheckin.red_flag_level)
+        .where(
+            SymptomCheckin.patient_id == patient_id,
+            SymptomCheckin.created_at >= lo,
+            SymptomCheckin.created_at < hi,
+        )
+        .order_by(SymptomCheckin.created_at)
+    )
+    for created, level in rows:
+        days.setdefault(created.astimezone(tz).date(), []).append(level)
+    return days
+
+
+def symptom_days(
+    db: Session, patient_id: uuid.UUID, start: date, end: date, timezone: str
+) -> list[dict[str, Any]]:
+    """§9.2 calendar: each day with check-ins and their levels (any level is a dot; L1/L2
+    a red-flag icon)."""
+    return [
+        {"date": day, "levels": levels}
+        for day, levels in _day_levels(db, patient_id, start, end, timezone).items()
+    ]
+
+
+def logged_on(db: Session, patient_id: uuid.UUID, day: date, timezone: str) -> bool:
+    """§4.3 quick log: "logged today" when a check-in exists on her local day."""
+    return bool(_day_levels(db, patient_id, day, day, timezone))
+
+
+def week_summary(
+    db: Session,
+    patient_id: uuid.UUID,
+    rules: SymptomRules,
+    start: date,
+    end: date,
+    timezone: str,
+) -> dict[str, Any]:
+    """§9.4 "You logged" for start..end: days with check-ins, top symptoms by count (up to 3),
+    red-flag days. Her data only; no comparison or judgement."""
+    days = _day_levels(db, patient_id, start, end, timezone)
+    tz = ZoneInfo(timezone)
+    lo = datetime.combine(start, datetime.min.time(), tzinfo=tz)
+    hi = datetime.combine(end + timedelta(days=1), datetime.min.time(), tzinfo=tz)
+    counts: dict[str, int] = {}
+    for symptom in db.scalars(
+        select(SymptomLog.symptom)
+        .join(SymptomCheckin, SymptomCheckin.id == SymptomLog.checkin_id)
+        .where(
+            SymptomLog.patient_id == patient_id,
+            SymptomCheckin.created_at >= lo,
+            SymptomCheckin.created_at < hi,
+        )
+    ):
+        counts[symptom] = counts.get(symptom, 0) + 1
+    labels = {s.id: s.label for s in rules.vocabulary.common}
+    labels |= {s.id: s.label for s in rules.vocabulary.warning}
+    top = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:3]
+    return {
+        "days_logged": len(days),
+        "top_symptoms": [{"symptom": s, "label": labels.get(s, s), "count": n} for s, n in top],
+        "red_flag_days": sorted(d for d, lv in days.items() if {"L1", "L2"} & set(lv)),
+    }

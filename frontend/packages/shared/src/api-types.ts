@@ -468,6 +468,11 @@ export interface components {
              */
             suggested_checkups: components["schemas"]["SuggestedCheckupOut"][];
             suggested_source?: components["schemas"]["SourceOut"] | null;
+            /**
+             * Symptom Days
+             * @default []
+             */
+            symptom_days: components["schemas"]["SymptomDayOut"][];
         };
         /**
          * ChartsOut
@@ -930,6 +935,11 @@ export interface components {
              * @default []
              */
             helplines: components["schemas"]["HelplineOut"][];
+            /**
+             * Logged Today
+             * @default false
+             */
+            logged_today: boolean;
             /** Messages */
             messages: {
                 [key: string]: string | null;
@@ -961,6 +971,7 @@ export interface components {
              * @enum {string}
              */
             state: "no_date" | "active" | "past_due" | "beyond_42" | "ended";
+            weekly_summary?: components["schemas"]["WeeklySummaryOut"] | null;
         };
         /** InviteCheckOut */
         InviteCheckOut: {
@@ -1209,6 +1220,16 @@ export interface components {
             /** Label */
             label: string;
         };
+        /** SymptomDayOut */
+        SymptomDayOut: {
+            /**
+             * Date
+             * Format: date
+             */
+            date: string;
+            /** Levels */
+            levels: string[];
+        };
         /** SymptomPoint */
         SymptomPoint: {
             /** Duration */
@@ -1242,6 +1263,15 @@ export interface components {
             max_length: number;
             /** Required */
             required: boolean;
+        };
+        /** TopSymptomOut */
+        TopSymptomOut: {
+            /** Count */
+            count: number;
+            /** Label */
+            label: string;
+            /** Symptom */
+            symptom: string;
         };
         /**
          * UltrasoundDatesIn
@@ -1342,6 +1372,31 @@ export interface components {
              * @default false
              */
             labour_duration: boolean;
+        };
+        /**
+         * WeeklySummaryOut
+         * @description §9.4: "You logged" (her data) next to "Common at this stage" (content); the app shows
+         *     them visually apart and never compares them.
+         */
+        WeeklySummaryOut: {
+            /** Common At Stage */
+            common_at_stage: components["schemas"]["ContentItem"][];
+            /** Days Logged */
+            days_logged: number;
+            /** Red Flag Days */
+            red_flag_days: string[];
+            /** Top Symptoms */
+            top_symptoms: components["schemas"]["TopSymptomOut"][];
+            /**
+             * Week End
+             * Format: date
+             */
+            week_end: string;
+            /**
+             * Week Start
+             * Format: date
+             */
+            week_start: string;
         };
     };
     responses: never;

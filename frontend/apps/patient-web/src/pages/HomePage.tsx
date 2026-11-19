@@ -12,6 +12,7 @@ import {
   QuickLogCard,
   StageSection,
   WeekStrip,
+  WeeklySummary,
 } from '../components/journey/JourneyBlocks'
 import { EndedHome } from '../components/journey/EndedHome'
 import { NotificationBar } from '../components/journey/NotificationBar'
@@ -55,7 +56,8 @@ export function HomePage() {
           />
         </>
       )}
-      <QuickLogCard />
+      <QuickLogCard loggedToday={data.logged_today} />
+      {data.weekly_summary && <WeeklySummary summary={data.weekly_summary} />}
       {pregnancy && <WeekStrip />}
       {data.next_appointment && <NextAppointmentCard appointment={data.next_appointment} />}
       {pregnancy && data.months.length > 0 && (

@@ -1,11 +1,12 @@
 import type { JourneyContentItem, JourneyHome } from '@alovia/shared'
 import { Card, cn } from '@alovia/ui'
-import { BookOpen, CalendarClock, PenLine } from 'lucide-react'
+import { BookOpen, CalendarClock, Check, PenLine, TriangleAlert } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router'
 
 import {
   appointmentWhen,
+  formatDay,
   illustrationAlt,
   isoDay,
   illustrationSrc,
@@ -15,7 +16,7 @@ import {
   weekRangeLabel,
 } from '../../app/journey'
 import { useCalendar } from '../../app/useAppointments'
-import { MarkerIcons, markersByDay, markersFor, markerWords } from './CalendarMarkers'
+import { hasRedFlag, MarkerIcons, markersByDay, markersFor, markerWords } from './CalendarMarkers'
 
 type Messages = JourneyHome['messages']
 
@@ -177,14 +178,67 @@ export function MonthsStrip({
 }
 
 /** §4.3 quick log shortcut. The "logged today" state arrives with Phase 3 (Module 7). */
-export function QuickLogCard() {
+export function QuickLogCard({ loggedToday = false }: { loggedToday?: boolean }) {
   return (
-    <Card>
+    <Card className="flex flex-wrap items-center justify-between gap-2">
       <Link to="/log" className="flex items-center gap-3 no-underline">
         <PenLine aria-hidden="true" className="size-6 shrink-0 text-primary" />
         <span className="font-semibold text-text">Log a symptom</span>
       </Link>
+      {loggedToday && (
+        <span className="flex items-center gap-1 text-sm text-muted">
+          <Check aria-hidden="true" className="size-4" />
+          Logged today
+        </span>
+      )}
     </Card>
+  )
+}
+
+/** §9.4 this week's summary: "You logged" (her data) and "Common at this stage" (content) in
+ * visually different blocks; no comparison or judgement between them is ever shown. */
+export function WeeklySummary({
+  summary,
+}: {
+  summary: NonNullable<JourneyHome['weekly_summary']>
+}) {
+  return (
+    <section aria-labelledby="summary-heading" className="flex flex-col gap-3">
+      <h2 id="summary-heading">This week&apos;s summary</h2>
+      <Card className="flex flex-col gap-2">
+        <h3>You logged</h3>
+        {summary.days_logged === 0 ? (
+          <p className="text-muted">No check-ins this week.</p>
+        ) : (
+          <>
+            <p>
+              Days with check-ins: <strong>{summary.days_logged}</strong>
+            </p>
+            {summary.top_symptoms.length > 0 && (
+              <ul className="flex flex-col gap-1">
+                {summary.top_symptoms.map((s) => (
+                  <li key={s.symptom}>
+                    {s.label}: {s.count}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {summary.red_flag_days.length > 0 && (
+              <p className="flex items-start gap-2">
+                <TriangleAlert aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-urgent" />
+                Red-flag days: {summary.red_flag_days.map(formatDay).join(', ')}
+              </p>
+            )}
+          </>
+        )}
+        <p className="text-sm">
+          <Link to="/log/history">Your symptom history</Link>
+        </p>
+      </Card>
+      {summary.common_at_stage.map((item) => (
+        <ContentCard key={item.id} item={item} />
+      ))}
+    </section>
   )
 }
 
@@ -248,6 +302,8 @@ export function WeekStrip() {
                   milestone={Boolean(markers?.milestones.length)}
                   appointment={Boolean(markers?.appointments.length)}
                   suggested={Boolean(markers?.suggested.length)}
+                  symptoms={Boolean(markers?.levels.length)}
+                  redFlag={Boolean(markers && hasRedFlag(markers))}
                 />
               </Link>
             </li>

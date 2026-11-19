@@ -66,6 +66,8 @@ export function journeyHome(overrides: Record<string, unknown> = {}) {
     size: null,
     next_appointment: null,
     helplines: [],
+    logged_today: false,
+    weekly_summary: null,
     ...overrides,
   }
 }
@@ -136,6 +138,7 @@ export async function mockCalendar(page: Page, data: Record<string, unknown> = {
           appointments: [],
           suggested_checkups: [],
           suggested_source: null,
+          symptom_days: [],
           ...data,
         },
         error: null,

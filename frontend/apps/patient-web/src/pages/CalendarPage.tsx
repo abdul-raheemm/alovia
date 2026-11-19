@@ -2,7 +2,7 @@ import 'react-day-picker/style.css'
 
 import { userMessage } from '@alovia/shared'
 import { Card, cn, ErrorState, PageSkeleton } from '@alovia/ui'
-import { CalendarClock, CircleDashed, Flag } from 'lucide-react'
+import { CalendarClock, CircleDashed, Flag, TriangleAlert } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { DayPicker, type DayButtonProps } from 'react-day-picker'
 import { Link, useSearchParams } from 'react-router'
@@ -16,9 +16,11 @@ import {
   monthBounds,
   parseDay,
 } from '../app/journey'
+import { LEVEL_HEADING, type Level } from '../app/symptoms'
 import { useCalendar } from '../app/useAppointments'
 import { DoctorAddedLabel } from '../components/journey/Appointments'
 import {
+  hasRedFlag,
   MarkerIcons,
   markersByDay,
   markersFor,
@@ -74,6 +76,11 @@ export function CalendarPage() {
             milestone: has('milestones'),
             appointment: has('appointments'),
             suggested: has('suggested'),
+            symptoms: has('levels'),
+            redFlag: (day: Date) => {
+              const m = markersFor(byDay, day)
+              return Boolean(m && hasRedFlag(m))
+            },
           }}
           components={{ DayButton: MarkerDayButton }}
           labels={{
@@ -96,6 +103,12 @@ export function CalendarPage() {
         </span>
         <span className="flex items-center gap-1">
           <CalendarClock aria-hidden="true" className="size-4 text-primary" /> Appointment
+        </span>
+        <span className="flex items-center gap-1">
+          <span aria-hidden="true" className="size-2 rounded-full bg-muted" /> Symptoms logged
+        </span>
+        <span className="flex items-center gap-1">
+          <TriangleAlert aria-hidden="true" className="size-4 text-urgent" /> Red flag
         </span>
         {data.suggested_source && (
           <span className="flex items-center gap-1">
@@ -135,6 +148,8 @@ function MarkerDayButton({ day, modifiers, className, children, ...props }: DayB
         milestone={Boolean(modifiers.milestone)}
         appointment={Boolean(modifiers.appointment)}
         suggested={Boolean(modifiers.suggested)}
+        symptoms={Boolean(modifiers.symptoms)}
+        redFlag={Boolean(modifiers.redFlag)}
       />
     </button>
   )
@@ -154,7 +169,8 @@ function DayDetails({ day, markers }: { day?: Date; markers?: DayMarkers }) {
     !markers ||
     (markers.milestones.length === 0 &&
       markers.appointments.length === 0 &&
-      markers.suggested.length === 0)
+      markers.suggested.length === 0 &&
+      markers.levels.length === 0)
   return (
     <section aria-labelledby="day-heading" className="flex flex-col gap-3">
       <h2 id="day-heading">{formatDay(isoDay(day))}</h2>
@@ -170,6 +186,21 @@ function DayDetails({ day, markers }: { day?: Date; markers?: DayMarkers }) {
                 <li key={`${m.kind}-${m.value}`} className="flex items-center gap-2">
                   <Flag aria-hidden="true" className="size-4 shrink-0 text-primary" />
                   {milestoneLabel(m)}
+                </li>
+              ))}
+            </ul>
+          )}
+          {markers.levels.length > 0 && (
+            // §9.2: that day's check-ins with their levels
+            <ul className="flex flex-col gap-1">
+              {markers.levels.map((level, i) => (
+                <li key={i} className="flex items-center gap-2">
+                  {level === 'L0' ? (
+                    <span aria-hidden="true" className="size-2 rounded-full bg-muted" />
+                  ) : (
+                    <TriangleAlert aria-hidden="true" className="size-4 text-urgent" />
+                  )}
+                  Check-in: {LEVEL_HEADING[level as Level]}
                 </li>
               ))}
             </ul>

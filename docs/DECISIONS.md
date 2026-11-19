@@ -71,6 +71,7 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-064 | 2026-11-18 | After a pregnancy has ended, the Log and Urgent screens show the after-pregnancy safety message and helplines instead of the pregnancy form (postpartum out of scope, D1); symptom history stays visible | Owner: as recommended | Accepted |
 | DEC-065 | 2026-11-18 | "Have not yet felt the baby move" is offered when the pregnancy week is unknown (safety principle §1.3) | Owner: as recommended | Accepted |
 | DEC-066 | 2026-11-18 | Migration 0003 (symptom_checkins, symptom_logs) tested on alovia-test, then applied to the main project | Owner: as recommended | Accepted |
+| DEC-067 | 2026-11-19 | The check-in examples in Symptom spec §10 and API.md §5 are corrected to `matched_rules: ["L1-03"]`: rule L2-07 excludes a headache that matched L1-03/L1-04, and the rule tables are the source of truth (§0 rule 4, §14 test 1) | Owner approval | Accepted |
 
 ## Template for new entries
 

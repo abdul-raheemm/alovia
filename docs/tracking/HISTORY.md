@@ -695,3 +695,14 @@ Done:
 Checks: first `bash scripts/check_all.sh` run → exit 1 after 8 h: 4 Phase 2 database tests failed with "failed to resolve host" (network lost while the machine slept; ERR-046); re-run → exit 0: pytest 334 passed; Vitest 44 passed; Playwright 82 passed; ruff, mypy, typecheck, lint, format pass.
 Errors met: 0 (two visual issues found by looking, fixed before commit)
 Next step: task 6 (Journey links: logged today, weekly summary, calendar dots and red-flag icons).
+
+## Session 26 — 2026-11-19 — Phase 3 task 6: symptoms in the Journey
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 3 — quick log "logged today", weekly summary, calendar dots and red-flag icons (Journey §4.3, §9.2, §9.4, §15 test 8)
+Done:
+- Backend: `symptoms.service` gains `symptom_days`, `logged_on`, `week_summary` (read by the journey router, ARCHITECTURE §8; no import cycle). Journey router: one `_home` builder for /home, PUT /dates and the pregnancy-end routes, adding `logged_today` and `weekly_summary` (with the `common_symptoms` content for the content week via `select_for_home`); the calendar adds `symptom_days`. 4 integration tests (strict warnings).
+- Patient app: quick log shows "Logged today"; "This week's summary" with "You logged" (days, top symptoms, red-flag days, link to history) and the "Common at this stage" Learn card, apart and never compared; calendar and week strip: a dot for any check-in and a distinct red-flag icon (urgent colour) on L1/L2 days, screen-reader words, legend, and the day's check-ins with their level names in the day details.
+- Tests: E2E for the home summary (no "normal"/comparison wording) and the calendar markers (distinct icon and colour), phone-light + laptop-dark, axe.
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 338 passed; Vitest 44 passed; Playwright 86 passed; ruff, mypy, typecheck, lint, format pass. Also (owner): the §10 / API.md §5 examples corrected to ["L1-03"] (DEC-067).
+Errors met: 0 (a missing import and a shell-escaped apostrophe in a test title, both caught by typecheck/prettier before running)
+Next step: task 7 (rule sign-off sheet, review, CHANGELOG 0.3.0).
