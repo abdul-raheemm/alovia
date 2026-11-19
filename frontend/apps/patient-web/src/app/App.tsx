@@ -10,6 +10,7 @@ import { CalendarPage } from '../pages/CalendarPage'
 import { DatesPage } from '../pages/DatesPage'
 import { DoctorNotesPage } from '../pages/DoctorNotesPage'
 import { GeneticPage } from '../pages/GeneticPage'
+import { ResultsPage } from '../pages/ResultsPage'
 import { HomePage } from '../pages/HomePage'
 import { JoinPage } from '../pages/JoinPage'
 import { MonthDetailPage } from '../pages/MonthDetailPage'
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
       { path: '/doctor-notes', element: <DoctorNotesPage /> },
       { path: '/pregnancy-end', element: <PregnancyEndPage /> },
       { path: '/genetic', element: <GeneticPage /> },
+      { path: '/results', element: <ResultsPage /> },
       { path: '/more', element: <MorePage /> },
       { path: '/urgent', element: <UrgentPage /> },
     ],

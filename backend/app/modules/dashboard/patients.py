@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 from app.core.errors import AppError
 from app.modules.dashboard.models import InboxItem
+from app.modules.dashboard.predictions import hba1c_note
 from app.modules.dashboard.schemas import (
     AssignedDoctor,
     GeneticStatus,
@@ -150,6 +151,7 @@ def patient_detail(db: Session, patient: Patient, cfg: JourneyConfig, today: dat
             "notes": patient.notes,
             "due_date_source": patient.due_date_source,
             "doctors": doctors,
+            "hba1c_note": hba1c_note(db, patient.id),
         }
     )
 

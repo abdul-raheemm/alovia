@@ -796,3 +796,13 @@ Done:
 - Task 2 doctor app: Home, Patients, New patient, patient page (Overview, invite link + Copy; other tabs placeholders for later tasks); 10 unit tests; 8 E2E (both viewports, axe).
 Checks: see the task 2 review report.
 Next step: owner review of task 2, then task 3 (predictions).
+
+## Session 35 — 2026-11-19 — Phase 5 task 3: predictions, sharing, trends, My results
+Who: Raheem + agent: Claude Code
+Done:
+- Owner: task 2 approved and committed (`fa08745`); range basis = training split (DEC-087); asked the agent to confirm the dataset licences → both CC BY 4.0 (UCI page; Mendeley Data page), citations in CREDITS.
+- Backend: schema/run/history/trends/share routes and `GET /patient/results`; unit conversion from `config.yaml`; range warnings from the range files (prediction still runs); unchanged models via `predictions.service.predict_and_save`; §9.5 note from `genetic.service.mother_haemoglobin_status`; `result_available` notifications. 15 integration tests: reference outputs reproduced through the route, §25 tests 1 (these routes), 5, 6, 7, 8, validation, trends.
+- Doctor app: Fetal/Maternal tabs; patient app: My results + More link + notification target. 4 new unit tests; 6 new E2E runs (both viewports, axe).
+- Proposals for the owner: DEC-088 (no rounding of converted values), DEC-089 (form sections, [CONFIRM]), DEC-090 (class colour ramp), DEC-091 (formulas in config.yaml).
+Checks: see the task 3 review report.
+Next step: owner review of task 3, then task 4 (genetic review, symptoms view, notes, appointments, dates/status).

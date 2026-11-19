@@ -11,7 +11,7 @@ from app.core.database import make_engine
 from app.core.errors import register_error_handlers
 from app.core.logging import REQUEST_ID_HEADER, configure_logging, request_context
 from app.modules.dashboard import router as dashboard
-from app.modules.dashboard.rules import load_dashboard_rules
+from app.modules.dashboard.rules import load_dashboard_rules, load_ranges
 from app.modules.genetic import router as genetic
 from app.modules.genetic.rules import load_genetic_rules
 from app.modules.journey import router as journey
@@ -42,6 +42,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.symptom_rules = load_symptom_rules()  # red-flag rules etc. (Symptom spec §13)
     app.state.genetic_rules = load_genetic_rules()  # inheritance rules (Genetic spec §12)
     app.state.dashboard_rules = load_dashboard_rules()  # settings + messages (Dashboard §23)
+    load_ranges()  # training ranges next to the models (§9.4)
     # public signing keys, fetched on first use and cached (app.core.auth)
     app.state.jwks_client = jwt.PyJWKClient(settings.supabase_jwks_url, cache_keys=True)
     register_error_handlers(app)
@@ -64,4 +65,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(symptoms.router)
     app.include_router(genetic.router)
     app.include_router(dashboard.router)
+    app.include_router(dashboard.patient_router)
     return app

@@ -42,6 +42,7 @@ from app.modules.journey.schemas import (
     SuggestedCheckupOut,
     UltrasoundDatesIn,
 )
+from app.modules.predictions import service as predictions
 from app.modules.users.models import Patient, User
 from app.modules.users.service import add_audit
 
@@ -426,7 +427,11 @@ def _notifications_due(
     ]
     # doctor_note: each note her doctor has shared (the doctor side arrives in Phase 5)
     due += [("doctor_note", str(n.id)) for n in dashboard.shared_notes(db, patient.id)]
-    # TODO(Phases 4-5): result_available, genetic_reviewed, dates_updated (doctor actions)
+    # result_available: each result a doctor shared with her (Dashboard §10 step 3)
+    due += [
+        ("result_available", str(r.share_id)) for r in predictions.shared_results(db, patient.id)
+    ]
+    # TODO(Phase 5 task 4): genetic_reviewed, dates_updated (doctor actions)
     return due
 
 

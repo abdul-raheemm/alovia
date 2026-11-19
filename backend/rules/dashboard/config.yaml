@@ -7,6 +7,83 @@ default_units:
   glucose: "mg/dL"
   temperature: "°F"
 
+# §9.3 unit conversions to the model unit: model = entered * multiply / divide + add.
+# [CONFIRM AT REVIEW] (U2). Sources: S1 NGSP master equation, S2 Joslin factor 18, standard °C->°F.
+unit_conversions:
+  hba1c:
+    feature: "Blood Glucose(HbA1c mmol/mol)"
+    model_unit: "mmol/mol"
+    other_unit: "%"
+    multiply: 10.93
+    divide: 1
+    add: -23.50
+    source: "S1"
+  glucose:
+    feature: "Blood Glucose(Fasting mmol/L)"
+    model_unit: "mmol/L"
+    other_unit: "mg/dL"
+    multiply: 1
+    divide: 18
+    add: 0
+    source: "S2"
+  temperature:
+    feature: "Body Temperature(F) "
+    model_unit: "°F"
+    other_unit: "°C"
+    multiply: 9
+    divide: 5
+    add: 32
+    source: "standard"
+
+# §9.1 form sections and field labels. Every model input appears exactly once (checked at
+# startup). [CONFIRM] which field sits in which section: the Bolt test frontend is not in the
+# repo; only the section names "Baseline & Variability", "Histogram Statistics" (fetal) and
+# "Vitals", "Blood Pressure", "Metabolic" (maternal) are known (context_v2 §5).
+form_groups:
+  fetal:
+    - label: "Baseline & Variability"
+      fields:
+        - {feature: "LB", label: "LB"}
+        - {feature: "ASTV", label: "ASTV"}
+        - {feature: "MSTV", label: "MSTV"}
+        - {feature: "ALTV", label: "ALTV"}
+        - {feature: "MLTV", label: "MLTV"}
+    - label: "Accelerations, Movements, Contractions & Decelerations"
+      fields:
+        - {feature: "AC.1", label: "AC"}
+        - {feature: "FM.1", label: "FM"}
+        - {feature: "UC.1", label: "UC"}
+        - {feature: "DL.1", label: "DL"}
+        - {feature: "DS.1", label: "DS"}
+        - {feature: "DP.1", label: "DP"}
+    - label: "Histogram Statistics"
+      fields:
+        - {feature: "Width", label: "Width"}
+        - {feature: "Min", label: "Min"}
+        - {feature: "Max", label: "Max"}
+        - {feature: "Nmax", label: "Nmax"}
+        - {feature: "Nzeros", label: "Nzeros"}
+        - {feature: "Mode", label: "Mode"}
+        - {feature: "Mean", label: "Mean"}
+        - {feature: "Median", label: "Median"}
+        - {feature: "Variance", label: "Variance"}
+        - {feature: "Tendency", label: "Tendency"}
+  maternal:
+    - label: "Vitals"
+      fields:
+        - {feature: "Age", label: "Age (years)"}
+        - {feature: "Body Temperature(F) ", label: "Body temperature"}
+        - {feature: "Heart rate(bpm)", label: "Heart rate (bpm)"}
+        - {feature: "BMI(kg/m 2)", label: "BMI (kg/m²)"}
+    - label: "Blood Pressure"
+      fields:
+        - {feature: "Systolic Blood Pressure(mm Hg)", label: "Systolic BP (mm Hg)"}
+        - {feature: "Diastolic Blood Pressure(mm Hg)", label: "Diastolic BP (mm Hg)"}
+    - label: "Metabolic"
+      fields:
+        - {feature: "Blood Glucose(HbA1c mmol/mol)", label: "HbA1c"}
+        - {feature: "Blood Glucose(Fasting mmol/L)", label: "Fasting glucose"}
+
 # §11 fetal inputs drawn as trend lines (names from fetal_risk_feature_order.json)
 fetal_trend_features: [LB, ASTV, ALTV]
 

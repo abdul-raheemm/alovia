@@ -92,6 +92,10 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-085 | 2026-11-19 | `ai_drafts` table and AI routes wait for Phase 6; `result_shares.ai_draft_id` is a plain nullable column until then | Owner: as recommended (J) | Accepted |
 | DEC-086 | 2026-11-19 | Phase 5 runs as tasks 1-7 (foundation, home/patients, predictions, other modules' doctor sides, records, rule review/audit/admin, E2E/release); review after each, merge at the end; migration 0005 alovia-test first, then main | Owner: as recommended (K) | Accepted |
 | DEC-087 | 2026-11-19 | Training ranges (Dashboard §9.4) use each model's training split (the rows it was fitted on), not the whole cleaned file; 6 of 29 inputs are slightly narrower as a result | Owner: as recommended | Accepted |
+| DEC-088 | 2026-11-19 | Converted values are stored and sent to the model unrounded (e.g. 7.0 % → 53.01 mmol/mol); rounding is for display only | Owner: as proposed (2026-11-19) | Accepted |
+| DEC-089 | 2026-11-19 | §9.1 form sections: the Bolt test frontend is not in the repo, so field membership of the known section names is a proposal in `config.yaml` (`form_groups`, [CONFIRM]) | Owner: as proposed (2026-11-19) | Accepted |
+| DEC-090 | 2026-11-19 | §11 trend points use an ordered one-hue ramp (`--class-1..3`) for the model classes, not the alert colours; the class is always in the tooltip and a text table | Owner: as proposed (2026-11-19) | Accepted |
+| DEC-091 | 2026-11-19 | §9.3 conversion formulas live in `rules/dashboard/config.yaml` (`unit_conversions`: multiply / divide / add with source), the only place they are typed | Owner: as proposed (2026-11-19) | Accepted |
 
 ## Template for new entries
 

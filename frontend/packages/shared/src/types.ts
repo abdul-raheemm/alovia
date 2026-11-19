@@ -48,3 +48,10 @@ export type PatientDetail = components['schemas']['PatientDetail']
 export type PatientInput = components['schemas']['PatientIn']
 export type InviteLink = components['schemas']['InviteOut']
 export type InboxItem = components['schemas']['InboxItemOut']
+
+/** Doctor predictions, sharing and trends (Dashboard spec §9-11); patient's shared results. */
+export type PredictionSchema = components['schemas']['PredictionSchema']
+export type PredictionInput = components['schemas']['PredictionIn']
+export type PredictionResult = components['schemas']['ResultOut']
+export type Trends = components['schemas']['TrendsOut']
+export type SharedResult = components['schemas']['PatientResultOut']

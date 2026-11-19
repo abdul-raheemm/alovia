@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- A Recharts chart wrapped in `aria-hidden` (data given as text instead) needs `accessibilityLayer={false}`, or axe reports focusable hidden content (ERR-051).
 - Times that are compared must come from one clock: write and check expiry with the database's `now()`, never the app server's (ERR-048).
 - In Git Bash, never pass a Python regex with backslashes (or a long YAML/text block) through an inline heredoc; write a script or the file with the file tool (ERR-044).
 - Free date inputs need a range check at the API: a local date near year 1 or 9999 overflows when converted or shifted, and one stored bad row can break every later read (ERR-042).
@@ -525,4 +526,34 @@ Cause: ruff lints and formats `.ipynb` files inside the project by default.
 Fix: notebooks restored from the untouched copies, the save cells added again; `extend-exclude = ["ml_training"]` in `pyproject.toml`.
 Verified by: ruff clean; notebooks differ from the originals only by the added cell.
 Prevention: third-party or owner files placed in the repo are excluded from formatters in the same step.
+Category: tooling
+
+### ERR-050 — 2026-11-19 — Prediction route returned 500: deprecated `Result.tuples()`
+Who: Claude Code
+Phase / task: Phase 5 — task 3 (found by the new tests)
+What happened: 9 of 15 new prediction tests failed; the route raised `SADeprecationWarning: The Result.tuples() method is deprecated` (warnings are errors in tests).
+Cause: `.tuples()` written from memory; SQLAlchemy 2.1 deprecated it (rows unpack directly).
+Fix: unpack the rows in a dict comprehension.
+Verified by: 15 passed.
+Prevention: tests run with warnings as errors, which caught it; no new rule.
+Category: bug
+
+### ERR-051 — 2026-11-19 — axe `aria-hidden-focus` on the doctor charts
+Who: Claude Code
+Phase / task: Phase 5 — task 3 (E2E)
+What happened: the result and trend charts failed axe: focusable elements inside `aria-hidden` wrappers.
+Cause: Recharts 3 adds a keyboard accessibility layer (focusable SVG) by default; the charts are hidden from screen readers because a text list/table carries the same data.
+Fix: `accessibilityLayer={false}` on both charts.
+Verified by: 6 E2E runs passed with axe.
+Prevention: Lesson added.
+Category: accessibility
+
+### ERR-052 — 2026-11-19 — `npm install -w doctor-web` failed with "reading 'location'" (third time)
+Who: Claude Code
+Phase / task: Phase 5 — task 3 (Recharts in the doctor app)
+What happened: the workspace install failed as in ERR-030 and ERR-034.
+Cause: same npm workspace bug; the existing Lesson was not applied first.
+Fix: plain `npm install`, then the workspace install.
+Verified by: install succeeded; lockfile +2 lines.
+Prevention: existing Lesson.
 Category: tooling

@@ -17,8 +17,8 @@ Every third-party asset used in the apps must be listed here **before** it is us
 ## Datasets (model training and training ranges)
 | Dataset | Use | Licence |
 |---|---|---|
-| UCI Cardiotocography (id 193), `CTG.xls` | Fetal model training (Phase 0-1, owner); training ranges in `backend/ml_models/fetal_risk_feature_ranges.json` (min/max only; the data itself is not shipped) | `[CONFIRM]` owner to confirm from the UCI page |
-| Hossain et al. (2026) maternal risk dataset, `Maternal_Risk.csv` | Maternal model training (owner); training ranges in `backend/ml_models/maternal_risk_feature_ranges.json` (min/max only; not shipped) | `[CONFIRM]` owner to confirm from the dataset page |
+| Campos, D. & Bernardes, J. (2000). *Cardiotocography* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C51S4N (`CTG.xls`, id 193) | Fetal model training (owner); training ranges in `backend/ml_models/fetal_risk_feature_ranges.json` (min/max only; the data itself is not shipped) | CC BY 4.0 (attribution required), checked on the UCI page 2026-11-19 (owner confirmed) |
+| Hossain, M. M. (2025). *Maternal health risk data* (Version 1) [Dataset]. Mendeley Data. https://doi.org/10.17632/ckhgtgdg4f.1 (`Maternal_Risk.csv`; cleaned to the criteria of Hossain et al. 2026) | Maternal model training (owner); training ranges in `backend/ml_models/maternal_risk_feature_ranges.json` (min/max only; not shipped) | CC BY 4.0 (attribution required), checked on the Mendeley Data page 2026-11-19 (owner confirmed) |
 
 ## Illustrations (Journey month cards)
 | File | Source URL | Author/publisher | Licence | Date downloaded | Changes |

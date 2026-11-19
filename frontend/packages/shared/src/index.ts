@@ -26,9 +26,14 @@ export type {
   PatientDetail,
   PatientInput,
   PatientRow,
+  PredictionInput,
+  PredictionResult,
+  PredictionSchema,
   PregnancyEndInput,
+  SharedResult,
   SymptomCharts,
   SymptomVocabulary,
+  Trends,
 } from './types'
 export {
   CONSENT_SOURCE,

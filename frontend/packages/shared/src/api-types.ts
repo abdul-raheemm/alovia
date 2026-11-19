@@ -91,6 +91,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/doctor/patients/{patient_id}/predictions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Prediction History */
+        get: operations["prediction_history_api_v1_doctor_patients__patient_id__predictions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/predictions/{model}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Run Prediction */
+        post: operations["run_prediction_api_v1_doctor_patients__patient_id__predictions__model__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/trends": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Prediction Trends */
+        get: operations["prediction_trends_api_v1_doctor_patients__patient_id__trends_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/predictions/schema/{model}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Prediction Schema */
+        get: operations["prediction_schema_api_v1_doctor_predictions_schema__model__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/predictions/{model}/{result_id}/share": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Share Result */
+        post: operations["share_result_api_v1_doctor_predictions__model___result_id__share_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/health": {
         parameters: {
             query?: never;
@@ -432,6 +517,26 @@ export interface paths {
         put?: never;
         /** Undo Pregnancy End */
         post: operations["undo_pregnancy_end_api_v1_patient_pregnancy_end_undo_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/patient/results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Results
+         * @description API.md §4.5: shared fetal/maternal results only (template + doctor message).
+         */
+        get: operations["my_results_api_v1_patient_results_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -893,6 +998,18 @@ export interface components {
             /** Url */
             url: string;
         };
+        /**
+         * ConversionOut
+         * @description §9.3 model = entered * multiply / divide + add, for the form's preview.
+         */
+        ConversionOut: {
+            /** Add */
+            add: number;
+            /** Divide */
+            divide: number;
+            /** Multiply */
+            multiply: number;
+        };
         /** DatesOut */
         DatesOut: {
             /** Due Date */
@@ -1117,6 +1234,24 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[PredictionSchema] */
+        Envelope_PredictionSchema_: {
+            data: components["schemas"]["PredictionSchema"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[ResultOut] */
+        Envelope_ResultOut_: {
+            data: components["schemas"]["ResultOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[TrendsOut] */
+        Envelope_TrendsOut_: {
+            data: components["schemas"]["TrendsOut"];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[VocabularyOut] */
         Envelope_VocabularyOut_: {
             data: components["schemas"]["VocabularyOut"];
@@ -1158,12 +1293,42 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[list[PatientResultOut]] */
+        Envelope_list_PatientResultOut__: {
+            /** Data */
+            data: components["schemas"]["PatientResultOut"][];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[list[PatientRow]] */
         Envelope_list_PatientRow__: {
             /** Data */
             data: components["schemas"]["PatientRow"][];
             /** Error */
             error?: null;
+        };
+        /** Envelope[list[ResultOut]] */
+        Envelope_list_ResultOut__: {
+            /** Data */
+            data: components["schemas"]["ResultOut"][];
+            /** Error */
+            error?: null;
+        };
+        /** Factor */
+        Factor: {
+            /** Direction */
+            direction: string;
+            /** Feature */
+            feature: string;
+            /** Impact */
+            impact: number;
+        };
+        /** FieldRange */
+        FieldRange: {
+            /** Max */
+            max: number;
+            /** Min */
+            min: number;
         };
         /** Flags */
         Flags: {
@@ -1473,6 +1638,8 @@ export interface components {
             genetic: components["schemas"]["GeneticStatus"] | null;
             /** Group */
             group: number;
+            /** Hba1C Note */
+            hba1c_note: boolean;
             /**
              * Id
              * Format: uuid
@@ -1514,6 +1681,41 @@ export interface components {
             name: string;
         };
         /**
+         * PatientResultOut
+         * @description §10 step 4 / UX P10: the class in plain words (doctor-approved template) and the
+         *     doctor's message only.
+         */
+        PatientResultOut: {
+            /** Doctor Message */
+            doctor_message: string | null;
+            /** Doctor Name */
+            doctor_name: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Result Date
+             * Format: date-time
+             */
+            result_date: string;
+            /**
+             * Result Type
+             * @enum {string}
+             */
+            result_type: "fetal" | "maternal";
+            /**
+             * Shared At
+             * Format: date-time
+             */
+            shared_at: string;
+            /** Template Key */
+            template_key: string;
+            /** Template Text */
+            template_text: string | null;
+        };
+        /**
          * PatientRow
          * @description §6 patient list row. Model labels are returned as text; colour is only a help.
          */
@@ -1543,6 +1745,46 @@ export interface components {
             symptom: components["schemas"]["SymptomLevel"] | null;
             /** Unseen Count */
             unseen_count: number;
+        };
+        /**
+         * PredictionIn
+         * @description §9.2: every model input as typed, plus the unit chosen on each switch.
+         */
+        PredictionIn: {
+            /**
+             * Units
+             * @default {}
+             */
+            units: {
+                [key: string]: string;
+            };
+            /** Values */
+            values: {
+                [key: string]: number;
+            };
+        };
+        /**
+         * PredictionSchema
+         * @description §9.1 form, built from the model's feature order and the config file.
+         */
+        PredictionSchema: {
+            /** Conversions */
+            conversions: {
+                [key: string]: components["schemas"]["ConversionOut"];
+            };
+            /** Groups */
+            groups: components["schemas"]["SchemaGroup"][];
+            /** Limitation Keys */
+            limitation_keys: string[];
+            /** Messages */
+            messages: {
+                [key: string]: string | null;
+            };
+            /**
+             * Model
+             * @enum {string}
+             */
+            model: "fetal" | "maternal";
         };
         /**
          * PregnancyEndIn
@@ -1618,6 +1860,70 @@ export interface components {
             url: string;
         };
         /**
+         * ResultOut
+         * @description §9.7 everything the doctor sees for one prediction. Never editable (§1.3).
+         */
+        ResultOut: {
+            /** Class Probabilities */
+            class_probabilities: {
+                [key: string]: number;
+            };
+            /** Confidence */
+            confidence: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Entered By Name */
+            entered_by_name: string | null;
+            /** Entered Values */
+            entered_values: {
+                [key: string]: unknown;
+            } | null;
+            /** Hba1C Note */
+            hba1c_note: boolean;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Input Values */
+            input_values: {
+                [key: string]: number;
+            };
+            /**
+             * Model
+             * @enum {string}
+             */
+            model: "fetal" | "maternal";
+            /** Model Version */
+            model_version: string | null;
+            /** Predicted Class */
+            predicted_class: string;
+            /** Range Warnings */
+            range_warnings: string[];
+            share: components["schemas"]["ShareOut"] | null;
+            /** Top Contributing Factors */
+            top_contributing_factors: components["schemas"]["Factor"][];
+        };
+        /** SchemaField */
+        SchemaField: {
+            /** Feature */
+            feature: string;
+            /** Label */
+            label: string;
+            range: components["schemas"]["FieldRange"];
+            unit: components["schemas"]["UnitSwitch"] | null;
+        };
+        /** SchemaGroup */
+        SchemaGroup: {
+            /** Fields */
+            fields: components["schemas"]["SchemaField"][];
+            /** Label */
+            label: string;
+        };
+        /**
          * SectionIn
          * @description One condition section (§4.1). `entry` is asked for haemophilia and Marfan only.
          */
@@ -1628,6 +1934,28 @@ export interface components {
             mother?: components["schemas"]["ParentIn"] | null;
             /** Previous Child */
             previous_child?: string | null;
+        };
+        /**
+         * ShareIn
+         * @description §10 step 2: an optional doctor message (the AI-2 draft is Phase 6).
+         */
+        ShareIn: {
+            /** Doctor Message */
+            doctor_message?: string | null;
+        };
+        /** ShareOut */
+        ShareOut: {
+            /** Doctor Message */
+            doctor_message: string | null;
+            /**
+             * Shared At
+             * Format: date-time
+             */
+            shared_at: string;
+            /** Shared By Name */
+            shared_by_name: string | null;
+            /** Template Key */
+            template_key: string;
         };
         /**
          * SizeReference
@@ -1741,6 +2069,41 @@ export interface components {
             /** Symptom */
             symptom: string;
         };
+        /** TrendPoint */
+        TrendPoint: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Ga Week */
+            ga_week: number | null;
+            /** Predicted Class */
+            predicted_class: string;
+            /**
+             * Result Id
+             * Format: uuid
+             */
+            result_id: string;
+            /** Values */
+            values: {
+                [key: string]: number;
+            };
+        };
+        /**
+         * TrendsOut
+         * @description §11: raw values over time, in model units; no arrows, scores or interpretations.
+         */
+        TrendsOut: {
+            /** Fetal */
+            fetal: components["schemas"]["TrendPoint"][];
+            /** Fetal Features */
+            fetal_features: string[];
+            /** Maternal */
+            maternal: components["schemas"]["TrendPoint"][];
+            /** Maternal Features */
+            maternal_features: string[];
+        };
         /**
          * UltrasoundDatesIn
          * @description Option C: gestational age from an ultrasound, and the scan date.
@@ -1765,6 +2128,20 @@ export interface components {
              * Format: date
              */
             scan_date: string;
+        };
+        /**
+         * UnitSwitch
+         * @description §9.3 a field with a unit switch: the model unit and the one other unit accepted.
+         */
+        UnitSwitch: {
+            /** Default */
+            default: string;
+            /** Model Unit */
+            model_unit: string;
+            /** Name */
+            name: string;
+            /** Other Unit */
+            other_unit: string;
         };
         /** UserOut */
         UserOut: {
@@ -2074,6 +2451,173 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_InviteOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    prediction_history_api_v1_doctor_patients__patient_id__predictions_get: {
+        parameters: {
+            query: {
+                model: "fetal" | "maternal";
+            };
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_ResultOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_prediction_api_v1_doctor_patients__patient_id__predictions__model__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model: "fetal" | "maternal";
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PredictionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ResultOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    prediction_trends_api_v1_doctor_patients__patient_id__trends_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_TrendsOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    prediction_schema_api_v1_doctor_predictions_schema__model__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model: "fetal" | "maternal";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PredictionSchema_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    share_result_api_v1_doctor_predictions__model___result_id__share_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model: "fetal" | "maternal";
+                result_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ShareIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_ResultOut_"];
                 };
             };
             /** @description Validation Error */
@@ -2696,6 +3240,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_HomeOut_"];
+                };
+            };
+        };
+    };
+    my_results_api_v1_patient_results_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_PatientResultOut__"];
                 };
             };
         };

@@ -14,6 +14,7 @@ describe('notification helpers (spec 10.1)', () => {
     expect(notificationTarget({ type: 'appointment_soon', target_ref: 'x' })).toBe('/appointments')
     expect(notificationTarget({ type: 'doctor_note', target_ref: 'x' })).toBe('/doctor-notes')
     expect(notificationTarget({ type: 'dates_updated', target_ref: null })).toBe('/dates')
+    expect(notificationTarget({ type: 'result_available', target_ref: 'x' })).toBe('/results')
   })
 
   it('has calm wording for every type, with no exclamation marks', () => {

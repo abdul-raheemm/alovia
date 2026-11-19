@@ -125,6 +125,20 @@ def latest_review(db: Session, patient_id: uuid.UUID) -> LatestReview | None:
     return LatestReview(row.review_status, row.priority, row.created_at) if row else None
 
 
+def mother_haemoglobin_status(db: Session, patient_id: uuid.UUID) -> str | None:
+    """Dashboard §9.5: the mother's haemoglobin-group status in the latest assessment, or None
+    when there is no assessment or no answer."""
+    inputs = db.scalar(
+        select(GeneticAssessment.inputs)
+        .where(GeneticAssessment.patient_id == patient_id)
+        .order_by(GeneticAssessment.created_at.desc())
+        .limit(1)
+    )
+    mother = ((inputs or {}).get("haemoglobin_group") or {}).get("mother") or {}
+    status = mother.get("status")
+    return status if isinstance(status, str) else None
+
+
 GeneticCheck = Literal["reviewed", "sent_to_doctor", "needs_testing", "pending_review"]
 
 

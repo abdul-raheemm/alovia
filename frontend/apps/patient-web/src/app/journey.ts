@@ -174,8 +174,8 @@ export function notificationText(n: { type: string; target_ref?: string | null }
   }
 }
 
-/** Where tapping a notification leads (§10.1 "Target"). TODO(Phases 4-5): My results and
- * Genetic risk pages; until then those open More. */
+/** Where tapping a notification leads (§10.1 "Target"). TODO(Phase 5 task 4): Genetic risk
+ * for genetic_reviewed; until then it opens More. */
 export function notificationTarget(n: { type: string; target_ref?: string | null }): string {
   switch (n.type) {
     case 'new_month':
@@ -187,6 +187,7 @@ export function notificationTarget(n: { type: string; target_ref?: string | null
     case 'dates_updated':
       return '/dates'
     case 'result_available':
+      return '/results'
     case 'genetic_reviewed':
       return '/more'
     default:

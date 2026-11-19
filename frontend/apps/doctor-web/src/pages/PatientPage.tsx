@@ -18,6 +18,7 @@ import {
 } from '../app/patients'
 import { api } from '../app/services'
 import { PatientForm } from '../components/PatientForm'
+import { PredictionTab } from '../components/predictions/PredictionTab'
 
 function Box({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -260,6 +261,8 @@ export function PatientPage() {
       </nav>
       {current.id === 'overview' ? (
         <Overview patient={patient.data} />
+      ) : current.id === 'fetal' || current.id === 'maternal' ? (
+        <PredictionTab key={current.id} model={current.id} patient={patient.data} />
       ) : (
         <Card>
           <h2>{current.label}</h2>

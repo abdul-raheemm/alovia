@@ -1,3 +1,17 @@
 @import '@alovia/ui/styles.css';
 /* let Tailwind find the classes used inside the shared UI package */
 @source '../../../packages/ui/src';
+
+/* Trend points (Dashboard spec §11): the model classes are ordered, so one hue light -> dark
+   (lightness steps checked with the dataviz validator for each theme's surface; the class is
+   also in every tooltip and table, so colour is never the only signal). */
+:root {
+  --class-1: #a59ae6;
+  --class-2: #4f3fa8;
+  --class-3: #251a5e;
+}
+[data-theme='dark'] {
+  --class-1: #4c4494;
+  --class-2: #a79bf0;
+  --class-3: #d0c4ff;
+}
