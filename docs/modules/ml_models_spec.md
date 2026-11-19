@@ -45,7 +45,7 @@ fetal_risk_label_mapping.json        maternal_risk_label_mapping.json
 fetal_risk_model_metadata.json       maternal_risk_model_metadata.json
 ```
 
-New in Phase 5 (Dashboard spec §9.4): `fetal_risk_feature_ranges.json`, `maternal_risk_feature_ranges.json`, computed by a script from the cleaned training data, never typed by hand. `[OPEN]` the cleaned training data files must be located (see §6).
+New in Phase 5 (Dashboard spec §9.4): `fetal_risk_feature_ranges.json`, `maternal_risk_feature_ranges.json`, computed by `backend/scripts/compute_feature_ranges.py`, never typed by hand (DEC-076). Source: the owner's training notebooks `backend/ml_training/fetal_model.ipynb` and `maternal_model.ipynb` (committed; one added cell each saves the cleaned CSV). Raw data (`CTG.xls`, `Maternal_Risk.csv`) and the cleaned CSVs live in `backend/ml_training/data/` (git-ignored); run the notebooks with that folder as the working folder. Basis: the min/max of each input in each model's **training split** (test_size 0.2, stratified, random_state 42 — exactly what the model was fitted on; 1,692 fetal and 4,846 maternal rows). The script refuses to write unless the saved model reproduces the test macro F1 in its metadata on the rebuilt split (0.9164 / 0.9909). Re-run of both notebooks on 2026-11-19 (same package versions): retrained `.joblib` files byte-identical to `backend/ml_models/`; all printed results identical to the stored outputs (only the pip log, a progress-bar warning, a pandas repr name and the `trained_on` date differ).
 
 ## 4. Prediction logic to preserve (from the old `ml-test/app`)
 

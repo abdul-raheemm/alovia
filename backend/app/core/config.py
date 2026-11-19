@@ -29,6 +29,8 @@ class Settings(BaseSettings):
     database_url: str
     # separate, empty database used only by the migration tests (never the main project)
     test_database_url: str | None = None
+    # base of the invite links doctors send (Dashboard §8.2); the deployed URL is set in Phase 9
+    patient_app_url: str = "http://localhost:5173"
 
     @field_validator("cors_origins", mode="before")
     @classmethod

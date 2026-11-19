@@ -174,4 +174,26 @@ export async function signInAsPatient(page: Page, me: unknown = TEST_PATIENT_ME)
       route.fulfill({ json: { data: [], error: null } }),
     )
   }
+  // and for the doctor app's home lists
+  for (const list of ['doctor/patients', 'doctor/inbox', 'doctor/inbox?*']) {
+    await page.route(`**/api/v1/${list}`, (route) =>
+      route.fulfill({ json: { data: [], error: null } }),
+    )
+  }
+}
+
+export const TEST_DOCTOR_ME = {
+  user: {
+    id: '66666666-6666-6666-6666-666666666666',
+    email: 'test.doctor@example.test',
+    role: 'doctor',
+  },
+  patient: null,
+  doctor: { id: '77777777-7777-7777-7777-777777777777', name: 'Test Doctor', specialty: null },
+  consent: { current_version: '2026-11-v1', accepted: true },
+}
+
+/** Sign in to the doctor app as a test doctor (same fake session as the patient helper). */
+export async function signInAsDoctor(page: Page): Promise<void> {
+  await signInAsPatient(page, TEST_DOCTOR_ME)
 }

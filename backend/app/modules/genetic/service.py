@@ -2,6 +2,8 @@
 (Genetic spec §4.1, §6-10; API.md §4.4). The doctor's review and corrections are Phase 5."""
 
 import uuid
+from dataclasses import dataclass
+from datetime import datetime
 from typing import Literal
 
 from sqlalchemy import select
@@ -98,6 +100,29 @@ def get_assessment(db: Session, patient: Patient, assessment_id: uuid.UUID) -> A
     if row is None:  # missing or another patient's: the same answer (API.md §6)
         raise AppError("NOT_FOUND", "We couldn't find this.", status=404)
     return _patient_view(row)
+
+
+@dataclass(frozen=True)
+class LatestReview:
+    """Doctor-side genetic status of the latest assessment (Dashboard §5.1, §6)."""
+
+    review_status: str  # pending_review / reviewed
+    priority: str  # normal / high
+    created_at: datetime
+
+
+def latest_review(db: Session, patient_id: uuid.UUID) -> LatestReview | None:
+    row = db.execute(
+        select(
+            GeneticAssessment.review_status,
+            GeneticAssessment.priority,
+            GeneticAssessment.created_at,
+        )
+        .where(GeneticAssessment.patient_id == patient_id)
+        .order_by(GeneticAssessment.created_at.desc())
+        .limit(1)
+    ).first()
+    return LatestReview(row.review_status, row.priority, row.created_at) if row else None
 
 
 GeneticCheck = Literal["reviewed", "sent_to_doctor", "needs_testing", "pending_review"]

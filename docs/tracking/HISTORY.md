@@ -785,3 +785,14 @@ Done:
 - Tests: 3 access tests (test-only router on the real dependencies), 7 dashboard rule-file tests, migration test extended.
 Checks (backend): `ruff format .` clean; `ruff check .` pass; `mypy app tests scripts` no issues (91 files); `pytest -q -W error` 491 passed.
 Next step: training ranges from the owner's notebooks (decision A), then task 2 (home, patient list, inbox, patient pages).
+
+## Session 34 — 2026-11-19 — Training ranges; Phase 5 task 2 (home, patients, inbox, invites)
+Who: Raheem + agent: Claude Code
+Done:
+- Owner: approved migration 0005 on main (applied, `alembic current` = 0005); added both training notebooks and raw data at the repo root → moved to `backend/ml_training/` (notebooks, committed) and `backend/ml_training/data/` (data, git-ignored), as asked.
+- One cell added to each notebook to save the cleaned CSV. Both notebooks executed top to bottom in a scratch virtual environment with the backend's ML versions: retrained models byte-identical to `backend/ml_models/`; all printed results identical to the stored outputs.
+- `scripts/compute_feature_ranges.py` → `fetal_risk_feature_ranges.json` (1,692 training rows) and `maternal_risk_feature_ranges.json` (4,846); the split is proven by reproducing the recorded test macro F1 (0.9164 / 0.9909). 6 inputs have a slightly narrower range in the training split than in the whole cleaned file (fetal DS.1, ASTV, MLTV, Median; maternal systolic BP, fasting glucose). Tests: range files cover every input in order; equal to a fresh computation when the data is present.
+- Task 2 backend: `/doctor/patients` (list, §6 order), `/doctor/patients/{id}` (overview), POST/PUT patients, POST invite, GET inbox, POST seen; 9 integration tests (order with mixed items = §25 test 3; seen visible to the other doctor = test 4; other doctors' patients 404 = test 1 for these routes; invite replaces the old one; linked patient 409; validation).
+- Task 2 doctor app: Home, Patients, New patient, patient page (Overview, invite link + Copy; other tabs placeholders for later tasks); 10 unit tests; 8 E2E (both viewports, axe).
+Checks: see the task 2 review report.
+Next step: owner review of task 2, then task 3 (predictions).

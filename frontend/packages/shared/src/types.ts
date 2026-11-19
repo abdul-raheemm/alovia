@@ -41,3 +41,10 @@ export type SymptomCharts = components['schemas']['ChartsOut']
 /** Genetic risk (Module 3, API.md §4.4). */
 export type GeneticAssessment = components['schemas']['AssessmentOut']
 export type GeneticInput = components['schemas']['AssessmentIn']
+
+/** Doctor home (Dashboard spec §5-8, API.md §4.6). */
+export type PatientRow = components['schemas']['PatientRow']
+export type PatientDetail = components['schemas']['PatientDetail']
+export type PatientInput = components['schemas']['PatientIn']
+export type InviteLink = components['schemas']['InviteOut']
+export type InboxItem = components['schemas']['InboxItemOut']

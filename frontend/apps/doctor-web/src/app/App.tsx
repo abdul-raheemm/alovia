@@ -12,6 +12,8 @@ import {
 
 import { AccountGate } from '../components/AccountGate'
 import { useMe } from '../components/DoctorShell'
+import { HomePage, NewPatientPage, PatientsPage } from '../pages/HomePages'
+import { PatientPage } from '../pages/PatientPage'
 import { authClient, queryClient } from './services'
 
 function PublicLayout() {
@@ -118,9 +120,11 @@ const router = createBrowserRouter([
   {
     element: <AccountGate />,
     children: [
-      // TODO(Phase 5): Dashboard spec screens (inbox, patient list, reviews, admin)
-      { path: '/home', element: <PlaceholderPage title="Home" /> },
-      { path: '/patients', element: <PlaceholderPage title="Patients" /> },
+      // TODO(Phase 5 tasks 4 and 6): genetic review, rule review and admin screens
+      { path: '/home', element: <HomePage /> },
+      { path: '/patients', element: <PatientsPage /> },
+      { path: '/patients/new', element: <NewPatientPage /> },
+      { path: '/patients/:id/:tab?', element: <PatientPage /> },
       { path: '/genetic-review', element: <PlaceholderPage title="Genetic review" /> },
       { path: '/rule-review', element: <PlaceholderPage title="Rule review" /> },
       { path: '/admin', element: <AdminOnly /> },

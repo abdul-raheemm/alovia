@@ -1,0 +1,41 @@
+{
+  "model": "maternal",
+  "basis": "training split of the cleaned data (test_size 0.2, stratified, random_state 42)",
+  "source": "backend/ml_training/maternal_model.ipynb -> maternal_clean.csv",
+  "training_rows": 4846,
+  "checked_test_macro_f1": 0.9909,
+  "features": {
+    "Age": {
+      "min": 15.0,
+      "max": 48.0
+    },
+    "Body Temperature(F) ": {
+      "min": 95.0,
+      "max": 104.0
+    },
+    "Heart rate(bpm)": {
+      "min": 45.0,
+      "max": 150.0
+    },
+    "Systolic Blood Pressure(mm Hg)": {
+      "min": 95.0,
+      "max": 169.0
+    },
+    "Diastolic Blood Pressure(mm Hg)": {
+      "min": 57.0,
+      "max": 142.0
+    },
+    "BMI(kg/m 2)": {
+      "min": 14.9,
+      "max": 27.9
+    },
+    "Blood Glucose(HbA1c mmol/mol)": {
+      "min": 30.0,
+      "max": 50.0
+    },
+    "Blood Glucose(Fasting mmol/L)": {
+      "min": 3.6,
+      "max": 8.9
+    }
+  }
+}

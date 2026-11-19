@@ -91,6 +91,7 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-084 | 2026-11-19 | Doctors are invited by `POST /admin/doctors` (Supabase Auth invite + users/doctors rows); the invite email leads to a "Set password" page in the doctor app (Flow D1) | Owner: as recommended (I) | Accepted |
 | DEC-085 | 2026-11-19 | `ai_drafts` table and AI routes wait for Phase 6; `result_shares.ai_draft_id` is a plain nullable column until then | Owner: as recommended (J) | Accepted |
 | DEC-086 | 2026-11-19 | Phase 5 runs as tasks 1-7 (foundation, home/patients, predictions, other modules' doctor sides, records, rule review/audit/admin, E2E/release); review after each, merge at the end; migration 0005 alovia-test first, then main | Owner: as recommended (K) | Accepted |
+| DEC-087 | 2026-11-19 | Training ranges (Dashboard §9.4) use each model's training split (the rows it was fitted on), not the whole cleaned file; 6 of 29 inputs are slightly narrower as a result | Owner: as recommended | Accepted |
 
 ## Template for new entries
 

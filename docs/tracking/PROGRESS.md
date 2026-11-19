@@ -55,7 +55,8 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 
 ## Phase 5 — Doctor Dashboard + Admin
 - [x] Task 1 foundation: migration 0005 (alovia-test, then main), doctor/admin access checks (role + active + consent + assignment), dashboard config + messages — Raheem + Claude Code — 2026-11-19
-- [ ] Patient list, inbox, patient tabs
+- [x] Training ranges (decision A): notebooks re-run, range files from the training split — Raheem + Claude Code — 2026-11-19
+- [x] Task 2 patient list, inbox, patient tabs (Overview), create/edit, invite links — Raheem + Claude Code — 2026-11-19 (owner approved; range basis DEC-087)
 - [ ] Predictions UI: units, range file script, warnings, limitations, sharing
 - [ ] Genetic review, symptoms view, records, notes, appointments, dates/status
 - [ ] Rule review screen; audit log; invite links; admin screens

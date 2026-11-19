@@ -70,6 +70,14 @@ def pregnancy_week(patient: Patient, cfg: JourneyConfig, today: date) -> int | N
     return ga.completed_weeks if ga is not None else None
 
 
+def gestational_age_now(
+    patient: Patient, cfg: JourneyConfig, today: date
+) -> tuple[int, int] | None:
+    """(weeks, days) today for the doctor's patient list and overview (Dashboard §5.1, §6)."""
+    ga = _current_ga(patient, cfg, today)
+    return (ga.completed_weeks, ga.days) if ga is not None else None
+
+
 # ---- §9.3 appointments ----
 
 

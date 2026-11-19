@@ -14,6 +14,12 @@ Every third-party asset used in the apps must be listed here **before** it is us
 | Lucide icons | ISC | UI icons |
 | Microsoft Fluent UI Emoji (https://github.com/microsoft/fluentui-emoji), colour SVGs: apple, brinjal (Eggplant), broccoli, capsicum (Bell pepper), coconut, corn (Ear of corn), grapes, lemon, mango, melon, orange (Tangerine), pineapple, tomato, watermelon — unchanged; downloaded 2026-11-17 and 2026-11-18, in `frontend/apps/patient-web/public/icons/fluent/` with the MIT `LICENSE` file | MIT (include licence notice) | Baby-size comparison objects |
 
+## Datasets (model training and training ranges)
+| Dataset | Use | Licence |
+|---|---|---|
+| UCI Cardiotocography (id 193), `CTG.xls` | Fetal model training (Phase 0-1, owner); training ranges in `backend/ml_models/fetal_risk_feature_ranges.json` (min/max only; the data itself is not shipped) | `[CONFIRM]` owner to confirm from the UCI page |
+| Hossain et al. (2026) maternal risk dataset, `Maternal_Risk.csv` | Maternal model training (owner); training ranges in `backend/ml_models/maternal_risk_feature_ranges.json` (min/max only; not shipped) | `[CONFIRM]` owner to confirm from the dataset page |
+
 ## Illustrations (Journey month cards)
 | File | Source URL | Author/publisher | Licence | Date downloaded | Changes |
 |---|---|---|---|---|---|

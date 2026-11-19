@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Times that are compared must come from one clock: write and check expiry with the database's `now()`, never the app server's (ERR-048).
 - In Git Bash, never pass a Python regex with backslashes (or a long YAML/text block) through an inline heredoc; write a script or the file with the file tool (ERR-044).
 - Free date inputs need a range check at the API: a local date near year 1 or 9999 overflows when converted or shifted, and one stored bad row can break every later read (ERR-042).
 - Add every new third-party asset or data source to `docs/legal/CREDITS.md` in the same task that ships it (ERR-043).
@@ -504,4 +505,24 @@ Cause: the existing Lesson (ERR-044: long text blocks → file tool) was not fol
 Fix: the same content written with the file tool.
 Verified by: the files exist; 491 tests passed.
 Prevention: follow the existing Lesson; no new rule needed.
+Category: tooling
+
+### ERR-048 — 2026-11-19 — A replaced invite link still checked as valid
+Who: Claude Code
+Phase / task: Phase 5 — task 2 (found by the new test)
+What happened: `test_invite_link_replaces_the_unused_one` failed: after a second link, the first code still checked valid.
+Cause: the cancel step set `expires_at` to the app server's clock, while the check compares with the database's `now()`; the two clocks differ by a few seconds, so the old code stayed valid briefly.
+Fix: invite create, cancel and link all use database time (`func.now()`).
+Verified by: the invite and doctor tests passed (24).
+Prevention: Lesson added (compare times on one clock: the database's).
+Category: bug
+
+### ERR-049 — 2026-11-19 — `ruff format .` reformatted the owner's notebooks
+Who: Claude Code
+Phase / task: Phase 5 — decision A
+What happened: after moving the notebooks into `backend/`, `ruff format .` rewrote their code cells and `ruff check` reported 35 style errors in them.
+Cause: ruff lints and formats `.ipynb` files inside the project by default.
+Fix: notebooks restored from the untouched copies, the save cells added again; `extend-exclude = ["ml_training"]` in `pyproject.toml`.
+Verified by: ruff clean; notebooks differ from the originals only by the added cell.
+Prevention: third-party or owner files placed in the repo are excluded from formatters in the same step.
 Category: tooling

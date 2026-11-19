@@ -15,6 +15,7 @@ Each part has its own `.env.example` (committed, empty values) and `.env` (never
 | `SUPABASE_JWT_ISSUER` / `SUPABASE_JWKS_URL` | Token verification (the project uses JWT signing keys, so no JWT secret is needed) | 1 |
 | `CORS_ORIGINS` | Comma-separated frontend origins | 1 |
 | `STORAGE_BUCKET` | Private bucket name (`medical-records`) | 5 |
+| `PATIENT_APP_URL` | Start of the invite links doctors send (Dashboard §8.2); default `http://localhost:5173`; the deployed patient app URL in Phase 9 | 5 |
 | `LLM_PROVIDER`, `LLM_MODEL`, `LLM_API_KEY` | AI drafts / RAG | 6–7 |
 | `EMBEDDING_PROVIDER`, `EMBEDDING_MODEL`, `EMBEDDING_API_KEY` | RAG | 7 |
 | `LOG_LEVEL` | `INFO` default | 1 |

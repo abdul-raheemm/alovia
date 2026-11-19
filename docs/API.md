@@ -125,6 +125,7 @@ Phase 3 additions to the Journey: the home data carries `logged_today` (a check-
 | Method | Path | Purpose |
 |---|---|---|
 | GET | `/doctor/patients` | Patient list (Dashboard §6) |
+| GET | `/doctor/patients/{id}` | Patient detail / Overview tab (Dashboard §5.1; added in Phase 5 task 2 — §24 names are `[OPEN]`) |
 | POST | `/doctor/patients` · PUT `/doctor/patients/{id}` | Create / edit |
 | POST | `/doctor/patients/{id}/invite` | Create invite link with a one-time code (returned once) |
 | GET | `/doctor/inbox` · POST `/doctor/inbox/{id}/seen` | Inbox |
@@ -143,6 +144,8 @@ Phase 3 additions to the Journey: the home data carries `logged_today` (a check-
 | GET, POST | `/doctor/patients/{id}/appointments` · PUT, DELETE `/doctor/appointments/{id}` | Doctor-created appointments |
 | PUT | `/doctor/patients/{id}/dates` · POST `/doctor/patients/{id}/pregnancy-end` | Dates / status |
 | GET | `/doctor/rules` · POST `/doctor/rules/{module}/{item_id}/signoff` · GET `/doctor/rules/{module}/export` | Rule review |
+
+**Doctor home routes (Phase 5 task 2, details).** All need an active doctor with the current consent (`get_doctor`); `{id}` routes also need an active assignment, else 404 `NOT_FOUND` (not assigned, removed and unknown look the same). `GET /doctor/patients` → rows `{id, name, linked, ga_weeks, ga_days, due_date, fetal, maternal, genetic, symptom, unseen_count, pregnancy_status, group}` in the §6 default order (groups 1-4; newest defining item first inside groups 1-3; group 4 by name); `fetal`/`maternal` = `{predicted_class, created_at}` of the latest result, `genetic` = `{review_status, priority, created_at}`, `symptom` = `{level, created_at}`; GA only while the pregnancy is active. Search and filters run in the doctor app. `GET /doctor/patients/{id}` → the same fields plus `age, notes, due_date_source, doctors: [{id, name, is_primary}]`. `POST /doctor/patients` `{name (1-100, trimmed), age? (18-120), notes? (≤1000)}` → 201 detail; the creator is assigned and primary; audit `patient created`. `PUT /doctor/patients/{id}` same body → detail; audit `patient edited`. `POST /doctor/patients/{id}/invite` → 201 `{link: <PATIENT_APP_URL>/join?code=…, expires_at}`; cancels any unused earlier code (it expires now, database time); 409 `CONFLICT` when the record already has a login; audit `invite created`. `GET /doctor/inbox?seen=false|true` → `[{id, patient_id, patient_name, type, ref_table, ref_id, created_at, seen_by_name, seen_at}]`: unseen = all, newest first, `ai_note_flag` after every rule-based item; seen = newest 100 by `seen_at`. `POST /doctor/inbox/{id}/seen` → the item; the first doctor's `seen_by`/`seen_at` are kept (a conditional update), audit `inbox item seen` once.
 
 ### 4.7 AI drafts (Phase 6, flags off by default)
 | Method | Path | Purpose |

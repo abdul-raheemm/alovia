@@ -7,12 +7,12 @@ patient can sign up. Used, expired and wrong codes all fail the same way (spec ย
 import hashlib
 import secrets
 import uuid
-from datetime import UTC, datetime, timedelta
+from datetime import timedelta
 from functools import lru_cache
 from pathlib import Path
 
 import yaml
-from sqlalchemy import text, update
+from sqlalchemy import func, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -44,12 +44,23 @@ def create_invite(db: Session, patient_id: uuid.UUID, created_by: uuid.UUID) -> 
     """Add a new invite and return its code (shown once; only the hash is stored).
     The caller commits. Used by the seed script now and the doctor route in Phase 5."""
     length, days = invite_settings()
+    # ยง8.2 step 2: a new link cancels any unused earlier link (it expires now). Database time,
+    # as the checks use it: the app server's clock can differ by seconds (ERR-048).
+    db.execute(
+        update(PatientInvite)
+        .where(
+            PatientInvite.patient_id == patient_id,
+            PatientInvite.used_at.is_(None),
+            PatientInvite.expires_at > func.now(),
+        )
+        .values(expires_at=func.now())
+    )
     code = "".join(secrets.choice(ALPHABET) for _ in range(length))
     invite = PatientInvite(
         patient_id=patient_id,
         code_hash=_hash(code),
         created_by=created_by,
-        expires_at=datetime.now(UTC) + timedelta(days=days),
+        expires_at=func.now() + timedelta(days=days),
     )
     db.add(invite)
     db.flush()
@@ -106,9 +117,9 @@ def link_patient(db: Session, current: CurrentUser, code: str) -> User:
         .where(
             PatientInvite.code_hash == _hash(code),
             PatientInvite.used_at.is_(None),
-            PatientInvite.expires_at > datetime.now(UTC),
+            PatientInvite.expires_at > func.now(),
         )
-        .values(used_at=datetime.now(UTC), used_by_user_id=user_id)
+        .values(used_at=func.now(), used_by_user_id=user_id)
         .returning(PatientInvite.id, PatientInvite.patient_id)
     ).one_or_none()
     linked = (

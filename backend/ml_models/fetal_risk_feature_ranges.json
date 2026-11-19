@@ -1,0 +1,93 @@
+{
+  "model": "fetal",
+  "basis": "training split of the cleaned data (test_size 0.2, stratified, random_state 42)",
+  "source": "backend/ml_training/fetal_model.ipynb -> fetal_clean.csv",
+  "training_rows": 1692,
+  "checked_test_macro_f1": 0.9164,
+  "features": {
+    "LB": {
+      "min": 106.0,
+      "max": 160.0
+    },
+    "AC.1": {
+      "min": 0.0,
+      "max": 0.0192837465564738
+    },
+    "FM.1": {
+      "min": 0.0,
+      "max": 0.4806338028169014
+    },
+    "UC.1": {
+      "min": 0.0,
+      "max": 0.0149253731343283
+    },
+    "DL.1": {
+      "min": 0.0,
+      "max": 0.0153846153846153
+    },
+    "DS.1": {
+      "min": 0.0,
+      "max": 0.0011778563015312
+    },
+    "DP.1": {
+      "min": 0.0,
+      "max": 0.0053475935828877
+    },
+    "ASTV": {
+      "min": 12.0,
+      "max": 86.0
+    },
+    "MSTV": {
+      "min": 0.2,
+      "max": 7.0
+    },
+    "ALTV": {
+      "min": 0.0,
+      "max": 91.0
+    },
+    "MLTV": {
+      "min": 0.0,
+      "max": 41.8
+    },
+    "Width": {
+      "min": 3.0,
+      "max": 180.0
+    },
+    "Min": {
+      "min": 50.0,
+      "max": 159.0
+    },
+    "Max": {
+      "min": 122.0,
+      "max": 238.0
+    },
+    "Nmax": {
+      "min": 0.0,
+      "max": 18.0
+    },
+    "Nzeros": {
+      "min": 0.0,
+      "max": 10.0
+    },
+    "Mode": {
+      "min": 60.0,
+      "max": 187.0
+    },
+    "Mean": {
+      "min": 73.0,
+      "max": 182.0
+    },
+    "Median": {
+      "min": 78.0,
+      "max": 186.0
+    },
+    "Variance": {
+      "min": 0.0,
+      "max": 269.0
+    },
+    "Tendency": {
+      "min": -1.0,
+      "max": 1.0
+    }
+  }
+}

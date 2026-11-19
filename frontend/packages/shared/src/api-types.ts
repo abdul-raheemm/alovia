@@ -4,6 +4,93 @@
  */
 
 export interface paths {
+    "/api/v1/doctor/inbox": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Inbox */
+        get: operations["list_inbox_api_v1_doctor_inbox_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/inbox/{item_id}/seen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mark Seen */
+        post: operations["mark_seen_api_v1_doctor_inbox__item_id__seen_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Patients */
+        get: operations["list_patients_api_v1_doctor_patients_get"];
+        put?: never;
+        /** Create Patient */
+        post: operations["create_patient_api_v1_doctor_patients_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Patient */
+        get: operations["get_patient_api_v1_doctor_patients__patient_id__get"];
+        /** Update Patient */
+        put: operations["update_patient_api_v1_doctor_patients__patient_id__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/invite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Invite */
+        post: operations["create_invite_api_v1_doctor_patients__patient_id__invite_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/health": {
         parameters: {
             query?: never;
@@ -527,6 +614,18 @@ export interface components {
             /** Show Numbers To Patient */
             show_numbers_to_patient: boolean;
         };
+        /** AssignedDoctor */
+        AssignedDoctor: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Primary */
+            is_primary: boolean;
+            /** Name */
+            name: string;
+        };
         /** BodyAreaDetail */
         BodyAreaDetail: {
             /** Choices */
@@ -975,9 +1074,21 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[InboxItemOut] */
+        Envelope_InboxItemOut_: {
+            data: components["schemas"]["InboxItemOut"];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[InviteCheckOut] */
         Envelope_InviteCheckOut_: {
             data: components["schemas"]["InviteCheckOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[InviteOut] */
+        Envelope_InviteOut_: {
+            data: components["schemas"]["InviteOut"];
             /** Error */
             error?: null;
         };
@@ -997,6 +1108,12 @@ export interface components {
         Envelope_NoneType_: {
             /** Data */
             data: null;
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[PatientDetail] */
+        Envelope_PatientDetail_: {
+            data: components["schemas"]["PatientDetail"];
             /** Error */
             error?: null;
         };
@@ -1027,10 +1144,24 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[list[InboxItemOut]] */
+        Envelope_list_InboxItemOut__: {
+            /** Data */
+            data: components["schemas"]["InboxItemOut"][];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[list[NotificationOut]] */
         Envelope_list_NotificationOut__: {
             /** Data */
             data: components["schemas"]["NotificationOut"][];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[PatientRow]] */
+        Envelope_list_PatientRow__: {
+            /** Data */
+            data: components["schemas"]["PatientRow"][];
             /** Error */
             error?: null;
         };
@@ -1042,6 +1173,18 @@ export interface components {
             risk_indicated: boolean;
             /** Timing Prompt */
             timing_prompt: boolean;
+        };
+        /** GeneticStatus */
+        GeneticStatus: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Priority */
+            priority: string;
+            /** Review Status */
+            review_status: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1119,10 +1262,69 @@ export interface components {
             state: "no_date" | "active" | "past_due" | "beyond_42" | "ended";
             weekly_summary?: components["schemas"]["WeeklySummaryOut"] | null;
         };
+        /** InboxItemOut */
+        InboxItemOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /** Patient Name */
+            patient_name: string;
+            /**
+             * Ref Id
+             * Format: uuid
+             */
+            ref_id: string;
+            /** Ref Table */
+            ref_table: string;
+            /** Seen At */
+            seen_at: string | null;
+            /** Seen By Name */
+            seen_by_name: string | null;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "symptom_l1" | "symptom_l2" | "pattern_p1" | "pattern_p2" | "pattern_p3" | "pattern_p4" | "pattern_p5" | "genetic_pending" | "genetic_high_priority" | "pregnancy_ended" | "record_uploaded" | "ai_note_flag" | "chat_urgent";
+        };
         /** InviteCheckOut */
         InviteCheckOut: {
             /** Valid */
             valid: boolean;
+        };
+        /**
+         * InviteOut
+         * @description §8.2: the link is shown once; only the code's hash is stored.
+         */
+        InviteOut: {
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Link */
+            link: string;
+        };
+        /** LatestClass */
+        LatestClass: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Predicted Class */
+            predicted_class: string;
         };
         /** LinkIn */
         LinkIn: {
@@ -1250,6 +1452,57 @@ export interface components {
             /** Status */
             status?: string | null;
         };
+        /**
+         * PatientDetail
+         * @description §5.1 Overview tab (the AI-1 summary is Phase 6).
+         */
+        PatientDetail: {
+            /** Age */
+            age: number | null;
+            /** Doctors */
+            doctors: components["schemas"]["AssignedDoctor"][];
+            /** Due Date */
+            due_date: string | null;
+            /** Due Date Source */
+            due_date_source: string | null;
+            fetal: components["schemas"]["LatestClass"] | null;
+            /** Ga Days */
+            ga_days: number | null;
+            /** Ga Weeks */
+            ga_weeks: number | null;
+            genetic: components["schemas"]["GeneticStatus"] | null;
+            /** Group */
+            group: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Linked */
+            linked: boolean;
+            maternal: components["schemas"]["LatestClass"] | null;
+            /** Name */
+            name: string;
+            /** Notes */
+            notes: string | null;
+            /** Pregnancy Status */
+            pregnancy_status: string;
+            symptom: components["schemas"]["SymptomLevel"] | null;
+            /** Unseen Count */
+            unseen_count: number;
+        };
+        /**
+         * PatientIn
+         * @description §8.1 create / edit: name, optional age and notes.
+         */
+        PatientIn: {
+            /** Age */
+            age?: number | null;
+            /** Name */
+            name: string;
+            /** Notes */
+            notes?: string | null;
+        };
         /** PatientRef */
         PatientRef: {
             /**
@@ -1259,6 +1512,37 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /**
+         * PatientRow
+         * @description §6 patient list row. Model labels are returned as text; colour is only a help.
+         */
+        PatientRow: {
+            /** Due Date */
+            due_date: string | null;
+            fetal: components["schemas"]["LatestClass"] | null;
+            /** Ga Days */
+            ga_days: number | null;
+            /** Ga Weeks */
+            ga_weeks: number | null;
+            genetic: components["schemas"]["GeneticStatus"] | null;
+            /** Group */
+            group: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Linked */
+            linked: boolean;
+            maternal: components["schemas"]["LatestClass"] | null;
+            /** Name */
+            name: string;
+            /** Pregnancy Status */
+            pregnancy_status: string;
+            symptom: components["schemas"]["SymptomLevel"] | null;
+            /** Unseen Count */
+            unseen_count: number;
         };
         /**
          * PregnancyEndIn
@@ -1403,6 +1687,16 @@ export interface components {
             date: string;
             /** Levels */
             levels: string[];
+        };
+        /** SymptomLevel */
+        SymptomLevel: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Level */
+            level: string;
         };
         /** SymptomPoint */
         SymptomPoint: {
@@ -1581,6 +1875,218 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    list_inbox_api_v1_doctor_inbox_get: {
+        parameters: {
+            query?: {
+                seen?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_InboxItemOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    mark_seen_api_v1_doctor_inbox__item_id__seen_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_InboxItemOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_patients_api_v1_doctor_patients_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_PatientRow__"];
+                };
+            };
+        };
+    };
+    create_patient_api_v1_doctor_patients_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PatientIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PatientDetail_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_patient_api_v1_doctor_patients__patient_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PatientDetail_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_patient_api_v1_doctor_patients__patient_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PatientIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PatientDetail_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_invite_api_v1_doctor_patients__patient_id__invite_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_InviteOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     health_api_v1_health_get: {
         parameters: {
             query?: never;

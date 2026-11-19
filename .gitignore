@@ -24,3 +24,6 @@ dev-dist/
 test-results/
 playwright-report/
 frontend/packages/shared/openapi.json
+
+# ML training data and notebook outputs: raw public datasets, cleaned CSVs, retrained models (never committed)
+backend/ml_training/data/

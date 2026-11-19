@@ -20,13 +20,18 @@ REFERENCE = json.loads(
 ML_PACKAGES = ("xgboost", "scikit-learn", "shap", "numpy", "pandas", "joblib", "scipy", "numba")
 
 
+RANGE_FILES = {"fetal_risk_feature_ranges.json", "maternal_risk_feature_ranges.json"}
+
+
 def test_model_files_identical_to_reference() -> None:
     actual = {
         p.name: hashlib.sha256(p.read_bytes()).hexdigest()
         for p in sorted(MODELS_DIR.iterdir())
-        if p.is_file()
+        if p.is_file() and p.name not in RANGE_FILES  # Phase 5 additions (Dashboard §9.4)
     }
     assert actual == REFERENCE["model_files_sha256"]
+    # nothing else may sit next to the models
+    assert {p.name for p in MODELS_DIR.iterdir() if p.is_file()} == set(actual) | RANGE_FILES
 
 
 def test_ml_package_versions_match_reference() -> None:

@@ -283,6 +283,17 @@ def symptom_days(
     ]
 
 
+def latest_level(db: Session, patient_id: uuid.UUID) -> tuple[str, datetime] | None:
+    """Dashboard §5.1, §6: the latest check-in's red-flag level and time."""
+    row = db.execute(
+        select(SymptomCheckin.red_flag_level, SymptomCheckin.created_at)
+        .where(SymptomCheckin.patient_id == patient_id)
+        .order_by(SymptomCheckin.created_at.desc())
+        .limit(1)
+    ).first()
+    return (row.red_flag_level, row.created_at) if row else None
+
+
 def logged_on(db: Session, patient_id: uuid.UUID, day: date, timezone: str) -> bool:
     """§4.3 quick log: "logged today" when a check-in exists on her local day."""
     return bool(_day_levels(db, patient_id, day, day, timezone))
