@@ -1,9 +1,14 @@
-import type { GeneticAssessment } from '@alovia/shared'
+import {
+  chanceLabel,
+  GENETIC_BUNDLE,
+  geneticText,
+  outcomeLabel,
+  type ConditionKey,
+  type GeneticAssessment,
+} from '@alovia/shared'
 import { Card } from '@alovia/ui'
 import { Stethoscope } from 'lucide-react'
 
-import { chanceLabel, geneticText, outcomeLabel, type ConditionKey } from '../../app/genetic'
-import { GENETIC_BUNDLE } from '../../app/geneticBundle.generated'
 import { formatDay } from '../../app/journey'
 
 type Condition = GeneticAssessment['conditions'][number]

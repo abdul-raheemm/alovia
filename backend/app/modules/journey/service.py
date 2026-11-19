@@ -3,6 +3,7 @@
 
 import uuid
 from datetime import UTC, date, datetime, time, timedelta
+from typing import Literal
 from zoneinfo import ZoneInfo
 
 from sqlalchemy import select
@@ -13,6 +14,7 @@ from app.common.rule_texts import Message
 from app.core.errors import AppError
 from app.core.logging import logger
 from app.modules.dashboard import service as dashboard
+from app.modules.genetic import service as genetic
 from app.modules.journey import engine
 from app.modules.journey.config import JourneyConfig, load_helplines
 from app.modules.journey.content import ContentProvider, select_for_home
@@ -36,7 +38,6 @@ from app.modules.journey.schemas import (
     MonthSummary,
     NavItemOut,
     NotificationOut,
-    PregnancyEndIn,
     PregnancyOut,
     SourceOut,
     SuggestedCheckupOut,
@@ -82,7 +83,10 @@ def gestational_age_now(
 # ---- §9.3 appointments ----
 
 
-def _appointment_out(row: Appointment, tz: ZoneInfo) -> AppointmentOut:
+Editor = Literal["patient", "doctor"]  # Dashboard §16: each edits only its own source
+
+
+def _appointment_out(row: Appointment, tz: ZoneInfo, viewer: Editor = "patient") -> AppointmentOut:
     # the database returns UTC; a date-only appointment is local midnight, so its day must
     # be read in the patient's time zone, never from the UTC value
     local = row.appointment_at.astimezone(tz)
@@ -95,11 +99,13 @@ def _appointment_out(row: Appointment, tz: ZoneInfo) -> AppointmentOut:
         title=row.title,
         note=row.note,
         source=row.source,  # CHECK constraint: patient | doctor
-        can_edit=row.source == "patient",
+        can_edit=row.source == viewer,
     )
 
 
-def list_appointments(db: Session, patient: Patient, timezone: str, today: date) -> AppointmentsOut:
+def list_appointments(
+    db: Session, patient: Patient, timezone: str, today: date, viewer: Editor = "patient"
+) -> AppointmentsOut:
     """Her appointments (her own and doctor-added). A date-only appointment (has_time false,
     stored at local 00:00) counts as upcoming for its whole day."""
     tz = ZoneInfo(timezone)
@@ -112,7 +118,7 @@ def list_appointments(db: Session, patient: Patient, timezone: str, today: date)
         .order_by(Appointment.appointment_at, Appointment.created_at)
     )
     for row in rows:
-        out = _appointment_out(row, tz)
+        out = _appointment_out(row, tz, viewer)
         is_upcoming = row.appointment_at >= now if row.has_time else out.date >= today
         (upcoming if is_upcoming else past).append(out)
     return AppointmentsOut(upcoming=upcoming, past=past[::-1])
@@ -132,7 +138,12 @@ def _stored_moment(body: AppointmentIn, timezone: str) -> datetime:
 
 
 def create_appointment(
-    db: Session, user: User, patient: Patient, body: AppointmentIn, timezone: str
+    db: Session,
+    user: User,
+    patient: Patient,
+    body: AppointmentIn,
+    timezone: str,
+    editor: Editor = "patient",
 ) -> AppointmentOut:
     row = Appointment(
         patient_id=patient.id,
@@ -141,19 +152,26 @@ def create_appointment(
         title=body.title,
         note=body.note,
         created_by=user.id,
-        source="patient",
+        source=editor,
     )
     db.add(row)
     db.flush()
     add_audit(db, user, "appointment created", "appointment", row.id, patient.id)
     db.commit()
     db.refresh(row)
-    return _appointment_out(row, ZoneInfo(timezone))
+    return _appointment_out(row, ZoneInfo(timezone), editor)
 
 
-def _own_editable(db: Session, patient: Patient, appointment_id: uuid.UUID) -> Appointment:
-    """§9.3: she edits and deletes only appointments she added herself. Another patient's
-    appointment is "not found" (API.md §3: same message whether missing or not visible)."""
+def appointment_patient_id(db: Session, appointment_id: uuid.UUID) -> uuid.UUID | None:
+    """Whose appointment this is (the doctor routes then check the assignment)."""
+    return db.scalar(select(Appointment.patient_id).where(Appointment.id == appointment_id))
+
+
+def _own_editable(
+    db: Session, patient: Patient, appointment_id: uuid.UUID, editor: Editor = "patient"
+) -> Appointment:
+    """§9.3 / Dashboard §16: the patient edits and deletes only her own appointments, doctors
+    only doctor-added ones. Another patient's appointment is "not found" (API.md §3)."""
     row = db.scalar(
         select(Appointment).where(
             Appointment.id == appointment_id, Appointment.patient_id == patient.id
@@ -161,11 +179,13 @@ def _own_editable(db: Session, patient: Patient, appointment_id: uuid.UUID) -> A
     )
     if row is None:
         raise AppError("NOT_FOUND", "We couldn't find this.", status=404)
-    if row.source != "patient":
-        logger.warning("permission denied", extra={"reason": "doctor-added appointment"})
+    if row.source != editor:
+        logger.warning("permission denied", extra={"reason": f"{row.source}-added appointment"})
         raise AppError(
             "FORBIDDEN",
-            "This appointment was added by your doctor and can't be changed.",
+            "This appointment was added by your doctor and can't be changed."
+            if editor == "patient"
+            else "This appointment was added by the patient and can't be changed.",
             status=403,
         )
     return row
@@ -178,8 +198,9 @@ def update_appointment(
     appointment_id: uuid.UUID,
     body: AppointmentIn,
     timezone: str,
+    editor: Editor = "patient",
 ) -> AppointmentOut:
-    row = _own_editable(db, patient, appointment_id)
+    row = _own_editable(db, patient, appointment_id, editor)
     row.appointment_at = _stored_moment(body, timezone)
     row.has_time = body.time is not None
     row.title = body.title
@@ -188,15 +209,19 @@ def update_appointment(
     add_audit(db, user, "appointment edited", "appointment", row.id, patient.id)
     db.commit()
     db.refresh(row)
-    return _appointment_out(row, ZoneInfo(timezone))
+    return _appointment_out(row, ZoneInfo(timezone), editor)
 
 
 def delete_appointment(
-    db: Session, user: User, patient: Patient, appointment_id: uuid.UUID
+    db: Session,
+    user: User,
+    patient: Patient,
+    appointment_id: uuid.UUID,
+    editor: Editor = "patient",
 ) -> None:
     """Hard delete: planning data, not a clinical record (DATABASE.md §8). The audit row
     keeps the id only."""
-    row = _own_editable(db, patient, appointment_id)
+    row = _own_editable(db, patient, appointment_id, editor)
     add_audit(db, user, "appointment deleted", "appointment", row.id, patient.id)
     db.delete(row)
     db.commit()
@@ -426,12 +451,29 @@ def _notifications_due(
         ("appointment_soon", str(a.id)) for a in soon if not a.has_time or a.appointment_at >= now
     ]
     # doctor_note: each note her doctor has shared (the doctor side arrives in Phase 5)
-    due += [("doctor_note", str(n.id)) for n in dashboard.shared_notes(db, patient.id)]
+    # (a genetic review note has its own genetic_reviewed notification below)
+    due += [
+        ("doctor_note", str(n.id))
+        for n in dashboard.shared_notes(db, patient.id)
+        if not (n.related_ref or "").startswith("genetic_assessment:")
+    ]
     # result_available: each result a doctor shared with her (Dashboard §10 step 3)
     due += [
         ("result_available", str(r.share_id)) for r in predictions.shared_results(db, patient.id)
     ]
-    # TODO(Phase 5 task 4): genetic_reviewed, dates_updated (doctor actions)
+    due += [("genetic_reviewed", str(i)) for i in genetic.reviewed_ids(db, patient.id)]
+    # dates_updated: each date change her doctor made (Dashboard §8.3)
+    due += [
+        ("dates_updated", str(h.id))
+        for h in db.scalars(
+            select(PregnancyDateHistory).where(
+                PregnancyDateHistory.patient_id == patient.id,
+                PregnancyDateHistory.changed_by != patient.user_id,
+                PregnancyDateHistory.old_status.is_(None),
+                PregnancyDateHistory.new_status.is_(None),
+            )
+        )
+    ]
     return due
 
 
@@ -532,20 +574,23 @@ def _status_history(user: User, patient: Patient, old: str, new: str) -> Pregnan
     )
 
 
-def end_pregnancy(db: Session, user: User, patient: Patient, body: PregnancyEndIn) -> None:
+def end_pregnancy(
+    db: Session, user: User, patient: Patient, status: str, inform_doctor: bool | None
+) -> None:
     """§11.2-11.3: store the status, the time and her answer; the doctor gets a
-    `pregnancy_ended` inbox item only when she chose "yes". One transaction."""
+    `pregnancy_ended` inbox item only when she chose "yes". One transaction. A doctor setting
+    it (Dashboard §17) passes inform_doctor=None: no question, no inbox item."""
     if patient.pregnancy_status != "active":
         raise AppError("CONFLICT", "This pregnancy is already marked as ended.", status=409)
-    history = _status_history(user, patient, "active", body.status)
+    history = _status_history(user, patient, "active", status)
     db.add(history)
     db.flush()  # gives the history row its id for the inbox reference
     now = datetime.now(UTC)
-    patient.pregnancy_status = body.status
+    patient.pregnancy_status = status
     patient.pregnancy_ended_at = now
-    patient.doctor_informed_of_end = body.inform_doctor
+    patient.doctor_informed_of_end = inform_doctor
     patient.updated_at = now
-    if body.inform_doctor:
+    if inform_doctor:
         dashboard.add_inbox_item(
             db, patient.id, "pregnancy_ended", "pregnancy_date_history", history.id
         )

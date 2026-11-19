@@ -41,3 +41,24 @@ def add_inbox_item(
     """Add a needs-attention item to the doctor inbox. The caller commits, so the item is
     saved in the same transaction as the event it points to."""
     db.add(InboxItem(patient_id=patient_id, type=type_, ref_table=ref_table, ref_id=ref_id))
+
+
+def add_note(
+    db: Session,
+    patient_id: uuid.UUID,
+    doctor_id: uuid.UUID,
+    body: str,
+    visible_to_patient: bool,
+    related_ref: str | None = None,
+) -> DoctorNote:
+    """A doctor note (Dashboard §15; Journey §10.3). Append-only. The caller commits."""
+    note = DoctorNote(
+        patient_id=patient_id,
+        doctor_id=doctor_id,
+        body=body,
+        visible_to_patient=visible_to_patient,
+        related_ref=related_ref,
+    )
+    db.add(note)
+    db.flush()
+    return note

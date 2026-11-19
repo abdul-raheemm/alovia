@@ -13,6 +13,7 @@ import {
 import { AccountGate } from '../components/AccountGate'
 import { useMe } from '../components/DoctorShell'
 import { HomePage, NewPatientPage, PatientsPage } from '../pages/HomePages'
+import { GeneticReviewPage } from '../pages/GeneticReviewPage'
 import { PatientPage } from '../pages/PatientPage'
 import { authClient, queryClient } from './services'
 
@@ -120,12 +121,12 @@ const router = createBrowserRouter([
   {
     element: <AccountGate />,
     children: [
-      // TODO(Phase 5 tasks 4 and 6): genetic review, rule review and admin screens
+      // TODO(Phase 5 task 6): rule review and admin screens
       { path: '/home', element: <HomePage /> },
       { path: '/patients', element: <PatientsPage /> },
       { path: '/patients/new', element: <NewPatientPage /> },
       { path: '/patients/:id/:tab?', element: <PatientPage /> },
-      { path: '/genetic-review', element: <PlaceholderPage title="Genetic review" /> },
+      { path: '/genetic-review', element: <GeneticReviewPage /> },
       { path: '/rule-review', element: <PlaceholderPage title="Rule review" /> },
       { path: '/admin', element: <AdminOnly /> },
     ],

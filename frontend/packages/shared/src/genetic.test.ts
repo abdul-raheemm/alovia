@@ -8,9 +8,10 @@ import {
   missingAnswers,
   questionFor,
   toGeneticInput,
+  draftFromInputs,
+  PENDING_TEXT,
 } from './genetic'
 import { GENETIC_BUNDLE } from './geneticBundle.generated'
-import { PENDING_TEXT } from './journey'
 
 describe('genetic helpers', () => {
   it('uses the spec disclaimer and pending texts', () => {
@@ -84,5 +85,21 @@ describe('genetic helpers', () => {
     expect(chanceLabel('1_in_4')).toBe('1 in 4 (25%)')
     expect(chanceLabel('not_expected')).toBe('not expected')
     expect(Object.values(GENETIC_BUNDLE.chances).join(' ')).not.toMatch(/\b0%/)
+  })
+})
+
+describe('draftFromInputs (doctor correction, Genetic §10.3)', () => {
+  it('round-trips a submitted answer set', () => {
+    const input = {
+      haemoglobin_group: {
+        mother: { status: 'beta_thal_carrier', evidence: 'hplc_report' },
+        father: { status: 'unknown' },
+        previous_child: 'no',
+      },
+      haemophilia: { entry: 'no' },
+      marfan: { entry: 'no' },
+      consanguinity: 'no',
+    }
+    expect(toGeneticInput(draftFromInputs(input))).toEqual(input)
   })
 })

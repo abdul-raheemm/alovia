@@ -8,7 +8,9 @@ export type {
   CheckinInput,
   CheckinResult,
   ConsentStatus,
+  DoctorAssessment,
   DoctorNote,
+  DoctorSymptoms,
   EntryInput,
   GeneticAssessment,
   GeneticInput,
@@ -19,6 +21,8 @@ export type {
   JourneyDatesInput,
   JourneyCalendar,
   JourneyHome,
+  NoteInput,
+  NoteRecord,
   Me,
   Milestone,
   MonthDetail,
@@ -47,3 +51,5 @@ export {
   type LegalDoc,
 } from './legal'
 export { userMessage } from './messages'
+export * from './genetic'
+export { GENETIC_BUNDLE } from './geneticBundle.generated'

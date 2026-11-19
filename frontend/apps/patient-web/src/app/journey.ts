@@ -2,7 +2,9 @@
 import type { JourneyHome } from '@alovia/shared'
 
 /** Shown in place of any message a doctor has not approved yet (DEC-041). */
-export const PENDING_TEXT = '[Text pending doctor approval]'
+import { PENDING_TEXT } from '@alovia/shared'
+
+export { PENDING_TEXT }
 
 export function messageText(messages: JourneyHome['messages'], key: string): string {
   return messages[key] ?? PENDING_TEXT
@@ -174,8 +176,7 @@ export function notificationText(n: { type: string; target_ref?: string | null }
   }
 }
 
-/** Where tapping a notification leads (§10.1 "Target"). TODO(Phase 5 task 4): Genetic risk
- * for genetic_reviewed; until then it opens More. */
+/** Where tapping a notification leads (§10.1 "Target"). */
 export function notificationTarget(n: { type: string; target_ref?: string | null }): string {
   switch (n.type) {
     case 'new_month':
@@ -189,7 +190,7 @@ export function notificationTarget(n: { type: string; target_ref?: string | null
     case 'result_available':
       return '/results'
     case 'genetic_reviewed':
-      return '/more'
+      return '/genetic'
     default:
       return '/home'
   }

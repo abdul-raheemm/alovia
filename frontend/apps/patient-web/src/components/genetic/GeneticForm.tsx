@@ -1,22 +1,25 @@
-import { ApiError, userMessage, type GeneticAssessment, type GeneticInput } from '@alovia/shared'
+import {
+  ApiError,
+  CONDITIONS,
+  emptyGeneticDraft,
+  evidenceFor,
+  GENETIC_BUNDLE,
+  missingAnswers,
+  questionFor,
+  sectionShown,
+  toGeneticInput,
+  userMessage,
+  type ConditionKey,
+  type GeneticAssessment,
+  type GeneticDraft,
+  type GeneticInput,
+  type ParentDraft,
+} from '@alovia/shared'
 import { Button, Card, ErrorState, FieldError } from '@alovia/ui'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useId, useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
 
-import {
-  CONDITIONS,
-  emptyGeneticDraft,
-  evidenceFor,
-  missingAnswers,
-  questionFor,
-  sectionShown,
-  toGeneticInput,
-  type ConditionKey,
-  type GeneticDraft,
-  type ParentDraft,
-} from '../../app/genetic'
-import { GENETIC_BUNDLE } from '../../app/geneticBundle.generated'
 import { HOME_KEY } from '../../app/useJourneyHome'
 import { api } from '../../app/services'
 import { ChoiceGroup } from '../symptoms/Fields'

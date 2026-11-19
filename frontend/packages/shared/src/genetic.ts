@@ -1,8 +1,10 @@
-/** Pure helpers for the genetic screens (Genetic spec §4.1, §5, §8, §11). */
-import type { GeneticInput } from '@alovia/shared'
+/** Pure helpers for the genetic screens of both apps (Genetic spec §4.1, §5, §8, §10, §11). */
+import type { GeneticInput } from './types'
 
 import { GENETIC_BUNDLE } from './geneticBundle.generated'
-import { PENDING_TEXT } from './journey'
+
+/** DEC-041: texts without doctor-approved wording show this, never agent-written text. */
+export const PENDING_TEXT = '[Text pending doctor approval]'
 
 export type ConditionKey = 'haemoglobin_group' | 'haemophilia' | 'marfan'
 export const CONDITIONS: ConditionKey[] = ['haemoglobin_group', 'haemophilia', 'marfan']
@@ -97,6 +99,27 @@ export function toGeneticInput(draft: GeneticDraft): GeneticInput {
     marfan: section('marfan'),
     consanguinity: draft.consanguinity,
   } as GeneticInput
+}
+
+/** The stored answers back as a draft, so a doctor can correct them (Genetic §10.3). */
+export function draftFromInputs(inputs: Record<string, unknown>): GeneticDraft {
+  const draft = emptyGeneticDraft()
+  for (const c of CONDITIONS) {
+    const s = (inputs[c] ?? {}) as Partial<{
+      entry: string
+      mother: ParentDraft
+      father: ParentDraft
+      previous_child: string
+    }>
+    draft[c] = {
+      entry: s.entry,
+      mother: { ...(s.mother ?? draft[c].mother) },
+      father: { ...(s.father ?? draft[c].father) },
+      previous_child: s.previous_child,
+    }
+  }
+  draft.consanguinity = inputs.consanguinity as string | undefined
+  return draft
 }
 
 /** Journey §10.4 "Genetic check" card labels (DEC-073). */

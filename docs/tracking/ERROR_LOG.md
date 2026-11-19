@@ -557,3 +557,33 @@ Fix: plain `npm install`, then the workspace install.
 Verified by: install succeeded; lockfile +2 lines.
 Prevention: existing Lesson.
 Category: tooling
+
+### ERR-053 — 2026-11-19 — Inline heredoc with apostrophes failed again
+Who: Claude Code
+Phase / task: Phase 5 — task 4 (journey edits)
+What happened: a Bash heredoc holding Python with "can't" strings failed ("unexpected EOF"); nothing was written.
+Cause: the ERR-044 Lesson was not applied to a long edit.
+Fix: the edit as a scratchpad script.
+Verified by: the script ran; tests pass.
+Prevention: existing Lesson.
+Category: tooling
+
+### ERR-054 — 2026-11-19 — E2E label lookup matched two fields
+Who: Claude Code
+Phase / task: Phase 5 — task 4 (E2E)
+What happened: `getByLabel('Due date')` also matched the radio "Clinician-confirmed due date" (strict-mode violation).
+Cause: Playwright label matching is a substring match by default.
+Fix: `{ exact: true }`.
+Verified by: 6 passed.
+Prevention: use exact label matches where a label is part of another label.
+Category: test
+
+### ERR-055 — 2026-11-19 — check_all lint failed on an E2E file the agent had not linted
+Who: Claude Code
+Phase / task: Phase 5 — task 4 checks
+What happened: `npm run lint` failed: a non-null assertion (`!`) in `e2e/doctor-care.spec.ts`.
+Cause: during the task the agent linted `apps` and `packages` only, not `e2e`.
+Fix: `notes.map(...)` instead of `notes[0]!`; all frontend checks re-run → exit 0 (63 unit, 114 E2E).
+Verified by: the re-run.
+Prevention: lint with `npx eslint .` (whole frontend), as check_all does.
+Category: tooling

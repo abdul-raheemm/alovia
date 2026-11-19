@@ -20,7 +20,11 @@ from app.modules.symptoms.schemas import (
     CheckinHistoryOut,
     CheckinIn,
     CheckinOut,
+    DoctorCheckinOut,
+    DoctorSymptomsOut,
     EntryOut,
+    PatternChangeOut,
+    PuqeBandOut,
     PuqePoint,
     SymptomPoint,
     SymptomSeries,
@@ -332,3 +336,33 @@ def week_summary(
         "top_symptoms": [{"symptom": s, "label": labels.get(s, s), "count": n} for s, n in top],
         "red_flag_days": sorted(d for d, lv in days.items() if {"L1", "L2"} & set(lv)),
     }
+
+
+def doctor_view(
+    db: Session, patient: Patient, rules: SymptomRules, timezone: str
+) -> DoctorSymptomsOut:
+    """§12 doctor view (Dashboard §13): her history with pattern changes, the chart data, the
+    symptom labels and the PUQE bands. The doctor cannot edit or delete check-ins."""
+    patterns: dict[uuid.UUID, list[dict[str, Any]]] = dict(
+        db.execute(
+            select(SymptomCheckin.id, SymptomCheckin.pattern_changes).where(
+                SymptomCheckin.patient_id == patient.id
+            )
+        ).all()
+    )
+    labels = {s.id: s.label for s in rules.vocabulary.common}
+    labels |= {s.id: s.label for s in rules.vocabulary.warning}
+    return DoctorSymptomsOut(
+        checkins=[
+            DoctorCheckinOut(
+                **c.model_dump(),
+                pattern_changes=[
+                    PatternChangeOut.model_validate(p) for p in patterns.get(c.checkin_id) or []
+                ],
+            )
+            for c in list_checkins(db, patient, rules, timezone)
+        ],
+        charts=charts(db, patient, rules, timezone),
+        labels=labels,
+        puqe_bands=[PuqeBandOut(band=b.band, min=b.min, max=b.max) for b in rules.puqe.bands],
+    )

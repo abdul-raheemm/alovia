@@ -1,7 +1,8 @@
 import type { PredictionInput, PredictionSchema } from '@alovia/shared'
 
-/** DEC-041: texts without doctor-approved wording show this, never agent-written text. */
-export const PENDING_TEXT = '[Text pending doctor approval]'
+import { PENDING_TEXT } from '@alovia/shared'
+
+export { PENDING_TEXT }
 
 export function messageText(messages: Record<string, string | null>, key: string): string {
   return messages[key] ?? PENDING_TEXT

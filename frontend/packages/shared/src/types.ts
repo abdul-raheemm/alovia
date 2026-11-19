@@ -55,3 +55,9 @@ export type PredictionInput = components['schemas']['PredictionIn']
 export type PredictionResult = components['schemas']['ResultOut']
 export type Trends = components['schemas']['TrendsOut']
 export type SharedResult = components['schemas']['PatientResultOut']
+
+/** Doctor sides of other modules (Dashboard §8.3, §12, §13, §15-17). */
+export type DoctorAssessment = components['schemas']['DoctorAssessmentOut']
+export type DoctorSymptoms = components['schemas']['DoctorSymptomsOut']
+export type NoteRecord = components['schemas']['NoteOut']
+export type NoteInput = components['schemas']['NoteIn']

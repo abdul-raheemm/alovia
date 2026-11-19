@@ -806,3 +806,13 @@ Done:
 - Proposals for the owner: DEC-088 (no rounding of converted values), DEC-089 (form sections, [CONFIRM]), DEC-090 (class colour ramp), DEC-091 (formulas in config.yaml).
 Checks: see the task 3 review report.
 Next step: owner review of task 3, then task 4 (genetic review, symptoms view, notes, appointments, dates/status).
+
+## Session 36 — 2026-11-19 — Phase 5 task 4: genetic review, symptoms view, notes, appointments, dates/status
+Who: Raheem + agent: Claude Code
+Done:
+- Owner: task 3 approved (DEC-088..091 accepted), committed `7106755`; LLM choice left for later, a free model wanted (memory saved).
+- Backend: genetic queue/doctor view/confirm/correct with the second-doctor rejection; symptom doctor view; notes write/list/share; doctor appointments (each side edits only its own); doctor dates (clinician/ultrasound, D2) and pregnancy end; `genetic_reviewed` and `dates_updated` notifications. 8 integration tests (Genetic §14 test 10, Dashboard §25 tests 1, 10, 11 for these routes).
+- Frontend: genetic helpers and bundle moved to `packages/shared` (+1 unit test); doctor Genetic review page and five patient tabs; patient Doctor notes link. 6 E2E runs (both viewports, axe).
+- Proposals: DEC-092..095. Spec conflict noted: Symptom §12 vs Dashboard §6 list order.
+Checks: see the task 4 review report.
+Next step: owner review of task 4, then task 5 (medical records).

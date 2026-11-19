@@ -96,6 +96,10 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-089 | 2026-11-19 | §9.1 form sections: the Bolt test frontend is not in the repo, so field membership of the known section names is a proposal in `config.yaml` (`form_groups`, [CONFIRM]) | Owner: as proposed (2026-11-19) | Accepted |
 | DEC-090 | 2026-11-19 | §11 trend points use an ordered one-hue ramp (`--class-1..3`) for the model classes, not the alert colours; the class is always in the tooltip and a text table | Owner: as proposed (2026-11-19) | Accepted |
 | DEC-091 | 2026-11-19 | §9.3 conversion formulas live in `rules/dashboard/config.yaml` (`unit_conversions`: multiply / divide / add with source), the only place they are typed | Owner: as proposed (2026-11-19) | Accepted |
+| DEC-092 | 2026-11-19 | A genetic review note (confirm or correct) is also saved as a shared doctor note linked by `related_ref` (Journey §10.3); the patient gets `genetic_reviewed`, not also `doctor_note`, for it | Owner: as proposed (2026-11-19) | Accepted |
+| DEC-093 | 2026-11-19 | The second-doctor rule for genetic review (Dashboard §12) is enforced by locking the assessment row (SELECT … FOR UPDATE) and checking reviewed / replaced; no new migration | Owner: as proposed (2026-11-19) | Accepted |
+| DEC-094 | 2026-11-19 | The generated genetic vocabulary and the pure genetic helpers moved from the patient app to `packages/shared` so the doctor's Correct-inputs form reuses them | Owner: as proposed (2026-11-19) | Accepted |
+| DEC-095 | 2026-11-19 | Doctors set dates only as clinician-confirmed or ultrasound (Dashboard §8.3); the LMP option is refused on the doctor route | Owner: as proposed (2026-11-19) | Accepted |
 
 ## Template for new entries
 

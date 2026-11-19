@@ -5,7 +5,11 @@ import uuid
 from datetime import date, datetime
 from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator
+
+from app.modules.genetic.engine import Assessment
+from app.modules.genetic.schemas import AssessmentIn
+from app.modules.journey.schemas import DueDateIn, EndStatus, UltrasoundDatesIn
 
 INBOX_TYPE = Literal[
     "symptom_l1",
@@ -239,3 +243,77 @@ class PatientResultOut(BaseModel):
     template_text: str | None  # null = pending doctor approval (DEC-041)
     doctor_message: str | None
     doctor_name: str | None
+
+
+# ---- task 4: genetic review, notes, dates and status (Dashboard §8.3, §12, §15, §17) ----
+
+NoteText = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=2000)]
+
+
+class GeneticReviewIn(BaseModel):
+    """Genetic §10.3 Confirm: the note is required."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    doctor_note: NoteText
+
+
+class GeneticCorrectIn(BaseModel):
+    """Genetic §10.3 Correct inputs: the corrected answers and the doctor's note."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    inputs: AssessmentIn
+    doctor_note: NoteText
+
+
+class DoctorAssessmentOut(BaseModel):
+    """The doctor's view of one assessment: everything, including numbers and priority."""
+
+    id: uuid.UUID
+    patient_id: uuid.UUID
+    patient_name: str
+    created_at: datetime
+    rules_version: str
+    review_status: Literal["pending_review", "reviewed"]
+    priority: Literal["normal", "high"]
+    risk_indicated: bool
+    result: Assessment
+    inputs: dict[str, Any]
+    doctor_note: str | None
+    reviewed_at: datetime | None
+    reviewed_by_name: str | None
+    supersedes_id: uuid.UUID | None
+    replaced: bool  # a correction replaced this one
+    by_doctor: bool  # submitted by a doctor (a correction), not the patient
+
+
+class NoteIn(BaseModel):
+    """Dashboard §15: private (doctors only) or shared, chosen when writing."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    body: NoteText
+    visible_to_patient: bool
+
+
+class NoteOut(BaseModel):
+    id: uuid.UUID
+    body: str
+    visible_to_patient: bool
+    doctor_name: str
+    created_at: datetime
+    related_ref: str | None
+
+
+class DoctorEndIn(BaseModel):
+    """Dashboard §17: the same three choices; the patient's inform-the-doctor question does
+    not apply."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    status: EndStatus
+
+
+# §8.3: a doctor sets a clinician-confirmed (option B) or ultrasound (option C) date
+DoctorDatesIn = Annotated[DueDateIn | UltrasoundDatesIn, Field(discriminator="option")]

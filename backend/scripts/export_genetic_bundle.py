@@ -1,4 +1,4 @@
-"""Writes the patient app's genetic form and result texts, generated from
+"""Writes both apps' genetic form and result texts (packages/shared), generated from
 backend/rules/genetic/*.yaml so the form offers exactly what the engine accepts (Genetic spec §5)
 and the result screen uses the rule files' words and messages.
 
@@ -18,10 +18,9 @@ from app.modules.genetic.rules import GeneticRules, parse_genetic_rules  # noqa:
 OUT = (
     Path(__file__).resolve().parents[2]
     / "frontend"
-    / "apps"
-    / "patient-web"
+    / "packages"
+    / "shared"
     / "src"
-    / "app"
     / "geneticBundle.generated.ts"
 )
 

@@ -12,7 +12,7 @@ export default tseslint.config(
       '**/dev-dist',
       'packages/shared/src/api-types.ts',
       'apps/patient-web/src/app/symptomBundle.generated.ts',
-      'apps/patient-web/src/app/geneticBundle.generated.ts',
+      'packages/shared/src/geneticBundle.generated.ts',
       'playwright-report',
       'test-results',
     ],

@@ -93,3 +93,33 @@ class ChartsOut(BaseModel):
 
     symptoms: list[SymptomSeries]
     puqe: list[PuqePoint]
+
+
+# ---- §12 doctor view (Dashboard spec §13) ----
+
+
+class PatternChangeOut(BaseModel):
+    code: str  # P1-P5
+    symptom: str | None  # null for P5 (counts L2 check-ins)
+
+
+class DoctorCheckinOut(CheckinHistoryOut):
+    """Doctor view of a check-in: the patient view plus the pattern changes (§9)."""
+
+    pattern_changes: list[PatternChangeOut]
+
+
+class PuqeBandOut(BaseModel):
+    band: str
+    min: int
+    max: int
+
+
+class DoctorSymptomsOut(BaseModel):
+    """§12: timeline with levels and rule IDs, pattern badges, charts, PUQE with bands.
+    Read-only; notes are shown in full."""
+
+    checkins: list[DoctorCheckinOut]
+    charts: ChartsOut
+    labels: dict[str, str]  # symptom id -> label from the rule files
+    puqe_bands: list[PuqeBandOut]

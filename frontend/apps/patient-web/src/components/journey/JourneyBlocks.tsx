@@ -15,7 +15,7 @@ import {
   weekDays,
   weekRangeLabel,
 } from '../../app/journey'
-import { GENETIC_CHECK_LABEL } from '../../app/genetic'
+import { GENETIC_CHECK_LABEL } from '@alovia/shared'
 import { useCalendar } from '../../app/useAppointments'
 import { hasRedFlag, MarkerIcons, markersByDay, markersFor, markerWords } from './CalendarMarkers'
 

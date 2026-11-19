@@ -5,19 +5,27 @@ active assignment (users.service.get_doctor / get_assigned_patient)."""
 import uuid
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Body, Depends, Request
 from sqlalchemy.orm import Session
 
 from app.api import API_PREFIX
 from app.common.responses import Envelope, ok
 from app.core.database import get_db
+from app.core.errors import AppError
+from app.modules.dashboard import care, predictions
 from app.modules.dashboard import patients as service
-from app.modules.dashboard import predictions
 from app.modules.dashboard.rules import load_ranges
 from app.modules.dashboard.schemas import (
+    DoctorAssessmentOut,
+    DoctorDatesIn,
+    DoctorEndIn,
+    GeneticCorrectIn,
+    GeneticReviewIn,
     InboxItemOut,
     InviteOut,
     ModelName,
+    NoteIn,
+    NoteOut,
     PatientDetail,
     PatientIn,
     PatientResultOut,
@@ -28,10 +36,15 @@ from app.modules.dashboard.schemas import (
     ShareIn,
     TrendsOut,
 )
+from app.modules.journey import service as journey
 from app.modules.journey.engine import local_today
+from app.modules.journey.schemas import AppointmentIn, AppointmentOut, AppointmentsOut
+from app.modules.symptoms import service as symptoms
+from app.modules.symptoms.schemas import DoctorSymptomsOut
 from app.modules.users.models import Patient
 from app.modules.users.service import (
     DoctorAccount,
+    assigned_patient,
     get_assigned_patient,
     get_doctor,
 )
@@ -142,6 +155,133 @@ def share_result(
     model: ModelName, result_id: uuid.UUID, body: ShareIn, account: Doc, db: Db
 ) -> dict[str, Any]:
     return ok(predictions.share(db, account, model, result_id, body).model_dump(mode="json"))
+
+
+# ---- task 4: genetic review, symptoms, notes, appointments, dates, status ----
+
+
+@router.get("/genetic/review-queue", response_model=Envelope[list[DoctorAssessmentOut]])
+def genetic_queue(account: Doc, db: Db) -> dict[str, Any]:
+    """Genetic §10.1: pending assessments of the doctor's patients, high priority first."""
+    return ok([a.model_dump(mode="json") for a in care.review_queue(db, account.doctor.id)])
+
+
+@router.get("/patients/{patient_id}/genetic", response_model=Envelope[list[DoctorAssessmentOut]])
+def patient_genetic(patient: Assigned, db: Db) -> dict[str, Any]:
+    return ok([a.model_dump(mode="json") for a in care.patient_assessments(db, patient)])
+
+
+@router.post(
+    "/genetic/assessments/{assessment_id}/review", response_model=Envelope[DoctorAssessmentOut]
+)
+def genetic_review(
+    assessment_id: uuid.UUID, body: GeneticReviewIn, account: Doc, db: Db
+) -> dict[str, Any]:
+    return ok(care.confirm(db, account, assessment_id, body.doctor_note).model_dump(mode="json"))
+
+
+@router.post(
+    "/genetic/assessments/{assessment_id}/correct",
+    status_code=201,
+    response_model=Envelope[DoctorAssessmentOut],
+)
+def genetic_correct(
+    request: Request, assessment_id: uuid.UUID, body: GeneticCorrectIn, account: Doc, db: Db
+) -> dict[str, Any]:
+    rules = request.app.state.genetic_rules
+    return ok(care.correct(db, account, assessment_id, body, rules).model_dump(mode="json"))
+
+
+@router.get("/patients/{patient_id}/symptoms", response_model=Envelope[DoctorSymptomsOut])
+def patient_symptoms(request: Request, patient: Assigned, db: Db) -> dict[str, Any]:
+    """Symptom §12 / Dashboard §13, read-only."""
+    tz = request.app.state.journey_config.timezone
+    out = symptoms.doctor_view(db, patient, request.app.state.symptom_rules, tz)
+    return ok(out.model_dump(mode="json"))
+
+
+@router.get("/patients/{patient_id}/notes", response_model=Envelope[list[NoteOut]])
+def list_notes(patient: Assigned, db: Db) -> dict[str, Any]:
+    return ok([n.model_dump(mode="json") for n in care.list_notes(db, patient)])
+
+
+@router.post("/patients/{patient_id}/notes", status_code=201, response_model=Envelope[NoteOut])
+def write_note(body: NoteIn, patient: Assigned, account: Doc, db: Db) -> dict[str, Any]:
+    return ok(care.write_note(db, account, patient, body).model_dump(mode="json"))
+
+
+@router.post("/notes/{note_id}/share", response_model=Envelope[NoteOut])
+def share_note(note_id: uuid.UUID, account: Doc, db: Db) -> dict[str, Any]:
+    return ok(care.share_note(db, account, note_id).model_dump(mode="json"))
+
+
+@router.get("/patients/{patient_id}/appointments", response_model=Envelope[AppointmentsOut])
+def list_appointments(request: Request, patient: Assigned, db: Db) -> dict[str, Any]:
+    """Dashboard §16: all her appointments; `can_edit` marks the doctor-added ones."""
+    tz = request.app.state.journey_config.timezone
+    out = journey.list_appointments(db, patient, tz, local_today(tz), viewer="doctor")
+    return ok(out.model_dump(mode="json"))
+
+
+@router.post(
+    "/patients/{patient_id}/appointments", status_code=201, response_model=Envelope[AppointmentOut]
+)
+def add_appointment(
+    request: Request, body: AppointmentIn, patient: Assigned, account: Doc, db: Db
+) -> dict[str, Any]:
+    tz = request.app.state.journey_config.timezone
+    out = journey.create_appointment(db, account.user, patient, body, tz, editor="doctor")
+    return ok(out.model_dump(mode="json"))
+
+
+def _appointment_patient(db: Session, account: DoctorAccount, appointment_id: uuid.UUID) -> Patient:
+    patient_id = journey.appointment_patient_id(db, appointment_id)
+    if patient_id is None:
+        raise AppError("NOT_FOUND", "We couldn't find this.", status=404)
+    return assigned_patient(db, account.doctor.id, patient_id)
+
+
+@router.put("/appointments/{appointment_id}", response_model=Envelope[AppointmentOut])
+def edit_appointment(
+    request: Request, appointment_id: uuid.UUID, body: AppointmentIn, account: Doc, db: Db
+) -> dict[str, Any]:
+    patient = _appointment_patient(db, account, appointment_id)
+    tz = request.app.state.journey_config.timezone
+    out = journey.update_appointment(
+        db, account.user, patient, appointment_id, body, tz, editor="doctor"
+    )
+    return ok(out.model_dump(mode="json"))
+
+
+@router.delete("/appointments/{appointment_id}", response_model=Envelope[None])
+def remove_appointment(appointment_id: uuid.UUID, account: Doc, db: Db) -> dict[str, Any]:
+    patient = _appointment_patient(db, account, appointment_id)
+    journey.delete_appointment(db, account.user, patient, appointment_id, editor="doctor")
+    return ok(None)
+
+
+@router.put("/patients/{patient_id}/dates", response_model=Envelope[PatientDetail])
+def set_dates(
+    request: Request,
+    body: Annotated[DoctorDatesIn, Body()],
+    patient: Assigned,
+    account: Doc,
+    db: Db,
+) -> dict[str, Any]:
+    """Dashboard §8.3: a clinician-confirmed or ultrasound date (Journey §5 rules, incl. D2);
+    logged; the patient gets a dates_updated notification."""
+    today = local_today(request.app.state.journey_config.timezone)
+    journey.set_dates(db, account.user, patient, body, today)
+    return _detail(request, db, patient)
+
+
+@router.post("/patients/{patient_id}/pregnancy-end", response_model=Envelope[PatientDetail])
+def end_pregnancy(
+    request: Request, body: DoctorEndIn, patient: Assigned, account: Doc, db: Db
+) -> dict[str, Any]:
+    """Dashboard §17: the same three choices; no pregnancy_ended inbox item."""
+    journey.end_pregnancy(db, account.user, patient, body.status, None)
+    return _detail(request, db, patient)
 
 
 patient_router = APIRouter(prefix=f"{API_PREFIX}/patient")

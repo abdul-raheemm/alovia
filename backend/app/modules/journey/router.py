@@ -197,7 +197,7 @@ def doctor_notes(request: Request, patient: OwnPatient, db: Db) -> dict[str, Any
 def end_pregnancy(
     request: Request, body: PregnancyEndIn, patient: OwnPatient, user: Account, db: Db
 ) -> dict[str, Any]:
-    service.end_pregnancy(db, user, patient, body)
+    service.end_pregnancy(db, user, patient, body.status, body.inform_doctor)
     return _home(request, db, patient)
 
 

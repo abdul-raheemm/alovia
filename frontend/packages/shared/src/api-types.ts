@@ -4,6 +4,78 @@
  */
 
 export interface paths {
+    "/api/v1/doctor/appointments/{appointment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Edit Appointment */
+        put: operations["edit_appointment_api_v1_doctor_appointments__appointment_id__put"];
+        post?: never;
+        /** Remove Appointment */
+        delete: operations["remove_appointment_api_v1_doctor_appointments__appointment_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/genetic/assessments/{assessment_id}/correct": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Genetic Correct */
+        post: operations["genetic_correct_api_v1_doctor_genetic_assessments__assessment_id__correct_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/genetic/assessments/{assessment_id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Genetic Review */
+        post: operations["genetic_review_api_v1_doctor_genetic_assessments__assessment_id__review_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/genetic/review-queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Genetic Queue
+         * @description Genetic §10.1: pending assessments of the doctor's patients, high priority first.
+         */
+        get: operations["genetic_queue_api_v1_doctor_genetic_review_queue_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/doctor/inbox": {
         parameters: {
             query?: never;
@@ -32,6 +104,23 @@ export interface paths {
         put?: never;
         /** Mark Seen */
         post: operations["mark_seen_api_v1_doctor_inbox__item_id__seen_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/notes/{note_id}/share": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Share Note */
+        post: operations["share_note_api_v1_doctor_notes__note_id__share_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -74,6 +163,65 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/doctor/patients/{patient_id}/appointments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Appointments
+         * @description Dashboard §16: all her appointments; `can_edit` marks the doctor-added ones.
+         */
+        get: operations["list_appointments_api_v1_doctor_patients__patient_id__appointments_get"];
+        put?: never;
+        /** Add Appointment */
+        post: operations["add_appointment_api_v1_doctor_patients__patient_id__appointments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set Dates
+         * @description Dashboard §8.3: a clinician-confirmed or ultrasound date (Journey §5 rules, incl. D2);
+         *     logged; the patient gets a dates_updated notification.
+         */
+        put: operations["set_dates_api_v1_doctor_patients__patient_id__dates_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/genetic": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Patient Genetic */
+        get: operations["patient_genetic_api_v1_doctor_patients__patient_id__genetic_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/doctor/patients/{patient_id}/invite": {
         parameters: {
             query?: never;
@@ -85,6 +233,24 @@ export interface paths {
         put?: never;
         /** Create Invite */
         post: operations["create_invite_api_v1_doctor_patients__patient_id__invite_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Notes */
+        get: operations["list_notes_api_v1_doctor_patients__patient_id__notes_get"];
+        put?: never;
+        /** Write Note */
+        post: operations["write_note_api_v1_doctor_patients__patient_id__notes_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -119,6 +285,46 @@ export interface paths {
         put?: never;
         /** Run Prediction */
         post: operations["run_prediction_api_v1_doctor_patients__patient_id__predictions__model__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/pregnancy-end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * End Pregnancy
+         * @description Dashboard §17: the same three choices; no pregnancy_ended inbox item.
+         */
+        post: operations["end_pregnancy_api_v1_doctor_patients__patient_id__pregnancy_end_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/symptoms": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Patient Symptoms
+         * @description Symptom §12 / Dashboard §13, read-only.
+         */
+        get: operations["patient_symptoms_api_v1_doctor_patients__patient_id__symptoms_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -670,6 +876,36 @@ export interface components {
             /** Upcoming */
             upcoming: components["schemas"]["AppointmentOut"][];
         };
+        /**
+         * Assessment
+         * @description §8.2 output (without the id and timestamps the service adds).
+         */
+        Assessment: {
+            /** Conditions */
+            conditions: components["schemas"]["ConditionResult"][];
+            /**
+             * Disclaimer Key
+             * @default disclaimer_main
+             */
+            disclaimer_key: string;
+            flags: components["schemas"]["Flags"];
+            /** Message Keys */
+            message_keys: string[];
+            /**
+             * Priority
+             * @enum {string}
+             */
+            priority: "normal" | "high";
+            /**
+             * Review Status
+             * @enum {string}
+             */
+            review_status: "pending_review" | "reviewed";
+            /** Rules Version */
+            rules_version: string;
+            /** Show Numbers To Patient */
+            show_numbers_to_patient: boolean;
+        };
         /** AssessmentIn */
         AssessmentIn: {
             /** Consanguinity */
@@ -1020,6 +1256,113 @@ export interface components {
             lmp_date: string | null;
         };
         /**
+         * DoctorAssessmentOut
+         * @description The doctor's view of one assessment: everything, including numbers and priority.
+         */
+        DoctorAssessmentOut: {
+            /** By Doctor */
+            by_doctor: boolean;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Doctor Note */
+            doctor_note: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Inputs */
+            inputs: {
+                [key: string]: unknown;
+            };
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /** Patient Name */
+            patient_name: string;
+            /**
+             * Priority
+             * @enum {string}
+             */
+            priority: "normal" | "high";
+            /** Replaced */
+            replaced: boolean;
+            result: components["schemas"]["Assessment"];
+            /**
+             * Review Status
+             * @enum {string}
+             */
+            review_status: "pending_review" | "reviewed";
+            /** Reviewed At */
+            reviewed_at: string | null;
+            /** Reviewed By Name */
+            reviewed_by_name: string | null;
+            /** Risk Indicated */
+            risk_indicated: boolean;
+            /** Rules Version */
+            rules_version: string;
+            /** Supersedes Id */
+            supersedes_id: string | null;
+        };
+        /**
+         * DoctorCheckinOut
+         * @description Doctor view of a check-in: the patient view plus the pattern changes (§9).
+         */
+        DoctorCheckinOut: {
+            /**
+             * Checkin Id
+             * Format: uuid
+             */
+            checkin_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Entries */
+            entries: components["schemas"]["EntryOut"][];
+            /**
+             * Local Date
+             * Format: date
+             */
+            local_date: string;
+            /** Matched Rules */
+            matched_rules: string[];
+            /** Message Keys */
+            message_keys: string[];
+            /** Pattern Changes */
+            pattern_changes: components["schemas"]["PatternChangeOut"][];
+            /** Pregnancy Week */
+            pregnancy_week: number | null;
+            /**
+             * Red Flag Level
+             * @enum {string}
+             */
+            red_flag_level: "L0" | "L1" | "L2";
+            /**
+             * Source
+             * @enum {string}
+             */
+            source: "form" | "urgent_button";
+        };
+        /**
+         * DoctorEndIn
+         * @description Dashboard §17: the same three choices; the patient's inform-the-doctor question does
+         *     not apply.
+         */
+        DoctorEndIn: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ended_birth" | "ended_loss" | "ended_not_specified";
+        };
+        /**
          * DoctorNoteOut
          * @description A note her doctor shared (§10.3); read-only for the patient.
          */
@@ -1052,6 +1395,22 @@ export interface components {
             name: string;
             /** Specialty */
             specialty: string | null;
+        };
+        /**
+         * DoctorSymptomsOut
+         * @description §12: timeline with levels and rule IDs, pattern badges, charts, PUQE with bands.
+         *     Read-only; notes are shown in full.
+         */
+        DoctorSymptomsOut: {
+            charts: components["schemas"]["ChartsOut"];
+            /** Checkins */
+            checkins: components["schemas"]["DoctorCheckinOut"][];
+            /** Labels */
+            labels: {
+                [key: string]: string;
+            };
+            /** Puqe Bands */
+            puqe_bands: components["schemas"]["PuqeBandOut"][];
         };
         /**
          * DueDateIn
@@ -1185,6 +1544,18 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[DoctorAssessmentOut] */
+        Envelope_DoctorAssessmentOut_: {
+            data: components["schemas"]["DoctorAssessmentOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[DoctorSymptomsOut] */
+        Envelope_DoctorSymptomsOut_: {
+            data: components["schemas"]["DoctorSymptomsOut"];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[HomeOut] */
         Envelope_HomeOut_: {
             data: components["schemas"]["HomeOut"];
@@ -1225,6 +1596,12 @@ export interface components {
         Envelope_NoneType_: {
             /** Data */
             data: null;
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[NoteOut] */
+        Envelope_NoteOut_: {
+            data: components["schemas"]["NoteOut"];
             /** Error */
             error?: null;
         };
@@ -1272,6 +1649,13 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[list[DoctorAssessmentOut]] */
+        Envelope_list_DoctorAssessmentOut__: {
+            /** Data */
+            data: components["schemas"]["DoctorAssessmentOut"][];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[list[DoctorNoteOut]] */
         Envelope_list_DoctorNoteOut__: {
             /** Data */
@@ -1283,6 +1667,13 @@ export interface components {
         Envelope_list_InboxItemOut__: {
             /** Data */
             data: components["schemas"]["InboxItemOut"][];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[NoteOut]] */
+        Envelope_list_NoteOut__: {
+            /** Data */
+            data: components["schemas"]["NoteOut"][];
             /** Error */
             error?: null;
         };
@@ -1338,6 +1729,23 @@ export interface components {
             risk_indicated: boolean;
             /** Timing Prompt */
             timing_prompt: boolean;
+        };
+        /**
+         * GeneticCorrectIn
+         * @description Genetic §10.3 Correct inputs: the corrected answers and the doctor's note.
+         */
+        GeneticCorrectIn: {
+            /** Doctor Note */
+            doctor_note: string;
+            inputs: components["schemas"]["AssessmentIn"];
+        };
+        /**
+         * GeneticReviewIn
+         * @description Genetic §10.3 Confirm: the note is required.
+         */
+        GeneticReviewIn: {
+            /** Doctor Note */
+            doctor_note: string;
         };
         /** GeneticStatus */
         GeneticStatus: {
@@ -1578,6 +1986,37 @@ export interface components {
             label: string;
         };
         /**
+         * NoteIn
+         * @description Dashboard §15: private (doctors only) or shared, chosen when writing.
+         */
+        NoteIn: {
+            /** Body */
+            body: string;
+            /** Visible To Patient */
+            visible_to_patient: boolean;
+        };
+        /** NoteOut */
+        NoteOut: {
+            /** Body */
+            body: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Doctor Name */
+            doctor_name: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Related Ref */
+            related_ref: string | null;
+            /** Visible To Patient */
+            visible_to_patient: boolean;
+        };
+        /**
          * NotificationOut
          * @description One unread notification for the bar (§4.2, §10.1). `target_ref`: the week or month
          *     number for new_week/new_month, the appointment or note id for the others.
@@ -1746,6 +2185,13 @@ export interface components {
             /** Unseen Count */
             unseen_count: number;
         };
+        /** PatternChangeOut */
+        PatternChangeOut: {
+            /** Code */
+            code: string;
+            /** Symptom */
+            symptom: string | null;
+        };
         /**
          * PredictionIn
          * @description §9.2: every model input as typed, plus the unit chosen on each switch.
@@ -1819,6 +2265,15 @@ export interface components {
             month: number;
             /** Trimester */
             trimester: number;
+        };
+        /** PuqeBandOut */
+        PuqeBandOut: {
+            /** Band */
+            band: string;
+            /** Max */
+            max: number;
+            /** Min */
+            min: number;
         };
         /** PuqePoint */
         PuqePoint: {
@@ -2252,6 +2707,162 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    edit_appointment_api_v1_doctor_appointments__appointment_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppointmentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AppointmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_appointment_api_v1_doctor_appointments__appointment_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                appointment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_NoneType_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    genetic_correct_api_v1_doctor_genetic_assessments__assessment_id__correct_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                assessment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GeneticCorrectIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_DoctorAssessmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    genetic_review_api_v1_doctor_genetic_assessments__assessment_id__review_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                assessment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GeneticReviewIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_DoctorAssessmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    genetic_queue_api_v1_doctor_genetic_review_queue_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_DoctorAssessmentOut__"];
+                };
+            };
+        };
+    };
     list_inbox_api_v1_doctor_inbox_get: {
         parameters: {
             query?: {
@@ -2301,6 +2912,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_InboxItemOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    share_note_api_v1_doctor_notes__note_id__share_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                note_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_NoteOut_"];
                 };
             };
             /** @description Validation Error */
@@ -2433,6 +3075,138 @@ export interface operations {
             };
         };
     };
+    list_appointments_api_v1_doctor_patients__patient_id__appointments_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AppointmentsOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_appointment_api_v1_doctor_patients__patient_id__appointments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppointmentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AppointmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    set_dates_api_v1_doctor_patients__patient_id__dates_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DueDateIn"] | components["schemas"]["UltrasoundDatesIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PatientDetail_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    patient_genetic_api_v1_doctor_patients__patient_id__genetic_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_DoctorAssessmentOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     create_invite_api_v1_doctor_patients__patient_id__invite_post: {
         parameters: {
             query?: never;
@@ -2451,6 +3225,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_InviteOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_notes_api_v1_doctor_patients__patient_id__notes_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_NoteOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    write_note_api_v1_doctor_patients__patient_id__notes_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NoteIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_NoteOut_"];
                 };
             };
             /** @description Validation Error */
@@ -2520,6 +3360,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_ResultOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    end_pregnancy_api_v1_doctor_patients__patient_id__pregnancy_end_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DoctorEndIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_PatientDetail_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    patient_symptoms_api_v1_doctor_patients__patient_id__symptoms_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_DoctorSymptomsOut_"];
                 };
             };
             /** @description Validation Error */

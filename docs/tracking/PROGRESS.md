@@ -58,7 +58,7 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 - [x] Training ranges (decision A): notebooks re-run, range files from the training split — Raheem + Claude Code — 2026-11-19
 - [x] Task 2 patient list, inbox, patient tabs (Overview), create/edit, invite links — Raheem + Claude Code — 2026-11-19 (owner approved; range basis DEC-087)
 - [x] Task 3 predictions: schema, units, range warnings, limitations, HbA1c note, sharing, trends, patient My results — Raheem + Claude Code — 2026-11-19 (owner approved; DEC-088..091 accepted)
-- [ ] Genetic review, symptoms view, records, notes, appointments, dates/status
+- [x] Task 4 genetic review (queue, confirm, correct, race), symptoms view, notes, appointments, dates/status — Raheem + Claude Code — 2026-11-19 (owner approved; DEC-092..095 accepted) (records = task 5)
 - [ ] Rule review screen; audit log; invite links; admin screens
 - [ ] E2E (access control!); review; CHANGELOG 0.5.0
 

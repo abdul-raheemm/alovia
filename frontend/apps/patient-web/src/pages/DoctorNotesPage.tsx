@@ -1,13 +1,13 @@
 import { userMessage } from '@alovia/shared'
 import { Card, ErrorState, PageSkeleton } from '@alovia/ui'
 import { Stethoscope } from 'lucide-react'
+import { Link } from 'react-router'
 
 import { formatDay } from '../app/journey'
 import { useDoctorNotes } from '../app/useNotifications'
 
 /** Doctor notes tab (Journey §10.3, UX_FLOWS P10): notes her doctors shared, newest first.
- * Read-only. TODO(Phase 5): link a genetic-assessment note (related_ref) to its assessment —
- * the doctor writes it in the genetic review (Genetic spec §10.3). */
+ * Read-only. A genetic review note links to her genetic check (Genetic spec §10.3). */
 export function DoctorNotesPage() {
   const notes = useDoctorNotes()
   if (notes.isPending) return <PageSkeleton />
@@ -36,6 +36,11 @@ export function DoctorNotesPage() {
                   {note.doctor_name} — {formatDay(note.created_on)}
                 </p>
                 <p className="whitespace-pre-line">{note.body}</p>
+                {note.related_ref?.startsWith('genetic_assessment:') && (
+                  <Link to="/genetic" className="self-start text-sm">
+                    About your genetic check
+                  </Link>
+                )}
               </Card>
             </li>
           ))}
