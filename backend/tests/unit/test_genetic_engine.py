@@ -445,6 +445,7 @@ def broken(path: str, value: Any) -> dict[str, Any]:
         (broken("haemophilia.father.status", "maybe"), "E2", "haemophilia.father.status"),
         (broken("haemophilia.entry", "perhaps"), "E2", "haemophilia.entry"),
         (broken("consanguinity", True), "E2", "consanguinity"),
+        (broken("haemoglobin_group.entry", "no"), "E2", "haemoglobin_group.entry"),  # no entry question
     ],
 )  # fmt: skip
 def test_validation_codes(raw: dict[str, Any], code: str, field: str) -> None:
@@ -482,6 +483,7 @@ def test_every_rule_conflict_and_error_id_has_a_test_here() -> None:
     named = set(
         re.findall(r"(?:HBB|HEM|MAR)-\d\d|\b[CFE]\d\b", Path(__file__).read_text(encoding="utf-8"))
     )
-    ids = {r.id for r in (*RULES.haemoglobin.rules, *RULES.haemophilia.rules, *RULES.marfan.rules)}
+    ids = {r.id for r in RULES.haemoglobin.rules} | {r.id for r in RULES.haemophilia.rules}
+    ids |= {r.id for r in RULES.marfan.rules}
     ids |= {c.id for c in RULES.conflicts.conflicts} | set(RULES.conflicts.errors)
     assert ids <= named, ids - named

@@ -189,7 +189,7 @@ Indexes (migration 0003): `symptom_checkins (patient_id, created_at DESC)`; `sym
 
 **`genetic_assessments`** (append-only; only review columns updated once)
 `id` uuid PK · `patient_id` FK · `submitted_by` FK users · `inputs` jsonb · `results` jsonb · `rules_version` text · `show_numbers_to_patient` boolean · `risk_indicated` boolean · `priority` text (`normal`/`high`) · `review_status` text (`pending_review`/`reviewed`) · `reviewed_by` FK doctors N · `reviewed_at` N · `doctor_note` text N · `supersedes_id` FK genetic_assessments N · `created_at`.
-**No `genetic_conditions` table** (rules are YAML files).
+**No `genetic_conditions` table** (rules are YAML files). Migration 0004: CHECKs on `priority` and `review_status`; indexes `(patient_id, created_at DESC)` and `(review_status, priority)` (review queue).
 
 ### 3.6 Doctor Dashboard — Module 6 (Phase 5)
 

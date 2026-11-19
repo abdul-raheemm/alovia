@@ -40,7 +40,8 @@ PHASE2_TABLES = {  # migration 0002 (inbox_items moved forward, DEC-044)
     "inbox_items",
 }
 PHASE3_TABLES = {"symptom_checkins", "symptom_logs"}  # migration 0003
-TABLES = PHASE1_TABLES | PHASE2_TABLES | PHASE3_TABLES
+PHASE4_TABLES = {"genetic_assessments"}  # migration 0004
+TABLES = PHASE1_TABLES | PHASE2_TABLES | PHASE3_TABLES | PHASE4_TABLES
 
 
 def _app_tables(engine: Engine) -> set[str]:
@@ -50,6 +51,8 @@ def _app_tables(engine: Engine) -> set[str]:
 def test_upgrade_downgrade_upgrade(test_db_url: str, engine: Engine) -> None:
     cfg = alembic_config(test_db_url)
     assert _app_tables(engine) == TABLES
+    command.downgrade(cfg, "0003")  # 0004's downgrade removes only its own table
+    assert _app_tables(engine) == PHASE1_TABLES | PHASE2_TABLES | PHASE3_TABLES
     command.downgrade(cfg, "0002")  # 0003's downgrade removes only its own tables
     assert _app_tables(engine) == PHASE1_TABLES | PHASE2_TABLES
     command.downgrade(cfg, "0001")  # 0002's downgrade removes only its own tables
@@ -304,3 +307,17 @@ def test_symptom_tables_check_their_values(conn: Connection) -> None:
     _rejects(conn, log, **{**ok, "dur": "a_week", "n": None})
     _rejects(conn, log, **{**ok, "area": "elbow", "n": None})
     _rejects(conn, log, **{**ok, "n": "x" * 501})
+
+
+def test_genetic_assessments_check_their_values(conn: Connection) -> None:
+    """Migration 0004 (Genetic spec §12.3): priority and review status are checked."""
+    patient = _patient(conn)
+    user = _user(conn, "patient")
+    sql = (
+        "INSERT INTO genetic_assessments (patient_id, submitted_by, inputs, results, "
+        "rules_version, show_numbers_to_patient, risk_indicated, priority, review_status) "
+        "VALUES (:p, :u, '{}', '{}', '1.0.0', true, false, :pr, :rs)"
+    )
+    conn.execute(text(sql), {"p": patient, "u": user, "pr": "normal", "rs": "pending_review"})
+    _rejects(conn, sql, p=patient, u=user, pr="urgent", rs="pending_review")
+    _rejects(conn, sql, p=patient, u=user, pr="high", rs="approved")

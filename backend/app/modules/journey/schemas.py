@@ -242,6 +242,10 @@ class HomeOut(BaseModel):
     helplines: list[HelplineOut] = []  # §13.3, official numbers for the support screen
     logged_today: bool = False  # §4.3 quick log
     weekly_summary: WeeklySummaryOut | None = None  # §9.4; not after the end
+    # §10.4 "Genetic check" status card: the latest assessment's state (DEC-073), or null
+    genetic_check: (
+        Literal["reviewed", "sent_to_doctor", "needs_testing", "pending_review"] | None
+    ) = None
 
 
 class MonthDetailOut(BaseModel):

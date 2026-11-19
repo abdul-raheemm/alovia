@@ -742,3 +742,13 @@ Done:
 - One test expectation was mine and wrong (family-history-only mother + tested-negative father is HBB-09, not "needs testing"); fixed to the spec row.
 Checks: ruff, mypy; 112 engine tests passed.
 Next step: task 3 (migration 0004, API, inbox items).
+
+## Session 30 — 2026-11-19 — Phase 4 task 3 (backend): migration 0004, API, inbox, Journey card
+Who: Raheem + agent: Claude Code
+Done:
+- Migration 0004 `genetic_assessments` (append-only; CHECKs; indexes) tested on alovia-test (up/down/up, model match, constraint test), then applied to main (`alembic current` = 0004).
+- Service + routes: POST (validate E1/E2 -> 400 with the field; engine; save pending_review; inbox `genetic_pending` + `genetic_high_priority` when high, DEC-071, one transaction; E4 logged), GET list (newest first), GET one (404 for another patient's). Patient view hides numbers while `show_numbers_to_patient` is false (setting off and not reviewed) and shows them with the doctor's note after review (§10.4); no doctor-only priority. Engine now also refuses an `entry` for the haemoglobin group (E2).
+- Journey home `genetic_check` for the §10.4 status card (DEC-073), read through `genetic.service`.
+- Tests: 10 API integration tests (submit + inbox, normal priority, E1/E2 save nothing, unknown fields and a baby-sex field refused, history/one/404, numbers hidden then shown after a simulated review, the Journey card in all 4 states, consent).
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 478 passed; Vitest 46 passed; Playwright 86 passed; ruff, mypy, typecheck, lint, format pass.
+Next step: task 3 frontend (form, result screen, history, More link, home card).

@@ -114,6 +114,8 @@ Phase 3 additions to the Journey: the home data carries `logged_today` (a check-
 | POST | `/patient/genetic/assessments` | Submit, run engine, save |
 | GET | `/patient/genetic/assessments` · `/{id}` | Own history / one |
 
+**Genetic routes (Phase 4, details):** `POST /patient/genetic/assessments` body `{haemoglobin_group: {mother: {status, evidence?}, father: {...}, previous_child}, haemophilia: {entry, mother?, father?, previous_child?}, marfan: {...}, consanguinity}` (unknown fields refused; no field for the baby's sex, §11.3) → 201 with the patient view. Errors: 400 `VALIDATION_ERROR` with `fields.<path> = E1|E2` (nothing saved). The engine result (§8.2, plus a top-level `message_keys` and `rule_id` naming the rule row or the C/F/E code that decided each condition) is saved as `pending_review` with `genetic_pending` (and `genetic_high_priority` when priority is high) inbox items in the same transaction. Patient view `{assessment_id, created_at, rules_version, review_status, show_numbers_to_patient, conditions, flags, message_keys, disclaimer_key, doctor_note, reviewed_at, inputs}`: outcomes are null while `show_numbers_to_patient` is false (setting off and not yet reviewed); the doctor-only priority is not included. `GET` lists her assessments newest first; `GET /{id}` → 404 for another patient's. The Journey home carries `genetic_check: reviewed|sent_to_doctor|needs_testing|pending_review|null` (§10.4, DEC-073).
+
 ### 4.5 Shared results (Phase 5)
 | Method | Path | Purpose |
 |---|---|---|

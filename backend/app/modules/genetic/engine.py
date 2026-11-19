@@ -146,6 +146,8 @@ def validate(raw: dict[str, Any], rules: GeneticRules) -> dict[str, Any]:
         if not isinstance(section, dict):
             raise GeneticInputError("E1", condition)
         out: dict[str, Any] = {}
+        if condition == "haemoglobin_group" and section.get("entry") is not None:
+            raise GeneticInputError("E2", f"{condition}.entry")  # always assessed (§5.5)
         if condition != "haemoglobin_group":  # §5.5 entry question first
             out["entry"] = _pick(section.get("entry"), _ANSWERS, f"{condition}.entry")
             if out["entry"] == "no":

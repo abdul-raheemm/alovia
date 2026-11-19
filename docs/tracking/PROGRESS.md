@@ -50,7 +50,7 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 ## Phase 4 — Genetic Risk
 - [x] YAML rules (HBB/HEM/MAR, evidence, conflicts, messages, config) — Raheem + Claude Code — 2026-11-19 (`backend/rules/genetic/` 8 files incl. labels.yaml; strict loader with coverage checks: 45 haemoglobin pairs once, 8 haemophilia form combinations once, 6 Marfan pairs once; /health genetic: true)
 - [x] Engine + 45 pair tests + all other tests — Raheem + Claude Code — 2026-11-19 (`app/modules/genetic/engine.py`: E1/E2, evidence handling, conflicts as data, rule tables, §6.4 priority, §9 prompts and the exact risk definition, E3/E4; 112 tests: 45 pairs, every HEM/MAR row, evidence, C1/C2/F1/F2/E3/E4, priority, not assessed, consanguinity, timing, show-before-review, no 0%/no sex field, nudges, validation, rule-coverage guard. Spec test 10 is Phase 5)
-- [ ] Migration + API + patient forms/results
+- [ ] Migration + API + patient forms/results — backend done 2026-11-19 (Raheem + Claude Code): migration 0004 tested on alovia-test and applied to main; `/patient/genetic/assessments` POST/GET/GET one; inbox items; Journey `genetic_check`. Patient forms/results next
 - [ ] E2E; review; CHANGELOG 0.4.0
 
 ## Phase 5 — Doctor Dashboard + Admin

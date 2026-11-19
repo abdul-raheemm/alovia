@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app.api import API_PREFIX
 from app.common.responses import Envelope, ok
 from app.core.database import get_db
+from app.modules.genetic import service as genetic
 from app.modules.journey import service
 from app.modules.journey.config import load_journey_messages
 from app.modules.journey.content import select_for_home
@@ -52,6 +53,7 @@ def _home(
     today = local_today(cfg.timezone)
     provider = request.app.state.content_provider
     out = service.get_home(db, patient, cfg, load_journey_messages(), provider, today, notices)
+    out.genetic_check = genetic.latest_check(db, patient.id)
     if out.state != "ended":
         start = today - timedelta(days=(today.weekday() + 1) % 7)
         end = start + timedelta(days=6)
