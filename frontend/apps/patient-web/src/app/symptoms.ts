@@ -90,3 +90,43 @@ export function toEntry(spec: CommonSymptom, d: CommonDraft): EntryInput {
   if (d.notes?.trim()) entry.notes = d.notes.trim()
   return entry as EntryInput
 }
+
+// ---- §4.3 history charts ----
+
+export const SEVERITY_KEYS = ['mild', 'moderate', 'severe', 'logged'] as const
+export type SeverityKey = (typeof SEVERITY_KEYS)[number]
+
+export interface WeekRow {
+  week: string // "Week 24", or "Week unknown" when there was no due date
+  total: number
+  mild: number
+  moderate: number
+  severe: number
+  logged: number // entries without a severity (warning signs, craving, appetite)
+  durations: Record<string, number>
+}
+
+/** One symptom's entries grouped by pregnancy week, in week order (unknown week last). */
+export function byWeek(
+  points: { pregnancy_week?: number | null; severity?: string | null; duration?: string | null }[],
+): WeekRow[] {
+  const rows = new Map<number, WeekRow>()
+  for (const p of points) {
+    const key = p.pregnancy_week ?? Number.POSITIVE_INFINITY
+    const row = rows.get(key) ?? {
+      week: p.pregnancy_week == null ? 'Week unknown' : `Week ${p.pregnancy_week}`,
+      total: 0,
+      mild: 0,
+      moderate: 0,
+      severe: 0,
+      logged: 0,
+      durations: {},
+    }
+    row.total += 1
+    const sev = (p.severity ?? 'logged') as SeverityKey
+    row[SEVERITY_KEYS.includes(sev) ? sev : 'logged'] += 1
+    if (p.duration) row.durations[p.duration] = (row.durations[p.duration] ?? 0) + 1
+    rows.set(key, row)
+  }
+  return [...rows.entries()].sort(([a], [b]) => a - b).map(([, row]) => row)
+}

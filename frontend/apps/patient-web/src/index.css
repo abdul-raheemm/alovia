@@ -10,3 +10,18 @@
   --rdp-day-height: 48px;
   --rdp-day_button-height: 46px;
 }
+
+/* Symptom history charts (Symptom spec §4.3): severity is an ordered magnitude, so one hue
+   light -> dark; checked with the dataviz palette validator for each theme's surface. */
+:root {
+  --chart-mild: #a993e0;
+  --chart-moderate: #6b4fbb;
+  --chart-severe: #3d2a7a;
+  --chart-logged: #9a94a8;
+}
+[data-theme='dark'] {
+  --chart-mild: #5d4a9c;
+  --chart-moderate: #9a83e6;
+  --chart-severe: #d4c8f8;
+  --chart-logged: #6f6884;
+}

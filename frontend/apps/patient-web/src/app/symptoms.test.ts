@@ -7,6 +7,7 @@ import {
   cannotReach,
   emptyDraft,
   entryError,
+  byWeek,
   LEVEL_HEADING,
   missingFields,
   offlineWarnings,
@@ -92,5 +93,23 @@ describe('symptom helpers', () => {
       symptom: 'food_craving',
       food: 'Test',
     })
+  })
+})
+
+describe('history grouping (spec 4.3)', () => {
+  it('counts entries per pregnancy week by severity and duration, unknown week last', () => {
+    const rows = byWeek([
+      { pregnancy_week: 25, severity: 'mild', duration: 'under_1_hour' },
+      { pregnancy_week: 24, severity: 'severe', duration: 'under_1_hour' },
+      { pregnancy_week: 24, severity: 'severe', duration: 'more_than_1_day' },
+      { pregnancy_week: null, severity: null, duration: null },
+      { pregnancy_week: 24, severity: null, duration: null },
+    ])
+    expect(rows.map((r) => [r.week, r.total, r.severe, r.mild, r.logged])).toEqual([
+      ['Week 24', 3, 2, 0, 1],
+      ['Week 25', 1, 0, 1, 0],
+      ['Week unknown', 1, 0, 0, 1],
+    ])
+    expect(rows[0]?.durations).toEqual({ under_1_hour: 1, more_than_1_day: 1 })
   })
 })

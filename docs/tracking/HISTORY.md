@@ -683,3 +683,15 @@ Done:
 Checks: `bash scripts/check_all.sh` → exit 0: pytest 334 passed; Vitest 43 passed; Playwright 78 passed; ruff, mypy, typecheck, lint, format pass.
 Errors met: 1 (ERR-045) plus one test locator ("14416" also matched the 1800 number — exact match).
 Next step: task 5 (history charts, Recharts install per DEC-059) and task 6 (Journey links).
+
+## Session 25 — 2026-11-19 — Phase 3 task 5: symptom history charts
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 3 — history charts (Symptom spec §4.3)
+Done:
+- Installed recharts 3.10.1 (DEC-059; 3.11.0 was one day old) and react-is 19.3.1 with a root npm override, so Recharts and the test formatter use the react-is that matches React 19 (npm kept a hoisted 17 otherwise). `npm audit`: 4 moderate, all in vite-plugin-pwa's build tooling (glob/minimatch via workbox-build), present before this change — noted for Phase 8.
+- `/log/history`: per symptom a stacked bar chart of entries per pregnancy week by severity (mild/moderate/severe/"logged" for entries without one), legend only when there are two or more series, hover tooltips, "Show as a table" with week, count, severities and durations; PUQE score line chart (3-15) with a table. Unknown week grouped last. Links from the log page and the ended home's "My records".
+- Colors: severity is ordered, so one hue light -> dark; validated with the dataviz palette validator for the light (#fff) and dark (#221d2e) surfaces — all checks pass. Rendered and looked at in both themes; fixed legend text colour (now text ink) and long PUQE date ticks (now "3 Nov", padded) after the first look.
+- Tests: `byWeek` unit test; 4 E2E (history with table and PUQE line, empty state; phone-light + laptop-dark, axe).
+Checks: first `bash scripts/check_all.sh` run → exit 1 after 8 h: 4 Phase 2 database tests failed with "failed to resolve host" (network lost while the machine slept; ERR-046); re-run → exit 0: pytest 334 passed; Vitest 44 passed; Playwright 82 passed; ruff, mypy, typecheck, lint, format pass.
+Errors met: 0 (two visual issues found by looking, fixed before commit)
+Next step: task 6 (Journey links: logged today, weekly summary, calendar dots and red-flag icons).

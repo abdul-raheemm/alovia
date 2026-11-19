@@ -15,6 +15,7 @@ import { MonthDetailPage } from '../pages/MonthDetailPage'
 import { PregnancyEndPage } from '../pages/PregnancyEndPage'
 import { LandingPage } from '../pages/LandingPage'
 import { LogPage } from '../pages/LogPage'
+import { SymptomHistoryPage } from '../pages/SymptomHistoryPage'
 import {
   AboutPage,
   CheckEmailPage,
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
       { path: '/months/:month', element: <MonthDetailPage /> },
       { path: '/calendar', element: <CalendarPage /> },
       { path: '/log', element: <LogPage /> },
+      { path: '/log/history', element: <SymptomHistoryPage /> },
       { path: '/appointments', element: <AppointmentsPage /> },
       { path: '/doctor-notes', element: <DoctorNotesPage /> },
       { path: '/pregnancy-end', element: <PregnancyEndPage /> },

@@ -485,3 +485,13 @@ Fix: `list_checkins` returns each check-in's entries in form order (warning sign
 Verified by: the test passed three runs in a row, then check_all exit 0.
 Prevention: never rely on `created_at` to order rows written in the same transaction.
 Category: bug
+
+### ERR-046 — 2026-11-19 — check_all failed on four database tests: host could not be resolved
+Who: Claude Code
+Phase / task: Phase 3 — task 5 checks
+What happened: one full check run took 8 h 11 min and 4 integration tests (Phase 2 audit and calendar tests) failed with `failed to resolve host 'aws-0-ap-south-1.pooler.supabase.com'`.
+Cause: the network/DNS was unavailable during the run (the machine was asleep or offline); not a code change — the failing tests touch none of the task 5 code.
+Fix: confirmed the host resolves again, re-ran check_all → exit 0 (334/44/82).
+Verified by: the re-run.
+Prevention: a database test that fails with a DNS/connection error is re-run after checking the network before looking for a code cause.
+Category: environment

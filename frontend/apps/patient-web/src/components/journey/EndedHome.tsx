@@ -34,8 +34,8 @@ export function EndedHome({ data }: { data: JourneyHome }) {
       )}
       <section aria-labelledby="records-heading" className="flex flex-col gap-3">
         <h2 id="records-heading">My records</h2>
-        {/* §11.3: appointments and doctor notes stay available. TODO(Phases 3-5): symptom
-            history and results join this list. */}
+        {/* §11.3: appointments, doctor notes and symptom history stay available.
+            TODO(Phases 4-5): results join this list. */}
         <Card>
           <ul className="flex flex-col gap-2">
             <li>
@@ -43,6 +43,9 @@ export function EndedHome({ data }: { data: JourneyHome }) {
             </li>
             <li>
               <Link to="/doctor-notes">Doctor notes</Link>
+            </li>
+            <li>
+              <Link to="/log/history">Symptom history</Link>
             </li>
           </ul>
         </Card>

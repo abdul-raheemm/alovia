@@ -44,5 +44,8 @@
     "test": "node scripts/run.mjs vitest run",
     "test:e2e": "node scripts/run.mjs playwright test",
     "gen:api": "node scripts/gen-api.mjs"
+  },
+  "overrides": {
+    "react-is": "19.3.1"
   }
 }

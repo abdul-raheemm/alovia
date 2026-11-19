@@ -10,7 +10,7 @@ import {
   TextField,
 } from '@alovia/ui'
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import { emptyDraft, entryError, missingFields, toEntry, type CommonDraft } from '../app/symptoms'
 import { useSubmitCheckin, useVocabulary } from '../app/useSymptoms'
@@ -97,6 +97,9 @@ export function LogPage() {
     <form onSubmit={send} noValidate className="flex flex-col gap-6">
       <h1>Log symptoms</h1>
       <NotMonitoredNotice />
+      <p className="text-sm">
+        <Link to="/log/history">Your symptom history</Link>
+      </p>
       {otherError && <ErrorState message={otherError} />}
 
       <section aria-labelledby="warning-heading" className="flex flex-col gap-2">

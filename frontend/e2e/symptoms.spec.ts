@@ -249,3 +249,60 @@ test('after the pregnancy has ended, log and urgent show the after-pregnancy not
   ).toBeVisible()
   await expect(page.getByRole('checkbox')).toHaveCount(0)
 })
+
+test('symptom history: charts by pregnancy week with a table view; PUQE over time (§4.3)', async ({
+  page,
+}) => {
+  await setUp(page)
+  await page.route('**/api/v1/patient/symptoms/charts', (route) =>
+    route.fulfill({
+      json: {
+        data: {
+          symptoms: [
+            {
+              symptom: 'headache',
+              label: 'Headache',
+              points: [
+                {
+                  local_date: '2026-11-10',
+                  pregnancy_week: 23,
+                  severity: 'mild',
+                  duration: 'under_1_hour',
+                },
+                {
+                  local_date: '2026-11-17',
+                  pregnancy_week: 24,
+                  severity: 'severe',
+                  duration: 'under_1_hour',
+                },
+              ],
+            },
+          ],
+          puqe: [{ local_date: '2026-11-17', pregnancy_week: 24, score: 13, band: 'severe' }],
+        },
+        error: null,
+      },
+    }),
+  )
+  await page.goto(`${PATIENT}/log`)
+  await page.getByRole('link', { name: 'Your symptom history' }).click()
+  await expect(page.getByRole('heading', { level: 1, name: 'Symptom history' })).toBeVisible()
+  await expect(page.locator('.recharts-bar-rectangle').first()).toBeVisible()
+  await expect(page.locator('.recharts-line')).toHaveCount(1)
+  const headache = page.getByRole('heading', { name: 'Headache' }).locator('..')
+  await headache.getByText('Show as a table').click()
+  await expect(
+    headache.getByRole('row', { name: /Week 24 1 Severe: 1 under 1 hour: 1/ }),
+  ).toBeVisible()
+  await expectNoA11yViolations(page)
+})
+
+test('symptom history: empty state', async ({ page }) => {
+  await setUp(page)
+  await page.route('**/api/v1/patient/symptoms/charts', (route) =>
+    route.fulfill({ json: { data: { symptoms: [], puqe: [] }, error: null } }),
+  )
+  await page.goto(`${PATIENT}/log/history`)
+  await expect(page.getByText('Nothing logged yet.')).toBeVisible()
+  await expectNoA11yViolations(page)
+})
