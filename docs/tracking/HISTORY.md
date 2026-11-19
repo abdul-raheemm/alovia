@@ -731,3 +731,14 @@ Done:
 - Tests: 15 rule-file tests (every row vs the spec tables, evidence, conflicts, settings, messages; 10 broken-file cases).
 Checks: ruff, mypy; rule-file + app-basics tests 24 passed.
 Next step: task 2 (engine + the 45 pair tests and all other §14 tests).
+
+## Session 29 — 2026-11-19 — Phase 4 task 2: genetic engine
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 4 — engine + 45 pair tests + all other tests (Genetic spec §5-9, §14)
+Done:
+- `app/modules/genetic/engine.py` (pure): validation E1/E2 with the field named (father haemophilia carrier/unknown accepted only for C2, DEC-068; no default father haemophilia answer, DEC-069; evidence only "allowed with" its condition/status; no evidence with unknown; nothing asked after entry "no"); §6.2 evidence handling; conflicts from conflicts.yaml; rule lookup (E3 when no row and no conflict); §6.4 priority; per-condition E4 (never a number); §9.3 nudges; §9.4 risk exactly; consanguinity message (numbers unchanged); timing prompt + priority high; show_result_before_review -> review_with_doctor / results_after_review.
+- Output additions (flagged): a top-level `message_keys` for whole-assessment messages (consanguinity, timing, review) — §8.2 has no place for them; `rule_id` names what decided the status (a rule row, or C1/C2/F1/F2/E3/E4).
+- Tests (112): the 45 pairs both ways against an independently typed spec table; every haemophilia row (boy+girl together) and Marfan row; every evidence rule; C1, C2 (carrier and unknown), F1, F2, E3, E4; priority; not assessed; consanguinity; risk/timing/priority in 14 cases; show-before-review both ways; no percent 0 and no sex field across all outputs; nudges; 11 validation cases; a guard that every rule/conflict/error ID is named in the test file.
+- One test expectation was mine and wrong (family-history-only mother + tested-negative father is HBB-09, not "needs testing"); fixed to the spec row.
+Checks: ruff, mypy; 112 engine tests passed.
+Next step: task 3 (migration 0004, API, inbox items).
