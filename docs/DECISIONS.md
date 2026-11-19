@@ -72,6 +72,14 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-065 | 2026-11-18 | "Have not yet felt the baby move" is offered when the pregnancy week is unknown (safety principle §1.3) | Owner: as recommended | Accepted |
 | DEC-066 | 2026-11-18 | Migration 0003 (symptom_checkins, symptom_logs) tested on alovia-test, then applied to the main project | Owner: as recommended | Accepted |
 | DEC-067 | 2026-11-19 | The check-in examples in Symptom spec §10 and API.md §5 are corrected to `matched_rules: ["L1-03"]`: rule L2-07 excludes a headache that matched L1-03/L1-04, and the rule tables are the source of truth (§0 rule 4, §14 test 1) | Owner approval | Accepted |
+| DEC-068 | 2026-11-19 | Genetic API accepts father haemophilia `carrier` / `unknown` (never offered on the form) so conflict C2 can be reported as the spec describes | Owner: as recommended (A) | Accepted |
+| DEC-069 | 2026-11-19 | The father's haemophilia answer has no pre-selected value (the patient must choose); other father answers default to `unknown` (D14) | Owner: as recommended (B); a default `not_affected` would produce numbers from a default | Accepted |
+| DEC-070 | 2026-11-19 | `disclaimer_main` uses the spec's fixed text (§11.2, D16); all other genetic message texts stay pending doctor approval | Owner: as recommended (C) | Accepted |
+| DEC-071 | 2026-11-19 | Every new genetic assessment adds a `genetic_pending` inbox item, plus `genetic_high_priority` when priority is high | Owner: as recommended (D); Dashboard spec inbox table | Accepted |
+| DEC-072 | 2026-11-19 | Genetic form consent reminder (UI text, not medical): "This form also asks about your husband. Your answers about him are covered by the consent you accepted." with a link to the consent text | Owner: approved wording (E); COMPLIANCE_CHECKLIST item 6 | Accepted |
+| DEC-073 | 2026-11-19 | Journey "Genetic check" status card and More link built in Phase 4, labels: "Reviewed by your doctor", "Needs testing", "Waiting for your doctor's review", "Sent to your doctor" | Owner: as recommended (F) | Accepted |
+| DEC-074 | 2026-11-19 | Doctor review queue, confirm, correct (spec test 10) and the `genetic_reviewed` notification are built in Phase 5 | Owner: as recommended (G) | Accepted |
+| DEC-075 | 2026-11-19 | Migration 0004 (genetic_assessments): alovia-test first, then main | Owner: as recommended (H) | Accepted |
 
 ## Template for new entries
 

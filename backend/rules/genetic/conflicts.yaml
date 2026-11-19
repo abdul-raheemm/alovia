@@ -1,0 +1,32 @@
+# Conflicts and flags (Genetic spec §6.3), checked after evidence handling. New conflict types
+# are added here and to the spec table, never as special cases in code (§6.3).
+# A check matches when every listed part holds:
+#   previous_child: the answer to the §5.6 question for this condition
+#   any_parent / mother / father: that parent's status (after evidence handling) is in the list
+#   both_parents: both parents' statuses are in the list
+conflicts:
+  - id: C1
+    condition: haemoglobin_group
+    spec: "A previous child has thalassaemia major or sickle cell disease (yes), but either parent is tested_negative"
+    when: { previous_child: "yes", any_parent: [tested_negative] }
+    status: conflict
+  - id: C2
+    condition: haemophilia
+    spec: "Father marked carrier or unknown (only possible through the API, not the form)"
+    when: { father: [carrier, unknown] }
+    status: conflict
+  - id: F1
+    condition: haemophilia
+    spec: "A previous son has haemophilia (yes) and the mother is tested_negative (new mutations happen, S3)"
+    when: { previous_child: "yes", mother: [tested_negative] }
+    status: counselling_flag
+  - id: F2
+    condition: marfan
+    spec: "A previous child has Marfan (yes) and both parents are not_affected (new mutations happen, S4)"
+    when: { previous_child: "yes", both_parents: [not_affected] }
+    status: counselling_flag
+
+# Engine errors (§6.3), status `error`: saved, logged, sent to the doctor
+errors:
+  E3: "Rule file missing, or no rule row matches"
+  E4: "Any unexpected engine failure (safe fallback message)"

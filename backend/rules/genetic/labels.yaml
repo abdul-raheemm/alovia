@@ -1,0 +1,43 @@
+# Form questions and display labels (Genetic spec §5.5-5.7, §7, §8.2). Questions are the spec's
+# own wording; option and outcome labels are the spec's values and table words. No advice here.
+conditions:
+  haemoglobin_group: "Haemoglobin conditions (β-thalassaemia, sickle cell)"
+  haemophilia: "Haemophilia"
+  marfan: "Marfan syndrome"
+
+# §5.5 entry question (haemophilia and Marfan only); {condition} is the name below
+entry_question: "Has anyone in your family or your husband's family been diagnosed with {condition}, or has either of you been told you have or carry it?"
+entry_answers: { "yes": "Yes", "no": "No", "not_sure": "Not sure" }
+# §5.6 previous child, asked inside each shown section
+previous_child_question: "Has a previous child of this couple been diagnosed with {condition}?"
+previous_child_answers: { "yes": "Yes", "no": "No", "not_sure": "Not sure", "no_previous_child": "No previous child" }
+# names used inside the two questions above (haemoglobin: the C1 wording)
+question_names:
+  haemoglobin_group: "thalassaemia major or sickle cell disease"
+  haemophilia: "haemophilia"
+  marfan: "Marfan syndrome"
+# §5.7 consanguinity
+consanguinity_question: "Are you and your husband related by blood (for example, cousins)?"
+consanguinity_answers: { "yes": "Yes", "no": "No", "not_sure": "Not sure" }
+
+# §7 outcome words and §7 / §8.2 chance display ("1 in 2 (50%)"; never 0%)
+outcomes:
+  affected: "Affected"
+  carrier: "Carrier"
+  neither: "Neither"
+  unaffected: "Unaffected"
+  beta_thal_carrier: "β-thal carrier"
+  sickle_carrier: "Sickle carrier"
+  hbe_carrier: "HbE carrier"
+  hbd_carrier: "HbD carrier"
+  beta_thal_major: "β-thalassaemia major"
+  sickle_cell_disease: "Sickle cell disease"
+  haemophilia: "Haemophilia"
+  inherits_from_parent: "Inheriting from a parent"
+  inherits_condition: "Inheriting the condition"
+chances:
+  1_in_2: "1 in 2 (50%)"
+  1_in_4: "1 in 4 (25%)"
+  all_children: "all children"
+  not_expected: "not expected"
+  not_calculable: "cannot be calculated"

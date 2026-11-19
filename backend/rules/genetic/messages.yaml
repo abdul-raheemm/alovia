@@ -1,0 +1,81 @@
+# Genetic Risk messages (genetic_risk_module_spec.md §11.4).
+# text: null  = not approved by a doctor yet. The apps then show
+#               "[Text pending doctor approval]" (DEC-041) — never wording written by the agent.
+# intent      = copied from the spec, for the reviewing doctor. It is never shown to patients.
+# disclaimer_main is the spec's own fixed wording (§11.2, D16).
+messages:
+  review_with_doctor:
+    intent: "Shown with calculated results: review these results with your doctor; do not rely on them alone"
+    text: null
+  results_after_review:
+    intent: "Shown when show_numbers_to_patient = false: results will appear after your doctor reviews them"
+    text: null
+  msg_sent_for_review:
+    intent: "Conflict or error: some answers need your doctor's review; sent to your doctor; no result shown until then"
+    text: null
+  msg_counselling_flag:
+    intent: "Your combination needs a specialist's advice; please discuss with your doctor"
+    text: null
+  msg_needs_testing:
+    intent: "Some information is missing; testing or counselling can help"
+    text: null
+  msg_not_assessed:
+    intent: "No family history given for this condition; mention to your doctor if anything changes"
+    text: null
+  msg_hplc_test_suggested:
+    intent: "Ask your doctor about a haemoglobin (HPLC) test, ideally early in pregnancy"
+    text: null
+  msg_partner_test_suggested:
+    intent: "Because you are a carrier, your husband's test result is needed"
+    text: null
+  msg_haemophilia_carrier_test_suggested:
+    intent: "Carrier testing for women is available; discuss with your doctor"
+    text: null
+  msg_marfan_assessment_suggested:
+    intent: "A doctor can assess this; discuss with your doctor"
+    text: null
+  msg_consanguinity_counselling:
+    intent: "Related couples are advised to discuss genetic counselling with their doctor"
+    text: null
+  msg_speak_to_doctor_soon:
+    intent: "Some tests in pregnancy can only be done at certain stages; please speak to your doctor soon (no procedures or week numbers)"
+    text: null
+  msg_safe_fallback:
+    intent: "Something went wrong; your doctor has been informed"
+    text: null
+  result_hbb_calculated:
+    intent: "Short plain-language explanation of the calculated haemoglobin group outcomes"
+    text: null
+  result_hem_calculated:
+    intent: "Short plain-language explanation of the calculated haemophilia outcomes"
+    text: null
+  result_mar_calculated:
+    intent: "Short plain-language explanation of the calculated Marfan outcomes"
+    text: null
+  warn_blood_count_not_enough:
+    intent: "A blood count alone cannot confirm carrier status"
+    text: null
+  warn_family_history_not_enough:
+    intent: "Family history alone cannot confirm status"
+    text: null
+  warn_card_checks_sickle_only:
+    intent: "The sickle cell card may not check for β-thalassaemia"
+    text: null
+  warn_carrier_depends_on_partner:
+    intent: "The carrier chance depends on the other parent's result"
+    text: null
+  note_carrier_girls_may_bleed:
+    intent: "Girls who are carriers sometimes have bleeding symptoms (S3)"
+    text: null
+  note_no_family_history_not_no_risk:
+    intent: "Haemophilia can appear in families with no history (S3)"
+    text: null
+  note_new_cases_can_occur:
+    intent: "Marfan can appear for the first time in a child (S4)"
+    text: null
+  note_severity_varies:
+    intent: "How the condition affects a person varies, even within a family (S4)"
+    text: null
+  disclaimer_main:
+    intent: "Fixed disclaimer, section 11.2 (shown on every result screen)"
+    text: "This is for knowledge only and is not medical advice. Counselling is recommended."

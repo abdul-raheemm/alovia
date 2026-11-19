@@ -1,0 +1,38 @@
+# Evidence ("how do you know?") — Genetic spec §5.4 and §6.2. Evidence is required for every
+# status except `unknown`. Weak evidence is treated as `unknown` before the rule tables run.
+conditions: [haemoglobin_group, haemophilia, marfan]
+
+evidence:
+  hplc_report:
+    label: "HPLC report"
+    strength: strong
+    conditions: [haemoglobin_group]
+  sickle_status_card:
+    label: "National sickle cell genetic status card"
+    strength: strong   # for sickle status only
+    conditions: [haemoglobin_group]
+    haemoglobin_statuses: [tested_negative, sickle_carrier, sickle_cell_disease]
+  test_report:
+    label: "Test report"
+    strength: strong
+    conditions: [haemoglobin_group, haemophilia, marfan]
+  doctor_told:
+    label: "A doctor told me"
+    strength: strong
+    conditions: [haemoglobin_group, haemophilia, marfan]
+  blood_count_only:
+    label: "Blood count only"
+    strength: weak
+    conditions: [haemoglobin_group]
+  family_history_only:
+    label: "Family history only"
+    strength: weak
+    conditions: [haemoglobin_group, haemophilia, marfan]
+
+# §6.2, applied in order before the rule tables
+handling:
+  - { evidence: blood_count_only, treat_as: unknown, warning: warn_blood_count_not_enough }
+  - { evidence: family_history_only, treat_as: unknown, warning: warn_family_history_not_enough }
+  # [CONFIRM AT RULE REVIEW] (A1): a "normal" card may not rule out β-thalassaemia carrier status
+  - { evidence: sickle_status_card, condition: haemoglobin_group, status: tested_negative,
+      treat_as: unknown, warning: warn_card_checks_sickle_only }

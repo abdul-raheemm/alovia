@@ -1,0 +1,5 @@
+# Genetic Risk settings (genetic_risk_module_spec.md §12.2). Checked at startup by
+# app/modules/genetic/rules.py; a wrong value stops the backend.
+# Raise rules_version on any rule change; changed rows are reviewed again (§13).
+rules_version: "1.0.0"
+show_result_before_review: true   # D4 [CONFIGURABLE]: calculated numbers shown before doctor review

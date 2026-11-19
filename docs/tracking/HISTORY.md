@@ -719,3 +719,15 @@ Checks: `bash scripts/check_all.sh` → exit 0: pytest 339 passed; Vitest 46 pas
 Owner decisions this phase: plan A-H (DEC-059..066), examples corrected (DEC-067).
 Open for the owner / doctor: doctor rule review and sign-off (A1-A4, PUQE band 3 vs 4), the 7 symptom messages, the Journey review sheet; merge after the owner's review.
 Next step: owner review → merge `phase-3/rules-data` into main → Phase 4 (Genetic Risk) planning.
+
+## Session 28 — 2026-11-19 — Phase 4 task 1: genetic rule files
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 4 — YAML rules (Genetic spec §5-7, §11.4, §12)
+Decisions: plan decisions A-H as recommended (DEC-068..075). Merged Phase 3 into main first (992579b).
+Done:
+- `backend/rules/genetic/`: config (rules_version 1.0.0, show_result_before_review true), haemoglobin_group (9 codes with the spec's meanings, 17 rows listing their exact pairs, A2/A4 tags), haemophilia (mother/father statuses, father_api_only for C2, 7 rows with if-boy and if-girl), marfan (4 rows), evidence (6 kinds, §6.2 handling incl. A1), conflicts (C1, C2, F1, F2 as data, E3/E4), messages (25 §11.4 keys; disclaimer_main from §11.2), labels (the spec's questions §5.5-5.7, outcome and chance words).
+- Loader `app/modules/genetic/rules.py`: strict models; coverage checks (45 haemoglobin pairs exactly once; each of the 8 haemophilia form combinations matched by exactly one row; each of the 6 Marfan pairs once); outcomes only on calculated rows and both boy+girl lists together; every message/outcome/evidence reference exists; loaded at startup; /health genetic: true.
+- Found: YAML reads a bare `yes` as true — the conflicts file quotes "yes".
+- Tests: 15 rule-file tests (every row vs the spec tables, evidence, conflicts, settings, messages; 10 broken-file cases).
+Checks: ruff, mypy; rule-file + app-basics tests 24 passed.
+Next step: task 2 (engine + the 45 pair tests and all other §14 tests).

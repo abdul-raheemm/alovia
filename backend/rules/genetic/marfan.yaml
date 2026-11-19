@@ -1,0 +1,31 @@
+# Marfan syndrome (Genetic spec §5.3, §7.3) — autosomal dominant. Must match the spec row for
+# row. The order of parents does not matter. Wording says "inheriting the condition", never
+# severity (D15).
+statuses:
+  affected: "Has Marfan syndrome (affected)"
+  not_affected: "Does not have Marfan syndrome"
+  unknown: "Not known"
+
+rules:
+  - id: MAR-01
+    pair: [not_affected, not_affected]
+    status: calculated
+    outcomes:
+      - { outcome: inherits_from_parent, chance: not_expected, names_condition: true }
+    notes: [note_new_cases_can_occur]
+    sources: [S4]
+  - id: MAR-02
+    pair: [affected, not_affected]
+    status: calculated
+    outcomes:
+      - { outcome: inherits_condition, chance: 1_in_2, names_condition: true }
+    notes: [note_severity_varies]
+    sources: [S4]
+  - id: MAR-03
+    pair: [affected, affected]
+    status: counselling_flag
+    sources: []
+  - id: MAR-04
+    pair: [unknown, any]
+    status: needs_testing_or_counselling
+    sources: []

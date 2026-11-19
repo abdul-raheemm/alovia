@@ -1,0 +1,131 @@
+# Haemoglobin group (Genetic spec §5.1, §7.1) — autosomal recessive, combined variants.
+# Must match the spec table row for row (§0 rule 4). The order of parents does not matter.
+# Every unordered pair of the 9 codes appears exactly once (45 pairs); any pair not matched -> E3.
+# Outcomes with names_condition: true name a condition, not a carrier state (§9.4 "risk indicated").
+statuses:   # value: [short code, label = the spec's "Meaning" column]
+  tested_negative: [N, "Tested, no haemoglobin variant found"]
+  beta_thal_carrier: [B, "β-thalassaemia carrier (trait / minor)"]
+  sickle_carrier: [S, "Sickle cell carrier (trait, HbAS)"]
+  hbe_carrier: [E, "HbE carrier"]
+  hbd_carrier: [D, "HbD carrier"]
+  beta_thal_major: [BB, "Has β-thalassaemia major (affected)"]
+  sickle_cell_disease: [SS, "Has sickle cell disease (affected)"]
+  other_or_unclear: [O, "Report shows another or an unclear variant, or a combined (compound) condition"]
+  unknown: [U, "Not tested or not known"]
+
+rules:
+  - id: HBB-01
+    pairs: [[N, N]]
+    status: calculated
+    outcomes:
+      - { outcome: affected, chance: not_expected, names_condition: true }
+      - { outcome: carrier, chance: not_expected }
+    sources: [S1]
+  - id: HBB-02
+    pairs: [[N, B]]
+    status: calculated
+    outcomes:
+      - { outcome: affected, chance: not_expected, names_condition: true }
+      - { outcome: beta_thal_carrier, chance: 1_in_2 }
+      - { outcome: neither, chance: 1_in_2 }
+    sources: [S1]
+  - id: HBB-03
+    pairs: [[N, S]]
+    status: calculated
+    outcomes:
+      - { outcome: affected, chance: not_expected, names_condition: true }
+      - { outcome: sickle_carrier, chance: 1_in_2 }
+      - { outcome: neither, chance: 1_in_2 }
+    sources: [S1, S2]
+  - id: HBB-04
+    pairs: [[N, E]]
+    status: calculated
+    confirm: A2
+    outcomes:
+      - { outcome: affected, chance: not_expected, names_condition: true }
+      - { outcome: hbe_carrier, chance: 1_in_2 }
+      - { outcome: neither, chance: 1_in_2 }
+    sources: [S2]
+  - id: HBB-05
+    pairs: [[N, D]]
+    status: calculated
+    confirm: A2
+    outcomes:
+      - { outcome: affected, chance: not_expected, names_condition: true }
+      - { outcome: hbd_carrier, chance: 1_in_2 }
+      - { outcome: neither, chance: 1_in_2 }
+    sources: [S2]
+  - id: HBB-06
+    pairs: [[N, BB]]
+    status: calculated
+    confirm: A4
+    outcomes:
+      - { outcome: affected, chance: not_expected, names_condition: true }
+      - { outcome: beta_thal_carrier, chance: all_children }
+    sources: [S1]
+  - id: HBB-07
+    pairs: [[N, SS]]
+    status: calculated
+    confirm: A4
+    outcomes:
+      - { outcome: affected, chance: not_expected, names_condition: true }
+      - { outcome: sickle_carrier, chance: all_children }
+    sources: [S2]
+  - id: HBB-08
+    pairs: [[N, O]]
+    status: counselling_flag
+    sources: []
+  - id: HBB-09
+    pairs: [[N, U]]
+    status: calculated
+    outcomes:
+      - { outcome: affected, chance: not_expected, names_condition: true }
+      - { outcome: carrier, chance: not_calculable }
+    warnings: [warn_carrier_depends_on_partner]
+    sources: [S1]
+  - id: HBB-10
+    pairs: [[B, B]]
+    status: calculated
+    outcomes:
+      - { outcome: beta_thal_major, chance: 1_in_4, names_condition: true }
+      - { outcome: beta_thal_carrier, chance: 1_in_2 }
+      - { outcome: neither, chance: 1_in_4 }
+    sources: [S1]
+  - id: HBB-11
+    pairs: [[S, S]]
+    status: calculated
+    outcomes:
+      - { outcome: sickle_cell_disease, chance: 1_in_4, names_condition: true }
+      - { outcome: sickle_carrier, chance: 1_in_2 }
+      - { outcome: neither, chance: 1_in_4 }
+    sources: [S2]
+  - id: HBB-12
+    pairs: [[B, S]]
+    status: calculated
+    outcomes:   # sickle cell disease here = sickle β-thalassaemia
+      - { outcome: sickle_cell_disease, chance: 1_in_4, names_condition: true }
+      - { outcome: beta_thal_carrier, chance: 1_in_4 }
+      - { outcome: sickle_carrier, chance: 1_in_4 }
+      - { outcome: neither, chance: 1_in_4 }
+    sources: [S1]
+  - id: HBB-13   # severity of these combinations varies (S2)
+    pairs: [[B, E], [B, D], [S, E], [S, D], [E, E], [E, D], [D, D]]
+    status: counselling_flag
+    sources: [S2]
+  - id: HBB-14   # BB or SS with any of B, S, E, D, BB, SS
+    pairs: [[BB, B], [BB, S], [BB, E], [BB, D], [BB, BB], [BB, SS],
+            [SS, B], [SS, S], [SS, E], [SS, D], [SS, SS]]
+    status: counselling_flag
+    sources: []
+  - id: HBB-15   # O with any of B, S, E, D, BB, SS, O
+    pairs: [[O, B], [O, S], [O, E], [O, D], [O, BB], [O, SS], [O, O]]
+    status: counselling_flag
+    sources: []
+  - id: HBB-16   # U with any of B, S, E, D, BB, SS, U (testing nudge, §9.3)
+    pairs: [[U, B], [U, S], [U, E], [U, D], [U, BB], [U, SS], [U, U]]
+    status: needs_testing_or_counselling
+    sources: [S6, S7]
+  - id: HBB-17
+    pairs: [[U, O]]
+    status: counselling_flag
+    sources: []

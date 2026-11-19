@@ -10,6 +10,7 @@ from app.core.config import Settings, get_settings
 from app.core.database import make_engine
 from app.core.errors import register_error_handlers
 from app.core.logging import REQUEST_ID_HEADER, configure_logging, request_context
+from app.modules.genetic.rules import load_genetic_rules
 from app.modules.journey import router as journey
 from app.modules.journey.config import (
     load_helplines,
@@ -36,6 +37,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     load_helplines()  # and its official helpline numbers (§13.3)
     app.state.content_provider = load_content_provider()  # and for the content files (§8.2)
     app.state.symptom_rules = load_symptom_rules()  # red-flag rules etc. (Symptom spec §13)
+    app.state.genetic_rules = load_genetic_rules()  # inheritance rules (Genetic spec §12)
     # public signing keys, fetched on first use and cached (app.core.auth)
     app.state.jwks_client = jwt.PyJWKClient(settings.supabase_jwks_url, cache_keys=True)
     register_error_handlers(app)

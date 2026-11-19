@@ -1,0 +1,70 @@
+# Haemophilia (Genetic spec §5.2, §7.2) — X-linked recessive. Must match the spec row for row.
+# The order of parents matters. Results are given for "if the baby is a boy" AND "if the baby is
+# a girl", always together; the baby's sex is never asked, stored or shown (§11.3, PCPNDT Act).
+# Haemophilia A and B are treated the same [CONFIRM AT RULE REVIEW] (A3).
+statuses:
+  mother:
+    tested_negative: "Tested negative"
+    carrier: "Carrier"
+    affected: "Has haemophilia (affected)"
+    unknown: "Not tested or not known"
+  father:
+    affected: "Has haemophilia (affected)"
+    not_affected: "Does not have haemophilia"
+# Not offered on the form; accepted by the API only so that conflict C2 can be reported (§6.3, DEC).
+father_api_only: [carrier, unknown]
+
+rules:
+  - id: HEM-01
+    mother: tested_negative
+    father: not_affected
+    status: calculated
+    if_boy:
+      - { outcome: haemophilia, chance: not_expected, names_condition: true }
+    if_girl:
+      - { outcome: carrier, chance: not_expected }
+    notes: [note_no_family_history_not_no_risk]   # about one third of cases have no family history (S3)
+    sources: [S3]
+  - id: HEM-02
+    mother: carrier
+    father: not_affected
+    status: calculated
+    if_boy:
+      - { outcome: haemophilia, chance: 1_in_2, names_condition: true }
+      - { outcome: unaffected, chance: 1_in_2 }
+    if_girl:
+      - { outcome: carrier, chance: 1_in_2 }
+      - { outcome: neither, chance: 1_in_2 }
+      - { outcome: haemophilia, chance: not_expected, names_condition: true }
+    notes: [note_carrier_girls_may_bleed]
+    sources: [S3]
+  - id: HEM-03
+    mother: tested_negative
+    father: affected
+    status: calculated
+    if_boy:
+      - { outcome: haemophilia, chance: not_expected, names_condition: true }
+    if_girl:
+      - { outcome: carrier, chance: all_children }   # "Carrier: all daughters"
+    notes: [note_carrier_girls_may_bleed]
+    sources: [S3]
+  - id: HEM-04
+    mother: carrier
+    father: affected
+    status: counselling_flag
+    sources: [S3]
+  - id: HEM-05
+    mother: affected
+    father: any
+    status: counselling_flag
+    sources: []
+  - id: HEM-06
+    mother: unknown
+    father: not_affected
+    status: needs_testing_or_counselling
+    sources: [S3]
+  - id: HEM-07
+    mother: unknown
+    father: affected
+    status: needs_testing_or_counselling
+    sources: [S3]

@@ -48,7 +48,7 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 - [ ] E2E; review; CHANGELOG 0.3.0 — agent part done 2026-11-19 (full check_all green; §14 map; review fixed the V3 advice text; rule-review sheet + sign-off file; CHANGELOG 0.3.0; version 0.3.0) — **waiting for the owner's review, then merge to main**
 
 ## Phase 4 — Genetic Risk
-- [ ] YAML rules (HBB/HEM/MAR, evidence, conflicts, messages, config)
+- [x] YAML rules (HBB/HEM/MAR, evidence, conflicts, messages, config) — Raheem + Claude Code — 2026-11-19 (`backend/rules/genetic/` 8 files incl. labels.yaml; strict loader with coverage checks: 45 haemoglobin pairs once, 8 haemophilia form combinations once, 6 Marfan pairs once; /health genetic: true)
 - [ ] Engine + 45 pair tests + all other tests
 - [ ] Migration + API + patient forms/results
 - [ ] E2E; review; CHANGELOG 0.4.0
