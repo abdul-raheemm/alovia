@@ -1,6 +1,7 @@
 """Account lookup, /me and app-wide consent (SECURITY.md §1, API.md §4.1, DEC-023, DEC-031)."""
 
 import uuid
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Annotated
 
@@ -13,7 +14,14 @@ from app.core.config import CONSENT_VERSION
 from app.core.database import get_db
 from app.core.errors import AppError
 from app.core.logging import logger
-from app.modules.users.models import AuditLog, Consent, Doctor, Patient, User
+from app.modules.users.models import (
+    AuditLog,
+    Consent,
+    Doctor,
+    DoctorPatientAssignment,
+    Patient,
+    User,
+)
 from app.modules.users.schemas import (
     ConsentIn,
     ConsentStatus,
@@ -75,10 +83,77 @@ def get_patient(
     if patient is None:
         logger.warning("permission denied", extra={"reason": "not a linked patient"})
         raise AppError("FORBIDDEN", "You don't have access to this.", status=403)
+    _require_consent(db, user)
+    return patient
+
+
+@dataclass(frozen=True)
+class DoctorAccount:
+    user: User
+    doctor: Doctor
+
+
+def _require_consent(db: Session, user: User) -> None:
     if not _consent_accepted(db, user.id):
         logger.warning("permission denied", extra={"reason": "consent not accepted"})
         raise AppError("FORBIDDEN", "Please accept the consent first.", status=403)
+
+
+def get_doctor(
+    user: Annotated[User, Depends(get_account)],
+    db: Annotated[Session, Depends(get_db)],
+) -> DoctorAccount:
+    """The signed-in doctor, for every /doctor/... route (Dashboard spec §4): doctor role, an
+    active doctor record and the current app-wide consent, checked in the backend."""
+    doctor = (
+        db.scalar(select(Doctor).where(Doctor.user_id == user.id))
+        if user.role == "doctor"
+        else None
+    )
+    if doctor is None or not doctor.is_active:
+        logger.warning("permission denied", extra={"reason": "not an active doctor"})
+        raise AppError("FORBIDDEN", "You don't have access to this.", status=403)
+    _require_consent(db, user)
+    return DoctorAccount(user=user, doctor=doctor)
+
+
+def get_admin(
+    user: Annotated[User, Depends(get_account)],
+    db: Annotated[Session, Depends(get_db)],
+) -> User:
+    """The signed-in admin, for every /admin/... route (Dashboard spec §4, §21)."""
+    if user.role != "admin":
+        logger.warning("permission denied", extra={"reason": "not an admin"})
+        raise AppError("FORBIDDEN", "You don't have access to this.", status=403)
+    _require_consent(db, user)
+    return user
+
+
+def assigned_patient(db: Session, doctor_id: uuid.UUID, patient_id: uuid.UUID) -> Patient:
+    """The patient, only when this doctor has an active assignment to her (spec §1.3, §4).
+    Otherwise 404, so a doctor cannot even learn that another doctor's patient exists."""
+    patient = db.scalar(
+        select(Patient)
+        .join(DoctorPatientAssignment, DoctorPatientAssignment.patient_id == Patient.id)
+        .where(
+            Patient.id == patient_id,
+            DoctorPatientAssignment.doctor_id == doctor_id,
+            DoctorPatientAssignment.removed_at.is_(None),
+        )
+    )
+    if patient is None:
+        logger.warning("permission denied", extra={"reason": "patient not assigned"})
+        raise AppError("NOT_FOUND", "Patient not found.", status=404)
     return patient
+
+
+def get_assigned_patient(
+    patient_id: uuid.UUID,
+    account: Annotated[DoctorAccount, Depends(get_doctor)],
+    db: Annotated[Session, Depends(get_db)],
+) -> Patient:
+    """Dependency for /doctor/patients/{patient_id}/... routes."""
+    return assigned_patient(db, account.doctor.id, patient_id)
 
 
 def get_me(db: Session, user: User) -> MeOut:

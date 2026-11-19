@@ -41,7 +41,8 @@ PHASE2_TABLES = {  # migration 0002 (inbox_items moved forward, DEC-044)
 }
 PHASE3_TABLES = {"symptom_checkins", "symptom_logs"}  # migration 0003
 PHASE4_TABLES = {"genetic_assessments"}  # migration 0004
-TABLES = PHASE1_TABLES | PHASE2_TABLES | PHASE3_TABLES | PHASE4_TABLES
+PHASE5_TABLES = {"result_shares", "medical_records", "rule_signoffs"}  # migration 0005
+TABLES = PHASE1_TABLES | PHASE2_TABLES | PHASE3_TABLES | PHASE4_TABLES | PHASE5_TABLES
 
 
 def _app_tables(engine: Engine) -> set[str]:
@@ -51,6 +52,10 @@ def _app_tables(engine: Engine) -> set[str]:
 def test_upgrade_downgrade_upgrade(test_db_url: str, engine: Engine) -> None:
     cfg = alembic_config(test_db_url)
     assert _app_tables(engine) == TABLES
+    command.downgrade(cfg, "0004")  # 0005's downgrade removes its tables and result columns
+    assert _app_tables(engine) == TABLES - PHASE5_TABLES
+    columns = {c["name"] for c in inspect(engine).get_columns("fetal_results")}
+    assert not {"entered_values", "range_warnings"} & columns
     command.downgrade(cfg, "0003")  # 0004's downgrade removes only its own table
     assert _app_tables(engine) == PHASE1_TABLES | PHASE2_TABLES | PHASE3_TABLES
     command.downgrade(cfg, "0002")  # 0003's downgrade removes only its own tables
@@ -321,3 +326,28 @@ def test_genetic_assessments_check_their_values(conn: Connection) -> None:
     conn.execute(text(sql), {"p": patient, "u": user, "pr": "normal", "rs": "pending_review"})
     _rejects(conn, sql, p=patient, u=user, pr="urgent", rs="pending_review")
     _rejects(conn, sql, p=patient, u=user, pr="high", rs="approved")
+
+
+def test_phase5_enumerations_and_unique_share(conn: Connection) -> None:
+    doctor, patient = _doctor(conn), _patient(conn)
+    share = (
+        "INSERT INTO result_shares (result_type, result_id, shared_by, template_key) "
+        "VALUES (:t, :r, :d, 'k')"
+    )
+    _rejects(conn, share, t="genetic", r=uuid.uuid4(), d=doctor)
+    result = uuid.uuid4()
+    conn.execute(text(share), {"t": "fetal", "r": result, "d": doctor})
+    _rejects(conn, share, t="fetal", r=result, d=doctor)  # a result is shared once
+    record = (
+        "INSERT INTO medical_records (patient_id, uploaded_by, file_type, storage_path, "
+        "original_filename) VALUES (:p, :d, :t, :s, 'f.pdf')"
+    )
+    _rejects(conn, record, p=patient, d=doctor, t="xray", s="a")
+    conn.execute(text(record), {"p": patient, "d": doctor, "t": "other", "s": "b"})
+    _rejects(conn, record, p=patient, d=doctor, t="other", s="b")  # storage_path unique
+    _rejects(
+        conn,
+        "INSERT INTO rule_signoffs (module, rules_version, item_id, checked, doctor_id) "
+        "VALUES ('dashboard', '1.0.0', 'x', true, :d)",
+        d=doctor,
+    )

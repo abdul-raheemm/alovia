@@ -774,3 +774,14 @@ Done:
 Checks: `bash scripts/check_all.sh` → exit 0: pytest 480 passed; Vitest 52 passed; Playwright 94 passed; ruff, mypy, typecheck, lint, format pass.
 Open for the owner / doctor: rule review and sign-off (A1-A4) and the 24 pending genetic messages; merge after the owner's review.
 Next step: owner review → merge `phase-4/genetic` into main → Phase 5 (Doctor Dashboard + Admin) planning.
+
+## Session 33 — 2026-11-19 — Phase 4 merged; Phase 5 plan; task 1 foundation
+Who: Raheem + agent: Claude Code
+Done:
+- `phase-4/genetic` fast-forward merged into main and pushed. Phase 5 plan posted; owner approved decisions A-K as recommended (DEC-076..086); branch `phase-5/dashboard`.
+- Migration 0005: `entered_values`, `range_warnings` on both result tables; `result_shares` (unique per result), `medical_records`, `rule_signoffs`; tested on alovia-test (up/down/up, model match, constraints), then applied to main with the owner's approval (`alembic current` = 0005).
+- Access checks in `users.service`: `get_doctor`, `get_admin`, `assigned_patient`, `get_assigned_patient` (the Phase 2 carry-over: consent checked in the backend for doctor/admin routes).
+- `rules/dashboard/config.yaml` (all §23 settings) + `messages.yaml` (12 keys, text null) with a strict startup loader; template classes cross-checked with the models' label files.
+- Tests: 3 access tests (test-only router on the real dependencies), 7 dashboard rule-file tests, migration test extended.
+Checks (backend): `ruff format .` clean; `ruff check .` pass; `mypy app tests scripts` no issues (91 files); `pytest -q -W error` 491 passed.
+Next step: training ranges from the owner's notebooks (decision A), then task 2 (home, patient list, inbox, patient pages).

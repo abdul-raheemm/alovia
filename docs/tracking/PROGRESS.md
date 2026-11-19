@@ -54,6 +54,7 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 - [ ] E2E; review; CHANGELOG 0.4.0 — agent part done 2026-11-19 (full check_all green; §14 tests 1-9 automated, test 10 in Phase 5; rule-review sheet (66 rows) + sign-off file; CHANGELOG 0.4.0; version 0.4.0) — **waiting for the owner's review, then merge to main**
 
 ## Phase 5 — Doctor Dashboard + Admin
+- [x] Task 1 foundation: migration 0005 (alovia-test, then main), doctor/admin access checks (role + active + consent + assignment), dashboard config + messages — Raheem + Claude Code — 2026-11-19
 - [ ] Patient list, inbox, patient tabs
 - [ ] Predictions UI: units, range file script, warnings, limitations, sharing
 - [ ] Genetic review, symptoms view, records, notes, appointments, dates/status

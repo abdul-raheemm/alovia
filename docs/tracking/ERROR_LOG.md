@@ -495,3 +495,13 @@ Fix: confirmed the host resolves again, re-ran check_all → exit 0 (334/44/82).
 Verified by: the re-run.
 Prevention: a database test that fails with a DNS/connection error is re-run after checking the network before looking for a code cause.
 Category: environment
+
+### ERR-047 — 2026-11-19 — Inline heredoc writing three test files failed
+Who: Claude Code
+Phase / task: Phase 5 — task 1 (tests)
+What happened: one Bash command appending test helpers and writing two test files through heredocs failed with "unexpected EOF while looking for matching `''"; nothing was written.
+Cause: the existing Lesson (ERR-044: long text blocks → file tool) was not followed.
+Fix: the same content written with the file tool.
+Verified by: the files exist; 491 tests passed.
+Prevention: follow the existing Lesson; no new rule needed.
+Category: tooling

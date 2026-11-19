@@ -119,3 +119,59 @@ def add_linked_patient(
                 {"u": user_id, "v": CONSENT_VERSION},
             )
     return user_id, patient_id
+
+
+def add_account(engine: Engine, role: str, *, consent: bool = True) -> uuid.UUID:
+    """A users row (doctor or admin) with the current consent by default. Returns user_id."""
+    user_id = uuid.uuid4()
+    with engine.begin() as conn:
+        conn.execute(
+            text("INSERT INTO users (id, email, role) VALUES (:id, :e, :r)"),
+            {"id": user_id, "e": f"{user_id}@example.test", "r": role},
+        )
+        if consent:
+            conn.execute(
+                text(
+                    "INSERT INTO consents (user_id, consent_version, age_confirmed_18_plus, "
+                    "accepted_at) VALUES (:u, :v, true, now())"
+                ),
+                {"u": user_id, "v": CONSENT_VERSION},
+            )
+    return user_id
+
+
+def add_doctor(
+    engine: Engine, *, consent: bool = True, active: bool = True
+) -> tuple[uuid.UUID, uuid.UUID]:
+    """A test doctor account. Returns (user_id, doctor_id)."""
+    user_id = add_account(engine, "doctor", consent=consent)
+    with engine.begin() as conn:
+        doctor_id: uuid.UUID = conn.execute(
+            text(
+                "INSERT INTO doctors (user_id, name, is_active) "
+                "VALUES (:u, 'Test Doctor', :a) RETURNING id"
+            ),
+            {"u": user_id, "a": active},
+        ).scalar_one()
+    return user_id, doctor_id
+
+
+def assign(
+    engine: Engine,
+    doctor_id: uuid.UUID,
+    patient_id: uuid.UUID,
+    *,
+    primary: bool = False,
+    removed: bool = False,
+) -> None:
+    """Assign a doctor to a patient (assigned_by = a fresh admin)."""
+    admin = add_account(engine, "admin")
+    with engine.begin() as conn:
+        conn.execute(
+            text(
+                "INSERT INTO doctor_patient_assignments (doctor_id, patient_id, is_primary, "
+                "assigned_by, assigned_at, removed_at) VALUES (:d, :p, :pr, :by, now(), "
+                "CASE WHEN :rm THEN now() END)"
+            ),
+            {"d": doctor_id, "p": patient_id, "pr": primary, "by": admin, "rm": removed},
+        )

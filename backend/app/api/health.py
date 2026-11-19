@@ -25,6 +25,7 @@ def health(request: Request) -> dict[str, Any]:
                 "genetic": request.app.state.genetic_rules is not None,
                 "symptoms": request.app.state.symptom_rules is not None,
                 "journey": request.app.state.journey_config is not None,
+                "dashboard": request.app.state.dashboard_rules is not None,
             },
             "version": __version__,
         }

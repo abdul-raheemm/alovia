@@ -1,0 +1,45 @@
+# Doctor Dashboard messages (doctor_dashboard_module_spec.md §9.4-9.6, §10).
+# text: null  = not approved by a doctor yet. The apps then show
+#               "[Text pending doctor approval]" (DEC-041) — never wording written by the agent.
+# intent      = copied from the spec, for the reviewing doctor. It is never shown to patients.
+messages:
+  # §9.6 model limitations, shown beside every prediction (doctor app)
+  lim_decision_support:
+    intent: "Fetal and maternal: AI decision support, not a diagnosis"
+    text: null
+  lim_public_data:
+    intent: "Fetal and maternal: trained on public datasets; not validated on Alovia's patients"
+    text: null
+  lim_fetal_ctg:
+    intent: "Fetal: requires computerised CTG analysis values (SisPorto-style)"
+    text: null
+  lim_maternal_separable:
+    intent: "Maternal: test scores are near the dataset's ceiling and do not indicate real-world accuracy"
+    text: null
+  # §9.4 next to the field and the prediction (doctor app)
+  warn_outside_training_range:
+    intent: "This value is outside the range of the model's training data"
+    text: null
+  # §9.5 beside the HbA1c field and the maternal result (doctor app). [CONFIRM AT REVIEW] (U3)
+  note_hba1c_haemoglobin_variant:
+    intent: "HbA1c can be unreliable with haemoglobin variants (S3)"
+    text: null
+  # §10 patient view of a shared result: the class in plain words. TODO(OPEN): the 6 templates (§27)
+  result_template_fetal_normal:
+    intent: "Shared fetal result, class Normal, in plain words for the patient"
+    text: null
+  result_template_fetal_suspect:
+    intent: "Shared fetal result, class Suspect, in plain words for the patient"
+    text: null
+  result_template_fetal_pathological:
+    intent: "Shared fetal result, class Pathological, in plain words for the patient"
+    text: null
+  result_template_maternal_low:
+    intent: "Shared maternal result, class Low, in plain words for the patient"
+    text: null
+  result_template_maternal_mid:
+    intent: "Shared maternal result, class Mid, in plain words for the patient"
+    text: null
+  result_template_maternal_high:
+    intent: "Shared maternal result, class High, in plain words for the patient"
+    text: null

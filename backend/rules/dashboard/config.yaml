@@ -1,4 +1,35 @@
 # Doctor Dashboard settings (doctor_dashboard_module_spec.md §23, all [CONFIGURABLE]).
-# Only the settings used so far are listed; the rest are added with Phase 5.
+# Checked at startup by app/modules/dashboard/rules.py; a wrong value stops the backend.
+
+# §9.3 default unit shown on each unit switch. [CONFIRM AT REVIEW] (U1): should match local lab reports.
+default_units:
+  hba1c: "%"
+  glucose: "mg/dL"
+  temperature: "°F"
+
+# §11 fetal inputs drawn as trend lines (names from fetal_risk_feature_order.json)
+fetal_trend_features: [LB, ASTV, ALTV]
+
+# §8.2 invite links
 invite_code_length: 8
 invite_code_days: 7
+
+# §14 medical records
+record_formats: [pdf, jpg, png]
+record_max_mb: 10
+signed_url_minutes: 5
+
+# §19 rule review: true = each rule engine refuses to start unless every row of its current
+# rules version is checked. false in development.
+require_signoff: false
+
+# §18 AI features (Phase 6). Off until the LLM is chosen.
+ai_summary_enabled: false
+ai_share_draft_enabled: false
+ai_genetic_draft_enabled: false
+ai_note_flag_enabled: false
+ai_summary_days: 14
+ai_timeout_seconds: 15
+# TODO(OPEN): LLM provider and model (shared with the RAG assistant, spec §27)
+llm_provider: null
+llm_model: null

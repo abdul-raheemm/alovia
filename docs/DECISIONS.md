@@ -80,6 +80,17 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-073 | 2026-11-19 | Journey "Genetic check" status card and More link built in Phase 4, labels: "Reviewed by your doctor", "Needs testing", "Waiting for your doctor's review", "Sent to your doctor" | Owner: as recommended (F) | Accepted |
 | DEC-074 | 2026-11-19 | Doctor review queue, confirm, correct (spec test 10) and the `genetic_reviewed` notification are built in Phase 5 | Owner: as recommended (G) | Accepted |
 | DEC-075 | 2026-11-19 | Migration 0004 (genetic_assessments): alovia-test first, then main | Owner: as recommended (H) | Accepted |
+| DEC-076 | 2026-11-19 | Training ranges (Dashboard §9.4) come from the owner's training notebooks: notebooks in `backend/ml_training/` (committed), raw and cleaned data in `backend/ml_training/data/` (git-ignored); each notebook gets one cell that saves its cleaned CSV; a script computes the range files from them | Owner: as recommended (A) | Accepted |
+| DEC-077 | 2026-11-19 | New backend dependency `python-multipart` (FastAPI file uploads, records) | Owner: as recommended (B) | Accepted |
+| DEC-078 | 2026-11-19 | Supabase Storage and Auth admin calls use Python's `urllib` (no new HTTP dependency) | Owner: as recommended (C) | Accepted |
+| DEC-079 | 2026-11-19 | Doctor app uses Recharts (same pinned version and react-is override as the patient app) for trends | Owner: as recommended (D) | Accepted |
+| DEC-080 | 2026-11-19 | Rule review "Export" downloads the sign-off `.md` file; the owner saves it into `docs/modules/reviews/` (a deployed server cannot write into the repo) | Owner: as recommended (E) | Accepted |
+| DEC-081 | 2026-11-19 | `require_signoff = true` is checked once at backend startup against `rule_signoffs`; an engine with an unchecked row of its current rules version stops startup | Owner: as recommended (F) | Accepted |
+| DEC-082 | 2026-11-19 | Rule review rows are built by the same code as the CSV review sheets (genetic, symptom, Journey §16 assumptions), moved into the app so screen and sheets always match | Owner: as recommended (G) | Accepted |
+| DEC-083 | 2026-11-19 | Default units and conversion formulas as in Dashboard §9.3/§23, marked [CONFIRM AT REVIEW] (U1, U2) | Owner: as recommended (H) | Accepted |
+| DEC-084 | 2026-11-19 | Doctors are invited by `POST /admin/doctors` (Supabase Auth invite + users/doctors rows); the invite email leads to a "Set password" page in the doctor app (Flow D1) | Owner: as recommended (I) | Accepted |
+| DEC-085 | 2026-11-19 | `ai_drafts` table and AI routes wait for Phase 6; `result_shares.ai_draft_id` is a plain nullable column until then | Owner: as recommended (J) | Accepted |
+| DEC-086 | 2026-11-19 | Phase 5 runs as tasks 1-7 (foundation, home/patients, predictions, other modules' doctor sides, records, rule review/audit/admin, E2E/release); review after each, merge at the end; migration 0005 alovia-test first, then main | Owner: as recommended (K) | Accepted |
 
 ## Template for new entries
 

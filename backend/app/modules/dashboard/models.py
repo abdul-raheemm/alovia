@@ -49,3 +49,42 @@ class InboxItem(Base):
         CheckConstraint(f"type IN ({INBOX_TYPES})", name="type"),
         Index("ix_inbox_items_unseen", "patient_id", postgresql_where=text("seen_at IS NULL")),
     )
+
+
+class MedicalRecord(Base):
+    """An uploaded file in the private Storage bucket (Dashboard spec §14). Not deleted in v1."""
+
+    __tablename__ = "medical_records"
+    id: Mapped[uuid.UUID] = uuid_pk()
+    patient_id: Mapped[uuid.UUID] = fk("patients.id", index=True)
+    uploaded_by: Mapped[uuid.UUID] = fk("doctors.id")
+    file_type: Mapped[str] = mapped_column(Text)
+    storage_path: Mapped[str] = mapped_column(Text, unique=True)
+    original_filename: Mapped[str] = mapped_column(Text)
+    note: Mapped[str | None] = mapped_column(Text)
+    uploaded_at: Mapped[datetime] = created_now()
+    __table_args__ = (
+        CheckConstraint(
+            "file_type IN ('ultrasound', 'blood_report', 'prescription', 'other')",
+            name="file_type",
+        ),
+    )
+
+
+class RuleSignoff(Base):
+    """A doctor's tick and comment on one rule-review row (Dashboard spec §19). Append-only:
+    the newest row per (module, rules_version, item_id) is the current state."""
+
+    __tablename__ = "rule_signoffs"
+    id: Mapped[uuid.UUID] = uuid_pk()
+    module: Mapped[str] = mapped_column(Text)
+    rules_version: Mapped[str] = mapped_column(Text)
+    item_id: Mapped[str] = mapped_column(Text)
+    checked: Mapped[bool] = mapped_column(Boolean)
+    comment: Mapped[str | None] = mapped_column(Text)
+    doctor_id: Mapped[uuid.UUID] = fk("doctors.id")
+    created_at: Mapped[datetime] = created_now()
+    __table_args__ = (
+        CheckConstraint("module IN ('genetic', 'symptom', 'journey')", name="module"),
+        Index("ix_rule_signoffs_module_version", "module", "rules_version"),
+    )

@@ -155,7 +155,7 @@ Legend: **PK** primary key, **FK** foreign key, **U** unique, **N** nullable. Co
 | doctor_message | text N | |
 | ai_draft_id | uuid N | FK to `ai_drafts` added in Phase 6 |
 | created_at | timestamptz | |
-Unique: (`result_type`, `result_id`).
+Unique: (`result_type`, `result_id`). Created by migration 0005 (with the two Phase 5 result columns above).
 
 ### 3.3 Pregnancy Journey — Module 4 (Phase 2)
 
@@ -197,10 +197,10 @@ Indexes (migration 0003): `symptom_checkins (patient_id, created_at DESC)`; `sym
 `id` uuid PK · `patient_id` FK · `type` text (`symptom_l1`, `symptom_l2`, `pattern_p1`…`pattern_p5`, `genetic_pending`, `genetic_high_priority`, `pregnancy_ended`, `record_uploaded`, `ai_note_flag`, `chat_urgent`) · `ref_table` text · `ref_id` uuid · `created_at` · `seen_by` FK doctors N · `seen_at` N. Never deleted.
 
 **`medical_records`**
-`id` uuid PK · `patient_id` FK · `uploaded_by` FK doctors · `file_type` text (`ultrasound`/`blood_report`/`prescription`/`other`) · `storage_path` text U · `original_filename` text · `note` text N · `uploaded_at` timestamptz.
+`id` uuid PK · `patient_id` FK · `uploaded_by` FK doctors · `file_type` text (`ultrasound`/`blood_report`/`prescription`/`other`) · `storage_path` text U · `original_filename` text · `note` text N · `uploaded_at` timestamptz. Migration 0005; index on `patient_id`.
 
 **`rule_signoffs`**
-`id` uuid PK · `module` text (`genetic`/`symptom`/`journey`) · `rules_version` text · `item_id` text · `checked` boolean · `comment` text N · `doctor_id` FK doctors · `created_at`.
+`id` uuid PK · `module` text (`genetic`/`symptom`/`journey`) · `rules_version` text · `item_id` text · `checked` boolean · `comment` text N · `doctor_id` FK doctors · `created_at`. Append-only: the newest row per (`module`, `rules_version`, `item_id`) is the current state. Migration 0005; index (`module`, `rules_version`).
 
 **`ai_drafts`** (Phase 6)
 `id` uuid PK · `feature` text (`AI-1`…`AI-4`) · `patient_id` FK N · `input` jsonb (no names/IDs) · `output` text N · `model_name` text · `prompt_version` text · `status` text (`accepted`/`edited`/`rejected`/`discarded`/`failed`) · `final_text` text N · `created_by` FK users N · `created_at`.
