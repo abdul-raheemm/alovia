@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { PENDING_TEXT } from './journey'
 import {
+  adviceParts,
   adviceText,
   cannotReach,
   emptyDraft,
@@ -111,5 +112,17 @@ describe('history grouping (spec 4.3)', () => {
       ['Week unknown', 1, 0, 0, 1],
     ])
     expect(rows[0]?.durations).toEqual({ under_1_hour: 1, more_than_1_day: 1 })
+  })
+})
+
+describe('advice parts (spec 11.2, V3)', () => {
+  it('uses the level message as the advice and lists the others after it', () => {
+    expect(adviceParts(['msg_level2_contact_today', 'msg_mood_support'])).toEqual({
+      main: 'msg_level2_contact_today',
+      extra: ['msg_mood_support'],
+    })
+  })
+  it('shows the safe-fallback message as the advice when the engine failed (V3)', () => {
+    expect(adviceParts(['msg_safe_fallback'])).toEqual({ main: 'msg_safe_fallback', extra: [] })
   })
 })

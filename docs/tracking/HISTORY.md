@@ -706,3 +706,16 @@ Done:
 Checks: `bash scripts/check_all.sh` → exit 0: pytest 338 passed; Vitest 44 passed; Playwright 86 passed; ruff, mypy, typecheck, lint, format pass. Also (owner): the §10 / API.md §5 examples corrected to ["L1-03"] (DEC-067).
 Errors met: 0 (a missing import and a shell-escaped apostrophe in a test title, both caught by typecheck/prettier before running)
 Next step: task 7 (rule sign-off sheet, review, CHANGELOG 0.3.0).
+
+## Session 27 — 2026-11-19 — Phase 3 task 7: review (agent part), sign-off sheet, 0.3.0
+Who: Raheem + agent: Claude Code
+Phase / task: Phase 3 — E2E; review; CHANGELOG 0.3.0
+Done:
+- Symptom spec §14 map: tests 1-7 and 9 (engine unit tests, incl. the rule-coverage guard), test 8 and 10 (API integration), Journey §15 test 8 (calendar E2E). All automated.
+- Review fixes: the advice screen showed the L1 text under an L2 heading for a V3 fallback (only `msg_safe_fallback` returned) — fixed with the tested `adviceParts` helper; stale "Phase 3" TODOs updated; `shortcut:` note on the pattern-history query. Sweeps: no "normal / harmless / nothing to worry" wording, no kick counter, no phone number outside the rule files.
+- Rule review (§16): `scripts/export_symptom_rule_review.py` → `docs/modules/reviews/symptom_rule_review.csv` (25 rules, PUQE questions + bands with the A2 note, P1-P5 with numbers, week settings, 7 messages, 2 phone numbers, A1-A4; columns per §16) + `symptom_rule_review_signoff.md`; unit test for completeness.
+- CREDITS: PUQE-24 wording source. CHANGELOG 0.3.0; version 0.3.0 (backend, 5 package.json, 6 lockfile lines, /health test).
+Checks: `bash scripts/check_all.sh` → exit 0: pytest 339 passed; Vitest 46 passed; Playwright 86 passed; ruff, mypy, typecheck, lint, format pass.
+Owner decisions this phase: plan A-H (DEC-059..066), examples corrected (DEC-067).
+Open for the owner / doctor: doctor rule review and sign-off (A1-A4, PUQE band 3 vs 4), the 7 symptom messages, the Journey review sheet; merge after the owner's review.
+Next step: owner review → merge `phase-3/rules-data` into main → Phase 4 (Genetic Risk) planning.

@@ -1,1 +1,1 @@
-__version__ = "0.2.0"  # matches docs/CHANGELOG.md; bumped at each phase release
+__version__ = "0.3.0"  # matches docs/CHANGELOG.md; bumped at each phase release

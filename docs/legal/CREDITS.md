@@ -37,3 +37,4 @@ Journey prototype content and the knowledge base: see `docs/knowledge-base/` (so
 | NHS website (pages saved in `knowledge-base/raw/`, licence-checked by the owner) | Open Government Licence v3.0 (attribution line in each item) | Unchanged excerpts |
 | MedlinePlus (US National Library of Medicine) | Public domain | Guidance, checklist, discuss-with-doctor, trimester overview |
 | WHO Fetal Growth Charts — Kiserud T et al., PLOS Medicine 2017, Table 11 (doi:10.1371/journal.pmed.1002220) | CC BY 4.0 (attribution on the size line) | 50th-percentile weights for the size sample |
+| PUQE-24 scale (created by Motherisk), as printed by the Association of Ontario Midwives (Symptom spec S5) | Published clinical scale, cited by the spec; title and publisher shown under the questions | Nausea and vomiting questions on the log page |

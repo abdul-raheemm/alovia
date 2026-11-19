@@ -3,6 +3,18 @@
 User-visible changes per release (one release per finished phase). Work-session details go in `tracking/HISTORY.md`, not here.
 Format: newest first. Versions: `0.<phase>.<patch>` until the first full release.
 
+## [0.3.0] — 2026-11-19 — Phase 3: Symptom Tracking
+### Added
+- Log symptoms: warning signs at the top (one tap) and everyday symptoms with only the details each asks for (severity, duration, body area, PUQE-24 nausea questions in the official wording, optional time and notes).
+- Red-flag rules from the spec (25 rules, MCP-card based): advice shown at once — "Go to hospital now" (large, high contrast, Telangana ambulance numbers), "Contact your doctor today", or "Saved"; national mental-health helpline (Tele MANAS) with mood changes. Notes are never read by the rules and the patient is told so.
+- Urgent button page ("I have an urgent symptom") that works even when the server cannot be reached: the warning-sign list and the advice are built into the app; the check-in is sent later.
+- Symptom history: per-symptom charts by pregnancy week and the PUQE score over time, each with a table view.
+- In the Journey: "Logged today" on the quick-log card, "This week's summary" (what she logged, next to what is common at this stage, kept apart), and symptom dots and distinct red-flag icons on the calendar.
+- Doctor side (data only, screens in Phase 5): every L1/L2 check-in and pattern change (P1–P5) creates an inbox item; pattern changes are never shown to the patient.
+- A rule-review sheet for the reviewing doctor (`docs/modules/reviews/`).
+### Changed
+- Patient messages and phone numbers now share one format across modules.
+
 ## [0.2.0] — 2026-11-17 — Phase 2: Pregnancy Journey
 ### Added
 - Pregnancy dates: onboarding with three options (last period, doctor's due date, ultrasound), date rules D1–D3, confirmation before an estimate replaces a doctor's or scan date, full date history.

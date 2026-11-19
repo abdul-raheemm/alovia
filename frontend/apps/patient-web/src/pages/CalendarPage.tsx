@@ -155,8 +155,8 @@ function MarkerDayButton({ day, modifiers, className, children, ...props }: DayB
   )
 }
 
-/** "Tapping a day shows that day's appointments, check-ins and milestones" (§9.2).
- * TODO(Phase 3): that day's check-ins with their levels (Module 7). */
+/** "Tapping a day shows that day's appointments, check-ins (with their levels) and
+ * milestones" (§9.2). */
 function DayDetails({ day, markers }: { day?: Date; markers?: DayMarkers }) {
   if (!day) {
     return (

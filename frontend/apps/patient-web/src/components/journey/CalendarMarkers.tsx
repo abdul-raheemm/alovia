@@ -52,8 +52,7 @@ export function markersFor(byDay: Map<string, DayMarkers>, day: Date): DayMarker
 }
 
 /** The small §9.2 icons: flag = milestone, clock = appointment, dashed circle = suggested
- * check-up (decorative; see markerWords).
- * TODO(Phase 3): symptom-day dot and a distinct red-flag icon (Module 7, §15 test 8). */
+ * check-up, dot = symptoms logged, triangle = red-flag check-in (decorative; see markerWords). */
 export function MarkerIcons({
   milestone,
   appointment,

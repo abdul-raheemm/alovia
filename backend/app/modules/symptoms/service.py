@@ -54,6 +54,8 @@ def _details(e: engine.Entry, rules: SymptomRules) -> dict[str, Any] | None:
 def _history(db: Session, patient: Patient, tz: ZoneInfo, since: datetime) -> engine.History:
     """Everything the §9 pattern rules need: every earlier entry (P1 is "first time ever") and
     the L2 check-ins inside the window."""
+    # shortcut: reads all of her past entries on every check-in (P1 needs "ever"); fine for a
+    # prototype history, upgrade to a per-symptom first-seen query if histories grow large.
     rows = db.execute(
         select(SymptomLog, SymptomCheckin.created_at)
         .join(SymptomCheckin, SymptomCheckin.id == SymptomLog.checkin_id)

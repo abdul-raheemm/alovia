@@ -130,3 +130,10 @@ export function byWeek(
   }
   return [...rows.entries()].sort(([a], [b]) => a - b).map(([, row]) => row)
 }
+
+/** Which message is the advice itself and which come after it (§11.2). The level message is
+ * the advice; when the engine failed (V3) the safe-fallback message takes its place. */
+export function adviceParts(keys: readonly string[]): { main: string; extra: string[] } {
+  const main = keys.find((k) => k.startsWith('msg_level')) ?? keys[0] ?? 'msg_safe_fallback'
+  return { main, extra: keys.filter((k) => k !== main) }
+}

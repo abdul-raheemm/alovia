@@ -3,7 +3,13 @@ import { Phone } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 
 import { messageText } from '../../app/journey'
-import { adviceText, LEVEL_HEADING, type HelplineKey, type Level } from '../../app/symptoms'
+import {
+  adviceParts,
+  adviceText,
+  LEVEL_HEADING,
+  type HelplineKey,
+  type Level,
+} from '../../app/symptoms'
 import { SYMPTOM_BUNDLE } from '../../app/symptomBundle.generated'
 import { useJourneyHome } from '../../app/useJourneyHome'
 import { Helplines } from '../journey/EndedHome'
@@ -58,7 +64,7 @@ export function AdviceScreen({
 }) {
   const heading = useRef<HTMLHeadingElement>(null)
   useEffect(() => heading.current?.focus(), [])
-  const extra = messageKeys.filter((k) => !k.startsWith('msg_level'))
+  const { main, extra } = adviceParts(messageKeys)
   return (
     <section className="flex flex-col gap-4">
       <Card
@@ -76,9 +82,7 @@ export function AdviceScreen({
         >
           {LEVEL_HEADING[level]}
         </h1>
-        <p className={cn(level === 'L1' && 'text-lg')}>
-          {adviceText(messageKeys.find((k) => k.startsWith('msg_level')) ?? 'msg_level1_go_now')}
-        </p>
+        <p className={cn(level === 'L1' && 'text-lg')}>{adviceText(main)}</p>
         {level === 'L1' && <SymptomHelpline which="emergency" />}
         {offline && (
           <p className="text-sm">

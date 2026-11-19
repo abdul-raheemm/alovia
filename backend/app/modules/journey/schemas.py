@@ -183,9 +183,8 @@ class WeeklySummaryOut(BaseModel):
 
 
 class CalendarOut(BaseModel):
-    """GET /patient/journey/calendar (§9.1-9.2) for the requested days.
-
-    TODO(Phase 3): symptom-day dots and red-flag icons (Module 7)."""
+    """GET /patient/journey/calendar (§9.1-9.2) for the requested days, including the
+    Module 7 symptom days (dots and red-flag icons)."""
 
     start: dt.date | None  # §9.1 navigation: pregnancy start ... due date + 2 weeks
     end: dt.date | None  # both null without an active, dated pregnancy
@@ -221,8 +220,8 @@ class EndedOut(BaseModel):
 class HomeOut(BaseModel):
     """GET /patient/journey/home (shape in docs/API.md §4.2).
 
-    Still to come: quick-log state and weekly summary (Phase 3), result and genetic status
-    cards (Phases 4-5). Notifications have their own route (GET /patient/notifications).
+    Still to come: result and genetic status cards (Phases 4-5). Notifications have their
+    own route (GET /patient/notifications).
     """
 
     state: HomeState

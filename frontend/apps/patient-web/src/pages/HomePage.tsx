@@ -17,9 +17,9 @@ import {
 import { EndedHome } from '../components/journey/EndedHome'
 import { NotificationBar } from '../components/journey/NotificationBar'
 
-/** Journey home in the §4.3 block order: header, baby card, this stage, quick log, week strip
- * (§9.1), next appointment, month cards. Still to come: weekly summary (Phase 3), status cards
- * (Phases 4-5). The notification bar (§4.2) sits at the top; an ended pregnancy shows the quiet
+/** Journey home in the §4.3 block order: header, baby card, this stage, quick log, this
+ * week's summary (§9.4), week strip (§9.1), next appointment, month cards. Still to come:
+ * status cards (Phases 4-5). The notification bar (§4.2) sits at the top; an ended pregnancy shows the quiet
  * §11 home instead. */
 export function HomePage() {
   const home = useJourneyHome()

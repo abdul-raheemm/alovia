@@ -1,0 +1,51 @@
+﻿section,item_id,what_to_check,current_value,source,checked,comment,reviewer,date,rules_version
+1 Red-flag rule,L1-01,Rule correct at level L1 against its sources?,`vaginal_bleeding` selected,S1,,,,,1.0.0
+1 Red-flag rule,L1-02,Rule correct at level L1 against its sources?,`fits` selected,S1,,,,,1.0.0
+1 Red-flag rule,L1-03,Rule correct at level L1 against its sources?,`headache` with `with_vision_problems` or `with_swelling` ticked (any severity),"S1, S3",,,,,1.0.0
+1 Red-flag rule,L1-04,Rule correct at level L1 against its sources?,`headache` and `sudden_swelling` in the same check-in,"S1, S3",,,,,1.0.0
+1 Red-flag rule,L1-05,Rule correct at level L1 against its sources?,`vision_problems` selected [CONFIRM AT RULE REVIEW] (A1),S3,,,,,1.0.0
+1 Red-flag rule,L1-06,Rule correct at level L1 against its sources?,`fluid_leaking` selected,S1,,,,,1.0.0
+1 Red-flag rule,L1-07,Rule correct at level L1 against its sources?,`high_fever` selected,S1,,,,,1.0.0
+1 Red-flag rule,L1-08,Rule correct at level L1 against its sources?,`sudden_breathlessness` selected,"S1, S2",,,,,1.0.0
+1 Red-flag rule,L1-09,Rule correct at level L1 against its sources?,`chest_pain` selected,S3,,,,,1.0.0
+1 Red-flag rule,L1-10,Rule correct at level L1 against its sources?,`fainting` selected,S2,,,,,1.0.0
+1 Red-flag rule,L1-11,Rule correct at level L1 against its sources?,`abdominal_discomfort` with severity `severe` (either body area),"S2, S3",,,,,1.0.0
+1 Red-flag rule,L1-12,Rule correct at level L1 against its sources?,`baby_movements_reduced` selected,S4,,,,,1.0.0
+1 Red-flag rule,L1-13,Rule correct at level L1 against its sources?,`labour_pains` with duration `more_than_12_hours`,S1,,,,,1.0.0
+1 Red-flag rule,L1-14,Rule correct at level L1 against its sources?,"`labour_pains` and pregnancy week < `preterm_before_week` (37), or week `null`",S2,,,,,1.0.0
+1 Red-flag rule,L2-01,Rule correct at level L2 against its sources?,`severe_itching` selected,S3,,,,,1.0.0
+1 Red-flag rule,L2-02,Rule correct at level L2 against its sources?,`sudden_swelling` selected (without `headache` in the check-in),S3,,,,,1.0.0
+1 Red-flag rule,L2-03,Rule correct at level L2 against its sources?,`leg_pain_one_side` selected,S3,,,,,1.0.0
+1 Red-flag rule,L2-04,Rule correct at level L2 against its sources?,`pain_passing_urine` selected,S3,,,,,1.0.0
+1 Red-flag rule,L2-05,Rule correct at level L2 against its sources?,`nausea_vomiting` with PUQE score >= 13,"S5, S6",,,,,1.0.0
+1 Red-flag rule,L2-06,Rule correct at level L2 against its sources?,`nausea_vomiting` with `unable_to_keep_fluids` ticked,S6,,,,,1.0.0
+1 Red-flag rule,L2-07,Rule correct at level L2 against its sources?,`headache` with severity `severe` (and no L1-03/L1-04 match),S3,,,,,1.0.0
+1 Red-flag rule,L2-08,Rule correct at level L2 against its sources?,`mood_change` with severity `severe` (also shows `msg_mood_support`),(no source in the spec),,,,,1.0.0
+1 Red-flag rule,L2-09,Rule correct at level L2 against its sources?,`baby_movements_never_felt` selected,S4,,,,,1.0.0
+1 Red-flag rule,L2-10,Rule correct at level L2 against its sources?,`labour_pains` at pregnancy week >= 37 and duration `under_12_hours`,(no source in the spec),,,,,1.0.0
+1 Red-flag rule,L2-11,Rule correct at level L2 against its sources?,Catch-all: any entry with severity `severe` not matched by another L1 or L2 rule,(no source in the spec),,,,,1.0.0
+2 PUQE question,nausea_hours,Wording matches the official sheet (A2)?,"In the last 24 hours, how long have you felt nauseated or sick to your stomach? | 1: Not at all; 2: 1 hour or less; 3: 2 - 3 hours; 4: 4 - 6 hours; 5: More than 6 hours",Pregnancy-Unique Quantification of Emesis (PUQE-24) scale (https://www.ontariomidwives.ca/sites/default/files/Clinical%20Topics/NVP%20algorithm%20-%20PUQE%20score%20-%20V01.pdf),,,,,1.0.0
+2 PUQE question,vomiting_times,Wording matches the official sheet (A2)?,"In the last 24 hours, have you vomited or thrown up? | 1: I did not throw up; 2: 1 - 2 times; 3: 3 - 4 times; 4: 5 - 6 times; 5: 7 or more times",Pregnancy-Unique Quantification of Emesis (PUQE-24) scale (https://www.ontariomidwives.ca/sites/default/files/Clinical%20Topics/NVP%20algorithm%20-%20PUQE%20score%20-%20V01.pdf),,,,,1.0.0
+2 PUQE question,retching_times,Wording matches the official sheet (A2)?,"In the last 24 hours, how many times have you had retching or dry heaves without bringing anything up? | 1: No time; 2: 1 - 2 times; 3: 3 - 4 times; 4: 5 - 6 times; 5: 7 or more times",Pregnancy-Unique Quantification of Emesis (PUQE-24) scale (https://www.ontariomidwives.ca/sites/default/files/Clinical%20Topics/NVP%20algorithm%20-%20PUQE%20score%20-%20V01.pdf),,,,,1.0.0
+2 PUQE bands,puqe_bands,Bands correct? The S5 sheet prints 4-6 for mild and no band for 3; the spec says 3-6.,mild 3-6; moderate 7-12; severe 13-15,"Symptom spec §8 (S5, S6)",,,,,1.0.0
+3 Pattern rule (doctor only),P1,Rule and its numbers sensible (A3)?,A common symptom is logged for the first time ever for this patient,Symptom spec §9,,,,,1.0.0
+3 Pattern rule (doctor only),P2,Rule and its numbers sensible (A3)?,An entry's severity is higher than every earlier entry of the same symptom within the window (pattern_window_days = 7),Symptom spec §9,,,,,1.0.0
+3 Pattern rule (doctor only),P3,Rule and its numbers sensible (A3)?,"The same common symptom is logged on at least p3_min_days different days within the window (pattern_window_days = 7, p3_min_days = 5)",Symptom spec §9,,,,,1.0.0
+3 Pattern rule (doctor only),P4,Rule and its numbers sensible (A3)?,The PUQE band is higher than the band of the previous PUQE score,Symptom spec §9,,,,,1.0.0
+3 Pattern rule (doctor only),P5,Rule and its numbers sensible (A3)?,"At least p5_min_l2 check-ins at L2 within the window (pattern_window_days = 7, p5_min_l2 = 2)",Symptom spec §9,,,,,1.0.0
+4 Week setting,movements_from_week,Week number correct?,16,Symptom spec §13.2,,,,,1.0.0
+4 Week setting,never_felt_from_week,Week number correct?,24,Symptom spec §13.2,,,,,1.0.0
+4 Week setting,preterm_before_week,Week number correct?,37,Symptom spec §13.2,,,,,1.0.0
+5 Message,msg_level1_go_now,Write or approve the text. Intent: Go to the nearest hospital now; take your MCP card; call the emergency number if you cannot travel,(no approved text yet),Symptom spec §11.2,,,,,1.0.0
+5 Message,msg_level2_contact_today,"Write or approve the text. Intent: Contact your doctor today; if it gets worse, go to hospital",(no approved text yet),Symptom spec §11.2,,,,,1.0.0
+5 Message,msg_level0_logged,Write or approve the text. Intent: Your symptom is saved; tell your doctor at your next visit if it continues; use the urgent button if anything changes,(no approved text yet),Symptom spec §11.2,,,,,1.0.0
+5 Message,msg_mood_support,Write or approve the text. Intent: You are not alone; talk to your doctor; national helpline number (section 11.3),(no approved text yet),Symptom spec §11.2,,,,,1.0.0
+5 Message,msg_notes_not_read,Write or approve the text. Intent: Notes are not checked automatically; use the warning signs list for anything urgent,(no approved text yet),Symptom spec §11.2,,,,,1.0.0
+5 Message,msg_not_monitored_live,Write or approve the text. Intent: Your doctor does not see entries in real time; in an emergency go to hospital (shown on the log page and the urgent button page),(no approved text yet),Symptom spec §11.2,,,,,1.0.0
+5 Message,msg_safe_fallback,"Write or approve the text. Intent: Something went wrong; if you feel unwell, contact your doctor or go to hospital",(no approved text yet),Symptom spec §11.2,,,,,1.0.0
+6 Phone number,emergency,Right number to show?,"Ambulance: 102, 108","Telangana Emergency Contacts – Official Helplines (https://www.telangana.gov.in/contacts/emergency-contacts/), accessed 2026-11-18",,,,,1.0.0
+6 Phone number,mental_health,Right number to show?,"Tele MANAS (national mental health helpline): 14416, 18008914416","Press Information Bureau, Ministry of Health and Family Welfare (29 May 2024) (https://pib.gov.in/PressReleasePage.aspx?PRID=2022057), accessed 2026-11-18",,,,,1.0.0
+7 Assumption,A1,Confirm or change.,Vision problems on their own (without headache) are L1.,Symptom spec §16.1,,,,,1.0.0
+7 Assumption,A2,Confirm or change.,PUQE vomiting and retching answer wording matches the official sheet.,Symptom spec §16.1,,,,,1.0.0
+7 Assumption,A3,Confirm or change.,"Pattern defaults (7-day window, 5 of 7 days, 2 L2 check-ins) are sensible.",Symptom spec §16.1,,,,,1.0.0
+7 Assumption,A4,Confirm or change.,"Labour pains at 37+ weeks under 12 hours are L2 (""contact your doctor""), not L1.",Symptom spec §16.1,,,,,1.0.0
