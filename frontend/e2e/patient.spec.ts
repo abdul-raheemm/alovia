@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { expectNoA11yViolations, mockInviteCheck, PATIENT } from './helpers'
+import { expectNoA11yViolations, mockInviteCheck, PATIENT, signInAsPatient } from './helpers'
 
 const INVALID = "This invite link isn't valid. Please ask your doctor for a new one."
 
@@ -44,6 +44,23 @@ test('valid invite: sign-up form with unticked consent boxes; Continue needs bot
   await agree.check()
   await expect(cont).toBeEnabled()
   await expectNoA11yViolations(page)
+})
+
+test('a signed-in patient opening an invite link is told, not taken into her app', async ({
+  page,
+}) => {
+  await signInAsPatient(page) // an existing, linked patient in this browser
+  await mockInviteCheck(page, true)
+  await page.route('**/auth/v1/logout*', (route) => route.fulfill({ status: 204, body: '' }))
+  await page.goto(`${PATIENT}/join?code=ABCD2345`)
+  await expect(page.getByText(/You are signed in as test\.patient@example\.test/)).toBeVisible()
+  await expect(page).toHaveURL(`${PATIENT}/join?code=ABCD2345`)
+  // her app must not try to link someone else's invite
+  expect(await page.evaluate(() => localStorage.getItem('alovia-invite-code'))).toBeNull()
+  await expectNoA11yViolations(page)
+  await page.getByRole('button', { name: 'Sign out' }).click()
+  await expect(page.getByRole('heading', { name: 'Create your account' })).toBeVisible()
+  expect(await page.evaluate(() => localStorage.getItem('alovia-invite-code'))).toBe('ABCD2345')
 })
 
 test('signed-out visitors are sent from the app to sign-in', async ({ page }) => {

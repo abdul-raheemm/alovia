@@ -1,4 +1,4 @@
-import { CONSENT_VERSION, useAuth, userMessage, type InviteCheck } from '@alovia/shared'
+import { CONSENT_VERSION, useAuth, userMessage, type InviteCheck, type Me } from '@alovia/shared'
 import { Button, Card, ErrorState, PageSkeleton, TextField } from '@alovia/ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
@@ -23,11 +23,20 @@ type SignUpValues = z.infer<typeof schema>
 export function JoinPage() {
   const [params] = useSearchParams()
   const code = params.get('code')?.trim() ?? ''
-  const { session, loading } = useAuth()
+  const { session, loading, client } = useAuth()
 
+  // kept for the email-confirmation round trip; only for someone not signed in, so a
+  // signed-in patient's app never tries to link someone else's invite
   useEffect(() => {
-    if (code) pendingInviteCode.set(code)
-  }, [code])
+    if (code && !loading && !session) pendingInviteCode.set(code)
+  }, [code, loading, session])
+
+  const me = useQuery({
+    queryKey: ['me'],
+    queryFn: () => api.get<Me>('/me'),
+    enabled: !!session,
+    retry: false,
+  })
 
   const check = useQuery({
     queryKey: ['invite-check', code],
@@ -35,8 +44,18 @@ export function JoinPage() {
     enabled: !!code && !session,
   })
 
-  // back from the confirmation email, already signed in: the account gate links the invite
-  if (!loading && session) return <Navigate to="/home" replace />
+  if (!loading && session) {
+    if (me.isPending) return <PageSkeleton />
+    // someone who already has a patient account opened an invite link: say so, never jump
+    // silently into her own app (the invite is for a new account)
+    if (me.data?.patient) {
+      return (
+        <SignedInNotice email={me.data.user.email} onSignOut={() => void client.auth.signOut()} />
+      )
+    }
+    // back from the confirmation email, not linked yet: the account gate links the invite
+    return <Navigate to="/home" replace />
+  }
   if (!code) return <Invalid />
   if (check.isPending) return <PageSkeleton />
   if (check.isError) {
@@ -49,6 +68,22 @@ export function JoinPage() {
   }
   if (!check.data.valid) return <Invalid />
   return <SignUpForm code={code} />
+}
+
+function SignedInNotice({ email, onSignOut }: { email: string; onSignOut: () => void }) {
+  return (
+    <Card role="alert" className="flex flex-col gap-3">
+      <p>
+        You are signed in as {email}. This invite link is for a new account. Sign out to use it.
+      </p>
+      <div className="flex flex-wrap gap-3">
+        <Button onClick={onSignOut}>Sign out</Button>
+        <Link to="/home" className="self-center">
+          Go to my app
+        </Link>
+      </div>
+    </Card>
+  )
 }
 
 function Invalid() {

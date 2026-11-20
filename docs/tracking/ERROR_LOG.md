@@ -3,6 +3,8 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Before running E2E tests, check ports 5173/5174 are free: Playwright reuses a running dev server, which carries the real .env (ERR-062).
+- A test that loops over discovered items must also assert it found some, or it can pass while checking nothing (ERR-059).
 - Code that parses paths or names from users must behave the same on Linux (deploy) as on Windows (dev); avoid platform-dependent classes like `PurePath` (ERR-058).
 - A Recharts chart wrapped in `aria-hidden` (data given as text instead) needs `accessibilityLayer={false}`, or axe reports focusable hidden content (ERR-051).
 - Times that are compared must come from one clock: write and check expiry with the database's `now()`, never the app server's (ERR-048).
@@ -618,3 +620,43 @@ Fix: `PureWindowsPath`, which splits on both separators everywhere; test with a 
 Verified by: records tests pass.
 Prevention: Lesson added.
 Category: bug
+
+### ERR-059 — 2026-11-20 — Access matrix first found no routes
+Who: Claude Code
+Phase / task: Phase 5 — task 7
+What happened: the route collector (`isinstance(r, APIRoute)` over `app.routes`) returned an empty list; the per-route loops checked nothing and the guard's count assertion failed.
+Cause: in FastAPI 0.163 included routers are not exposed as `APIRoute` objects on `app.routes`.
+Fix: read the routes from `app.openapi()['paths']` (41 doctor/admin routes).
+Verified by: 4 matrix tests pass; the count guard stays.
+Prevention: Lesson added.
+Category: test
+
+### ERR-060 — 2026-11-20 — Invite link opened by a signed-in patient skipped sign-up
+Who: owner (found in manual testing) + Claude Code
+Phase / task: Phase 5 — task 7 checklist (code from Phase 1)
+What happened: opening a new patient's invite link in a browser where an older test patient was signed in went straight to that patient's home; no sign-up, no consent; the doctor's notes and dates (for the new record) seemed not to arrive.
+Cause: `JoinPage` redirected every signed-in session to /home (meant for the return from the confirmation email) and stored the invite code even for a linked patient.
+Fix: a linked patient sees who is signed in and a Sign out button; the code is stored only when nobody is signed in; an unlinked session (confirmation return) still continues to the gate.
+Verified by: new E2E test; full check run.
+Prevention: test sign-in pages with an existing session as well as without.
+Category: bug
+
+### ERR-061 — 2026-11-20 — make_doctor.py crashed on an email already in use
+Who: owner (found in manual testing) + Claude Code
+Phase / task: Phase 5 — task 7
+What happened: `UniqueViolation ... uq_users_email` traceback.
+Cause: the script checked the user id but not whether the email belonged to another account.
+Fix: check the email first and refuse with the existing account's role and id.
+Verified by: new test (3 make_doctor tests pass).
+Prevention: scripts check every unique field they write before writing.
+Category: bug
+
+### ERR-062 — 2026-11-20 — E2E run used the owner's running dev servers
+Who: Claude Code
+Phase / task: Phase 5 — task 7 (verifying ERR-060)
+What happened: the new join-page E2E failed and even `/home` lost the fake session.
+Cause: the owner's `npm run dev` servers held ports 5173/5174; Playwright (`reuseExistingServer`) reused them, and they run with the real Supabase settings, so the test session key did not match.
+Fix: waited until the ports were free, then ran the full check.
+Verified by: port check (no listeners) and the full run.
+Prevention: Lesson added.
+Category: environment

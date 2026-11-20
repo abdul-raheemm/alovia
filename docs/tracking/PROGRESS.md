@@ -61,7 +61,7 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 - [x] Task 4 genetic review (queue, confirm, correct, race), symptoms view, notes, appointments, dates/status — Raheem + Claude Code — 2026-11-19 (owner approved; DEC-092..095 accepted) (records = task 5)
 - [x] Task 5 medical records: upload (type + signature + size checks), list, 5-minute download links — Raheem + Claude Code — 2026-11-20 (owner approved; DEC-096..098; real-bucket check at the task 7 review, DEC-104)
 - [x] Task 6 rule review (sign-off, export, require_signoff), activity log, admin (doctors, invite, assignments), Set password — Raheem + Claude Code — 2026-11-20 (owner approved) (invite links were done in task 2)
-- [ ] E2E (access control!); review; CHANGELOG 0.5.0
+- [x] Task 7 E2E (access control on all 41 routes); review; `make_doctor.py`; manual checklist (owner, done 2026-11-20); CHANGELOG 0.5.0 — Raheem + Claude Code — 2026-11-20
 
 ## Phase 6 — AI drafts · Phase 7 — RAG · Phase 8 — Security · Phase 9 — Deployment
 See `docs/ROADMAP.md`; tasks added when the phase starts.

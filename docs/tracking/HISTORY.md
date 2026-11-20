@@ -836,3 +836,23 @@ Done:
 - Debugging: full check found an unclosed DB connection after a refused start (ERR-057, fixed); review found upload file names would keep folder paths on Linux (ERR-058, fixed, test added); duplicate landmark name on the admin log (fixed).
 Checks: see the task 6 review report.
 Next step: owner review of task 6, then task 7 (phase review, make_doctor, manual checklist, CHANGELOG 0.5.0).
+
+## Session 39 — 2026-11-20 — Phase 5 task 7: review, access matrix, 0.5.0
+Who: Raheem + agent: Claude Code
+Done:
+- Owner: task 6 approved; committed `443112c` (only task 6 files).
+- Access matrix over every doctor/admin route (41, read from OpenAPI). The first version found zero routes (FastAPI does not list included routes as `APIRoute`); the guard caught it before it could pass silently (ERR-059).
+- `scripts/make_doctor.py` + 2 tests; combined-score wording check; version 0.5.0 (backend, pyproject, 5 package.json, 6 lockfile lines; the third-party `type-check` 0.4.0 left alone); CHANGELOG 0.5.0; ENVIRONMENT §3b; owner checklist.
+- Dashboard spec §25 map: 1 access per route (matrix + per-task tests) ✔; 2 admin routes reject doctors/patients, admin reaches no clinical route ✔; 3 list order ✔; 4 seen shared ✔; 5 unit conversion ✔; 6 range warning stored, still predicts ✔; 7 HbA1c note rule ✔; 8 hidden until shared, then template + message only ✔; 9 invite links (Phase 1 tests + task 2) ✔; 10 genetic review race ✔; 11 appointments each side ✔; 12 AI → Phase 6 (flags off; no LLM code); 13 require_signoff ✔; 14 last doctor blocked ✔; 15 no combined score: wording check ✔ + manual item in the checklist.
+Checks: see the task 7 review report.
+Next step: owner review + manual checklist → merge `phase-5/dashboard` into main → Phase 6 planning (free LLM options first).
+
+## Session 40 — 2026-11-20 — Owner's manual checklist; two fixes
+Who: Raheem + agent: Claude Code
+Done:
+- Owner ran `docs/review/phase5_manual_checklist.md` with the real Supabase project (doctor login via `make_doctor.py`, uploads, sharing, admin, rule review) and reported testing done.
+- Fixed: `make_doctor.py` crashed with a raw IntegrityError when the email already belonged to another account → clear refusal naming that account's role and id (+ test) (ERR-061).
+- Fixed: the join page sent any signed-in person to their own app, so an invite link opened in a browser with an older patient signed in skipped sign-up and consent → a notice with Sign out; the invite code is stored only when nobody is signed in (+ E2E) (ERR-060).
+- Explained the rule review page; doctor sign-off of the 188 rows stays an open owner item before release (`require_signoff` off in development).
+Checks: final check run before the task 7 commit.
+Next step: commit task 7, merge Phase 5 into main, Phase 6 planning.

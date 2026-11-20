@@ -59,7 +59,7 @@ def test_health(client: TestClient) -> None:
                 "journey": True,
                 "dashboard": True,
             },
-            "version": "0.4.0",
+            "version": "0.5.0",
         },
         "error": None,
     }

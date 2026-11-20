@@ -3,6 +3,20 @@
 User-visible changes per release (one release per finished phase). Work-session details go in `tracking/HISTORY.md`, not here.
 Format: newest first. Versions: `0.<phase>.<patch>` until the first full release.
 
+## [0.5.0] — 2026-11-20 — Phase 5: Doctor Dashboard + Admin
+### Added
+- Doctor home: a needs-attention inbox (red flags, pattern changes, genetic assessments, records, pregnancy end; "Mark as seen" shows who and when to every assigned doctor; AI suggestions would sit last) and the patient list in priority order, with search and filters. Model classes are always written out, never colour only.
+- Patients: create and edit records; one-time invite links (a new link replaces an unused one; joined patients cannot get another).
+- Patient page with tabs. Overview: details, each latest result in its own box (no combined score), invite, activity log. Fetal and Maternal: forms built from the models' own field lists, unit switches with a conversion preview (HbA1c %, glucose mg/dL, temperature °C), training-range warnings (the prediction still runs), the HbA1c note for haemoglobin variants, results with class probabilities, top factors and limitations, sharing with the patient (template text + optional message, once), earlier results and trend charts. Genetic: review queue, confirm with a note or correct the inputs (a new assessment; the old one is kept; a second doctor is refused). Symptoms: check-ins with levels, rule IDs, pattern badges, notes and charts (read-only). Records: upload PDF/JPG/PNG to a private store (type, file signature and size checked) and download through 5-minute links. Notes (private or shared), appointments (each side edits only its own), dates (clinician-confirmed or ultrasound) and pregnancy status.
+- Patient app: More → My results (only shared results, as text and the doctor's message); notifications for shared results, genetic reviews and doctor date changes; genetic review notes link to the genetic check.
+- Rule review: every genetic, symptom and Journey rule row with its source; doctors tick "checked" and comment per rules version; export of the sign-off file; an optional start-up block until everything is signed.
+- Admin (admin role only): invite doctors by email (with a Set password page), deactivate and reactivate, manage assignments (the last doctor cannot be removed), and the activity log (no clinical values).
+- Training ranges computed from the owner's training notebooks (re-run: identical models), never typed by hand.
+### Fixed
+- Opening an invite link while already signed in as another patient no longer jumps silently into that patient's app; the page says who is signed in and offers Sign out.
+### Notes
+- All texts shown to patients and the limitation/warning texts stay "[Text pending doctor approval]" until a doctor approves them. AI features (Phase 6) are off.
+
 ## [0.4.0] — 2026-11-19 — Phase 4: Genetic Risk
 ### Added
 - Genetic risk check (More → Genetic risk): what the patient knows about her own and her husband's status for haemoglobin conditions (β-thalassaemia, sickle cell, HbE/HbD; always asked), haemophilia and Marfan syndrome (behind entry questions), with "how do you know?" evidence and a consent reminder about the father's data.

@@ -41,6 +41,12 @@ Module settings live in YAML (`backend/rules/*/config.yaml`, `backend/content/`)
 3. The person signs in to the doctor app and accepts the consent once (DEC-046).
 The script refuses to change an account that already has another role, and does nothing for an existing admin.
 
+## 3b. A doctor login for manual testing (owner only, DEC-104)
+1. Supabase dashboard → Authentication → Users → Add user → Create new user (tick "Auto confirm"); copy the UID.
+2. From `backend/`: `python scripts/make_doctor.py --user-id <UID> --email <their email> --name "Test Doctor" [--assign-seed-patients]`.
+3. Sign in to the doctor app and accept the consent once. In normal use, doctors are invited from the Admin page instead (DEC-101).
+The script refuses to change an account that already has another role, and does nothing the second time.
+
 ## 4. Rules
 - Never commit real secrets; `.env` is in `.gitignore` from the first commit.
 - Keep development, test and production values separate.
