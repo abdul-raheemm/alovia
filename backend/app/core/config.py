@@ -8,7 +8,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Annotated, Literal
 
-from pydantic import field_validator
+from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     test_database_url: str | None = None
     # base of the invite links doctors send (Dashboard §8.2); the deployed URL is set in Phase 9
     patient_app_url: str = "http://localhost:5173"
+    # private Storage bucket for medical records (Dashboard §14); records answer 503 without them
+    supabase_url: str | None = None
+    supabase_service_role_key: SecretStr | None = None  # backend only; hidden when printed
+    storage_bucket: str | None = None
 
     @field_validator("cors_origins", mode="before")
     @classmethod

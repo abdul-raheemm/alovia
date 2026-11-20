@@ -10,6 +10,7 @@ from app.core.config import Settings, get_settings
 from app.core.database import make_engine
 from app.core.errors import register_error_handlers
 from app.core.logging import REQUEST_ID_HEADER, configure_logging, request_context
+from app.core.storage import SupabaseStorage
 from app.modules.dashboard import router as dashboard
 from app.modules.dashboard.rules import load_dashboard_rules, load_ranges
 from app.modules.genetic import router as genetic
@@ -43,6 +44,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.genetic_rules = load_genetic_rules()  # inheritance rules (Genetic spec §12)
     app.state.dashboard_rules = load_dashboard_rules()  # settings + messages (Dashboard §23)
     load_ranges()  # training ranges next to the models (§9.4)
+    app.state.storage = SupabaseStorage(  # private bucket (Dashboard §14)
+        settings.supabase_url,
+        key.get_secret_value() if (key := settings.supabase_service_role_key) else None,
+        settings.storage_bucket,
+    )
     # public signing keys, fetched on first use and cached (app.core.auth)
     app.state.jwks_client = jwt.PyJWKClient(settings.supabase_jwks_url, cache_keys=True)
     register_error_handlers(app)

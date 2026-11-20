@@ -816,3 +816,13 @@ Done:
 - Proposals: DEC-092..095. Spec conflict noted: Symptom §12 vs Dashboard §6 list order.
 Checks: see the task 4 review report.
 Next step: owner review of task 4, then task 5 (medical records).
+
+## Session 37 — 2026-11-19 — Phase 5 task 5: medical records
+Who: Raheem + agent: Claude Code
+Done:
+- Owner: task 4 approved; committed `f0d1d0f` with only task 4 files (task 5 backend work already in progress was left out of that commit).
+- Backend: Storage client (urllib, DEC-078), records upload/list/download per Dashboard §14 and SECURITY §8; `python-multipart` 0.0.33 (DEC-077). 13 integration tests (upload/list/download and audit, five 415 cases, 413, bad form, storage down saves nothing, inbox item only for other doctors, §25 test 1 for these routes) and 3 storage unit tests.
+- Frontend: API client `FormData` support (+1 unit test); Records tab; 4 E2E runs (both viewports, axe).
+- Proposals: DEC-096..098.
+Checks: see the task 5 review report.
+Next step: owner review of task 5 and a one-time real upload through the doctor app; then task 6 (rule review, activity log, admin).

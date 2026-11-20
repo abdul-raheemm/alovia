@@ -21,6 +21,7 @@ import { AppointmentsTab } from '../components/care/AppointmentsTab'
 import { GeneticTab } from '../components/care/GeneticReview'
 import { NotesTab } from '../components/care/NotesTab'
 import { PregnancyTab } from '../components/care/PregnancyTab'
+import { RecordsTab } from '../components/care/RecordsTab'
 import { SymptomsTab } from '../components/care/SymptomsTab'
 import { PatientForm } from '../components/PatientForm'
 import { PredictionTab } from '../components/predictions/PredictionTab'
@@ -220,7 +221,7 @@ function Overview({ patient }: { patient: PatientDetail }) {
 }
 
 /** Patient detail (§5): tabs as links, so each tab has its own address (inbox items open the
- * related tab). Records is built in Phase 5 task 5. */
+ * related tab). */
 export function PatientPage() {
   const { id = '', tab = 'overview' } = useParams()
   const patient = useQuery({
@@ -279,10 +280,7 @@ export function PatientPage() {
       ) : current.id === 'pregnancy' ? (
         <PregnancyTab patient={patient.data} />
       ) : (
-        <Card>
-          <h2>{current.label}</h2>
-          <p className="text-muted">This section is being built.</p>
-        </Card>
+        <RecordsTab patientId={id} />
       )}
     </section>
   )

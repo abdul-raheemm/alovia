@@ -29,6 +29,16 @@ describe('api client', () => {
     expect((init.headers as Record<string, string>).Authorization).toBe('Bearer tok')
   })
 
+  it('sends FormData as multipart, without a JSON content type', async () => {
+    const fetchFn = vi.fn(async () => jsonResponse(201, { data: { id: 1 }, error: null }))
+    const form = new FormData()
+    form.append('file_type', 'other')
+    await client(fetchFn).post('/doctor/patients/p/records', form)
+    const [, init] = fetchFn.mock.calls[0] as unknown as [string, RequestInit]
+    expect(init.body).toBe(form)
+    expect((init.headers as Record<string, string>)['Content-Type']).toBeUndefined()
+  })
+
   it('turns an error envelope into ApiError with code, fields and request id', async () => {
     const fetchFn = vi.fn(async () =>
       jsonResponse(

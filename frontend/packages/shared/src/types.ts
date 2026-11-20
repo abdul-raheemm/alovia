@@ -61,3 +61,7 @@ export type DoctorAssessment = components['schemas']['DoctorAssessmentOut']
 export type DoctorSymptoms = components['schemas']['DoctorSymptomsOut']
 export type NoteRecord = components['schemas']['NoteOut']
 export type NoteInput = components['schemas']['NoteIn']
+
+/** Medical records (Dashboard §14). */
+export type MedicalRecord = components['schemas']['RecordOut']
+export type RecordDownload = components['schemas']['DownloadOut']

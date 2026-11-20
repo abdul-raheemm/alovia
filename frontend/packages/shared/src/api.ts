@@ -63,6 +63,8 @@ export function createApiClient({
     const token = await getToken()
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), timeoutMs)
+    // a file upload (FormData) goes as multipart; the browser sets its Content-Type boundary
+    const form = body instanceof FormData
     let res: Response
     try {
       res = await fetchFn(`${baseUrl}${path}`, {
@@ -70,10 +72,10 @@ export function createApiClient({
         signal: controller.signal,
         headers: {
           Accept: 'application/json',
-          ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
+          ...(body === undefined || form ? {} : { 'Content-Type': 'application/json' }),
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: body === undefined ? undefined : JSON.stringify(body),
+        body: body === undefined ? undefined : form ? body : JSON.stringify(body),
       })
     } catch {
       throw new ApiError(0, NETWORK_ERROR, 'No response from the server.')

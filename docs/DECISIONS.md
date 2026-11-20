@@ -100,6 +100,15 @@ Record every important decision here so it is not re-decided. Module-level decis
 | DEC-093 | 2026-11-19 | The second-doctor rule for genetic review (Dashboard §12) is enforced by locking the assessment row (SELECT … FOR UPDATE) and checking reviewed / replaced; no new migration | Owner: as proposed (2026-11-19) | Accepted |
 | DEC-094 | 2026-11-19 | The generated genetic vocabulary and the pure genetic helpers moved from the patient app to `packages/shared` so the doctor's Correct-inputs form reuses them | Owner: as proposed (2026-11-19) | Accepted |
 | DEC-095 | 2026-11-19 | Doctors set dates only as clinician-confirmed or ultrasound (Dashboard §8.3); the LMP option is refused on the doctor route | Owner: as proposed (2026-11-19) | Accepted |
+| DEC-096 | 2026-11-19 | Record size and format limits are checked only by the server (from `config.yaml`); the doctor app does not copy them (a file-picker hint only) | Owner: as recommended (2026-11-20) | Accepted |
+| DEC-097 | 2026-11-19 | `record_uploaded` inbox item (§7.1 "uploaded by another assigned doctor") is created only when the patient has another active assigned doctor; `.jpeg` is accepted as JPG | Owner: as recommended (2026-11-20) | Accepted |
+| DEC-098 | 2026-11-19 | Automated tests use a fake Storage (they never write to the main project's bucket); the real bucket is checked by the owner once through the doctor app | Owner: as recommended (2026-11-20) | Accepted |
+| DEC-099 | 2026-11-20 | Journey sign-offs use a rules version computed from the Journey review rows (a short hash), so any change to a row needs signing again (T6-A) | Owner: as recommended | Accepted |
+| DEC-100 | 2026-11-20 | The rule review screen shows the same Journey rows as the Journey CSV sheet (messages, R1-R4, helplines, ...), built by the same code (T6-B) | Owner: as recommended | Accepted |
+| DEC-101 | 2026-11-20 | Admin "Invite doctor" calls the Supabase Auth invite API; the email opens a "Set password" page in the doctor app; new setting `DOCTOR_APP_URL` (default http://localhost:5174), added to Supabase Redirect URLs by the owner at the review (T6-C) | Owner: as recommended | Accepted |
+| DEC-102 | 2026-11-20 | The admin activity log shows actor, action, entity, time and patient name; never clinical values (T6-D) | Owner: as recommended | Accepted |
+| DEC-103 | 2026-11-20 | Patient list order follows Dashboard §6 (inbox-based); Symptom spec §12's own order is noted as superseded for the dashboard | Owner: as recommended | Accepted |
+| DEC-104 | 2026-11-20 | Manual testing (real bucket upload, doctor sign-in, click-through) moves to the task 7 review, with a tested `scripts/make_doctor.py` to turn the owner's Supabase login into a doctor | Owner: as recommended | Accepted |
 
 ## Template for new entries
 

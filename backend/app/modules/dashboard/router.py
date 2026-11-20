@@ -5,20 +5,21 @@ active assignment (users.service.get_doctor / get_assigned_patient)."""
 import uuid
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Body, Depends, Request
+from fastapi import APIRouter, Body, Depends, File, Form, Request, UploadFile
 from sqlalchemy.orm import Session
 
 from app.api import API_PREFIX
 from app.common.responses import Envelope, ok
 from app.core.database import get_db
 from app.core.errors import AppError
-from app.modules.dashboard import care, predictions
+from app.modules.dashboard import care, predictions, records
 from app.modules.dashboard import patients as service
 from app.modules.dashboard.rules import load_ranges
 from app.modules.dashboard.schemas import (
     DoctorAssessmentOut,
     DoctorDatesIn,
     DoctorEndIn,
+    DownloadOut,
     GeneticCorrectIn,
     GeneticReviewIn,
     InboxItemOut,
@@ -32,6 +33,8 @@ from app.modules.dashboard.schemas import (
     PatientRow,
     PredictionIn,
     PredictionSchema,
+    RecordOut,
+    RecordType,
     ResultOut,
     ShareIn,
     TrendsOut,
@@ -292,3 +295,46 @@ def my_results(request: Request, patient: OwnPatient, db: Db) -> dict[str, Any]:
     """API.md §4.5: shared fetal/maternal results only (template + doctor message)."""
     rules = request.app.state.dashboard_rules
     return ok([r.model_dump(mode="json") for r in predictions.patient_results(db, patient, rules)])
+
+
+# ---- task 5: medical records (§14) ----
+
+
+@router.get("/patients/{patient_id}/records", response_model=Envelope[list[RecordOut]])
+def list_records(patient: Assigned, db: Db) -> dict[str, Any]:
+    return ok([r.model_dump(mode="json") for r in records.list_records(db, patient)])
+
+
+@router.post("/patients/{patient_id}/records", status_code=201, response_model=Envelope[RecordOut])
+def upload_record(
+    request: Request,
+    file: Annotated[UploadFile, File()],
+    file_type: Annotated[RecordType, Form()],
+    patient: Assigned,
+    account: Doc,
+    db: Db,
+    note: Annotated[str | None, Form(max_length=500)] = None,
+) -> dict[str, Any]:
+    """multipart/form-data: file, file_type, optional note (API.md §2)."""
+    settings = request.app.state.dashboard_rules.settings
+    # read one byte past the limit, so an oversized file is refused without reading it all
+    data = file.file.read(settings.record_max_mb * 1024 * 1024 + 1)
+    out = records.upload(
+        db,
+        request.app.state.storage,
+        settings,
+        account,
+        patient,
+        file.filename or "",
+        data,
+        file_type,
+        (note or "").strip() or None,
+    )
+    return ok(out.model_dump(mode="json"))
+
+
+@router.get("/records/{record_id}/download", response_model=Envelope[DownloadOut])
+def download_record(request: Request, record_id: uuid.UUID, account: Doc, db: Db) -> dict[str, Any]:
+    settings = request.app.state.dashboard_rules.settings
+    url = records.download_link(db, request.app.state.storage, settings, account, record_id)
+    return ok(DownloadOut(url=url, expires_in=settings.signed_url_minutes * 60).model_dump())

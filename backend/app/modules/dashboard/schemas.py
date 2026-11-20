@@ -317,3 +317,24 @@ class DoctorEndIn(BaseModel):
 
 # §8.3: a doctor sets a clinician-confirmed (option B) or ultrasound (option C) date
 DoctorDatesIn = Annotated[DueDateIn | UltrasoundDatesIn, Field(discriminator="option")]
+
+
+# ---- task 5: medical records (§14) ----
+
+RecordType = Literal["ultrasound", "blood_report", "prescription", "other"]
+
+
+class RecordOut(BaseModel):
+    id: uuid.UUID
+    file_type: RecordType
+    original_filename: str
+    note: str | None
+    uploaded_at: datetime
+    uploaded_by_name: str | None
+
+
+class DownloadOut(BaseModel):
+    """A signed link to the private file, valid for `expires_in` seconds (§14)."""
+
+    url: str
+    expires_in: int

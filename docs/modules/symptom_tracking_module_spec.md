@@ -324,7 +324,7 @@ Any general text about common symptoms comes from the knowledge base or the Jour
 
 ## 12. Doctor view
 
-- **Patient list order:** patients with an L1 check-in in the last `pattern_window_days` first, then L2 or P5, then the rest; newest first within each group.
+- **Patient list order:** patients with an L1 check-in in the last `pattern_window_days` first, then L2 or P5, then the rest; newest first within each group. *(Superseded for the dashboard by Dashboard spec §6, which orders by unseen inbox items created from these same events — owner decision 2026-11-20, DEC-103.)*
 - **Per patient:** check-in timeline with levels and matched rule IDs; pattern-change badges (P1–P5) with the symptom named; charts per symptom by pregnancy week; PUQE score chart with bands.
 - **Read-only:** the doctor cannot edit or delete check-ins. Doctor comments on symptoms are `[OPEN]` (not in v1).
 

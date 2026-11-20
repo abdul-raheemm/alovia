@@ -311,6 +311,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/doctor/patients/{patient_id}/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Records */
+        get: operations["list_records_api_v1_doctor_patients__patient_id__records_get"];
+        put?: never;
+        /**
+         * Upload Record
+         * @description multipart/form-data: file, file_type, optional note (API.md §2).
+         */
+        post: operations["upload_record_api_v1_doctor_patients__patient_id__records_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/doctor/patients/{patient_id}/symptoms": {
         parameters: {
             query?: never;
@@ -376,6 +397,23 @@ export interface paths {
         put?: never;
         /** Share Result */
         post: operations["share_result_api_v1_doctor_predictions__model___result_id__share_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/records/{record_id}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download Record */
+        get: operations["download_record_api_v1_doctor_records__record_id__download_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -974,6 +1012,18 @@ export interface components {
             /** Required */
             required: boolean;
         };
+        /** Body_upload_record_api_v1_doctor_patients__patient_id__records_post */
+        Body_upload_record_api_v1_doctor_patients__patient_id__records_post: {
+            /** File */
+            file: string;
+            /**
+             * File Type
+             * @enum {string}
+             */
+            file_type: "ultrasound" | "blood_report" | "prescription" | "other";
+            /** Note */
+            note?: string | null;
+        };
         /**
          * CalendarOut
          * @description GET /patient/journey/calendar (§9.1-9.2) for the requested days, including the
@@ -1413,6 +1463,16 @@ export interface components {
             puqe_bands: components["schemas"]["PuqeBandOut"][];
         };
         /**
+         * DownloadOut
+         * @description A signed link to the private file, valid for `expires_in` seconds (§14).
+         */
+        DownloadOut: {
+            /** Expires In */
+            expires_in: number;
+            /** Url */
+            url: string;
+        };
+        /**
          * DueDateIn
          * @description Option B: due date given by her doctor.
          */
@@ -1556,6 +1616,12 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[DownloadOut] */
+        Envelope_DownloadOut_: {
+            data: components["schemas"]["DownloadOut"];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[HomeOut] */
         Envelope_HomeOut_: {
             data: components["schemas"]["HomeOut"];
@@ -1614,6 +1680,12 @@ export interface components {
         /** Envelope[PredictionSchema] */
         Envelope_PredictionSchema_: {
             data: components["schemas"]["PredictionSchema"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[RecordOut] */
+        Envelope_RecordOut_: {
+            data: components["schemas"]["RecordOut"];
             /** Error */
             error?: null;
         };
@@ -1695,6 +1767,13 @@ export interface components {
         Envelope_list_PatientRow__: {
             /** Data */
             data: components["schemas"]["PatientRow"][];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[RecordOut]] */
+        Envelope_list_RecordOut__: {
+            /** Data */
+            data: components["schemas"]["RecordOut"][];
             /** Error */
             error?: null;
         };
@@ -2313,6 +2392,30 @@ export interface components {
             title: string;
             /** Url */
             url: string;
+        };
+        /** RecordOut */
+        RecordOut: {
+            /**
+             * File Type
+             * @enum {string}
+             */
+            file_type: "ultrasound" | "blood_report" | "prescription" | "other";
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Note */
+            note: string | null;
+            /** Original Filename */
+            original_filename: string;
+            /**
+             * Uploaded At
+             * Format: date-time
+             */
+            uploaded_at: string;
+            /** Uploaded By Name */
+            uploaded_by_name: string | null;
         };
         /**
          * ResultOut
@@ -3408,6 +3511,72 @@ export interface operations {
             };
         };
     };
+    list_records_api_v1_doctor_patients__patient_id__records_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_RecordOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_record_api_v1_doctor_patients__patient_id__records_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_record_api_v1_doctor_patients__patient_id__records_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_RecordOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     patient_symptoms_api_v1_doctor_patients__patient_id__symptoms_get: {
         parameters: {
             query?: never;
@@ -3524,6 +3693,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_ResultOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_record_api_v1_doctor_records__record_id__download_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                record_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_DownloadOut_"];
                 };
             };
             /** @description Validation Error */

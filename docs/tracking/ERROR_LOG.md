@@ -587,3 +587,13 @@ Fix: `notes.map(...)` instead of `notes[0]!`; all frontend checks re-run → exi
 Verified by: the re-run.
 Prevention: lint with `npx eslint .` (whole frontend), as check_all does.
 Category: tooling
+
+### ERR-056 — 2026-11-19 — Storage client left an HTTP error response open
+Who: Claude Code
+Phase / task: Phase 5 — task 5 (found by the storage unit test)
+What happened: `ResourceWarning: Implicitly cleaning up <HTTPError 400>` (warnings are errors in tests).
+Cause: `urllib`'s `HTTPError` keeps the response open; the client raised a new error without closing it.
+Fix: `exc.close()` before raising the 503.
+Verified by: 3 storage tests pass with warnings as errors.
+Prevention: close `HTTPError` whenever it is caught.
+Category: bug
