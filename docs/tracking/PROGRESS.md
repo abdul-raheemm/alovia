@@ -63,5 +63,10 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 - [x] Task 6 rule review (sign-off, export, require_signoff), activity log, admin (doctors, invite, assignments), Set password — Raheem + Claude Code — 2026-11-20 (owner approved) (invite links were done in task 2)
 - [x] Task 7 E2E (access control on all 41 routes); review; `make_doctor.py`; manual checklist (owner, done 2026-11-20); CHANGELOG 0.5.0 — Raheem + Claude Code — 2026-11-20
 
+**Phase 5 complete — merged into main 2026-11-20 (`d7f16f0`, release 0.5.0).**
+
+## ⏸ Paused 2026-11-20 — resume with Phase 6 planning (see CONTEXT.md "PAUSED HERE")
+- [ ] Phase 6 step 0: research free LLM options (limits, data policy) → owner chooses → Phase 6 plan
+
 ## Phase 6 — AI drafts · Phase 7 — RAG · Phase 8 — Security · Phase 9 — Deployment
 See `docs/ROADMAP.md`; tasks added when the phase starts.
