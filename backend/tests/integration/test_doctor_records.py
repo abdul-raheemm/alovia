@@ -190,3 +190,15 @@ def test_other_doctors_patients_records_are_hidden(
     assert upload(client, stranger, pid).status_code == 404
     assert client.get(f"{API}/records/{rid}/download", headers=stranger).status_code == 404
     assert client.get(f"{API}/records/{uuid.uuid4()}/download", headers=h).status_code == 404
+
+
+@pytest.mark.parametrize(
+    ("sent", "stored"),
+    [(r"C:\Users\x\scan 1.pdf", "scan 1.pdf"), ("/home/x/scan 2.pdf", "scan 2.pdf")],
+)
+def test_folder_paths_are_dropped_on_any_system(
+    client: TestClient, engine: Engine, storage: FakeStorage, sent: str, stored: str
+) -> None:
+    """Browsers may send a full path; only the file name is kept (Linux and Windows servers)."""
+    h, pid, _ = setup(engine)
+    assert upload(client, h, pid, name=sent).json()["data"]["original_filename"] == stored

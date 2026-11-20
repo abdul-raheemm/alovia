@@ -1,9 +1,12 @@
 export { ApiError, NETWORK_ERROR, createApiClient, type ApiClient } from './api'
 export { AuthProvider, createAuthClient, useAuth } from './auth'
 export type {
+  AdminDoctor,
   Appointment,
   AppointmentInput,
   AppointmentList,
+  AssignmentPatient,
+  AuditEntry,
   CheckinHistory,
   CheckinInput,
   CheckinResult,
@@ -36,6 +39,8 @@ export type {
   PredictionSchema,
   PregnancyEndInput,
   RecordDownload,
+  RuleModule,
+  RuleRow,
   SharedResult,
   SymptomCharts,
   SymptomVocabulary,

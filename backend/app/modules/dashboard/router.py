@@ -6,16 +6,19 @@ import uuid
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Body, Depends, File, Form, Request, UploadFile
+from fastapi.responses import PlainTextResponse
 from sqlalchemy.orm import Session
 
 from app.api import API_PREFIX
 from app.common.responses import Envelope, ok
 from app.core.database import get_db
 from app.core.errors import AppError
-from app.modules.dashboard import care, predictions, records
+from app.modules.dashboard import admin, care, predictions, records, rule_review
 from app.modules.dashboard import patients as service
+from app.modules.dashboard.rule_review import Module as RuleModule
 from app.modules.dashboard.rules import load_ranges
 from app.modules.dashboard.schemas import (
+    AuditEntryOut,
     DoctorAssessmentOut,
     DoctorDatesIn,
     DoctorEndIn,
@@ -36,7 +39,10 @@ from app.modules.dashboard.schemas import (
     RecordOut,
     RecordType,
     ResultOut,
+    RuleModuleOut,
+    RuleRowOut,
     ShareIn,
+    SignoffIn,
     TrendsOut,
 )
 from app.modules.journey import service as journey
@@ -285,6 +291,43 @@ def end_pregnancy(
     """Dashboard §17: the same three choices; no pregnancy_ended inbox item."""
     journey.end_pregnancy(db, account.user, patient, body.status, None)
     return _detail(request, db, patient)
+
+
+# ---- task 6: rule review (§19) and the patient's activity log (§20) ----
+
+
+@router.get("/rules", response_model=Envelope[list[RuleModuleOut]])
+def rules_overview(request: Request, account: Doc, db: Db) -> dict[str, Any]:
+    state = request.app.state
+    out = rule_review.overview(db, state.genetic_rules, state.symptom_rules)
+    return ok([m.model_dump(mode="json") for m in out])
+
+
+@router.post("/rules/{module}/signoff", status_code=201, response_model=Envelope[RuleRowOut])
+def rule_signoff(
+    request: Request, module: RuleModule, body: SignoffIn, account: Doc, db: Db
+) -> dict[str, Any]:
+    state = request.app.state
+    out = rule_review.sign(db, account, module, body, state.genetic_rules, state.symptom_rules)
+    return ok(out.model_dump(mode="json"))
+
+
+@router.get("/rules/{module}/export", response_class=PlainTextResponse)
+def rule_export(request: Request, module: RuleModule, account: Doc, db: Db) -> PlainTextResponse:
+    """§19 Export as a Markdown file download (DEC-080)."""
+    state = request.app.state
+    text = rule_review.export_markdown(db, module, state.genetic_rules, state.symptom_rules)
+    return PlainTextResponse(
+        text,
+        media_type="text/markdown; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="rule_review_signoff_{module}.md"'},
+    )
+
+
+@router.get("/patients/{patient_id}/audit", response_model=Envelope[list[AuditEntryOut]])
+def patient_audit(patient: Assigned, db: Db) -> dict[str, Any]:
+    """§4 / §20: the log entries of an assigned patient (no clinical values)."""
+    return ok([e.model_dump(mode="json") for e in admin.patient_audit(db, patient.id)])
 
 
 patient_router = APIRouter(prefix=f"{API_PREFIX}/patient")

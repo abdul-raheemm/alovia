@@ -6,12 +6,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app import __version__
 from app.api import health
+from app.core.auth_admin import SupabaseAuthAdmin
 from app.core.config import Settings, get_settings
 from app.core.database import make_engine
 from app.core.errors import register_error_handlers
 from app.core.logging import REQUEST_ID_HEADER, configure_logging, request_context
 from app.core.storage import SupabaseStorage
+from app.modules.dashboard import admin_router
 from app.modules.dashboard import router as dashboard
+from app.modules.dashboard.rule_review import require_signoff
 from app.modules.dashboard.rules import load_dashboard_rules, load_ranges
 from app.modules.genetic import router as genetic
 from app.modules.genetic.rules import load_genetic_rules
@@ -44,13 +47,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.genetic_rules = load_genetic_rules()  # inheritance rules (Genetic spec §12)
     app.state.dashboard_rules = load_dashboard_rules()  # settings + messages (Dashboard §23)
     load_ranges()  # training ranges next to the models (§9.4)
+    service_key = k.get_secret_value() if (k := settings.supabase_service_role_key) else None
     app.state.storage = SupabaseStorage(  # private bucket (Dashboard §14)
-        settings.supabase_url,
-        key.get_secret_value() if (key := settings.supabase_service_role_key) else None,
-        settings.storage_bucket,
+        settings.supabase_url, service_key, settings.storage_bucket
     )
+    app.state.auth_admin = SupabaseAuthAdmin(settings.supabase_url, service_key)  # §21 invites
     # public signing keys, fetched on first use and cached (app.core.auth)
     app.state.jwks_client = jwt.PyJWKClient(settings.supabase_jwks_url, cache_keys=True)
+    if app.state.dashboard_rules.settings.require_signoff:  # DEC-081: unchecked rows stop startup
+        try:
+            require_signoff(app.state.engine, app.state.genetic_rules, app.state.symptom_rules)
+        except RuntimeError:
+            app.state.engine.dispose()  # close the check's pooled connection before stopping
+            raise
     register_error_handlers(app)
     app.middleware("http")(request_context)
     # added last so it wraps everything, including the 500 response
@@ -72,4 +81,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(genetic.router)
     app.include_router(dashboard.router)
     app.include_router(dashboard.patient_router)
+    app.include_router(admin_router.router)
     return app

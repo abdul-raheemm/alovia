@@ -826,3 +826,13 @@ Done:
 - Proposals: DEC-096..098.
 Checks: see the task 5 review report.
 Next step: owner review of task 5 and a one-time real upload through the doctor app; then task 6 (rule review, activity log, admin).
+
+## Session 38 — 2026-11-20 — Phase 5 task 6: rule review, activity log, admin
+Who: Raheem + agent: Claude Code
+Done:
+- Owner: all task 5/6 decisions as recommended (DEC-096..104); manual testing moved to the task 7 review; asked for proper debugging and a list of possible improvements.
+- Backend: rule review (rows from the shared builders, sign-off, export, require_signoff), Supabase invite client, admin doctors/assignments/audit, doctor patient audit. 10 integration tests (incl. §25 tests 2, 13, 14) + the records path test.
+- Frontend: Rule review, Admin, Activity section, Set password; 8 E2E runs (both viewports, axe).
+- Debugging: full check found an unclosed DB connection after a refused start (ERR-057, fixed); review found upload file names would keep folder paths on Linux (ERR-058, fixed, test added); duplicate landmark name on the admin log (fixed).
+Checks: see the task 6 review report.
+Next step: owner review of task 6, then task 7 (phase review, make_doctor, manual checklist, CHANGELOG 0.5.0).

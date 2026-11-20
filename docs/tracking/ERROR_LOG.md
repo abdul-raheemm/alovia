@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Code that parses paths or names from users must behave the same on Linux (deploy) as on Windows (dev); avoid platform-dependent classes like `PurePath` (ERR-058).
 - A Recharts chart wrapped in `aria-hidden` (data given as text instead) needs `accessibilityLayer={false}`, or axe reports focusable hidden content (ERR-051).
 - Times that are compared must come from one clock: write and check expiry with the database's `now()`, never the app server's (ERR-048).
 - In Git Bash, never pass a Python regex with backslashes (or a long YAML/text block) through an inline heredoc; write a script or the file with the file tool (ERR-044).
@@ -596,4 +597,24 @@ Cause: `urllib`'s `HTTPError` keeps the response open; the client raised a new e
 Fix: `exc.close()` before raising the 503.
 Verified by: 3 storage tests pass with warnings as errors.
 Prevention: close `HTTPError` whenever it is caught.
+Category: bug
+
+### ERR-057 — 2026-11-20 — A refused start left a database connection open
+Who: Claude Code
+Phase / task: Phase 5 — task 6 (full check run)
+What happened: `test_logged_today_and_weekly_summary` failed with `ResourceWarning: psycopg.Connection ... deleted while still open`, unrelated to its own code.
+Cause: `create_app` with `require_signoff` on opened a pooled connection for the check and raised without disposing the engine; garbage collection closed it later, inside another test.
+Fix: dispose the engine before re-raising.
+Verified by: the rule review and symptom suites pass with ResourceWarning as an error; full check re-run.
+Prevention: any start-up step that touches the database cleans up on failure.
+Category: bug
+
+### ERR-058 — 2026-11-20 — Upload names would keep Windows folder paths on a Linux server
+Who: Claude Code
+Phase / task: Phase 5 — task 6 debugging review (code from task 5)
+What happened: review found `PurePath(filename).name` only strips folders for the server's own system; on Linux (Render, Phase 9) `C:\fake\scan.pdf` would be stored whole. The test passed only because tests run on Windows.
+Cause: platform-dependent path class.
+Fix: `PureWindowsPath`, which splits on both separators everywhere; test with a Windows and a POSIX path.
+Verified by: records tests pass.
+Prevention: Lesson added.
 Category: bug

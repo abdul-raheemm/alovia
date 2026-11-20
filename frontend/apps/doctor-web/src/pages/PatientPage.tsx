@@ -1,4 +1,4 @@
-import { userMessage, type InviteLink, type PatientDetail } from '@alovia/shared'
+import { userMessage, type AuditEntry, type InviteLink, type PatientDetail } from '@alovia/shared'
 import { Button, Card, cn, ErrorState, PageSkeleton } from '@alovia/ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Copy, Link2 } from 'lucide-react'
@@ -24,6 +24,7 @@ import { PregnancyTab } from '../components/care/PregnancyTab'
 import { RecordsTab } from '../components/care/RecordsTab'
 import { SymptomsTab } from '../components/care/SymptomsTab'
 import { PatientForm } from '../components/PatientForm'
+import { AuditTable } from './AdminPage'
 import { PredictionTab } from '../components/predictions/PredictionTab'
 
 function Box({ title, children }: { title: string; children: ReactNode }) {
@@ -204,6 +205,8 @@ function Overview({ patient }: { patient: PatientDetail }) {
         </Card>
       </section>
 
+      <PatientActivity patientId={patient.id} />
+
       <section aria-labelledby="actions-heading" className="flex flex-col gap-3">
         <h2 id="actions-heading">Quick actions</h2>
         <ul className="flex flex-wrap gap-3">
@@ -217,6 +220,31 @@ function Overview({ patient }: { patient: PatientDetail }) {
         </ul>
       </section>
     </div>
+  )
+}
+
+/** §20 / §4: this patient's activity log entries (no clinical values). */
+function PatientActivity({ patientId }: { patientId: string }) {
+  const log = useQuery({
+    queryKey: ['doctor-patient-audit', patientId],
+    queryFn: () => api.get<AuditEntry[]>(`/doctor/patients/${patientId}/audit`),
+  })
+  return (
+    <section aria-labelledby="activity-heading" className="flex flex-col gap-3">
+      <h2 id="activity-heading">Activity</h2>
+      <Card>
+        {log.isPending ? (
+          <PageSkeleton />
+        ) : log.isError ? (
+          <ErrorState
+            message={userMessage(log.error, 'doctor')}
+            onRetry={() => void log.refetch()}
+          />
+        ) : (
+          <AuditTable entries={log.data} caption="Activity on this patient" />
+        )}
+      </Card>
+    </section>
   )
 }
 

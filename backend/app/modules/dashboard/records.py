@@ -2,7 +2,7 @@
 short-lived download links. Not deleted in v1; patients cannot see them in v1 ([OPEN])."""
 
 import uuid
-from pathlib import PurePath
+from pathlib import PureWindowsPath
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -28,7 +28,7 @@ NOT_ALLOWED = "Only PDF, JPG, PNG"
 
 def file_format(filename: str, head: bytes, allowed: tuple[str, ...]) -> str:
     """The checked format, or 415: allowed extension AND matching file signature."""
-    ext = EXTENSIONS.get(PurePath(filename).suffix.lower().lstrip("."))
+    ext = EXTENSIONS.get(PureWindowsPath(filename).suffix.lower().lstrip("."))
     if ext is None or ext not in allowed or not head.startswith(SIGNATURES[ext][0]):
         raise AppError("UNSUPPORTED_FILE_TYPE", NOT_ALLOWED, status=415)
     return ext
@@ -85,7 +85,8 @@ def upload(
         uploaded_by=account.doctor.id,
         file_type=file_type,
         storage_path=path,
-        original_filename=PurePath(filename).name[:255] or f"record.{ext}",
+        # PureWindowsPath splits on both \ and /, whatever system the server runs on
+        original_filename=PureWindowsPath(filename).name[:255] or f"record.{ext}",
         note=note,
     )
     db.add(row)

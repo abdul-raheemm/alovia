@@ -1,5 +1,5 @@
 import { AuthProvider, CREDITS_SOURCE, LEGAL_DOCS, useAuth, type LegalDoc } from '@alovia/shared'
-import { Logo, Markdown, PlaceholderPage, SignInForm } from '@alovia/ui'
+import { Logo, Markdown, SignInForm } from '@alovia/ui'
 import { QueryClientProvider } from '@tanstack/react-query'
 import {
   createBrowserRouter,
@@ -14,7 +14,10 @@ import { AccountGate } from '../components/AccountGate'
 import { useMe } from '../components/DoctorShell'
 import { HomePage, NewPatientPage, PatientsPage } from '../pages/HomePages'
 import { GeneticReviewPage } from '../pages/GeneticReviewPage'
+import { AdminPage } from '../pages/AdminPage'
 import { PatientPage } from '../pages/PatientPage'
+import { RuleReviewPage } from '../pages/RuleReviewPage'
+import { SetPasswordPage } from '../pages/SetPasswordPage'
 import { authClient, queryClient } from './services'
 
 function PublicLayout() {
@@ -95,7 +98,7 @@ function AboutPage() {
 function AdminOnly() {
   const me = useMe()
   if (me.user.role !== 'admin') return <Navigate to="/home" replace />
-  return <PlaceholderPage title="Admin" />
+  return <AdminPage />
 }
 
 function NotFound() {
@@ -113,6 +116,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Navigate to="/home" replace /> },
       { path: '/signin', element: <SignInPage /> },
+      { path: '/set-password', element: <SetPasswordPage /> },
       { path: '/about', element: <AboutPage /> },
       ...LEGAL_DOCS.map((doc) => ({ path: doc.path, element: <LegalPage doc={doc} /> })),
       { path: '*', element: <NotFound /> },
@@ -121,13 +125,12 @@ const router = createBrowserRouter([
   {
     element: <AccountGate />,
     children: [
-      // TODO(Phase 5 task 6): rule review and admin screens
       { path: '/home', element: <HomePage /> },
       { path: '/patients', element: <PatientsPage /> },
       { path: '/patients/new', element: <NewPatientPage /> },
       { path: '/patients/:id/:tab?', element: <PatientPage /> },
       { path: '/genetic-review', element: <GeneticReviewPage /> },
-      { path: '/rule-review', element: <PlaceholderPage title="Rule review" /> },
+      { path: '/rule-review', element: <RuleReviewPage /> },
       { path: '/admin', element: <AdminOnly /> },
     ],
   },

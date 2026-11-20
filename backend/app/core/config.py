@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     test_database_url: str | None = None
     # base of the invite links doctors send (Dashboard §8.2); the deployed URL is set in Phase 9
     patient_app_url: str = "http://localhost:5173"
+    # where the doctor invite email leads (Set password page, DEC-101); deployed URL in Phase 9
+    doctor_app_url: str = "http://localhost:5174"
     # private Storage bucket for medical records (Dashboard §14); records answer 503 without them
     supabase_url: str | None = None
     supabase_service_role_key: SecretStr | None = None  # backend only; hidden when printed

@@ -65,3 +65,10 @@ export type NoteInput = components['schemas']['NoteIn']
 /** Medical records (Dashboard §14). */
 export type MedicalRecord = components['schemas']['RecordOut']
 export type RecordDownload = components['schemas']['DownloadOut']
+
+/** Rule review, admin and activity log (Dashboard §19-21). */
+export type RuleModule = components['schemas']['RuleModuleOut']
+export type RuleRow = components['schemas']['RuleRowOut']
+export type AdminDoctor = components['schemas']['AdminDoctorOut']
+export type AssignmentPatient = components['schemas']['AssignmentPatientOut']
+export type AuditEntry = components['schemas']['AuditEntryOut']

@@ -338,3 +338,112 @@ class DownloadOut(BaseModel):
 
     url: str
     expires_in: int
+
+
+# ---- task 6: rule review (§19) ----
+
+
+class SignoffIn(BaseModel):
+    """§19: tick "checked" (or not) and an optional comment for one row."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    key: str = Field(min_length=1, max_length=200)
+    checked: bool
+    comment: Annotated[str, StringConstraints(strip_whitespace=True, max_length=2000)] | None = None
+
+
+class RuleRowOut(BaseModel):
+    key: str
+    item_id: str
+    section: str
+    what_to_check: str
+    current_value: str
+    source: str
+    checked: bool | None  # None = not signed for this rules version yet
+    comment: str | None
+    doctor_name: str | None
+    signed_at: datetime | None
+
+
+class RuleModuleOut(BaseModel):
+    module: Literal["genetic", "symptom", "journey"]
+    rules_version: str
+    total: int
+    checked: int
+    rows: list[RuleRowOut]
+
+
+# ---- task 6: admin and activity log (§20, §21) ----
+
+Email = Annotated[
+    str,
+    StringConstraints(strip_whitespace=True, max_length=254, pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$"),
+]
+Name = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=100)]
+Specialty = Annotated[str, StringConstraints(strip_whitespace=True, max_length=100)]
+
+
+class DoctorInviteIn(BaseModel):
+    """§21 / UX A1: invite by email, with name and specialty."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    email: Email
+    name: Name
+    specialty: Specialty | None = None
+
+
+class DoctorUpdateIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    name: Name
+    specialty: Specialty | None = None
+    is_active: bool
+
+
+class AdminDoctorOut(BaseModel):
+    id: uuid.UUID
+    name: str
+    specialty: str | None
+    email: str
+    is_active: bool
+    patient_count: int
+
+
+class AssignmentIn(BaseModel):
+    """§21: add a doctor to a patient, or set an assigned doctor as primary."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    patient_id: uuid.UUID
+    doctor_id: uuid.UUID
+    is_primary: bool = False
+
+
+class AssignedDoctorAdmin(BaseModel):
+    doctor_id: uuid.UUID
+    name: str
+    is_primary: bool
+    is_active: bool
+
+
+class AssignmentPatientOut(BaseModel):
+    patient_id: uuid.UUID
+    patient_name: str
+    doctors: list[AssignedDoctorAdmin]
+
+
+class AuditEntryOut(BaseModel):
+    """§20: who did what to which record, when. Never clinical values."""
+
+    id: uuid.UUID
+    created_at: datetime
+    actor_email: str | None
+    actor_role: str | None
+    actor_name: str | None
+    action: str
+    entity_type: str
+    entity_id: str | None
+    patient_id: uuid.UUID | None
+    patient_name: str | None

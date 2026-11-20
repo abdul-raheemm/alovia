@@ -175,7 +175,12 @@ export async function signInAsPatient(page: Page, me: unknown = TEST_PATIENT_ME)
     )
   }
   // and for the doctor app's home lists
-  for (const list of ['doctor/patients', 'doctor/inbox', 'doctor/inbox?*']) {
+  for (const list of [
+    'doctor/patients',
+    'doctor/inbox',
+    'doctor/inbox?*',
+    'doctor/patients/*/audit',
+  ]) {
     await page.route(`**/api/v1/${list}`, (route) =>
       route.fulfill({ json: { data: [], error: null } }),
     )

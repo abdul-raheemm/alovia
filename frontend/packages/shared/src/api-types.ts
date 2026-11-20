@@ -4,6 +4,100 @@
  */
 
 export interface paths {
+    "/api/v1/admin/assignments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search Assignments */
+        get: operations["search_assignments_api_v1_admin_assignments_get"];
+        put?: never;
+        /** Assign */
+        post: operations["assign_api_v1_admin_assignments_post"];
+        /** Unassign */
+        delete: operations["unassign_api_v1_admin_assignments_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Audit
+         * @description UX A3: filter by user, action and date.
+         */
+        get: operations["audit_api_v1_admin_audit_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/audit/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Audit Actions
+         * @description The action names in the log, for the filter list.
+         */
+        get: operations["audit_actions_api_v1_admin_audit_actions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/doctors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Doctors */
+        get: operations["list_doctors_api_v1_admin_doctors_get"];
+        put?: never;
+        /** Invite Doctor */
+        post: operations["invite_doctor_api_v1_admin_doctors_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/doctors/{doctor_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update Doctor */
+        put: operations["update_doctor_api_v1_admin_doctors__doctor_id__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/doctor/appointments/{appointment_id}": {
         parameters: {
             query?: never;
@@ -178,6 +272,26 @@ export interface paths {
         put?: never;
         /** Add Appointment */
         post: operations["add_appointment_api_v1_doctor_patients__patient_id__appointments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/patients/{patient_id}/audit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Patient Audit
+         * @description §4 / §20: the log entries of an assigned patient (no clinical values).
+         */
+        get: operations["patient_audit_api_v1_doctor_patients__patient_id__audit_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -414,6 +528,60 @@ export interface paths {
         get: operations["download_record_api_v1_doctor_records__record_id__download_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Rules Overview */
+        get: operations["rules_overview_api_v1_doctor_rules_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/rules/{module}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Rule Export
+         * @description §19 Export as a Markdown file download (DEC-080).
+         */
+        get: operations["rule_export_api_v1_doctor_rules__module__export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/doctor/rules/{module}/signoff": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Rule Signoff */
+        post: operations["rule_signoff_api_v1_doctor_rules__module__signoff_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -847,6 +1015,24 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AdminDoctorOut */
+        AdminDoctorOut: {
+            /** Email */
+            email: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Active */
+            is_active: boolean;
+            /** Name */
+            name: string;
+            /** Patient Count */
+            patient_count: number;
+            /** Specialty */
+            specialty: string | null;
+        };
         /**
          * AppointmentIn
          * @description Create or edit an appointment (§9.3): date, optional time, title (max 100 characters),
@@ -1004,6 +1190,85 @@ export interface components {
             is_primary: boolean;
             /** Name */
             name: string;
+        };
+        /** AssignedDoctorAdmin */
+        AssignedDoctorAdmin: {
+            /**
+             * Doctor Id
+             * Format: uuid
+             */
+            doctor_id: string;
+            /** Is Active */
+            is_active: boolean;
+            /** Is Primary */
+            is_primary: boolean;
+            /** Name */
+            name: string;
+        };
+        /**
+         * AssignmentIn
+         * @description §21: add a doctor to a patient, or set an assigned doctor as primary.
+         */
+        AssignmentIn: {
+            /**
+             * Doctor Id
+             * Format: uuid
+             */
+            doctor_id: string;
+            /**
+             * Is Primary
+             * @default false
+             */
+            is_primary: boolean;
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+        };
+        /** AssignmentPatientOut */
+        AssignmentPatientOut: {
+            /** Doctors */
+            doctors: components["schemas"]["AssignedDoctorAdmin"][];
+            /**
+             * Patient Id
+             * Format: uuid
+             */
+            patient_id: string;
+            /** Patient Name */
+            patient_name: string;
+        };
+        /**
+         * AuditEntryOut
+         * @description §20: who did what to which record, when. Never clinical values.
+         */
+        AuditEntryOut: {
+            /** Action */
+            action: string;
+            /** Actor Email */
+            actor_email: string | null;
+            /** Actor Name */
+            actor_name: string | null;
+            /** Actor Role */
+            actor_role: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Entity Id */
+            entity_id: string | null;
+            /** Entity Type */
+            entity_type: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Patient Id */
+            patient_id: string | null;
+            /** Patient Name */
+            patient_name: string | null;
         };
         /** BodyAreaDetail */
         BodyAreaDetail: {
@@ -1413,6 +1678,18 @@ export interface components {
             status: "ended_birth" | "ended_loss" | "ended_not_specified";
         };
         /**
+         * DoctorInviteIn
+         * @description §21 / UX A1: invite by email, with name and specialty.
+         */
+        DoctorInviteIn: {
+            /** Email */
+            email: string;
+            /** Name */
+            name: string;
+            /** Specialty */
+            specialty?: string | null;
+        };
+        /**
          * DoctorNoteOut
          * @description A note her doctor shared (§10.3); read-only for the patient.
          */
@@ -1461,6 +1738,15 @@ export interface components {
             };
             /** Puqe Bands */
             puqe_bands: components["schemas"]["PuqeBandOut"][];
+        };
+        /** DoctorUpdateIn */
+        DoctorUpdateIn: {
+            /** Is Active */
+            is_active: boolean;
+            /** Name */
+            name: string;
+            /** Specialty */
+            specialty?: string | null;
         };
         /**
          * DownloadOut
@@ -1562,6 +1848,12 @@ export interface components {
             /** Symptom */
             symptom: string;
         };
+        /** Envelope[AdminDoctorOut] */
+        Envelope_AdminDoctorOut_: {
+            data: components["schemas"]["AdminDoctorOut"];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[AppointmentOut] */
         Envelope_AppointmentOut_: {
             data: components["schemas"]["AppointmentOut"];
@@ -1577,6 +1869,12 @@ export interface components {
         /** Envelope[AssessmentOut] */
         Envelope_AssessmentOut_: {
             data: components["schemas"]["AssessmentOut"];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[AssignmentPatientOut] */
+        Envelope_AssignmentPatientOut_: {
+            data: components["schemas"]["AssignmentPatientOut"];
             /** Error */
             error?: null;
         };
@@ -1695,6 +1993,12 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[RuleRowOut] */
+        Envelope_RuleRowOut_: {
+            data: components["schemas"]["RuleRowOut"];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[TrendsOut] */
         Envelope_TrendsOut_: {
             data: components["schemas"]["TrendsOut"];
@@ -1707,10 +2011,31 @@ export interface components {
             /** Error */
             error?: null;
         };
+        /** Envelope[list[AdminDoctorOut]] */
+        Envelope_list_AdminDoctorOut__: {
+            /** Data */
+            data: components["schemas"]["AdminDoctorOut"][];
+            /** Error */
+            error?: null;
+        };
         /** Envelope[list[AssessmentOut]] */
         Envelope_list_AssessmentOut__: {
             /** Data */
             data: components["schemas"]["AssessmentOut"][];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[AssignmentPatientOut]] */
+        Envelope_list_AssignmentPatientOut__: {
+            /** Data */
+            data: components["schemas"]["AssignmentPatientOut"][];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[AuditEntryOut]] */
+        Envelope_list_AuditEntryOut__: {
+            /** Data */
+            data: components["schemas"]["AuditEntryOut"][];
             /** Error */
             error?: null;
         };
@@ -1781,6 +2106,20 @@ export interface components {
         Envelope_list_ResultOut__: {
             /** Data */
             data: components["schemas"]["ResultOut"][];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[RuleModuleOut]] */
+        Envelope_list_RuleModuleOut__: {
+            /** Data */
+            data: components["schemas"]["RuleModuleOut"][];
+            /** Error */
+            error?: null;
+        };
+        /** Envelope[list[str]] */
+        Envelope_list_str__: {
+            /** Data */
+            data: string[];
             /** Error */
             error?: null;
         };
@@ -2465,6 +2804,45 @@ export interface components {
             /** Top Contributing Factors */
             top_contributing_factors: components["schemas"]["Factor"][];
         };
+        /** RuleModuleOut */
+        RuleModuleOut: {
+            /** Checked */
+            checked: number;
+            /**
+             * Module
+             * @enum {string}
+             */
+            module: "genetic" | "symptom" | "journey";
+            /** Rows */
+            rows: components["schemas"]["RuleRowOut"][];
+            /** Rules Version */
+            rules_version: string;
+            /** Total */
+            total: number;
+        };
+        /** RuleRowOut */
+        RuleRowOut: {
+            /** Checked */
+            checked: boolean | null;
+            /** Comment */
+            comment: string | null;
+            /** Current Value */
+            current_value: string;
+            /** Doctor Name */
+            doctor_name: string | null;
+            /** Item Id */
+            item_id: string;
+            /** Key */
+            key: string;
+            /** Section */
+            section: string;
+            /** Signed At */
+            signed_at: string | null;
+            /** Source */
+            source: string;
+            /** What To Check */
+            what_to_check: string;
+        };
         /** SchemaField */
         SchemaField: {
             /** Feature */
@@ -2514,6 +2892,18 @@ export interface components {
             shared_by_name: string | null;
             /** Template Key */
             template_key: string;
+        };
+        /**
+         * SignoffIn
+         * @description §19: tick "checked" (or not) and an optional comment for one row.
+         */
+        SignoffIn: {
+            /** Checked */
+            checked: boolean;
+            /** Comment */
+            comment?: string | null;
+            /** Key */
+            key: string;
         };
         /**
          * SizeReference
@@ -2810,6 +3200,244 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    search_assignments_api_v1_admin_assignments_get: {
+        parameters: {
+            query?: {
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_AssignmentPatientOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    assign_api_v1_admin_assignments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignmentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AssignmentPatientOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unassign_api_v1_admin_assignments_delete: {
+        parameters: {
+            query: {
+                patient_id: string;
+                doctor_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AssignmentPatientOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    audit_api_v1_admin_audit_get: {
+        parameters: {
+            query?: {
+                actor?: string | null;
+                action?: string | null;
+                day_from?: string | null;
+                day_to?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_AuditEntryOut__"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    audit_actions_api_v1_admin_audit_actions_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_str__"];
+                };
+            };
+        };
+    };
+    list_doctors_api_v1_admin_doctors_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_AdminDoctorOut__"];
+                };
+            };
+        };
+    };
+    invite_doctor_api_v1_admin_doctors_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DoctorInviteIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AdminDoctorOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_doctor_api_v1_admin_doctors__doctor_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                doctor_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DoctorUpdateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_AdminDoctorOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     edit_appointment_api_v1_doctor_appointments__appointment_id__put: {
         parameters: {
             query?: never;
@@ -3231,6 +3859,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_AppointmentOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    patient_audit_api_v1_doctor_patients__patient_id__audit_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                patient_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_AuditEntryOut__"];
                 };
             };
             /** @description Validation Error */
@@ -3724,6 +4383,92 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Envelope_DownloadOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rules_overview_api_v1_doctor_rules_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_list_RuleModuleOut__"];
+                };
+            };
+        };
+    };
+    rule_export_api_v1_doctor_rules__module__export_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                module: "genetic" | "symptom" | "journey";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rule_signoff_api_v1_doctor_rules__module__signoff_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                module: "genetic" | "symptom" | "journey";
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SignoffIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Envelope_RuleRowOut_"];
                 };
             };
             /** @description Validation Error */

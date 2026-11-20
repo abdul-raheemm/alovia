@@ -15,6 +15,7 @@ Each part has its own `.env.example` (committed, empty values) and `.env` (never
 | `SUPABASE_JWT_ISSUER` / `SUPABASE_JWKS_URL` | Token verification (the project uses JWT signing keys, so no JWT secret is needed) | 1 |
 | `CORS_ORIGINS` | Comma-separated frontend origins | 1 |
 | `STORAGE_BUCKET` | Private bucket name (`medical-records`); records routes answer 503 when it, `SUPABASE_URL` or `SUPABASE_SERVICE_ROLE_KEY` is missing (the key is read as a hidden secret and never logged) | 5 |
+| `DOCTOR_APP_URL` | Where the admin's doctor-invite email leads (`<url>/set-password`, DEC-101); default `http://localhost:5174`; must be listed in Supabase → Authentication → URL Configuration → Redirect URLs | 5 |
 | `PATIENT_APP_URL` | Start of the invite links doctors send (Dashboard §8.2); default `http://localhost:5173`; the deployed patient app URL in Phase 9 | 5 |
 | `LLM_PROVIDER`, `LLM_MODEL`, `LLM_API_KEY` | AI drafts / RAG | 6–7 |
 | `EMBEDDING_PROVIDER`, `EMBEDDING_MODEL`, `EMBEDDING_API_KEY` | RAG | 7 |
