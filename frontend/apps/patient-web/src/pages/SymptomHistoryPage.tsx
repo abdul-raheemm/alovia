@@ -155,7 +155,7 @@ function PuqeChart({ points }: { points: SymptomCharts['puqe'] }) {
   }))
   return (
     <Card className="flex flex-col gap-3">
-      <h2>Nausea and vomiting score (PUQE-24)</h2>
+      <h2 className="font-sans">Nausea and vomiting score (PUQE-24)</h2>
       <div className="h-48 w-full">
         <ResponsiveContainer>
           <LineChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: -20 }}>

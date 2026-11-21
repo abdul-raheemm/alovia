@@ -119,13 +119,15 @@ Tints of the primary only; no new hue. Weeks still to come use the same arc colo
 
 ## 4. Typography
 
-Fonts are **self-hosted** through `@fontsource` packages (no Google Fonts CDN, so no third-party requests). Both are SIL Open Font Licence.
+Fonts are **self-hosted** through `@fontsource-variable` packages (no Google Fonts CDN, so no third-party requests). All are SIL Open Font Licence. Decided by DEC-111 (2026-11-21).
 
 | | Patient app | Doctor app |
 |---|---|---|
-| Heading + body | **Nunito** (rounded, friendly) | **Inter** (clear, dense) |
-| Proposal (DEC-111, pending the owner's visual check) | Fraunces (display) + Figtree (body) | Geist |
-| Numbers in tables/charts | Nunito, tabular figures | Inter, tabular figures |
+| Display (`--font-display`: H1 and H2, incl. the Home week headline / ring headline; big numerals) | **Fraunces** (variable, optical size axis) | **Geist** (same as body) |
+| Body and UI (`--font-sans`) | **Figtree** (variable) | **Geist** (variable) |
+| Numbers in tables/charts | Figtree, tabular figures | Geist, tabular figures |
+
+Safety, urgent and clinical-message text (advice screens, the urgent page, warning signs, the medical disclaimer, genetic conditions and results, the PUQE score) is **always `--font-sans`**, never the serif: such headings carry the `font-sans` class. H3 and smaller stay on the sans. Headings use `text-wrap: balance`, paragraphs `text-wrap: pretty`; display text has letter-spacing -0.01em.
 
 | Style | Size / weight / line height |
 |---|---|
@@ -166,7 +168,7 @@ Label always visible above the field (no placeholder-only labels). Focus: 2px pr
 Patient: surface, large radius, 20px padding, small shadow (light) / border (dark). Doctor: surface, medium radius, 16px padding, border. **Content-type marking (Journey D15):** educational content = primary-soft background with a small "Learn" label and source line; patient's own data = surface with "You logged"; doctor-confirmed = surface with a doctor icon and "From your doctor".
 
 ## 11. Navigation
-- **Patient, phone:** bottom nav bar with the items from `rules/journey/config.yaml` `nav_items` (now Home, Calendar, Log symptoms, Appointments, Doctor notes, More — DEC-040), urgent button pinned top-right on every screen; notification bar under the header. `[OPEN]` the redesign (`FRONTEND_REDESIGN.md` §7.4, open item 3) proposes Home, Calendar, Log (raised centre), Appointments, More, with Doctor notes under More plus a Home status card; the config stays as it is until the owner decides.
+- **Patient, phone:** bottom nav bar with the items from `rules/journey/config.yaml` `nav_items` (now Home, Calendar, Log symptoms, Appointments, Doctor notes, More — DEC-040), urgent button pinned top-right on every screen; notification bar under the header. **Decided 2026-11-21 (DEC-112):** with the redesigned shell the items become Home, Calendar, Log (raised centre), Appointments, More; Doctor notes moves under More, with the "New doctor note" status card on Home. The config changes in redesign build step 2.
 - **Patient, laptop:** left side bar with the same items.
 - **Doctor:** left side bar (Home, Patients, Genetic review, Rule review, Admin [admin only]); top bar with search and theme toggle; collapses to a menu on small screens.
 

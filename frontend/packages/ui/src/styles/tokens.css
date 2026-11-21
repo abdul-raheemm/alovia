@@ -20,11 +20,19 @@
   --color-success: #1f6b4a;
   --color-info: var(--color-primary);
 
-  --font-sans: 'Nunito', system-ui, sans-serif;
+  --font-sans: 'Figtree Variable', system-ui, sans-serif;
+  /* FRONTEND_REDESIGN §5.3: headings and big numerals; safety text always stays on --font-sans */
+  --font-display: var(--font-sans);
 
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
+
+  /* FRONTEND_REDESIGN §5.4 motion: transform and opacity only */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
 
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
   --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
@@ -42,7 +50,13 @@
   --color-text: #2b2440;
   --color-muted: #5e5873;
   --color-border: #e6e0f2;
-  --font-sans: 'Nunito', system-ui, sans-serif;
+  /* §3.5 pregnancy ring (patient only), contrast-checked in DESIGN_SYSTEM §3.4 */
+  --color-arc-1: #907bcc;
+  --color-arc-2: #8169c5;
+  --color-arc-3: #6b4fbb;
+  --color-track: var(--color-border);
+  --font-sans: 'Figtree Variable', system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, serif;
   --radius-sm: 8px;
   --radius-md: 16px;
   --radius-lg: 24px;
@@ -57,6 +71,9 @@
   --color-text: #eeeaf6;
   --color-muted: #b4acc8;
   --color-border: #3a3350;
+  --color-arc-1: #8073a8;
+  --color-arc-2: #9989c8;
+  --color-arc-3: #b9a6f2;
 }
 
 /* §3.2 Doctor app */
@@ -70,7 +87,8 @@
   --color-text: #1e2230;
   --color-muted: #4e566a;
   --color-border: #dde1ea;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Geist Variable', system-ui, sans-serif;
+  --font-display: var(--font-sans);
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;

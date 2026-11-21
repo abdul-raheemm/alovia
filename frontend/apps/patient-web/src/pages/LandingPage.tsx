@@ -16,7 +16,7 @@ export function LandingPage() {
         data only.
       </p>
       <Card>
-        <h2 className="mb-2">Medical disclaimer</h2>
+        <h2 className="mb-2 font-sans">Medical disclaimer</h2>
         <p>{fullDisclaimer()}</p>
       </Card>
       <div className="flex flex-col items-start gap-3">

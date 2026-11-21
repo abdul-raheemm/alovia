@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Before showing a visual comparison, check the changed style is actually applied to visible elements (computed style or a look at the shot), not only that the screenshot was taken (ERR-064).
 - Before running E2E tests, check ports 5173/5174 are free: Playwright reuses a running dev server, which carries the real .env (ERR-062).
 - A test that loops over discovered items must also assert it found some, or it can pass while checking nothing (ERR-059).
 - Code that parses paths or names from users must behave the same on Linux (deploy) as on Windows (dev); avoid platform-dependent classes like `PurePath` (ERR-058).
@@ -659,4 +660,44 @@ Cause: the owner's `npm run dev` servers held ports 5173/5174; Playwright (`reus
 Fix: waited until the ports were free, then ran the full check.
 Verified by: port check (no listeners) and the full run.
 Prevention: Lesson added.
+Category: environment
+
+### ERR-063 — 2026-11-21 — Temporary Playwright spec used `__dirname`
+Who: Claude Code
+Phase / task: Redesign step 1 (font comparison screenshots)
+What happened: "ReferenceError: __dirname is not defined".
+Cause: the E2E specs run as ES modules, where `__dirname` does not exist.
+Fix: used `process.cwd()` (Playwright runs from `frontend/`).
+Verified by: the 4 screenshots were taken.
+Prevention: none needed (temporary file, deleted).
+Category: tool
+
+### ERR-064 — 2026-11-21 — First font comparison did not show the display font
+Who: Claude Code
+Phase / task: Redesign step 1
+What happened: the "Fraunces + Figtree" screenshots showed sans headings only.
+Cause: the display font was set on `h1` only, and Home's only `h1` is screen-reader only; the visible headline is an `h2`. Assumed it worked because the run passed.
+Fix: caught by looking at the shots before sending; re-rendered with the display font on visible headings; the final wiring was checked with computed styles.
+Verified by: computed `font-family` (week headline Fraunces, urgent heading Figtree) and the screenshots.
+Prevention: Lesson added.
+Category: wrong assumption
+
+### ERR-065 — 2026-11-21 — Prettier failed after a scripted edit
+Who: Claude Code
+Phase / task: Redesign step 1
+What happened: `format:check` warned on `Advice.tsx`.
+Cause: adding `'font-sans'` made a `cn(...)` call longer than the line limit.
+Fix: `npx prettier --write` on the file; frontend checks re-run.
+Verified by: format, lint, types, unit, build, E2E all passed.
+Prevention: run Prettier on files changed by scripts before the full check.
+Category: tooling
+
+### ERR-066 — 2026-11-21 — 21st.dev MCP server never appeared
+Who: Claude Code
+Phase / task: Redesign toolkit setup
+What happened: the owner set `API_KEY_21ST`, but `/mcp` did not list 21st and no log existed.
+Cause: the plugin's `.mcp.json` had a `url` but no `"type": "http"`, so Claude Code dropped the entry silently.
+Fix: added `"type": "http"` to `~/.claude/plugins/cache/21st-dev/21st/1.0.1/.mcp.json` (backup `.mcp.json.bak`); key still read from the environment variable.
+Verified by: `claude mcp list` → `plugin:21st:21st ... ✔ Connected`.
+Prevention: a plugin update replaces the file; re-add the line if 21st disappears again.
 Category: environment

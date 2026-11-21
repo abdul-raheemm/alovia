@@ -75,7 +75,7 @@ export function UrgentPage() {
 
   return (
     <form onSubmit={send} noValidate className="flex flex-col gap-4">
-      <h1>{TITLE}</h1>
+      <h1 className="font-sans">{TITLE}</h1>
       <NotMonitoredNotice />
       {submit.isError && !cannotReach(submit.error) && Object.keys(fields).length === 0 && (
         <ErrorState message={userMessage(submit.error, 'patient')} />

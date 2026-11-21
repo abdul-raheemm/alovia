@@ -1,7 +1,6 @@
-import '@fontsource/nunito/400.css'
-import '@fontsource/nunito/500.css'
-import '@fontsource/nunito/600.css'
-import '@fontsource/nunito/700.css'
+import '@fontsource-variable/figtree'
+// opsz axis: optical sizing for the display font (FRONTEND_REDESIGN §5.3)
+import '@fontsource-variable/fraunces/opsz.css'
 import './index.css'
 
 import { watchSystemTheme } from '@alovia/ui'

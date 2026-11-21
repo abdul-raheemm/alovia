@@ -66,7 +66,7 @@ export function MonthDetailPage() {
       )}
       <p className="text-sm text-muted">{messageText(messages, 'msg_typical_not_yours')}</p>
       <Card>
-        <h2 className="text-base">Warning signs</h2>
+        <h2 className="font-sans text-base">Warning signs</h2>
         <p className="mt-1">
           If something feels wrong, check the <Link to="/log">warning signs</Link> or use the urgent
           button at the top.

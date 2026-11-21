@@ -78,7 +78,11 @@ export function AdviceScreen({
         <h1
           ref={heading}
           tabIndex={-1}
-          className={cn(level === 'L1' && 'text-3xl text-urgent', level === 'L2' && 'text-caution')}
+          className={cn(
+            'font-sans',
+            level === 'L1' && 'text-3xl text-urgent',
+            level === 'L2' && 'text-caution',
+          )}
         >
           {LEVEL_HEADING[level]}
         </h1>
@@ -110,7 +114,7 @@ export function AfterEndNotice({ title }: { title: string }) {
   const home = useJourneyHome()
   return (
     <section className="flex flex-col gap-4">
-      <h1>{title}</h1>
+      <h1 className="font-sans">{title}</h1>
       <Card className="flex flex-col gap-3 border-2 border-caution bg-caution/10">
         <p>
           {home.data

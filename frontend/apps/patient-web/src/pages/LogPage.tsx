@@ -103,7 +103,7 @@ export function LogPage() {
       {otherError && <ErrorState message={otherError} />}
 
       <section aria-labelledby="warning-heading" className="flex flex-col gap-2">
-        <h2 id="warning-heading">Warning signs</h2>
+        <h2 id="warning-heading" className="font-sans">Warning signs</h2>
         <Card className="flex flex-col gap-1">
           {v.warning.map((w) => (
             <div key={w.id}>

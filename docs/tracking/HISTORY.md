@@ -864,3 +864,12 @@ Done:
 - `phase-5/dashboard` fast-forward merged into `main` and pushed (`60a6b3e..d7f16f0`).
 - Pause notes written: CONTEXT.md "PAUSED HERE" block (state, checks, next step, open owner items, improvement ideas), PROGRESS.md resume line.
 Next step: resume with Phase 6 planning — research free LLM options first (owner's wish), then the plan with one batch of decisions.
+
+## Session 42 — 2026-11-21 — Frontend redesign steps 0 and 1
+Who: Raheem + agent: Claude Code
+Done:
+- Owner: added `docs/FRONTEND_REDESIGN.md`; toolkit installed (Emil skills, Impeccable, 21st.dev, unslop, taste, playwright-cli). Branch `redesign/frontend`.
+- Step 0 (`c0a5d71`): `PRODUCT.md` (owner answers: users without the capstone line, positioning, platform web), thin `DESIGN.md` pointer, DEC-105..111 from brief §15; offline clash resolved by the owner (keep DEC-060, DEC-109); month illustrations cropped from the owner-supplied sheet (DEC-108, credits, licence before release).
+- Step 1: DEC-112 (bottom bar Home, Calendar, Log, Appointments, More; Doctor notes under More). Ring arc + motion tokens. Font comparison at 375 px shown; owner chose Fraunces + Figtree (patient) and Geist (doctor), then display font on H2 too. Safety/clinical headings carry `font-sans`. Nunito and Inter packages removed. 21st.dev MCP fixed (plugin config lacked `"type": "http"`, outside the repo). `/learn-taste` run by the owner: no taste corrections yet.
+Checks: backend 561 passed (ruff, format, mypy clean); frontend format, lint, types, 65 unit, build, 128 E2E passed.
+Next step: step 2 plan (skeletons, nav, urgent button, notification slot, shells).

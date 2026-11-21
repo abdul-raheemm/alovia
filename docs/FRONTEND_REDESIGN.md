@@ -137,7 +137,7 @@ The stack is already fixed in `ARCHITECTURE.md`. Keep it; use its current featur
 | Charts | Recharts (doctor and patient trends) | Accessible colours, direct labels, "view as table" |
 | Calendar | `react-day-picker` or a custom grid | Custom grid if the markers, week gutter or sticky headers fight the library |
 | Toasts | shadcn Sonner | Only for non-clinical confirmations |
-| Fonts | Self-hosted `@fontsource-variable/*` (section 5.3) | **Approved by this file** `[CONFIRM visually]` |
+| Fonts | Self-hosted `@fontsource-variable/*` (section 5.3) | **Approved by this file**; confirmed visually by the owner 2026-11-21 (DEC-111) |
 | Browser features | `100dvh`, `env(safe-area-inset-*)`, `viewport-fit=cover`, container queries, `:focus-visible`, `touch-action: manipulation`, `overscroll-behavior`, `text-wrap: balance`, `@media (hover: hover)` | All widely supported |
 | Drag-to-dismiss sheets | Radix `Sheet` first. If swipe-to-dismiss is wanted, ask the owner before adding `vaul` | New dependency rule |
 
@@ -166,7 +166,7 @@ On the card surface the dark-theme ratios are 3.85, 5.27 and 7.64; the light-the
 Other ring tokens: `--color-track` = `--color-border` (decorative base; the ring is also described in text). Marker bubble: white fill (`--color-surface`), 2 px `--color-primary` outline, text `--color-text`. Today dot: `--color-primary`.
 The doctor app does not use the ring. Its chart colours stay `--color-primary` and `--color-secondary`.
 
-### 5.3 Typography [OWNER asked for an "expensive" look; fonts are a PROPOSAL `[CONFIRM visually]`]
+### 5.3 Typography [OWNER asked for an "expensive" look; **decided 2026-11-21, DEC-111**: Fraunces + Figtree, Geist]
 
 The design system currently says Nunito (patient) and Inter (doctor). Both are fine but common. Proposal:
 
@@ -307,7 +307,7 @@ Tailwind breakpoints (design system section 15): phone below 640, small tablet 6
 
 **Sidebar (1024 and above).** Same items. Log is a primary button at the top of the list. Active item has the same soft pill.
 
-**Doctor notes [OPEN]:** Journey 4.1 lists it as a nav item; `DESIGN_SYSTEM.md` section 11 omits it. Default until the owner decides: it lives under More, and appears as a status card on Home when there is a new note.
+**Doctor notes [OWNER 2026-11-21, DEC-112]:** it lives under More, and appears as a status card on Home when there is a new note.
 
 **Urgent button:** top right on every screen (phone and desktop). When the backend cannot be reached it keeps the Phase 3 behaviour (DEC-060): the warning-sign list stays usable, any warning sign shows the L1 advice at once, and the check-in is kept to send later **[OWNER 2026-11-21, DEC-109]**.
 
@@ -551,7 +551,7 @@ Use `/playwright-best-practices`. Minimal reporters in CLI runs. Projects: patie
 | next | 2026-11-21 | Month illustrations: use the owner-supplied doctor-approved set (stock, watermarked) for the prototype; **overrides Journey D2 and 7.1 for these nine files**; must be licensed or replaced before public release |
 | DEC-109 | 2026-11-21 | Symptom draft kept 30 minutes on the device; everyday Log online only; offline urgent button keeps DEC-060 (owner, 2026-11-21) |
 | next | 2026-11-21 | Design toolkit: Emil Kowalski skills, Impeccable, 21st.dev, heydamir unslop, taste skill, Playwright; single root `DESIGN.md` pointing to the design system |
-| next | 2026-11-21 | Typography proposal: Fraunces + Figtree (patient), Geist (doctor), pending the owner's visual check |
+| DEC-111 | 2026-11-21 | Typography: Fraunces + Figtree (patient), Geist (doctor); accepted after the owner's visual check |
 
 ### Open items
 
@@ -559,12 +559,12 @@ Use `/playwright-best-practices`. Minimal reporters in CLI runs. Projects: patie
 |---|---|---|
 | 1 | "Nothing to report today" option in Module 7 (spec treats an empty check-in as error V1) | Not built |
 | 2 | Back-filled check-ins (needs `logged_for_date` and a red-flag date rule) | Only today can be logged; past days view-only |
-| 3 | Doctor notes in the bottom nav or under More | Under More, plus a Home status card |
+| 3 | Doctor notes in the bottom nav or under More | **Decided (DEC-112):** under More, plus a Home status card |
 | 4 | Chip icons: Lucide only, or custom | Lucide only (design system) |
 | 5 | Ring colours: tints of primary or distinct hues | Tints of primary (section 5.2) |
 | 6 | Empty states for history charts and calendar | Claude Code proposes with `/impeccable onboard`; owner approves |
 | 7 | Estimate band width on the ring | Not built; the "estimate" label is shown |
-| 8 | Typography choice | Show Fraunces + Figtree vs Nunito at 375 px and let the owner pick |
+| 8 | Typography choice | **Decided 2026-11-21 (DEC-111):** the owner picked Fraunces + Figtree after the 375 px comparison |
 | 9 | Licence for the nine illustrations | Prototype only; buy or replace before public release |
 | 10 | Which Playwright skill is installed | Confirm with `/skills` |
 

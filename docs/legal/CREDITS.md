@@ -5,8 +5,9 @@ Every third-party asset used in the apps must be listed here **before** it is us
 ## Fonts
 | Asset | Licence | Use |
 |---|---|---|
-| Nunito (via @fontsource, self-hosted) | SIL Open Font Licence 1.1 | Patient app |
-| Inter (via @fontsource, self-hosted) | SIL Open Font Licence 1.1 | Doctor app |
+| Fraunces (via @fontsource-variable, self-hosted) | SIL Open Font Licence 1.1 | Patient app, display |
+| Figtree (via @fontsource-variable, self-hosted) | SIL Open Font Licence 1.1 | Patient app, body |
+| Geist (via @fontsource-variable, self-hosted) | SIL Open Font Licence 1.1 | Doctor app |
 
 ## Icons and emoji
 | Asset | Licence | Use |
