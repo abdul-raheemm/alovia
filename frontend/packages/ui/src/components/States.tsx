@@ -3,14 +3,15 @@ import type { ReactNode } from 'react'
 
 import { Button } from './Button'
 import { Card } from './Card'
+import { CardSkeleton, Skeleton } from './Skeleton'
 
 /** Loading skeleton in the rough shape of a page (UX_FLOWS §0). */
 export function PageSkeleton() {
   return (
     <div role="status" aria-label="Loading" className="flex flex-col gap-4 p-4">
-      <div className="h-8 w-1/2 animate-pulse rounded-sm bg-primary-soft" />
-      <div className="h-24 animate-pulse rounded-lg bg-primary-soft" />
-      <div className="h-24 animate-pulse rounded-lg bg-primary-soft" />
+      <Skeleton className="h-8 w-1/2 rounded-sm" />
+      <CardSkeleton />
+      <CardSkeleton />
     </div>
   )
 }

@@ -61,7 +61,9 @@ function ConditionCard({ c, showNumbers }: { c: Condition; showNumbers: boolean 
 export function GeneticResult({ result }: { result: GeneticAssessment }) {
   return (
     <section aria-labelledby="result-heading" className="flex flex-col gap-4">
-      <h2 id="result-heading" className="font-sans">Your result — {formatDay(result.created_at.slice(0, 10))}</h2>
+      <h2 id="result-heading" className="font-sans">
+        Your result — {formatDay(result.created_at.slice(0, 10))}
+      </h2>
       <p role="note" className="rounded-md border border-border bg-surface p-3 font-semibold">
         {geneticText(result.disclaimer_key)}
       </p>

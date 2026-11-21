@@ -23,13 +23,14 @@ term_from_week: 37                 # §6.4 calendar marker
 appointment_notice_hours: 24       # §10.1 appointment_soon
 resume_window_days: 7              # §11.6 "I marked this by mistake"
 
-# §4.1 nav bar (owner decision 2026-11-17: the spec's six items, served from here)
+# §4.1 nav bar, served from here (DEC-040). DEC-112 (2026-11-21, FRONTEND_REDESIGN §7.4): five
+# items with Log as the raised centre action; Doctor notes moved under More. The bar label for
+# appointments is "Visits" so all five fit at 375 px (owner, 2026-11-21); the page title stays.
 nav_items:
   - { key: home, label: Home }
   - { key: calendar, label: Calendar }
-  - { key: log_symptoms, label: Log symptoms }
-  - { key: appointments, label: Appointments }
-  - { key: doctor_notes, label: Doctor notes }
+  - { key: log_symptoms, label: Log }
+  - { key: appointments, label: Visits }
   - { key: more, label: More }
 
 # §9.2 suggested check-ups (R3). Copied 2026-11-18 from the official NHM (MoHFW) Maternal Health

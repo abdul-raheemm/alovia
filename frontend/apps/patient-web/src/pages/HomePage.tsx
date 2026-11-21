@@ -5,6 +5,7 @@ import { Link } from 'react-router'
 
 import { formatDay, messageText, weeksLabel } from '../app/journey'
 import { useJourneyHome } from '../app/useJourneyHome'
+import { useNotifications } from '../app/useNotifications'
 import {
   BabyCard,
   GeneticCheckCard,
@@ -24,7 +25,10 @@ import { NotificationBar } from '../components/journey/NotificationBar'
  * §11 home instead. */
 export function HomePage() {
   const home = useJourneyHome()
-  if (home.isPending) return <PageSkeleton />
+  // FRONTEND_REDESIGN §11 rule 5: home data and notifications appear together (no layout shift);
+  // a failed notifications call does not block the home (it shows no bar)
+  const notifications = useNotifications()
+  if (home.isPending || notifications.isPending) return <PageSkeleton />
   if (home.isError) {
     return (
       <ErrorState

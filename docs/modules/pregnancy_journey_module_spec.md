@@ -102,7 +102,7 @@ Bottom nav bar (mobile) or side bar (desktop). Items come from `config.yaml` (`n
 | Calendar | Calendar (section 9) |
 | Log symptoms | Module 7 log page |
 | Appointments | Appointment list and form (section 9.3) |
-| Doctor notes | Notes the doctor has shared (section 10.3) |
+| Doctor notes | Notes the doctor has shared (section 10.3). *Since DEC-112 (2026-11-21) under More, not in the bar; the bar shows Home, Calendar, Log, Visits (Appointments), More.* |
 | More | Genetic risk (Module 3), My results (fetal/maternal), Pregnancy dates, "My pregnancy has ended", Credits, Settings; Knowledge assistant only when `assistant_enabled = true` |
 
 ### 4.2 Notification bar

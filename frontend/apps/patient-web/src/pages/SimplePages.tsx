@@ -79,6 +79,10 @@ export function MorePage() {
           <li>
             <Link to="/dates">Pregnancy dates</Link>
           </li>
+          {/* DEC-112: Doctor notes moved here from the bottom bar */}
+          <li>
+            <Link to="/doctor-notes">Doctor notes</Link>
+          </li>
           {/* §11.1 entry, only while the pregnancy is active */}
           {home.data && home.data.state !== 'ended' && (
             <li>

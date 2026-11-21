@@ -118,7 +118,9 @@ export function GeneticForm({ onDone }: { onDone: (result: GeneticAssessment) =>
         const s = draft[c]
         return (
           <section key={c} aria-labelledby={`${c}-heading`} className="flex flex-col gap-3">
-            <h2 id={`${c}-heading`} className="font-sans">{GENETIC_BUNDLE.conditions[c]}</h2>
+            <h2 id={`${c}-heading`} className="font-sans">
+              {GENETIC_BUNDLE.conditions[c]}
+            </h2>
             <Card className="flex flex-col gap-4">
               {c !== 'haemoglobin_group' && (
                 <ChoiceGroup

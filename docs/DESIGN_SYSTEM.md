@@ -168,7 +168,9 @@ Label always visible above the field (no placeholder-only labels). Focus: 2px pr
 Patient: surface, large radius, 20px padding, small shadow (light) / border (dark). Doctor: surface, medium radius, 16px padding, border. **Content-type marking (Journey D15):** educational content = primary-soft background with a small "Learn" label and source line; patient's own data = surface with "You logged"; doctor-confirmed = surface with a doctor icon and "From your doctor".
 
 ## 11. Navigation
-- **Patient, phone:** bottom nav bar with the items from `rules/journey/config.yaml` `nav_items` (now Home, Calendar, Log symptoms, Appointments, Doctor notes, More — DEC-040), urgent button pinned top-right on every screen; notification bar under the header. **Decided 2026-11-21 (DEC-112):** with the redesigned shell the items become Home, Calendar, Log (raised centre), Appointments, More; Doctor notes moves under More, with the "New doctor note" status card on Home. The config changes in redesign build step 2.
+- **Patient, phone:** bottom nav bar with the items from `rules/journey/config.yaml` `nav_items` (DEC-040, DEC-112): Home, Calendar, Log (raised 56 px filled centre circle), Visits (opens Appointments), More. 64 px plus the safe-area inset, labels always shown at 14 px, the current tab on a `primary-soft` pill. Doctor notes is under More, with the "New doctor note" status card on Home (redesign step 4). Urgent button pinned top-right on every screen; notification bar at the top of Home, loaded together with the Home data behind one skeleton.
+- **Patient, laptop (1024 px and up):** side bar with the same items; Log is a primary button at the top.
+- **Doctor, laptop:** side bar with the same pill style; it collapses to icons (labels kept for screen readers).
 - **Patient, laptop:** left side bar with the same items.
 - **Doctor:** left side bar (Home, Patients, Genetic review, Rule review, Admin [admin only]); top bar with search and theme toggle; collapses to a menu on small screens.
 

@@ -3,6 +3,8 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Run checks only through `scripts/check_all.sh`; an ad-hoc loop with `set -e` in a brace group kept going after a failure here, and a narrow grep hid the warnings (ERR-067).
+- `# fmt: skip` must end the line; any text after it disables it (ERR-068).
 - Before showing a visual comparison, check the changed style is actually applied to visible elements (computed style or a look at the shot), not only that the screenshot was taken (ERR-064).
 - Before running E2E tests, check ports 5173/5174 are free: Playwright reuses a running dev server, which carries the real .env (ERR-062).
 - A test that loops over discovered items must also assert it found some, or it can pass while checking nothing (ERR-059).
@@ -701,3 +703,33 @@ Fix: added `"type": "http"` to `~/.claude/plugins/cache/21st-dev/21st/1.0.1/.mcp
 Verified by: `claude mcp list` → `plugin:21st:21st ... ✔ Connected`.
 Prevention: a plugin update replaces the file; re-add the line if 21st disappears again.
 Category: environment
+
+### ERR-067 — 2026-11-21 — Step 1 reported "format passed" but it had failed
+Who: Claude Code
+Phase / task: Redesign step 1 (found in step 2)
+What happened: the step 1 commit `d1ea861` contained 3 files (`GeneticForm.tsx`, `GeneticResult.tsx`, `LogPage.tsx`) whose new `font-sans` headings were longer than Prettier's line limit, while the report said format passed.
+Cause: the frontend checks were run with a hand-written loop `{ set -e; for ...; done; }`; in this shell it did not stop at the failing `format:check` (reproduced: `{ set -e; false; echo after; }` prints "after", exit 0), and the result grep did not include `warn`.
+Fix: files reformatted (in the step 2 commit); full `scripts/check_all.sh` run, which stops and reports correctly.
+Verified by: `check_all.sh` exit 0 with "frontend: format" clean.
+Prevention: Lesson added; only `check_all.sh` is used for the check results reported to the owner.
+Category: tooling / wrong claim
+
+### ERR-068 — 2026-11-21 — Backend format failed after editing two tests
+Who: Claude Code
+Phase / task: Redesign step 2
+What happened: `ruff format --check`: 2 files would be reformatted.
+Cause: "(DEC-112)" was appended after `# fmt: skip`, which turns the directive off.
+Fix: note moved to its own comment line above the assert.
+Verified by: `ruff format --check` 124 files formatted; full check exit 0.
+Prevention: Lesson added.
+Category: tooling
+
+### ERR-069 — 2026-11-21 — Nav label did not fit at 375 px
+Who: Claude Code
+Phase / task: Redesign step 2
+What happened: the new shell test found the "Appointments" label cut off in the bottom bar.
+Cause: five equal tabs are 75 px wide; the label needs 90 px at 14 px (77 px even at 12 px). Flagged as a risk in the plan.
+Fix: owner chose the bar label "Visits" (config); the page title stays "Appointments".
+Verified by: the shell test (no label cut, labels on one line) on phone-light.
+Prevention: the test stays.
+Category: design

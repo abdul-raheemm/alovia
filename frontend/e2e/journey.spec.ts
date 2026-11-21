@@ -145,20 +145,22 @@ test('a doctor-set date is replaced by an estimate only after she confirms (spec
   expect(sent).toEqual([false, false, true])
 })
 
-test('navigation shows the six items from the backend config (DEC-040)', async ({ page }) => {
+test('navigation shows the five items from the backend config (DEC-040, DEC-112)', async ({
+  page,
+}) => {
   await signInAsPatient(page)
   await mockHome(page, ACTIVE)
   await page.goto(`${PATIENT}/home`)
   const nav = page.getByRole('navigation', { name: 'Main' })
-  await expect(nav.getByRole('link')).toHaveText([
-    'Home',
-    'Calendar',
-    'Log symptoms',
-    'Appointments',
-    'Doctor notes',
-    'More',
-  ])
-  await nav.getByRole('link', { name: 'Doctor notes' }).click()
+  // phone: config order; laptop side bar: Log as the button at the top
+  const order =
+    (page.viewportSize()?.width ?? 0) >= 1024
+      ? ['Log', 'Home', 'Calendar', 'Visits', 'More']
+      : ['Home', 'Calendar', 'Log', 'Visits', 'More']
+  await expect(nav.getByRole('link')).toHaveText(order)
+  // Doctor notes now lives under More
+  await nav.getByRole('link', { name: 'More' }).click()
+  await page.getByRole('link', { name: 'Doctor notes' }).click()
   await expect(page.getByRole('heading', { name: 'Doctor notes' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Urgent' })).toBeVisible() // on every screen
   await expectNoA11yViolations(page)

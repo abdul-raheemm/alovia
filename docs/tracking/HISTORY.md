@@ -873,3 +873,13 @@ Done:
 - Step 1: DEC-112 (bottom bar Home, Calendar, Log, Appointments, More; Doctor notes under More). Ring arc + motion tokens. Font comparison at 375 px shown; owner chose Fraunces + Figtree (patient) and Geist (doctor), then display font on H2 too. Safety/clinical headings carry `font-sans`. Nunito and Inter packages removed. 21st.dev MCP fixed (plugin config lacked `"type": "http"`, outside the repo). `/learn-taste` run by the owner: no taste corrections yet.
 Checks: backend 561 passed (ruff, format, mypy clean); frontend format, lint, types, 65 unit, build, 128 E2E passed.
 Next step: step 2 plan (skeletons, nav, urgent button, notification slot, shells).
+
+## Session 43 — 2026-11-21 — Frontend redesign step 2: shells and navigation
+Who: Raheem + agent: Claude Code
+Done:
+- Owner approved the step 2 plan. Nav config now Home, Calendar, Log, Visits, More (DEC-112); the owner chose the bar label "Visits" after a test showed "Appointments" cannot fit a 75 px tab at 375 px (needs 90 px at 14 px, 77 px at 12 px). Doctor notes on the More page.
+- Patient BottomNav (raised Log circle, pill, 14 px labels, safe-area inset) and SideNav (Log button at the top); UrgentButton component; skeleton set in `packages/ui` (pulse only with motion allowed); Home waits for notifications too (no layout shift); doctor side bar pill style + collapse to icons.
+- New `e2e/shell.spec.ts`: 5 items, Log raised and centred, 44 px targets, labels never cut and on one line, laptop side bar, skeleton without pulse under reduced motion with a working bar, doctor collapse.
+- Found while checking: the step 1 commit had 3 files Prettier rejects (ERR-067); fixed in this commit.
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 65 unit; build; 133 E2E (3 layout tests skipped by design).
+Next step: step 3 plan (Log flow).

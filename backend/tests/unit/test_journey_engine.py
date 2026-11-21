@@ -195,8 +195,9 @@ def test_shipped_config_matches_the_spec_defaults() -> None:
     assert CFG.suggested_checkups.source.url.startswith("https://nhm.gov.in/")
     assert CFG.timezone == "Asia/Kolkata"
     assert (CFG.term_from_week, CFG.appointment_notice_hours, CFG.resume_window_days) == (37, 24, 7)
+    # DEC-112: five items, Doctor notes moved under More
     assert [i.key for i in CFG.nav_items] == [
-        "home", "calendar", "log_symptoms", "appointments", "doctor_notes", "more",
+        "home", "calendar", "log_symptoms", "appointments", "more",
     ]  # fmt: skip
 
 

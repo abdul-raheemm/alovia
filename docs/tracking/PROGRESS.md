@@ -71,7 +71,8 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 ## Frontend redesign (branch `redesign/frontend`, `docs/FRONTEND_REDESIGN.md` §14) — started 2026-11-21, before Phase 6
 - [x] Step 0: `PRODUCT.md`, `DESIGN.md` pointer, DEC-105..111, offline clash resolved (DEC-060 kept), month illustrations from the owner's set (DEC-108) — Raheem + Claude Code — 2026-11-21 (`c0a5d71`)
 - [x] Step 1: tokens (ring arcs, motion), fonts Fraunces + Figtree / Geist (DEC-111, H1 + H2, safety headings stay sans), nav decision DEC-112 recorded — Raheem + Claude Code — 2026-11-21
-- [ ] Step 2: skeleton set, BottomNav / SideNav (DEC-112 nav), UrgentButton, NotificationBar slot, app shells — next
+- [x] Step 2: skeleton set, BottomNav / SideNav (DEC-112 nav; bar label "Visits" for Appointments), UrgentButton, Home + notifications behind one skeleton, doctor side bar collapse — Raheem + Claude Code — 2026-11-21
+- [ ] Step 3: Log flow (sheet, chips, groups, detail rows, PUQE sheet, Save bar, draft) — next
 - [ ] Steps 3-9: Log, Home ring, Calendar, Doctor screens, motion pass, unslop/impeccable pass, Playwright + snapshots
 - Owner items: fill `docs/illustration_review.md`; illustration licence before public release.
 

@@ -36,9 +36,8 @@ export const TEST_PATIENT_ME = {
 const NAV_ITEMS = [
   { key: 'home', label: 'Home' },
   { key: 'calendar', label: 'Calendar' },
-  { key: 'log_symptoms', label: 'Log symptoms' },
-  { key: 'appointments', label: 'Appointments' },
-  { key: 'doctor_notes', label: 'Doctor notes' },
+  { key: 'log_symptoms', label: 'Log' },
+  { key: 'appointments', label: 'Visits' },
   { key: 'more', label: 'More' },
 ]
 

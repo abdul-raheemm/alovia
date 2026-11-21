@@ -78,8 +78,9 @@ def test_home_without_dates_shows_onboarding_state(client: TestClient, engine: E
     assert data["state"] == "no_date"
     assert data["pregnancy"] is None
     assert data["dates"] == {"due_date": None, "lmp_date": None, "due_date_source": None}
+    # DEC-112: five items, Doctor notes moved under More
     assert [i["key"] for i in data["nav_items"]] == [
-        "home", "calendar", "log_symptoms", "appointments", "doctor_notes", "more",
+        "home", "calendar", "log_symptoms", "appointments", "more",
     ]  # fmt: skip
     assert data["show_prototype_banner"] is True
     # DEC-041: no approved wording yet, so every message text is null
