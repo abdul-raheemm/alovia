@@ -78,6 +78,7 @@ def test_vocabulary_matches_the_spec() -> None:
 
 def test_settings_are_the_spec_defaults() -> None:
     s = RULES.settings
+    assert s.draft_ttl_minutes == 30  # DEC-109
     assert (s.rules_version, s.pattern_window_days, s.p3_min_days, s.p5_min_l2) == (
         "1.0.0",
         7,

@@ -43,6 +43,7 @@
 5 Message,msg_notes_not_read,Write or approve the text. Intent: Notes are not checked automatically; use the warning signs list for anything urgent,(no approved text yet),Symptom spec §11.2,,,,,1.0.0
 5 Message,msg_not_monitored_live,Write or approve the text. Intent: Your doctor does not see entries in real time; in an emergency go to hospital (shown on the log page and the urgent button page),(no approved text yet),Symptom spec §11.2,,,,,1.0.0
 5 Message,msg_safe_fallback,"Write or approve the text. Intent: Something went wrong; if you feel unwell, contact your doctor or go to hospital",(no approved text yet),Symptom spec §11.2,,,,,1.0.0
+5 Message,msg_not_saved,Write or approve the text. Intent: Your check-in is not saved yet; your choices are kept on this device for a short time; try again; for anything urgent use the urgent button,(no approved text yet),Symptom spec §11.2,,,,,1.0.0
 6 Phone number,emergency,Right number to show?,"Ambulance: 102, 108","Telangana Emergency Contacts – Official Helplines (https://www.telangana.gov.in/contacts/emergency-contacts/), accessed 2026-11-18",,,,,1.0.0
 6 Phone number,mental_health,Right number to show?,"Tele MANAS (national mental health helpline): 14416, 18008914416","Press Information Bureau, Ministry of Health and Family Welfare (29 May 2024) (https://pib.gov.in/PressReleasePage.aspx?PRID=2022057), accessed 2026-11-18",,,,,1.0.0
 7 Assumption,A1,Confirm or change.,Vision problems on their own (without headache) are L1.,Symptom spec §16.1,,,,,1.0.0

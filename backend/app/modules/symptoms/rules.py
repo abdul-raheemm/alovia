@@ -25,6 +25,7 @@ REQUIRED_MESSAGES = {
     "msg_notes_not_read",
     "msg_not_monitored_live",
     "msg_safe_fallback",
+    "msg_not_saved",  # DEC-109: a failed save keeps the draft
 }
 WeekSetting = Literal["movements_from_week", "never_felt_from_week", "preterm_before_week"]
 
@@ -43,6 +44,7 @@ class SymptomSettings(_Strict):
     movements_from_week: int = Field(ge=0, le=MAX_WEEKS)
     never_felt_from_week: int = Field(ge=0, le=MAX_WEEKS)
     preterm_before_week: int = Field(ge=0, le=MAX_WEEKS)
+    draft_ttl_minutes: int = Field(gt=0)  # DEC-109
 
     @model_validator(mode="after")
     def window_holds_p3(self) -> SymptomSettings:

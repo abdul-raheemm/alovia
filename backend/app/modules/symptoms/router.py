@@ -19,7 +19,13 @@ from app.modules.symptoms.rules import (
     SymptomRules,
     WarningSymptom,
 )
-from app.modules.symptoms.schemas import ChartsOut, CheckinHistoryOut, CheckinIn, CheckinOut
+from app.modules.symptoms.schemas import (
+    ChartsOut,
+    CheckinHistoryOut,
+    CheckinIn,
+    CheckinOut,
+    PuqeBandOut,
+)
 from app.modules.users.models import Patient
 from app.modules.users.service import get_patient
 
@@ -42,6 +48,8 @@ class VocabularyOut(BaseModel):
     warning: list[WarningSymptom]
     puqe_questions: list[PuqeQuestion]
     puqe_source: PuqeSource
+    puqe_bands: list[PuqeBandOut]  # §8, for the live score band on the Log
+    draft_ttl_minutes: int  # DEC-109: unsaved Log draft kept on the device
 
 
 def _week(request: Request, patient: Patient) -> int | None:
@@ -71,6 +79,8 @@ def vocabulary(request: Request, patient: OwnPatient) -> dict[str, Any]:
         warning=[s for s in v.warning if s.id in offered],
         puqe_questions=list(rules.puqe.questions),
         puqe_source=rules.puqe.source,
+        puqe_bands=[PuqeBandOut(band=b.band, min=b.min, max=b.max) for b in rules.puqe.bands],
+        draft_ttl_minutes=rules.settings.draft_ttl_minutes,
     )
     return ok(out.model_dump(mode="json"))
 

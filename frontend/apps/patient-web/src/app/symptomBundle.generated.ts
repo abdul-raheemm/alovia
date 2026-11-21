@@ -105,7 +105,8 @@ export const SYMPTOM_BUNDLE = {
     "msg_mood_support": null,
     "msg_notes_not_read": null,
     "msg_not_monitored_live": null,
-    "msg_safe_fallback": null
+    "msg_safe_fallback": null,
+    "msg_not_saved": null
   },
   "helplines": {
     "emergency": {

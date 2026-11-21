@@ -24,6 +24,10 @@ messages:
   msg_safe_fallback:
     intent: Something went wrong; if you feel unwell, contact your doctor or go to hospital
     text: null
+  # DEC-109 / FRONTEND_REDESIGN §7.5: the everyday Log could not be saved (e.g. offline)
+  msg_not_saved:
+    intent: Your check-in is not saved yet; your choices are kept on this device for a short time; try again; for anything urgent use the urgent button
+    text: null
 
 # §11.3 phone numbers, copied word for word from official pages (never from memory).
 helplines:

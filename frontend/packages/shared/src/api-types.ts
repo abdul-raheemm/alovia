@@ -3127,6 +3127,8 @@ export interface components {
             };
             /** Common */
             common: components["schemas"]["CommonSymptom"][];
+            /** Draft Ttl Minutes */
+            draft_ttl_minutes: number;
             /** Durations */
             durations: {
                 [key: string]: string;
@@ -3139,6 +3141,8 @@ export interface components {
             logging_open: boolean;
             /** Pregnancy Week */
             pregnancy_week: number | null;
+            /** Puqe Bands */
+            puqe_bands: components["schemas"]["PuqeBandOut"][];
             /** Puqe Questions */
             puqe_questions: components["schemas"]["PuqeQuestion"][];
             puqe_source: components["schemas"]["PuqeSource"];

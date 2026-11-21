@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- Adding or changing a rule-file message means regenerating its rule-review CSV in the same change (ERR-071).
 - Run checks only through `scripts/check_all.sh`; an ad-hoc loop with `set -e` in a brace group kept going after a failure here, and a narrow grep hid the warnings (ERR-067).
 - `# fmt: skip` must end the line; any text after it disables it (ERR-068).
 - Before showing a visual comparison, check the changed style is actually applied to visible elements (computed style or a look at the shot), not only that the screenshot was taken (ERR-064).
@@ -733,3 +734,23 @@ Fix: owner chose the bar label "Visits" (config); the page title stays "Appointm
 Verified by: the shell test (no label cut, labels on one line) on phone-light.
 Prevention: the test stays.
 Category: design
+
+### ERR-070 — 2026-11-21 — Chip inputs could not be clicked by Playwright
+Who: Claude Code
+Phase / task: Redesign step 3
+What happened: `check()` on the chip checkboxes timed out: "label intercepts pointer events".
+Cause: the real inputs were `sr-only` (1 px, clipped) inside the chip label, so the label sat on top.
+Fix: the input now covers the whole chip invisibly (`absolute inset-0 opacity-0`), so it is the element tapped; screen readers unchanged.
+Verified by: symptom and log-sheet E2E pass with axe.
+Prevention: none needed beyond the pattern recorded in DESIGN_SYSTEM §9 (chips).
+Category: bug (found by tests)
+
+### ERR-071 — 2026-11-21 — Rule-review count test failed after adding a message
+Who: Claude Code
+Phase / task: Redesign step 3
+What happened: `test_rule_review.py` expected 50 symptom rows, got 51.
+Cause: `msg_not_saved` is a new message, so it is a new row for doctor sign-off; the CSV review sheet had not been regenerated.
+Fix: ran `scripts/export_symptom_rule_review.py` (51 rows) and updated the expected count with the reason.
+Verified by: the test and the full check.
+Prevention: when adding a message key, regenerate the rule-review sheet in the same change.
+Category: missed step

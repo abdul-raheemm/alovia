@@ -69,6 +69,12 @@ const VOCABULARY = {
     url: 'https://example.test/puqe',
     date_accessed: '2026-11-18',
   },
+  puqe_bands: [
+    { band: 'mild', min: 3, max: 6 },
+    { band: 'moderate', min: 7, max: 12 },
+    { band: 'severe', min: 13, max: 15 },
+  ],
+  draft_ttl_minutes: 30,
 }
 
 const ACTIVE = journeyHome({
@@ -125,14 +131,14 @@ test('log an everyday symptom: details asked, saved (L0)', async ({ page }) => {
   await expect(page.getByRole('note')).toHaveText(PENDING)
 
   await page.getByRole('checkbox', { name: 'Headache' }).check()
-  await page.getByRole('button', { name: 'Submit' }).click()
+  await page.getByRole('button', { name: 'Save check-in' }).click()
   await expect(page.getByText('Please fill this in.')).toHaveCount(2) // severity, duration
   await expectNoA11yViolations(page)
 
   await page.getByRole('radio', { name: 'Mild' }).check()
   await page.getByRole('radio', { name: 'Under 1 hour' }).check()
   await page.getByLabel('Notes (optional)').fill('Test note')
-  await page.getByRole('button', { name: 'Submit' }).click()
+  await page.getByRole('button', { name: 'Save check-in' }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'Saved' })).toBeVisible()
   expect(sent()).toEqual({
     source: 'form',
@@ -150,7 +156,7 @@ test('a warning sign shows the L1 screen with the emergency number (UX P5)', asy
   await answerCheckin(page, result('L1', ['msg_level1_go_now'], ['L1-01']))
   await page.goto(`${PATIENT}/log`)
   await page.getByRole('checkbox', { name: 'Bleeding from the vagina (any amount)' }).check()
-  await page.getByRole('button', { name: 'Submit' }).click()
+  await page.getByRole('button', { name: 'Save check-in' }).click()
   const advice = page.getByRole('alert')
   await expect(advice.getByRole('heading', { name: 'Go to hospital now' })).toBeVisible()
   await expect(advice.getByText(PENDING)).toBeVisible()
@@ -166,6 +172,9 @@ test('PUQE questions and mood support with the national helpline', async ({ page
   const sent = await answerCheckin(page, result('L0', ['msg_level0_logged', 'msg_mood_support']))
   await page.goto(`${PATIENT}/log`)
   await page.getByRole('checkbox', { name: 'Nausea / vomiting' }).check()
+  // the PUQE questions open in their own sheet, with a live score band (FRONTEND_REDESIGN §7.5)
+  const puqe = page.getByRole('dialog', { name: 'Nausea / vomiting' })
+  await expect(puqe.getByRole('status')).toHaveText('0 of 3 questions answered')
   for (const [i, q] of [
     'Test question one',
     'Test question two',
@@ -177,9 +186,14 @@ test('PUQE questions and mood support with the national helpline', async ({ page
       .check()
   }
   await expect(page.getByText('Questions: Test PUQE sheet (Test Publisher)')).toBeVisible()
+  await expect(puqe.getByRole('status')).toHaveText('Score 9 of 15 (Moderate)')
+  await expectNoA11yViolations(page)
+  await puqe.getByRole('button', { name: 'Done' }).click()
+  await expect(puqe).toBeHidden()
+  await expect(page.getByText('Score 9 of 15 (Moderate)')).toBeVisible()
   await page.getByRole('checkbox', { name: 'Mood change' }).check()
   await page.getByRole('group', { name: 'Severity' }).getByRole('radio', { name: 'Mild' }).check()
-  await page.getByRole('button', { name: 'Submit' }).click()
+  await page.getByRole('button', { name: 'Save check-in' }).click()
   expect(sent()).toEqual({
     source: 'form',
     entries: [

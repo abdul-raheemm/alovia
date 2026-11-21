@@ -40,7 +40,8 @@ def doctor(engine: Engine) -> dict[str, str]:
 def test_overview_lists_every_sheet_row(client: TestClient, engine: Engine) -> None:
     data = client.get(API, headers=doctor(engine)).json()["data"]
     assert [m["module"] for m in data] == ["genetic", "symptom", "journey"]
-    assert [m["total"] for m in data] == [66, 50, 72]  # the same rows as the CSV sheets
+    # the same rows as the CSV sheets (symptom 51: msg_not_saved added for DEC-113)
+    assert [m["total"] for m in data] == [66, 51, 72]
     assert data[0]["rules_version"] == "1.0.0" and data[2]["rules_version"].startswith("j-")
     first = data[0]["rows"][0]
     assert first["key"] == "1:HBB-01" and first["checked"] is None

@@ -1,6 +1,6 @@
 # CONTEXT — start here (for any new agent, chat or teammate)
 
-**Last updated:** 2026-11-21 by Claude Code (session 43, redesign steps 0-2) — update the "Current state" section at the end of every session.
+**Last updated:** 2026-11-21 by Claude Code (session 44, redesign steps 0-3) — update the "Current state" section at the end of every session.
 
 ## What Alovia is
 A woman-centric pregnancy web app (patient app) with a doctor dashboard (doctor app) and one FastAPI backend. Capstone project of a 3-person team at MJCET (AI & DS), led by Raheem. Research prototype — synthetic/test data only, not for clinical use.
@@ -32,7 +32,7 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 ## Current state
 
 ### Frontend redesign — in progress (2026-11-21)
-- Branch `redesign/frontend` (from `main` at 0.5.0). Brief: `docs/FRONTEND_REDESIGN.md`; build order §14. Steps 0-2 done (PROGRESS.md). Next: step 3 (Log flow). Bottom bar: Home, Calendar, Log, Visits, More (DEC-112).
+- Branch `redesign/frontend` (from `main` at 0.5.0). Brief: `docs/FRONTEND_REDESIGN.md`; build order §14. Steps 0-3 done (PROGRESS.md). Next: step 4 (Home ring). Bottom bar: Home, Calendar, Log, Visits, More (DEC-112).
 - Fonts: Fraunces (H1/H2) + Figtree, Geist for doctors (DEC-111); safety/clinical headings use `font-sans`.
 - Phase 6 stays paused until the redesign is done or the owner says otherwise.
 
@@ -42,7 +42,7 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 - **Owner's manual check:** `docs/review/phase5_manual_checklist.md` done (real Supabase: doctor login via `scripts/make_doctor.py`, uploads, sharing, admin, rule review). Two bugs found there were fixed (ERR-060, ERR-061).
 - **Database:** main and alovia-test at migration 0005. Storage bucket `medical-records` (private). `DOCTOR_APP_URL` + `PATIENT_APP_URL` have localhost defaults.
 - **Next step when resuming:** Phase 6 (AI drafts) planning. It is blocked on the `[OPEN]` LLM choice, shared with Phase 7 (RAG). The owner wants a **free** model: first research current free options (local models via Ollama; free API tiers such as Gemini, Groq, Mistral, OpenRouter; free local embeddings) with their limits and data policies, then post the Phase 6 plan with one batch of decisions. Spec rule §18.1-8: only synthetic data reaches an LLM until privacy is settled.
-- **Open owner items (none block Phase 6 coding):** doctor sign-off of the 188 rule-review rows (Rule review page; `require_signoff` stays off in development); doctor-approved wording for every "[Text pending doctor approval]" text (incl. the 6 result templates and 12 dashboard texts); legal placeholders (team, supervisor, contact); Supabase Redirect URLs for the deployed apps (Phase 9).
+- **Open owner items (none block Phase 6 coding):** doctor sign-off of the 189 rule-review rows (188 + `msg_not_saved`, DEC-113) (Rule review page; `require_signoff` stays off in development); doctor-approved wording for every "[Text pending doctor approval]" text (incl. the 6 result templates and 12 dashboard texts); legal placeholders (team, supervisor, contact); Supabase Redirect URLs for the deployed apps (Phase 9).
 - **Improvement ideas noted, not approved (owner to decide later):** batch the per-patient queries on the patient list and genetic queue; auto-mark `genetic_pending` inbox items as seen on review; paging for the activity log (200) and seen inbox (100); clean-up of rare leftovers after a failed save (Phase 8).
 - **Before running E2E locally:** stop your own `npm run dev` servers (ports 5173/5174), or Playwright reuses them (ERR-062).
 

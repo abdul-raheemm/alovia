@@ -164,6 +164,10 @@ Small: `0 1px 2px rgb(0 0 0 / 0.06)`. Medium: `0 4px 12px rgb(0 0 0 / 0.08)`. La
 ## 9. Inputs
 Label always visible above the field (no placeholder-only labels). Focus: 2px primary outline + 2px offset. Error: urgent-coloured border, message below with icon, `aria-describedby`. Units shown inside the field on the right (e.g. "mmol/mol").
 
+**Chips (patient Log, FRONTEND_REDESIGN §7.5):** a real checkbox (symptom) or radio (single choice) covering the whole chip invisibly; at least 44 px, pill shape; off: `primary-soft` wash with a 1 px border; on: `primary` fill, `on-primary` text and a check icon; press scales to 0.97 (none with reduced motion); focus ring on the chip.
+
+**Sheets:** native `<dialog>` opened as a modal (DEC-113). Phone: full screen with an X; laptop: right panel, 480 px. Esc closes.
+
 ## 10. Cards
 Patient: surface, large radius, 20px padding, small shadow (light) / border (dark). Doctor: surface, medium radius, 16px padding, border. **Content-type marking (Journey D15):** educational content = primary-soft background with a small "Learn" label and source line; patient's own data = surface with "You logged"; doctor-confirmed = surface with a doctor icon and "From your doctor".
 

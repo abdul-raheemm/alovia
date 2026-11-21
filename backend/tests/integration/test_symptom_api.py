@@ -70,6 +70,12 @@ def test_vocabulary_is_filtered_by_week(client: TestClient, engine: Engine) -> N
     warning = {s["id"] for s in data["warning"]}
     assert "baby_movements_reduced" not in warning and "baby_movements_never_felt" not in warning
     assert len(data["common"]) == 10 and len(data["puqe_questions"]) == 3
+    assert data["draft_ttl_minutes"] == 30  # DEC-109
+    assert [(b["band"], b["min"], b["max"]) for b in data["puqe_bands"]] == [
+        ("mild", 3, 6),
+        ("moderate", 7, 12),
+        ("severe", 13, 15),
+    ]
     unknown = client.get(f"{URL}/vocabulary", headers=patient(engine, client, weeks=None))
     ids = {s["id"] for s in unknown.json()["data"]["warning"]}
     assert {"baby_movements_reduced", "baby_movements_never_felt"} <= ids  # §1.3, DEC-065

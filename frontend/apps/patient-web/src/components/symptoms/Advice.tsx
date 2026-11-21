@@ -110,11 +110,12 @@ export function AdviceScreen({
 
 /** DEC-064: after the pregnancy has ended, the log and urgent pages show the after-pregnancy
  * safety message and helplines instead of the pregnancy form (postpartum is out of scope). */
-export function AfterEndNotice({ title }: { title: string }) {
+/** `title` is left out where the page already has its heading (the Log sheet header). */
+export function AfterEndNotice({ title }: { title?: string }) {
   const home = useJourneyHome()
   return (
     <section className="flex flex-col gap-4">
-      <h1 className="font-sans">{title}</h1>
+      {title && <h1 className="font-sans">{title}</h1>}
       <Card className="flex flex-col gap-3 border-2 border-caution bg-caution/10">
         <p>
           {home.data

@@ -883,3 +883,12 @@ Done:
 - Found while checking: the step 1 commit had 3 files Prettier rejects (ERR-067); fixed in this commit.
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 65 unit; build; 133 E2E (3 layout tests skipped by design).
 Next step: step 3 plan (Log flow).
+
+## Session 44 — 2026-11-21 — Frontend redesign step 3: the Log
+Who: Raheem + agent: Claude Code
+Done:
+- Owner approved the plan with all four recommendations (DEC-113): one Everyday header, `draft_ttl_minutes` in `rules/symptoms/config.yaml` sent with the vocabulary (plus `puqe_bands`), new `msg_not_saved` key, native `<dialog>` sheets.
+- Log rebuilt as a sheet (phone full screen, laptop 480 px right panel; X / Esc go back); warning chips in an urgent-tinted box (labour duration kept, spec §5.2); everyday chips with detail cards; PUQE sheet with live score band; Save disabled until a choice; device draft restored within 30 minutes, cleared on save, Clear and sign-out; failed save shows `msg_not_saved` and keeps the draft.
+- Doctor rule-review sheet regenerated: 51 symptom rows (189 in total) because of `msg_not_saved`.
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 70 unit; build; 141 E2E.
+Next step: step 4 plan (Home ring).

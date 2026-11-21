@@ -2,12 +2,18 @@ import { createApiClient, createAuthClient } from '@alovia/shared'
 import { QueryClient } from '@tanstack/react-query'
 
 import { config } from './config'
+import { clearAllDrafts } from './logDraft'
 
 // Only created after main.tsx has checked that the settings exist.
 export const authClient = createAuthClient(
   config.supabaseUrl ?? '',
   config.supabasePublishableKey ?? '',
 )
+
+// DEC-109: an unsaved Log draft never outlives the session
+authClient.auth.onAuthStateChange((event) => {
+  if (event === 'SIGNED_OUT') clearAllDrafts()
+})
 
 export const api = createApiClient({
   baseUrl: config.apiBaseUrl ?? '',

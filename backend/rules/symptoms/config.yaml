@@ -8,3 +8,5 @@ p5_min_l2: 2
 movements_from_week: 16
 never_felt_from_week: 24
 preterm_before_week: 37
+# FRONTEND_REDESIGN §7.5 (DEC-109): minutes an unsaved Log draft is kept on the device
+draft_ttl_minutes: 30
