@@ -57,14 +57,14 @@ export function weekRangeLabel(weekStart: number, weekEnd: number): string {
   return `Weeks ${weekStart}–${weekEnd}`
 }
 
-/** Placeholder month illustrations (spec §7.1): simple shapes labelled "placeholder",
- * allowed only while the prototype banner is shown; replaced by openly licensed drawings. */
+/** Month illustrations: the owner-supplied doctor-approved set (DEC-108; stock previews, prototype
+ * and demo only while the prototype banner is shown; licence or replace before public release). */
 export function illustrationSrc(month: number): string {
-  return `/illustrations/month_${month}.svg`
+  return `/illustrations/month_${month}.webp`
 }
 
 export function illustrationAlt(month: number): string {
-  return `Placeholder drawing for month ${month}`
+  return `Illustration of a typical baby in month ${month} of pregnancy`
 }
 
 /** §7.2 wording: "about the size of a [object]" plus the typical value — never "your baby". */

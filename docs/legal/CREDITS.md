@@ -21,11 +21,20 @@ Every third-party asset used in the apps must be listed here **before** it is us
 | Hossain, M. M. (2025). *Maternal health risk data* (Version 1) [Dataset]. Mendeley Data. https://doi.org/10.17632/ckhgtgdg4f.1 (`Maternal_Risk.csv`; cleaned to the criteria of Hossain et al. 2026) | Maternal model training (owner); training ranges in `backend/ml_models/maternal_risk_feature_ranges.json` (min/max only; not shipped) | CC BY 4.0 (attribution required), checked on the Mendeley Data page 2026-11-19 (owner confirmed) |
 
 ## Illustrations (Journey month cards)
-| File | Source URL | Author/publisher | Licence | Date downloaded | Changes |
+| File | Source | Artist | Licence status | Date added | Changes |
 |---|---|---|---|---|---|
-| month_1 … month_9 | `[OPEN]` | | Public domain / CC0 / CC BY / CC BY-SA only | | |
+| `frontend/apps/patient-web/public/illustrations/month_1.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `frontend/apps/patient-web/public/illustrations/month_2.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `frontend/apps/patient-web/public/illustrations/month_3.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `frontend/apps/patient-web/public/illustrations/month_4.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `frontend/apps/patient-web/public/illustrations/month_5.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `frontend/apps/patient-web/public/illustrations/month_6.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `frontend/apps/patient-web/public/illustrations/month_7.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `frontend/apps/patient-web/public/illustrations/month_8.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `frontend/apps/patient-web/public/illustrations/month_9.webp` | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, **not licensed for release** | 2026-11-21 | Cropped from the sheet only |
+| `assets/illustrations/source/dreamstime_304802954_preview.jpg` (original sheet) | Dreamstime, image ID 304802954 | Liubomyr Feshchyn | Stock, watermarked preview, not licensed for release | 2026-11-21 | None |
 
-Prototype only (Journey §7.1): `month_1.svg` … `month_9.svg` are simple placeholder shapes labelled "Placeholder", made by `frontend/scripts/make-placeholder-illustrations.mjs` — no third-party asset. Allowed only while the prototype banner is shown; they must be replaced by openly licensed drawings (and recorded above) before release.
+Owner decision DEC-108 (2026-11-21): used for the capstone prototype and demo only, while `show_prototype_banner = true`. **Before any public deployment, buy the licence or replace the set**; watermarked previews must not be shown to the public. Doctor approval: `docs/illustration_review.md`. The earlier placeholder shapes (`month_*.svg`) were removed.
 
 Checked and **not allowed** (2026-11-18): the nine fetal-stage images on womenshealth.gov "Stages of pregnancy" (`/sites/default/files/images/01months.jpg` … `09months.jpg`) carry a printed "©peggerrity.com" mark — a third-party illustrator's copyright that the site's "free of copyright restrictions" statement does not cover. Servier Medical Art (CC BY 4.0) has no month-by-month series.
 

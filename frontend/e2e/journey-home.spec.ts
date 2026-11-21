@@ -58,7 +58,11 @@ test('home shows the §4.3 blocks: baby card, stage content with source, banner,
   // baby card: placeholder illustration, size worded as typical, never "your baby"
   await expect(page.getByRole('heading', { name: 'Month 6', exact: true })).toBeVisible()
   // the current month's drawing appears twice: baby card and months strip
-  await expect(page.getByRole('img', { name: 'Placeholder drawing for month 6' })).toHaveCount(2)
+  const drawing = page.getByRole('img', {
+    name: 'Illustration of a typical baby in month 6 of pregnancy',
+  })
+  await expect(drawing).toHaveCount(2)
+  await expect(drawing.first()).toHaveAttribute('src', '/illustrations/month_6.webp')
   await expect(page.getByText('About the size of a test object (about 600 g)')).toBeVisible()
   await expect(page.getByText('Test size table')).toBeVisible()
   expect(await page.content()).not.toContain('your baby')

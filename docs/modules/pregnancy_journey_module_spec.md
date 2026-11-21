@@ -73,7 +73,7 @@ The Pregnancy Journey is the **home screen of the patient app**. It is the first
 | # | Topic | Decision | Date |
 |---|---|---|---|
 | D1 | Role of the module | Journey is the patient home screen; other modules are reached from it | 2026-11-16 |
-| D2 | Illustrations | 9 month illustrations (one per pregnancy month), taken from **publicly available, openly licensed drawings** (section 7.1), not drawn for Alovia; doctor-reviewed | 2026-11-16 |
+| D2 | Illustrations | 9 month illustrations (one per pregnancy month), taken from **publicly available, openly licensed drawings** (section 7.1), not drawn for Alovia; doctor-reviewed. *Overridden for the prototype and demo by DEC-108 (2026-11-21): the owner-supplied, doctor-approved stock set; licence or replace before public release.* | 2026-11-16 |
 | D3 | Motion | Gentle motion with Framer Motion (float, swipe between months, week transition). Lottie only for small decorative moments. No 3D, no Rive in v1. | 2026-11-16 |
 | D4 | No heartbeat animation | Nothing that looks like live monitoring | 2026-11-16 |
 | D5 | Baby-size comparisons | Yes. Typical size per week with a source; comparison object from **Microsoft Fluent Emoji** (MIT licence). | 2026-11-16 |
@@ -204,6 +204,8 @@ New week (each 7 days from GA 0), new month (first week of each month in 6.3), n
 ## 7. Illustrations and size comparison
 
 ### 7.1 Month illustrations
+> **Owner override (2026-11-21, DEC-108):** for the prototype and demo the nine files are the owner-supplied, doctor-approved stock set (Dreamstime 304802954, watermarked previews, `docs/legal/CREDITS.md`). The licence rule below still applies to any public release: buy the licence or replace the set first.
+
 - 9 image files, `month_1.*` … `month_9.*` (SVG preferred; PNG or WebP allowed), taken from **publicly available drawings**. Nothing is drawn for Alovia in v1.
 - **Allowed licences only:** public domain, CC0, CC BY 4.0, or CC BY-SA 4.0. Anything else (including "free to view", unclear, or non-commercial-only) is not allowed.
 - **Where to look first:** womenshealth.gov drawings without a copyright mark (public domain, S1). Check the current site for a set covering the months; keep one source or one consistent style across all 9 if possible. Other openly licensed medical drawing sets may be used if they meet the licence rule.

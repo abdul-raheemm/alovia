@@ -34,7 +34,7 @@ export default defineConfig({
         ],
       },
       // cache only the app's own files; health data from the API is never stored offline
-      workbox: { globPatterns: ['**/*.{js,css,html,svg,png,woff2}'], runtimeCaching: [] },
+      workbox: { globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'], runtimeCaching: [] },
     }),
   ],
   // one React for the app and the linked workspace packages

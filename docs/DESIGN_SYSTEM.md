@@ -97,7 +97,23 @@ Status backgrounds use the same hue at about 10% opacity, with the text in the f
 | Patient dark: text on primary-soft | 12.37 |
 | Dark: urgent button text (`--color-bg`) on urgent, patient / doctor | 6.52 / 6.55 (same pair as urgent on bg; white on dark urgent would fail) |
 
-All pairs pass AA for normal text (≥ 4.5). Any new colour pair must be checked before use and added here.
+| Patient light: ring arcs 1 / 2 / 3 on bg | 3.39 / 4.20 / 5.77 (graphics, ≥ 3:1) |
+| Patient light: ring arcs 1 / 2 / 3 on surface | 3.56 / 4.41 / 6.07 (graphics) |
+| Patient dark: ring arcs 1 / 2 / 3 on bg | 4.27 / 5.85 / 8.48 (graphics) |
+| Patient dark: ring arcs 1 / 2 / 3 on surface | 3.85 / 5.27 / 7.64 (graphics) |
+
+All text pairs pass AA for normal text (≥ 4.5); the ring arcs are graphics and pass 3:1 (re-computed 2026-11-21). Any new colour pair must be checked before use and added here.
+
+### 3.5 Ring tokens (patient app only, DEC-105; `FRONTEND_REDESIGN.md` §5.2)
+
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `--color-arc-1` | `#907BCC` | `#8073A8` | Trimester 1 (weeks 0–13) |
+| `--color-arc-2` | `#8169C5` | `#9989C8` | Trimester 2 (weeks 14–27) |
+| `--color-arc-3` | `#6B4FBB` | `#B9A6F2` | Trimester 3 (weeks 28–42) |
+| `--color-track` | = `--color-border` | = `--color-border` | Ring base (decorative; the ring is also described in text) |
+
+Tints of the primary only; no new hue. Weeks still to come use the same arc colour at 35% opacity (decorative). The doctor app does not use the ring.
 
 ---
 
@@ -108,6 +124,7 @@ Fonts are **self-hosted** through `@fontsource` packages (no Google Fonts CDN, s
 | | Patient app | Doctor app |
 |---|---|---|
 | Heading + body | **Nunito** (rounded, friendly) | **Inter** (clear, dense) |
+| Proposal (DEC-111, pending the owner's visual check) | Fraunces (display) + Figtree (body) | Geist |
 | Numbers in tables/charts | Nunito, tabular figures | Inter, tabular figures |
 
 | Style | Size / weight / line height |
@@ -149,7 +166,7 @@ Label always visible above the field (no placeholder-only labels). Focus: 2px pr
 Patient: surface, large radius, 20px padding, small shadow (light) / border (dark). Doctor: surface, medium radius, 16px padding, border. **Content-type marking (Journey D15):** educational content = primary-soft background with a small "Learn" label and source line; patient's own data = surface with "You logged"; doctor-confirmed = surface with a doctor icon and "From your doctor".
 
 ## 11. Navigation
-- **Patient, phone:** bottom nav bar with the items from `rules/journey/config.yaml` `nav_items` (now Home, Calendar, Log symptoms, Appointments, Doctor notes, More — DEC-040), urgent button pinned top-right on every screen; notification bar under the header.
+- **Patient, phone:** bottom nav bar with the items from `rules/journey/config.yaml` `nav_items` (now Home, Calendar, Log symptoms, Appointments, Doctor notes, More — DEC-040), urgent button pinned top-right on every screen; notification bar under the header. `[OPEN]` the redesign (`FRONTEND_REDESIGN.md` §7.4, open item 3) proposes Home, Calendar, Log (raised centre), Appointments, More, with Doctor notes under More plus a Home status card; the config stays as it is until the owner decides.
 - **Patient, laptop:** left side bar with the same items.
 - **Doctor:** left side bar (Home, Patients, Genetic review, Rule review, Admin [admin only]); top bar with search and theme toggle; collapses to a menu on small screens.
 
@@ -159,11 +176,11 @@ Loading, Empty, Error, Success, Disabled as defined in `docs/UX_FLOWS.md` §0.
 ## 13. Icons and imagery
 - UI icons: **Lucide** (ISC licence), outline, 20px default (24px in patient nav).
 - Size comparisons: **Microsoft Fluent Emoji** (MIT).
-- Month illustrations: openly licensed drawings only (Journey spec §7.1); all credits in `docs/legal/CREDITS.md`.
+- Month illustrations: the owner-supplied doctor-approved set for the prototype and demo (DEC-108, overriding Journey §7.1 for these nine files only; licence or replace before public release); all credits in `docs/legal/CREDITS.md`.
 - Every meaningful image has alt text; decorative images use `alt=""`.
 
 ## 14. Motion
-Framer Motion (`motion` package) for gentle float, swipes and week transitions; Lottie only for decorative moments. Durations 150–300ms. **Respect `prefers-reduced-motion`** and the in-app "Reduce motion" setting. No motion on L1 screens, and no heartbeat-like animation anywhere.
+Framer Motion (`motion` package) for gentle float, swipes and week transitions; Lottie only for decorative moments. Durations: fast 150 ms, base 200 ms, slow 300 ms; entering and moving elements ease out with `cubic-bezier(0.23, 1, 0.32, 1)`; animate `transform` and `opacity` only; hover styles only inside `@media (hover: hover)` (`FRONTEND_REDESIGN.md` §5.4). **Respect `prefers-reduced-motion`** and the in-app "Reduce motion" setting. No motion on L1 screens, and no heartbeat-like animation anywhere.
 
 ## 15. Responsive design
 Tailwind breakpoints: phone < 640px, small tablet 640–767px, tablet 768–1023px, laptop ≥ 1024px. Patient app designed at 375px first; doctor app at 1280px first, usable down to 375px (tables become cards). Layout details may change during build `[CONFIGURABLE]`, but must work at 375px and 1280px.
