@@ -69,9 +69,7 @@ async function setUp(page: Page) {
   )
 }
 
-test('calendar month view shows markers and the tapped day details (§9.1-9.2)', async ({
-  page,
-}) => {
+test('calendar shows markers and the tapped day details (§9.1-9.2)', async ({ page }) => {
   await setUp(page)
   const asked: string[] = []
   await mockCalendar(page, CALENDAR)
@@ -81,29 +79,39 @@ test('calendar month view shows markers and the tapped day details (§9.1-9.2)',
   await page.goto(`${PATIENT}/calendar`)
 
   await expect(page.getByRole('heading', { level: 1, name: 'Calendar' })).toBeVisible()
-  expect(asked).toContain('?from=2026-11-01&to=2026-11-30') // the month on screen
+  // the month on screen first, then the whole range (FRONTEND_REDESIGN §7.6)
+  expect(asked).toContain('?from=2026-11-01&to=2026-11-30')
+  await expect.poll(() => asked).toContain('?from=2026-05-04&to=2027-02-22')
   // markers are also in the day's accessible name, not only in the icons
   await expect(page.getByRole('button', { name: /^20 November 2026.*appointment/ })).toBeVisible()
   await expect(
     page.getByRole('button', { name: /^23 November 2026.*milestone, appointment/ }),
   ).toBeVisible()
-  // today is selected at first and has nothing on it
-  await expect(page.getByRole('heading', { name: '17 November 2026' })).toBeVisible()
-  await expect(page.getByText('Nothing on this day.')).toBeVisible()
+  const laptop = (page.viewportSize()?.width ?? 0) >= 1024
+  if (laptop) {
+    // the day panel shows today at first, which has nothing on it
+    await expect(page.getByRole('heading', { name: '17 November 2026' })).toBeVisible()
+    await expect(page.getByText('Nothing on this day.')).toBeVisible()
+  } else {
+    await expect(page.getByRole('dialog')).toHaveCount(0) // the sheet opens on a tap only
+  }
   await expectNoA11yViolations(page)
 
   await page.getByRole('button', { name: /^23 November 2026/ }).click()
   const details = page.getByRole('region', { name: '23 November 2026' })
+  await expect(details.getByText('Week 29', { exact: true })).toBeVisible()
   await expect(details.getByText('Week 29 begins')).toBeVisible()
   await expect(details.getByText('Trimester 3 begins')).toBeVisible()
   await expect(details.getByText('Test doctor visit')).toBeVisible()
   await expect(details.getByText('Added by your doctor')).toBeVisible()
+  if (!laptop) await page.getByRole('button', { name: 'Close' }).click()
 
   // §9.2 suggested check-up: dashed marker, labelled "suggested", with its official source
   await page.getByRole('button', { name: /^9 November 2026.*suggested check-up/ }).click()
   const ninth = page.getByRole('region', { name: '9 November 2026' })
   await expect(ninth.getByText('suggested', { exact: true })).toBeVisible()
   await expect(ninth.getByText('Test suggested check-up')).toBeVisible()
+  if (!laptop) await page.getByRole('button', { name: 'Close' }).click()
   await expect(page.getByRole('link', { name: 'Test schedule page' })).toBeVisible()
 
   await page.getByRole('button', { name: /^20 November 2026/ }).click()
@@ -117,10 +125,16 @@ test('calendar stops at the navigation range (§9.1: start .. due date + 2 weeks
   await setUp(page)
   await mockCalendar(page, { ...CALENDAR, end: '2026-11-30' })
   await page.goto(`${PATIENT}/calendar`)
-  await expect(page.getByRole('button', { name: /next month/i })).toBeDisabled()
-  await page.getByRole('button', { name: /previous month/i }).click()
-  await expect(page.getByText('October 2026')).toBeVisible()
-  await expect(page.getByText('Choose a day to see its details.')).toBeVisible()
+  if ((page.viewportSize()?.width ?? 0) >= 1024) {
+    await expect(page.getByRole('button', { name: /next month/i })).toBeDisabled()
+    await page.getByRole('button', { name: /previous month/i }).click()
+    await expect(page.getByText('October 2026')).toBeVisible()
+  } else {
+    // phone: one list of months from the pregnancy start to the end of the range
+    await expect(page.getByText('May 2026', { exact: true })).toBeAttached()
+    await expect(page.getByText('November 2026', { exact: true })).toBeAttached()
+    await expect(page.getByText('December 2026', { exact: true })).toHaveCount(0)
+  }
 })
 
 test('home week strip marks today and opens the calendar on a day', async ({ page }) => {
@@ -228,7 +242,7 @@ test('calendar shows symptom dots and distinct red-flag icons (Journey §15 test
     page.getByRole('button', { name: /^12 November 2026.*symptoms logged$/ }),
   ).toBeVisible()
   const redDay = page.getByRole('button', {
-    name: /^13 November 2026.*symptoms logged, red-flag check-in/,
+    name: /^13 November 2026.*symptoms logged, Level 1 warning logged/,
   })
   await expect(redDay).toBeVisible()
   await expect(redDay.locator('svg.text-urgent')).toHaveCount(1) // distinct icon and colour
@@ -236,6 +250,12 @@ test('calendar shows symptom dots and distinct red-flag icons (Journey §15 test
   const details = page.getByRole('region', { name: '13 November 2026' })
   await expect(details.getByText('Check-in: Saved')).toBeVisible()
   await expect(details.getByText('Check-in: Go to hospital now')).toBeVisible()
-  await expect(page.getByText('Red flag', { exact: true })).toBeVisible() // legend
+  await expectNoA11yViolations(page)
+  if ((page.viewportSize()?.width ?? 0) < 1024)
+    await page.getByRole('button', { name: 'Close' }).click()
+  // the legend is behind a visible "What these mean" button (§7.6)
+  await page.getByRole('button', { name: 'What these mean' }).click()
+  await expect(page.getByText('Level 1 warning logged', { exact: true })).toBeVisible()
+  await expect(page.getByText('Level 2 warning logged', { exact: true })).toBeVisible()
   await expectNoA11yViolations(page)
 })

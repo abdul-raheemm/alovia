@@ -11,6 +11,44 @@
   --rdp-day_button-height: 46px;
 }
 
+/* Calendar redesign (FRONTEND_REDESIGN §7.6): full-width grid, cells at least 44 px, a 2rem
+   week gutter; today = primary outline + bold numeral; suggested check-up = dashed outline
+   (never faded colours). */
+.alovia-calendar .rdp-month,
+.alovia-calendar .rdp-month_grid {
+  width: 100%;
+}
+.alovia-calendar .rdp-month_grid {
+  table-layout: fixed;
+}
+.alovia-calendar .rdp-week_number,
+.alovia-calendar .rdp-week_number_header {
+  width: 2rem;
+}
+/* full opacity: the library's 0.75 puts the gutter on its own layer above the pinned weekday
+   row; the muted text colour keeps it quiet */
+.rdp-root.alovia-calendar {
+  --rdp-week_number-opacity: 1;
+}
+.alovia-calendar .cal-cell .rdp-day_button {
+  width: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--radius-sm);
+}
+.alovia-calendar .cal-cell-lg .rdp-day_button {
+  min-height: 72px;
+}
+.alovia-calendar .cal-today .rdp-day_button {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+.alovia-calendar .cal-suggested .rdp-day_button {
+  border: 1.5px dashed var(--color-primary);
+}
+
 /* Symptom history charts (Symptom spec §4.3): severity is an ordered magnitude, so one hue
    light -> dark; checked with the dataviz palette validator for each theme's surface. */
 :root {

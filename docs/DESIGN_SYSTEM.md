@@ -168,6 +168,8 @@ Label always visible above the field (no placeholder-only labels). Focus: 2px pr
 
 **Pregnancy ring (patient Home, FRONTEND_REDESIGN §7.2):** SVG 320×320, radius 140, stroke 22; three arcs `--color-arc-1..3` with 3° gaps, weeks to come at 35% opacity; 300 px wide on phones, 340 px on laptops; the drag marker is a 44 px `surface` bubble with a `primary` outline and `text` label; the month image sits on a round disc (`surface`, white in dark mode). Float 4 px / 6 s and a 300 ms month fade, both off with reduced motion.
 
+**Calendar (patient, FRONTEND_REDESIGN §7.6, DEC-115):** cells at least 44 px; rows are pregnancy weeks with a "W24" gutter; today = 2 px `primary` outline and bold numeral; markers: `primary` dot = check-in, L1 `triangle-alert` in `urgent`, L2 `circle-alert` in `caution` (a different shape), calendar icon = appointment, flag = milestone (new weeks are in the gutter), dashed `primary` outline = suggested check-up; never faded colours; up to two markers plus "+n". Phone: month list + bottom sheet; laptop: one month + right panel.
+
 **Sheets:** native `<dialog>` opened as a modal (DEC-113). Phone: full screen with an X; laptop: right panel, 480 px. Esc closes.
 
 ## 10. Cards

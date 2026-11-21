@@ -774,3 +774,13 @@ Fix: ring max 300 px on phones (340 on laptops), dates link moved below the size
 Verified by: `home-ring.spec.ts` first-screen test.
 Prevention: the test stays; longer approved texts will be caught by it.
 Category: design (found by tests)
+
+### ERR-074 — 2026-11-22 — Calendar rows showed through the pinned header
+Who: Claude Code
+Phase / task: Redesign step 5
+What happened: on the phone a "W22" label was visible between the pinned weekday row and the sticky month name.
+Cause: the weekday row is 25 px tall but the month name stuck at 28 px, leaving a 3 px gap. A first guess (the library's 0.75 opacity layer) did not fix it; measuring with `elementFromPoint` found the real cause.
+Fix: month name sticks at 25 px; the week number also drawn at full opacity.
+Verified by: screenshot at the same scroll position; full check.
+Prevention: measure positions before changing styles on a guess.
+Category: design

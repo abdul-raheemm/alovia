@@ -901,3 +901,11 @@ Done:
 - The first-screen test found the size line 60 px below the fold at 375×667; fixed (ring 300 px on phones, dates link moved below the size line).
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 78 unit; build; 153 E2E.
 Next step: step 5 plan (Calendar).
+
+## Session 46 — 2026-11-22 — Frontend redesign step 5: Calendar
+Who: Raheem + agent: Claude Code
+Done:
+- Owner chose rows = pregnancy weeks (DEC-115). Calendar rebuilt: phone month list (pregnancy start to due + 2 weeks, one range request after a one-month probe), W gutter, pinned weekday row, sticky month names, 44 px cells, today outline, Jump to today, bottom-sheet day details with each check-in's symptoms, severity and duration (existing check-in API); laptop one month with Previous / Next / Today and a right panel; markers: dot, L1 triangle (urgent), L2 circle-alert (caution), appointment, flag, dashed suggested; "What these mean" legend.
+- Fixed after screenshots: a 3 px gap between the pinned weekday row and the sticky month name let rows show through; the day sheet stretched to full height.
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 80 unit; build; 159 E2E.
+Next step: step 6 plan (doctor app).

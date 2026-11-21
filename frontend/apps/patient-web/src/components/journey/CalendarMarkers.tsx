@@ -37,14 +37,33 @@ export function markerWords(markers: DayMarkers | undefined): string {
     markers?.appointments.length ? 'appointment' : null,
     markers?.suggested.length ? 'suggested check-up' : null,
     markers?.levels.length ? 'symptoms logged' : null,
-    markers && hasRedFlag(markers) ? 'red-flag check-in' : null,
+    // FRONTEND_REDESIGN §7.6: the level is named, not only coloured
+    markers && warningLevel(markers)
+      ? `Level ${warningLevel(markers)?.slice(1)} warning logged`
+      : null,
   ].filter(Boolean)
   return words.length ? `, ${words.join(', ')}` : ''
 }
 
 /** §9.2: a day with an L1 or L2 check-in gets the distinct red-flag icon. */
 export function hasRedFlag(markers: DayMarkers): boolean {
-  return markers.levels.some((l) => l === 'L1' || l === 'L2')
+  return warningLevel(markers) !== null
+}
+
+/** The day's highest warning level: L1 above L2; null when there is none. */
+export function warningLevel(markers: DayMarkers): 'L1' | 'L2' | null {
+  if (markers.levels.includes('L1')) return 'L1'
+  if (markers.levels.includes('L2')) return 'L2'
+  return null
+}
+
+/** Pregnancy week of a local day, counted from the pregnancy start (Journey §9.1 range start). */
+export function pregnancyWeekOn(start: string, day: string): number {
+  const [a, b] = [start, day].map((d) => {
+    const [y, m, dd] = d.split('-').map(Number) as [number, number, number]
+    return Date.UTC(y, m - 1, dd)
+  }) as [number, number]
+  return Math.floor((b - a) / (7 * 86_400_000))
 }
 
 export function markersFor(byDay: Map<string, DayMarkers>, day: Date): DayMarkers | undefined {
