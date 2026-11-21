@@ -1,5 +1,5 @@
-import { Logo } from '@alovia/ui'
-import { Outlet } from 'react-router'
+import { cn, Logo } from '@alovia/ui'
+import { Outlet, useLocation } from 'react-router'
 
 import { useJourneyHome } from '../app/useJourneyHome'
 import { BottomNav, SideNav } from './PatientNav'
@@ -17,6 +17,9 @@ const FALLBACK_NAV = [
 export function PatientShell() {
   const home = useJourneyHome()
   const items = home.data?.nav_items ?? FALLBACK_NAV
+  // FRONTEND_REDESIGN §6: redesigned pages get the 1200 px desktop layout; the others keep
+  // their reading width until their own redesign step
+  const wide = useLocation().pathname === '/home'
   return (
     <div className="min-h-dvh lg:flex">
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:p-2">
@@ -30,7 +33,7 @@ export function PatientShell() {
           </span>
           <UrgentButton />
         </header>
-        <main id="main" className="mx-auto max-w-3xl p-4">
+        <main id="main" className={cn('mx-auto p-4', wide ? 'max-w-[1200px] lg:p-6' : 'max-w-3xl')}>
           <Outlet />
         </main>
       </div>

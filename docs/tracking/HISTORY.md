@@ -892,3 +892,12 @@ Done:
 - Doctor rule-review sheet regenerated: 51 symptom rows (189 in total) because of `msg_not_saved`.
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 70 unit; build; 141 E2E.
 Next step: step 4 plan (Home ring).
+
+## Session 45 — 2026-11-21 — Frontend redesign step 4: Home ring
+Who: Raheem + agent: Claude Code
+Done:
+- Owner approved the plan with both recommendations (DEC-114): "Read about week N" opens the month page holding that week; doctor-note and result notifications become Home status cards.
+- `app/ring.ts` (geometry, drag with stops at both ends, week start date = due − 280 + 7 × week, month from the served map) + 8 unit tests; `PregnancyRing` (arcs, today dot, draggable aria-hidden marker, haptics, month disc, float/fade off with reduced motion); Home rebuilt (headline, preview chip, size line, cards; laptop two columns, 1200 px).
+- The first-screen test found the size line 60 px below the fold at 375×667; fixed (ring 300 px on phones, dates link moved below the size line).
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 78 unit; build; 153 E2E.
+Next step: step 5 plan (Calendar).

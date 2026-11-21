@@ -754,3 +754,23 @@ Fix: ran `scripts/export_symptom_rule_review.py` (51 rows) and updated the expec
 Verified by: the test and the full check.
 Prevention: when adding a message key, regenerate the rule-review sheet in the same change.
 Category: missed step
+
+### ERR-072 — 2026-11-21 — Clean-up script removed imports still in use
+Who: Claude Code
+Phase / task: Redesign step 4
+What happened: after replacing BabyCard, `illustrationAlt` / `illustrationSrc` were dropped from the imports of `JourneyBlocks.tsx` although the month cards use them.
+Cause: the script counted the name with a trailing comma, which only the import line has, so it judged the names unused.
+Fix: imports restored before any check ran; types and lint confirmed.
+Verified by: typecheck and lint clean.
+Prevention: let lint/typecheck find unused imports instead of hand-written text checks.
+Category: tooling
+
+### ERR-073 — 2026-11-21 — Home rows 1-6 did not fit the first screen
+Who: Claude Code
+Phase / task: Redesign step 4
+What happened: the new first-screen test found the size line ending at 662 px, below the bottom bar (602 px) at 375×667.
+Cause: ring 343 px wide (full width) and the dates link inside the headline.
+Fix: ring max 300 px on phones (340 on laptops), dates link moved below the size line, tighter gaps.
+Verified by: `home-ring.spec.ts` first-screen test.
+Prevention: the test stays; longer approved texts will be caught by it.
+Category: design (found by tests)

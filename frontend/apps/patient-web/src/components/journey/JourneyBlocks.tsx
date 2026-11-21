@@ -1,15 +1,14 @@
 import type { JourneyContentItem, JourneyHome } from '@alovia/shared'
 import { Card, cn } from '@alovia/ui'
 import { BookOpen, CalendarClock, Check, Dna, PenLine, TriangleAlert } from 'lucide-react'
-import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router'
 
 import {
   appointmentWhen,
   formatDay,
   illustrationAlt,
-  isoDay,
   illustrationSrc,
+  isoDay,
   messageText,
   sizeLine,
   weekDays,
@@ -30,52 +29,28 @@ export function PrototypeBanner({ messages }: { messages: Messages }) {
   )
 }
 
-/** §4.3 baby card: month illustration (gentle float, D3) and the size comparison, worded as
- * typical (§13.1). No size row -> no comparison (§7.2). */
-export function BabyCard({
-  pregnancy,
-  size,
-  messages,
-}: {
-  pregnancy: NonNullable<JourneyHome['pregnancy']>
-  size: JourneyHome['size']
-  messages: Messages
-}) {
-  const reduceMotion = useReducedMotion()
+/** §4.3 size comparison under the ring headline (FRONTEND_REDESIGN §7.1 row 6), worded as
+ * typical (§13.1), with its source. No sourced size row -> nothing (§7.2). */
+export function SizeLine({ size, messages }: { size: JourneyHome['size']; messages: Messages }) {
+  if (!size) return null
   return (
-    <Card className="flex items-center gap-4">
-      <motion.img
-        src={illustrationSrc(pregnancy.month)}
-        alt={illustrationAlt(pregnancy.month)}
-        width={112}
-        height={112}
-        className="size-28 shrink-0"
-        animate={reduceMotion ? undefined : { y: [0, -5, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <div className="flex flex-col gap-1">
-        <h2>Month {pregnancy.month}</h2>
-        {size && (
-          <p className="flex items-center gap-2">
-            {/* comparison object from Microsoft Fluent Emoji (MIT); name is in the text */}
-            <img
-              src={`/icons/fluent/${size.object_icon_id}.svg`}
-              alt=""
-              width={28}
-              height={28}
-              className="size-7 shrink-0"
-            />
-            {sizeLine(size)}
-          </p>
-        )}
-        {size && (
-          <p className="text-sm text-muted">
-            Source: {size.source.publisher} — {size.source.title}
-          </p>
-        )}
-        <p className="text-sm text-muted">{messageText(messages, 'msg_typical_not_yours')}</p>
-      </div>
-    </Card>
+    <div className="flex flex-col gap-1">
+      <p className="flex items-center gap-2">
+        {/* comparison object from Microsoft Fluent Emoji (MIT); name is in the text */}
+        <img
+          src={`/icons/fluent/${size.object_icon_id}.svg`}
+          alt=""
+          width={28}
+          height={28}
+          className="size-7 shrink-0"
+        />
+        {sizeLine(size)}
+      </p>
+      <p className="text-sm text-muted">
+        Source: {size.source.publisher} — {size.source.title}
+      </p>
+      <p className="text-sm text-muted">{messageText(messages, 'msg_typical_not_yours')}</p>
+    </div>
   )
 }
 

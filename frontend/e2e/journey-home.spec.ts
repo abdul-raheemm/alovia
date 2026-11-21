@@ -55,9 +55,10 @@ test('home shows the §4.3 blocks: baby card, stage content with source, banner,
   await page.route(HOME_URL, (route) => route.fulfill({ json: { data: FULL_HOME, error: null } }))
   await page.goto(`${PATIENT}/home`)
 
-  // baby card: placeholder illustration, size worded as typical, never "your baby"
-  await expect(page.getByRole('heading', { name: 'Month 6', exact: true })).toBeVisible()
-  // the current month's drawing appears twice: baby card and months strip
+  // ring centre (FRONTEND_REDESIGN §7.1-7.3): today's month image and caption; size worded as
+  // typical, never "your baby"
+  await expect(page.getByText('Month 6 · now')).toBeVisible()
+  // the current month's drawing appears twice: ring centre and months strip
   const drawing = page.getByRole('img', {
     name: 'Illustration of a typical baby in month 6 of pregnancy',
   })

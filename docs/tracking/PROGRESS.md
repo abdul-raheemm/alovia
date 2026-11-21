@@ -73,7 +73,8 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 - [x] Step 1: tokens (ring arcs, motion), fonts Fraunces + Figtree / Geist (DEC-111, H1 + H2, safety headings stay sans), nav decision DEC-112 recorded — Raheem + Claude Code — 2026-11-21
 - [x] Step 2: skeleton set, BottomNav / SideNav (DEC-112 nav; bar label "Visits" for Appointments), UrgentButton, Home + notifications behind one skeleton, doctor side bar collapse — Raheem + Claude Code — 2026-11-21
 - [x] Step 3: Log flow — native `<dialog>` sheet, warning and everyday chips, detail cards, PUQE sheet with live band, Save bar, 30-minute device draft, `msg_not_saved` (DEC-113) — Raheem + Claude Code — 2026-11-21
-- [ ] Step 4: Home (ring, baby image, headline, preview chip, cards) — next
+- [x] Step 4: Home — pregnancy ring (drag preview 0-42 weeks, today dot, haptics), month image on a disc with float/fade, headline, size line, status cards (DEC-114), laptop two columns — Raheem + Claude Code — 2026-11-21
+- [ ] Step 5: Calendar (markers, day detail, legend, desktop grid) — next
 - [ ] Steps 3-9: Log, Home ring, Calendar, Doctor screens, motion pass, unslop/impeccable pass, Playwright + snapshots
 - Owner items: fill `docs/illustration_review.md`; illustration licence before public release.
 

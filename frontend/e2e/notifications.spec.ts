@@ -64,13 +64,16 @@ test('notification bar: tap opens the target and marks it read; dismiss removes 
   await page.goto(`${PATIENT}/home`)
 
   const bar = page.getByRole('region', { name: 'Notifications' })
-  await expect(bar.getByRole('link')).toHaveCount(3)
+  await expect(bar.getByRole('link')).toHaveCount(2)
   await expect(bar.getByRole('link', { name: 'Week 28 has started' })).toBeVisible()
-  await expect(bar.getByRole('link', { name: 'Your doctor shared a note with you' })).toBeVisible()
+  // a new doctor note is a Home status card, not a bar item (DEC-112, step 4 plan)
+  const noteCard = page.getByRole('link', { name: 'Your doctor shared a note with you' })
+  await expect(noteCard).toHaveCount(1)
+  await expect(bar.getByRole('link', { name: 'Your doctor shared a note with you' })).toHaveCount(0)
   await expectNoA11yViolations(page)
 
   await bar.getByRole('button', { name: 'Dismiss: Week 28 has started' }).click()
-  await expect(bar.getByRole('link')).toHaveCount(2)
+  await expect(bar.getByRole('link')).toHaveCount(1)
   expect(posted).toContain('n-week/dismiss')
 
   await bar.getByRole('link', { name: 'Month 7 has started' }).click()

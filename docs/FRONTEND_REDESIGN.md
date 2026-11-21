@@ -257,7 +257,7 @@ Tailwind breakpoints (design system section 15): phone below 640, small tablet 6
 **Scrubbing [OWNER: option A with guardrails]**
 - The marker can reach week 0 up to the 42-week end, past and future, by dragging in either direction.
 - Guardrails: (a) any week other than today shows the preview chip "Viewing week N · Back to today"; (b) a scrubbed week is **read-only**: no log, warning or action buttons, and it never changes any risk status or red-flag rule; (c) the today dot stays visible, and the marker returns to today when the screen is left and reopened.
-- While scrubbing, the headline block shows the viewed week ("Week 30") and the date that week starts, and hides "days to go". A link line "Read about week 30" opens that week's content item with its source.
+- While scrubbing, the headline block shows the viewed week ("Week 30") and the date that week starts, and hides "days to go". A link line "Read about week 30" opens that week's content item with its source. **[OWNER 2026-11-21, DEC-114: opens the month page that holds that week; no week page yet.]**
 - **The month illustration and its caption do not change while scrubbing.** [OWNER]
 - Compute the headline from `previewDay` synchronously (no animation lag), so the week, date and text never disagree.
 

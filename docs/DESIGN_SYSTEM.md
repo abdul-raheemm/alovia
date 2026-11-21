@@ -166,6 +166,8 @@ Label always visible above the field (no placeholder-only labels). Focus: 2px pr
 
 **Chips (patient Log, FRONTEND_REDESIGN §7.5):** a real checkbox (symptom) or radio (single choice) covering the whole chip invisibly; at least 44 px, pill shape; off: `primary-soft` wash with a 1 px border; on: `primary` fill, `on-primary` text and a check icon; press scales to 0.97 (none with reduced motion); focus ring on the chip.
 
+**Pregnancy ring (patient Home, FRONTEND_REDESIGN §7.2):** SVG 320×320, radius 140, stroke 22; three arcs `--color-arc-1..3` with 3° gaps, weeks to come at 35% opacity; 300 px wide on phones, 340 px on laptops; the drag marker is a 44 px `surface` bubble with a `primary` outline and `text` label; the month image sits on a round disc (`surface`, white in dark mode). Float 4 px / 6 s and a 300 ms month fade, both off with reduced motion.
+
 **Sheets:** native `<dialog>` opened as a modal (DEC-113). Phone: full screen with an X; laptop: right panel, 480 px. Esc closes.
 
 ## 10. Cards

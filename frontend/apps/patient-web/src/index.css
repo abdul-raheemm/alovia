@@ -25,3 +25,31 @@
   --chart-severe: #d4c8f8;
   --chart-logged: #6f6884;
 }
+
+/* Home ring month image (FRONTEND_REDESIGN §7.3): a slow 4 px float over 6 s while the ring is
+   idle, and a single 300 ms fade when the month changes. Off with reduced motion. */
+@keyframes alovia-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+@keyframes alovia-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ring-float {
+    animation: alovia-float 6s ease-in-out infinite;
+  }
+  [data-dragging] .ring-float {
+    animation-play-state: paused;
+  }
+  .ring-fade {
+    animation: alovia-fade-in var(--duration-slow) var(--ease-out-strong);
+  }
+}
