@@ -957,3 +957,13 @@ Done:
 - The larger suite timed out 4 tests under parallel load (the phone calendar test took 27 s of 30 s alone); Playwright limits raised to 60 s per test and 10 s per wait.
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 91 unit; build; 234 E2E (42 skipped by design).
 Next step: owner review; merge into main after approval; then Phase 6 planning (free LLM options first).
+
+## Session 52 — 2026-11-22 — Redesign merged; fresh seed data
+Who: Raheem + agent: Claude Code
+Done:
+- `redesign/frontend` fast-forward merged into `main` and pushed (`3e171d6..5416b6d`), owner's request.
+- New `scripts/seed_dev.py`: 7 sign-in accounts (Admin, Dr Mary, Test Patient 1-5; passwords only in `backend/.env` as `SEED_PASSWORD_*`) and connected data through the app's services (weeks 10 / 22 / 33, patient 4 joined without data, patient 5 birth two weeks ago). `create_user` in `app/core/auth_admin.py` (seed only). Reset SQL in `docs/review/reset_seed_data.sql`.
+- Review fixes (owner: "fix all 3"): no fetal result after patient 5's birth; the "already has a login" error says to run the reset SQL; patient 3's L1 check-in dated today like its inbox item.
+- Owner ran the reset SQL (0 app users, 0 logins) and filled `.env`; the seed ran on the main project. Checked: all 7 accounts sign in (Supabase password sign-in), data as planned; the real rules added 6 "pattern change P1" inbox items.
+Checks: backend ruff, format, mypy clean; 561 backend tests passed (before the review fixes); seed + admin tests passed after them.
+Next step: owner's manual testing with the seeded accounts; then Phase 6 planning.

@@ -35,7 +35,7 @@ py -3.14 -m venv .venv
 pip install -r requirements.txt -r requirements-dev.txt
 copy .env.example .env      # then fill values (see docs/ENVIRONMENT.md)
 alembic upgrade head        # only after the owner approves
-python scripts\seed_dev.py  # optional: fake test data + invite links (DATABASE.md §12)
+python scripts\seed_dev.py  # optional: 7 test logins + connected data; reset first (DATABASE.md §12)
 uvicorn app.main:create_app --factory --reload
 
 # Frontends (new terminal)

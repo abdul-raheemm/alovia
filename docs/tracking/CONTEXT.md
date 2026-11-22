@@ -32,7 +32,7 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 ## Current state
 
 ### Frontend redesign — in progress (2026-11-21)
-- Branch `redesign/frontend` (from `main` at 0.5.0). Brief: `docs/FRONTEND_REDESIGN.md`; build order §14. **Redesign complete (steps 0-9, DEC-105..118).** Next: owner review, then merge `redesign/frontend` into `main` (ask first), then Phase 6 planning. Bottom bar: Home, Calendar, Log, Visits, More (DEC-112).
+- Branch `redesign/frontend` (from `main` at 0.5.0). Brief: `docs/FRONTEND_REDESIGN.md`; build order §14. **Redesign complete and merged into `main` (2026-11-22).** Fresh seed data in the main project (Admin, Dr Mary, Test Patient 1-5). Next: owner's manual testing, then Phase 6 planning. Bottom bar: Home, Calendar, Log, Visits, More (DEC-112).
 - Fonts: Fraunces (H1/H2) + Figtree, Geist for doctors (DEC-111); safety/clinical headings use `font-sans`.
 - Phase 6 stays paused until the redesign is done or the owner says otherwise.
 
@@ -59,7 +59,7 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 - Owner permission (2026-11-17): finish the rest of Phase 1 without asking per task; normal approvals resume with Phase 2.
 - ML moved: `backend/ml_models/` (8 files, byte-identical), `app/modules/predictions/risk_model.py` (logic unchanged), loaded once at startup; `/health` `models_loaded: true`. Prediction routes come in Phase 5.
 - Frontend done (`frontend/`): patient-web (port 5173, installable PWA) and doctor-web (port 5174), `packages/ui` (tokens from DESIGN_SYSTEM, components, themes, fonts), `packages/shared` (API client, auth-only Supabase client, generated API types, legal texts from `docs/legal`). Invite-only sign-up with consent, sign-in/out, role routing, shells with placeholders for later phases.
-- Seed: `backend/scripts/seed_dev.py` (1 admin, 2 doctors, 5 patients, invite links). Every check: `scripts/check_all.ps1`.
+- Seed: `backend/scripts/seed_dev.py` (Admin, Dr Mary, Test Patient 1-5 with logins and connected data; reset with `docs/review/reset_seed_data.sql`). Every check: `scripts/check_all.ps1`.
 - **Phase 1 approved and merged into `main` (release 0.1.0).** Palette and fonts confirmed (DEC-015).
 - **Phase 2 started** (branch `phase-2/migration-and-dates`). Done: migration 0002 (Journey tables + `inbox_items`, applied to the main project) and the date engine (`app/modules/journey/engine.py`, settings in `backend/rules/journey/config.yaml`, loaded at startup; `/health` `rules_loaded.journey: true`).
 - Phase 2 task order (owner, 2026-11-17): 3 dates ✓ → 5 home + month cards → 4 content provider (fetch S1/S2/S3/S6, DEC-042/043) → 6 calendar + appointments → 7 notifications + doctor notes → 8 pregnancy end → 0 Phase 1 follow-ups (doctor/admin consent, 405 code, sign-in audit) → 9 review.

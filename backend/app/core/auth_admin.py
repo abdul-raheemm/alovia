@@ -64,3 +64,31 @@ class SupabaseAuthAdmin:
             logger.error("auth admin failed", extra={"reason": "no user id in reply"})
             raise AppError("SERVICE_UNAVAILABLE", "Invites are not available right now.", 503)
         return user_id
+
+
+def create_user(url: str | None, service_key: str | None, email: str, password: str) -> str:
+    """Development seed only (scripts/seed_dev.py): a confirmed email + password login through
+    the Supabase admin API. Returns the new user id. Never called by the running app."""
+    if not (url and service_key):
+        raise RuntimeError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are needed in .env")
+    req = urllib.request.Request(
+        f"{url.rstrip('/')}/auth/v1/admin/users",
+        data=json.dumps({"email": email, "password": password, "email_confirm": True}).encode(),
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {service_key}",
+            "apikey": service_key,
+            "Content-Type": "application/json",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT_SECONDS) as res:
+            return str(json.loads(res.read())["id"])
+    except urllib.error.HTTPError as exc:
+        exc.close()
+        if exc.code == 422:  # Supabase: the email is already registered
+            raise RuntimeError(
+                f"{email} already has a Supabase login: run docs/review/reset_seed_data.sql "
+                "in Supabase, then run the seed again"
+            ) from exc
+        raise RuntimeError(f"Supabase refused to create {email} (HTTP {exc.code})") from exc

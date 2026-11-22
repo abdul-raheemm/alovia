@@ -280,7 +280,7 @@ All patient tables are sensitive health data (pregnancy, symptoms, genetic findi
 6. No destructive change (drop/rename) without the owner's explicit approval.
 
 ## 12. Seed Data (development only)
-`backend/scripts/seed_dev.py` creates clearly fake data: 1 admin, 2 doctors, 5 patients with names like "Test Patient 1", different gestational ages (8, 16, 24, 34, 41 weeks), sample appointments, check-ins at each level, one genetic assessment per status. Never real people's data. Never run against production without approval.
+`backend/scripts/seed_dev.py` (owner 2026-11-22) creates seven synthetic sign-in accounts and the data that connects them: Admin, who invited Dr Mary; Dr Mary, the primary doctor of Test Patient 1-5 (weeks 10, 22 and 33 — one per trimester; patient 4 joined with no data yet; patient 5 gave birth two weeks ago). Check-ins, predictions, a genetic check, notes and appointments go through the app's own services. Logins are created in Supabase with the service-role key; passwords come from `backend/.env` (`SEED_PASSWORD_*`, never committed). It refuses to run when users exist: first run `docs/review/reset_seed_data.sql` in the Supabase SQL editor.
 
 ## 13. Migrations by Phase
 
