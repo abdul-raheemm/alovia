@@ -9,6 +9,8 @@
   --rdp-accent-background-color: var(--color-primary-soft);
   --rdp-day-height: 48px;
   --rdp-day_button-height: 46px;
+  --rdp-nav_button-width: 44px;
+  --rdp-nav_button-height: 44px;
 }
 
 /* Calendar redesign (FRONTEND_REDESIGN §7.6): full-width grid, cells at least 44 px, a 2rem

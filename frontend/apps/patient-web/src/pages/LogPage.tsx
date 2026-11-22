@@ -267,7 +267,9 @@ function LogForm({ v, onClose }: { v: Vocabulary; onClose: () => void }) {
         )}
         <NotMonitoredNotice />
         <p className="text-sm">
-          <Link to="/log/history">Your symptom history</Link>
+          <Link className="tap" to="/log/history">
+            Your symptom history
+          </Link>
         </p>
         {otherError && <ErrorState message={otherError} />}
 

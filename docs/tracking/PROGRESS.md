@@ -79,7 +79,8 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 - [x] Step 6b: Doctor patient detail — header card (age, week, due date + source, unseen, per-module badges), scrolling tab bar with the open tab in view, "View as table" on every chart, sticky main form buttons on phones — Raheem + Claude Code — 2026-11-22
 - [x] Step 7: motion pass — audit with the Emil improve-animations skill (quick); sheet slide-in, button press, ring spring, instant scroll with reduced motion, patient tab cross-fades, once-per-load Home card rise (DEC-117); reduced-motion E2E — Raheem + Claude Code — 2026-11-22
 - [x] Step 8: quality pass — `impeccable detect` (code + live public pages), screenshots of every E2E screen, `/unslop` audit (light slop, polish mode), empty states (DEC-118), worst-case data hardening — Raheem + Claude Code — 2026-11-22
-- [ ] Step 9: final Playwright suite, axe and visual snapshots — next
+- [x] Step 9: final suite — read-only preview hides log/action links; ring tests (week 2, month boundaries, haptics); every-screen checks (360 px, 44 px targets); CLS on Log and Calendar; token contrast test; 5 more size/theme projects; 24 visual snapshots — Raheem + Claude Code — 2026-11-22
+- **Redesign complete (steps 0-9).** Next: owner review of the branch, then merge `redesign/frontend` into `main` (asks first), then Phase 6 planning.
 - [ ] Steps 3-9: Log, Home ring, Calendar, Doctor screens, motion pass, unslop/impeccable pass, Playwright + snapshots
 - Owner items: fill `docs/illustration_review.md`; illustration licence before public release.
 

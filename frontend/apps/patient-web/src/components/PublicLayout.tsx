@@ -7,7 +7,7 @@ export function PublicLayout() {
   return (
     <div className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-6 px-4 py-6">
       <header>
-        <Link to="/" className="no-underline">
+        <Link to="/" className="tap no-underline">
           <Logo />
         </Link>
       </header>
@@ -27,11 +27,15 @@ export function LegalFooter() {
         <ul className="flex flex-wrap gap-x-4 gap-y-2">
           {LEGAL_DOCS.map((doc) => (
             <li key={doc.path}>
-              <Link to={doc.path}>{doc.title}</Link>
+              <Link className="tap" to={doc.path}>
+                {doc.title}
+              </Link>
             </li>
           ))}
           <li>
-            <Link to="/about">About</Link>
+            <Link className="tap" to="/about">
+              About
+            </Link>
           </li>
         </ul>
       </nav>

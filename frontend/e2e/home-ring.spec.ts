@@ -172,3 +172,94 @@ test('home loads without layout shift (CLS under 0.1, §11 rule 5)', async ({ pa
   await page.waitForTimeout(500)
   expect(await page.evaluate(() => (window as unknown as { cls: number }).cls)).toBeLessThan(0.1)
 })
+
+async function drag(page: Page, weeks: number[]) {
+  await page.locator('[data-ring-marker] circle').hover()
+  await page.mouse.down()
+  for (const week of weeks) {
+    const [x, y] = await ringPoint(page, week)
+    await page.mouse.move(x, y, { steps: 4 })
+  }
+  await page.mouse.up()
+}
+
+test('preview is read-only and works backwards too: week 2, image unchanged, no actions', async ({
+  page,
+}) => {
+  await openHome(page)
+  await expect(page.getByRole('link', { name: 'Log a symptom' })).toBeVisible()
+  await drag(page, [20, 12, 6, 2.5])
+  await expect(page.getByRole('heading', { name: 'Week 2' })).toBeVisible()
+  await expect(page.getByText('Month 6 · now')).toBeVisible()
+  await expect(
+    page
+      .getByRole('img', { name: 'Illustration of a typical baby in month 6 of pregnancy' })
+      .first(),
+  ).toHaveAttribute('src', '/illustrations/month_6.webp')
+  // §7.2 (b): no log or action buttons while previewing
+  await expect(page.getByRole('link', { name: 'Log a symptom' })).toHaveCount(0)
+  await expect(page.getByRole('link', { name: 'Change pregnancy dates' })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Back to today' }).click()
+  await expect(page.getByRole('link', { name: 'Log a symptom' })).toBeVisible()
+})
+
+test('haptics: a short pulse when the day changes; none with reduced motion', async ({ page }) => {
+  await page.addInitScript(() => {
+    const w = window as unknown as { pulses: number[] }
+    w.pulses = []
+    Object.defineProperty(navigator, 'vibrate', {
+      value: (ms: number) => {
+        w.pulses.push(ms)
+        return true
+      },
+    })
+  })
+  await openHome(page)
+  await drag(page, [25, 26, 27])
+  const pulses = await page.evaluate(() => (window as unknown as { pulses: number[] }).pulses)
+  expect(pulses.length).toBeGreaterThan(0)
+  expect(pulses.length).toBeLessThanOrEqual(3 * 7) // never more than one per day crossed
+  expect(new Set(pulses)).toEqual(new Set([8])) // one short 8 ms pulse each (§7.2)
+
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.reload()
+  await expect(page.getByText('Month 6 · now')).toBeVisible()
+  await drag(page, [25, 26, 27])
+  expect(await page.evaluate(() => (window as unknown as { pulses: number[] }).pulses)).toEqual([])
+})
+
+test('month image: each month boundary week shows that month (served month map)', async ({
+  page,
+}) => {
+  test.setTimeout(120_000) // 18 page loads, two per month
+  await signInAsPatient(page)
+  let current = ACTIVE
+  await page.route('**/api/v1/patient/journey/home', (r) =>
+    r.fulfill({ json: { data: current, error: null } }),
+  )
+  for (const m of MONTHS) {
+    for (const week of [m.week_start ?? 0, m.week_end ?? 0]) {
+      current = journeyHome({
+        state: week >= 42 ? 'beyond_42' : 'active',
+        dates: ACTIVE.dates,
+        pregnancy: {
+          ...PREGNANCY,
+          completed_weeks: week,
+          days: 0,
+          content_week: week,
+          month: m.month,
+        },
+        months: MONTHS,
+      })
+      await page.goto(`${PATIENT}/home`)
+      await expect(page.getByText(`Month ${m.month} · now`)).toBeVisible()
+      await expect(
+        page
+          .getByRole('img', {
+            name: `Illustration of a typical baby in month ${m.month} of pregnancy`,
+          })
+          .first(),
+      ).toHaveAttribute('src', `/illustrations/month_${m.month}.webp`)
+    }
+  }
+})

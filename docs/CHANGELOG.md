@@ -3,6 +3,21 @@
 User-visible changes per release (one release per finished phase). Work-session details go in `tracking/HISTORY.md`, not here.
 Format: newest first. Versions: `0.<phase>.<patch>` until the first full release.
 
+## [Unreleased] — Frontend redesign (`redesign/frontend`, 2026-11-21 to 2026-11-22)
+Brief: `FRONTEND_REDESIGN.md`; decisions DEC-105 to DEC-118. No backend behaviour changed except two vocabulary fields and one message key (below).
+### Changed
+- Patient app: Fraunces + Figtree type; bottom bar Home, Calendar, Log (raised), Visits, More (Doctor notes moved to More); side bar on laptops.
+- Patient Home: a pregnancy ring with today's month drawing (owner-supplied set, licence before release), a drag preview of any week (read-only, nothing saved), headline, size line, status cards for new doctor notes and results; two columns on laptops.
+- Log symptoms: a sheet with warning signs first, chips, detail cards, a PUQE sheet with a live score band, Save disabled until a choice, a 30-minute device draft and a clear "not saved yet" message.
+- Calendar: a scrolling list of months whose rows are pregnancy weeks ("W24"), distinct L1 / L2 markers, a legend, day details with each symptom, Jump to today; one month with a side panel on laptops.
+- Doctor app: Geist type; a collapsible side bar, top bar with "/" patient search and user menu; home with level icons and summary tiles; patient list with per-module badges (never combined), sorting, pages, keyboard rows and phone cards; patient page header card, "View as table" for every chart, sticky form buttons on phones.
+- Motion: sheets slide in, buttons respond to presses, patient tabs cross-fade, Home cards rise once; everything off with reduced motion.
+- Quality: empty states for symptom history and an empty calendar day, readable line lengths, 44 px touch targets, long names no longer widen the page.
+### Added (backend)
+- Symptom vocabulary returns `puqe_bands` and `draft_ttl_minutes` (30, configurable); message key `msg_not_saved` (text pending doctor approval; one more rule-review row, 189 in total).
+### Tests
+- See TESTING.md "Frontend redesign additions": more sizes and themes, every-screen checks, ring and motion tests, a token contrast test and 24 visual snapshots.
+
 ## [0.5.0] — 2026-11-20 — Phase 5: Doctor Dashboard + Admin
 ### Added
 - Doctor home: a needs-attention inbox (red flags, pattern changes, genetic assessments, records, pregnancy end; "Mark as seen" shows who and when to every assigned doctor; AI suggestions would sit last) and the patient list in priority order, with search and filters. Model classes are always written out, never colour only.

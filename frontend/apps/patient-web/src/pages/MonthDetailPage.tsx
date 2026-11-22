@@ -40,7 +40,9 @@ export function MonthDetailPage() {
   return (
     <section className="flex flex-col gap-4">
       <p>
-        <Link to="/home">&larr; Back to home</Link>
+        <Link className="tap" to="/home">
+          &larr; Back to home
+        </Link>
       </p>
       <div className="flex items-center gap-4">
         <img

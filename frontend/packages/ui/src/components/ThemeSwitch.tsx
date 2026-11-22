@@ -21,7 +21,7 @@ export function ThemeSwitch({ compact = false }: { compact?: boolean }) {
           <label
             key={value}
             className={cn(
-              'flex min-h-10 cursor-pointer items-center gap-1 rounded-sm px-3 text-sm has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary',
+              'flex min-h-11 cursor-pointer items-center gap-1 rounded-sm px-3 text-sm has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-primary',
               choice === value && 'bg-primary text-on-primary',
             )}
           >

@@ -293,7 +293,9 @@ export function PatientPage() {
   return (
     <section className="flex flex-col gap-4">
       <p>
-        <Link to="/patients">All patients</Link>
+        <Link className="tap" to="/patients">
+          All patients
+        </Link>
       </p>
       <PatientHeader patient={patient.data} />
       <nav aria-label="Patient sections" className="-mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">

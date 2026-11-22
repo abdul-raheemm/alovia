@@ -83,10 +83,12 @@ export function CheckboxField({ label, error, id, ...props }: CheckboxProps) {
           type="checkbox"
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
-          className="mt-1 size-5 shrink-0 accent-[var(--color-primary)]"
+          className="mt-3 size-5 shrink-0 accent-[var(--color-primary)]"
           {...props}
         />
-        <label htmlFor={inputId}>{label}</label>
+        <label htmlFor={inputId} className="min-h-11 py-2.5">
+          {label}
+        </label>
       </div>
       <FieldError id={errorId} message={error} />
     </div>

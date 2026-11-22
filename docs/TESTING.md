@@ -25,6 +25,14 @@ Forms, state handling (loading/empty/error), components with logic (calendar mar
 ### End-to-end (Playwright, phone 375px and laptop 1280px, light and dark)
 Critical flows in §5, with **axe accessibility checks** on each page.
 
+**Frontend redesign additions (FRONTEND_REDESIGN.md §13, redesign step 9):**
+- Projects: `phone-light` (375×812) and `laptop-dark` (1280×800) run everything. Five more projects (360 dark, 390 light, 768 dark and light, 1440 light) run only `e2e/responsive.spec.ts` (bottom bar vs side bar, two columns on Home, doctor cards vs table, no sideways scroll, axe).
+- `e2e/quality.spec.ts`: every listed patient, doctor and public screen has no sideways scroll at 360 px and no interactive element under 44×44 px at 375 px (a checkbox counts with its label; links inside running text are exempt, WCAG 2.5.8). Layout shift (CLS) under 0.1 on Home, Log and Calendar.
+- `e2e/home-ring.spec.ts`: ring above the fold at 375×667, drag preview (weeks 30 and 2) never changes the image or data and shows no log/action buttons, month image at every month boundary, haptics (stubbed `navigator.vibrate`, none with reduced motion), laptop columns.
+- `e2e/motion.spec.ts`, `e2e/worst-case.spec.ts`, `e2e/log-sheet.spec.ts`, `e2e/calendar-redesign.spec.ts`, `e2e/doctor-shell.spec.ts`, `e2e/doctor-detail.spec.ts`, `e2e/shell.spec.ts`.
+- `packages/ui/src/contrast.test.ts` (Vitest): reads `tokens.css` and checks every text pair at 4.5:1 and the ring arcs at 3:1, both apps, both themes.
+- **Visual snapshots** (`e2e/snapshots.spec.ts`): patient Home, Log, Calendar and doctor Home, Patients, patient page at 375 and 1280 px, light and dark (24 images in `e2e/snapshots.spec.ts-snapshots/`). They are made on Windows (`-win32` in the name); another OS such as Linux CI needs its own set first: `npx playwright test snapshots --update-snapshots`. After an intended visual change, update them the same way and review the new images before committing.
+
 ## 3. Tools
 
 | Purpose | Backend | Frontend |

@@ -3,6 +3,7 @@
 Every error the agent meets (failed command, failing test, bug found, wrong assumption, tool problem) gets an entry, even if fixed in a minute. Read the **Lessons** section at the start of every session.
 
 ## Lessons (keep short; one line each; newest first)
+- When a text search finds a CSS block, anchor it (start of line): selectors can contain each other (ERR-080).
 - Adding or changing a rule-file message means regenerating its rule-review CSV in the same change (ERR-071).
 - Run checks only through `scripts/check_all.sh`; an ad-hoc loop with `set -e` in a brace group kept going after a failure here, and a narrow grep hid the warnings (ERR-067).
 - `# fmt: skip` must end the line; any text after it disables it (ERR-068).
@@ -834,3 +835,23 @@ Fix: `overflow-wrap: anywhere` on the root (breaks only when a word cannot fit).
 Verified by: `e2e/worst-case.spec.ts` (all five screens 375 px).
 Prevention: the spec stays.
 Category: design (found by worst-case data)
+
+### ERR-080 — 2026-11-22 — Contrast test read the wrong dark block
+Who: Claude Code
+Phase / task: Redesign step 9
+What happened: the new contrast test reported dark urgent at 2.76:1 (the design system says 6.52:1).
+Cause: the test searched for `[data-theme='dark'] {`, which also matches the end of `[data-app='patient'][data-theme='dark'] {`, so the general dark block (status colours) was never read. A test bug; the app's colours were right.
+Fix: blocks are matched at the start of a line.
+Verified by: 7/7 contrast checks pass; one recorded ratio (13.98) reproduced.
+Prevention: compare a test's first result with a known value before trusting a failure.
+Category: test
+
+### ERR-081 — 2026-11-22 — Full suite timeouts after adding the step 9 tests
+Who: Claude Code
+Phase / task: Redesign step 9
+What happened: 4 E2E tests failed in the full run (230 passed): two phone calendar tests, a haptics test and a responsive test, all timeouts.
+Cause: more projects in parallel; the phone calendar test (10 months of cells, two axe scans) needed 27 s of its 30 s alone.
+Fix: Playwright `timeout` 60 s and `expect.timeout` 10 s; no assertion changed.
+Verified by: full `check_all.sh` exit 0 (234 passed).
+Prevention: watch per-test durations when adding heavy checks.
+Category: test / environment

@@ -535,7 +535,9 @@ function DayDetails({
         </Card>
       )}
       <p className="text-sm">
-        <Link to="/appointments">Manage appointments</Link>
+        <Link className="tap" to="/appointments">
+          Manage appointments
+        </Link>
       </p>
     </section>
   )

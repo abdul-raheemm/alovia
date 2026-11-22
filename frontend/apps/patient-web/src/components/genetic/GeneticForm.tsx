@@ -110,7 +110,9 @@ export function GeneticForm({ onDone }: { onDone: (result: GeneticAssessment) =>
           you accepted.
         </p>
         <p className="text-sm">
-          <Link to="/consent">Read the consent text</Link>
+          <Link className="tap" to="/consent">
+            Read the consent text
+          </Link>
         </p>
       </Card>
       {otherError && <ErrorState message={otherError} />}

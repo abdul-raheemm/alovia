@@ -77,16 +77,22 @@ export function MorePage() {
         <h2 className="mb-2">My pregnancy</h2>
         <ul className="flex flex-col gap-2">
           <li>
-            <Link to="/dates">Pregnancy dates</Link>
+            <Link className="tap" to="/dates">
+              Pregnancy dates
+            </Link>
           </li>
           {/* DEC-112: Doctor notes moved here from the bottom bar */}
           <li>
-            <Link to="/doctor-notes">Doctor notes</Link>
+            <Link className="tap" to="/doctor-notes">
+              Doctor notes
+            </Link>
           </li>
           {/* §11.1 entry, only while the pregnancy is active */}
           {home.data && home.data.state !== 'ended' && (
             <li>
-              <Link to="/pregnancy-end">{END_TITLE}</Link>
+              <Link className="tap" to="/pregnancy-end">
+                {END_TITLE}
+              </Link>
             </li>
           )}
         </ul>
@@ -96,11 +102,15 @@ export function MorePage() {
         <h2 className="mb-2">Checks</h2>
         <ul className="flex flex-col gap-2">
           <li>
-            <Link to="/genetic">Genetic risk</Link>
+            <Link className="tap" to="/genetic">
+              Genetic risk
+            </Link>
           </li>
           <li>
             {/* UX_FLOWS P10: results her doctor shared (Dashboard §10) */}
-            <Link to="/results">My results</Link>
+            <Link className="tap" to="/results">
+              My results
+            </Link>
           </li>
         </ul>
       </Card>
@@ -108,16 +118,24 @@ export function MorePage() {
         <h2 className="mb-2">Legal</h2>
         <ul className="flex flex-col gap-2">
           <li>
-            <Link to="/privacy">Privacy Policy</Link>
+            <Link className="tap" to="/privacy">
+              Privacy Policy
+            </Link>
           </li>
           <li>
-            <Link to="/terms">Terms of Use</Link>
+            <Link className="tap" to="/terms">
+              Terms of Use
+            </Link>
           </li>
           <li>
-            <Link to="/disclaimer">Medical Disclaimer</Link>
+            <Link className="tap" to="/disclaimer">
+              Medical Disclaimer
+            </Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link className="tap" to="/about">
+              About
+            </Link>
           </li>
         </ul>
       </Card>

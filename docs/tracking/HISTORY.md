@@ -946,3 +946,14 @@ Done:
 - A suspected missing Home image/cards in a screenshot was the 300 ms fade being captured at its start (measured opacity 1 after load) — not a bug.
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 84 unit; build; 183 E2E.
 Next step: step 9 plan (final suite, axe, snapshots).
+
+## Session 51 — 2026-11-22 — Frontend redesign step 9: final suite (redesign complete)
+Who: Raheem + agent: Claude Code
+Done:
+- Owner approved all of step 9. Gap found against FRONTEND_REDESIGN §7.2 (b): the quick-log card and the dates link stayed visible while previewing a week; now hidden (preview state lifted to the Home page).
+- New tests: ring preview to week 2 and read-only, month image at every month boundary, haptics (stubbed vibrate; none with reduced motion), `quality.spec.ts` (every patient/doctor/public screen: no sideways scroll at 360 px, 44 px targets; CLS on Log and Calendar), `responsive.spec.ts` on five extra size/theme projects, `snapshots.spec.ts` (24 images, Windows set), `packages/ui/src/contrast.test.ts` (token pairs from tokens.css).
+- Touch targets fixed: a `tap` utility on 27 standalone links, 44 px checkbox labels (shared CheckboxField), theme switch options and calendar month arrows 44 px, public logo link.
+- TESTING.md (redesign additions) and CHANGELOG ([Unreleased] frontend redesign) updated. No version bump: versions follow roadmap phases.
+- The larger suite timed out 4 tests under parallel load (the phone calendar test took 27 s of 30 s alone); Playwright limits raised to 60 s per test and 10 s per wait.
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 91 unit; build; 234 E2E (42 skipped by design).
+Next step: owner review; merge into main after approval; then Phase 6 planning (free LLM options first).

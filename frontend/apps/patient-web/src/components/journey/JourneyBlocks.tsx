@@ -100,7 +100,9 @@ export function StageSection({
         items.map((item) => <ContentCard key={item.id} item={item} />)
       )}
       <p className="text-sm">
-        <Link to={`/months/${month}`}>Read more about month {month}</Link>
+        <Link className="tap" to={`/months/${month}`}>
+          Read more about month {month}
+        </Link>
       </p>
     </section>
   )
@@ -157,7 +159,7 @@ export function MonthsStrip({
 export function QuickLogCard({ loggedToday = false }: { loggedToday?: boolean }) {
   return (
     <Card className="flex flex-wrap items-center justify-between gap-2">
-      <Link to="/log" className="flex items-center gap-3 no-underline">
+      <Link to="/log" className="flex min-h-11 items-center gap-3 no-underline">
         <PenLine aria-hidden="true" className="size-6 shrink-0 text-primary" />
         <span className="font-semibold text-text">Log a symptom</span>
       </Link>
@@ -208,7 +210,9 @@ export function WeeklySummary({
           </>
         )}
         <p className="text-sm">
-          <Link to="/log/history">Your symptom history</Link>
+          <Link className="tap" to="/log/history">
+            Your symptom history
+          </Link>
         </p>
       </Card>
       {summary.common_at_stage.map((item) => (
@@ -287,7 +291,9 @@ export function WeekStrip() {
         })}
       </ol>
       <p className="text-sm">
-        <Link to="/calendar">Open the calendar</Link>
+        <Link className="tap" to="/calendar">
+          Open the calendar
+        </Link>
       </p>
     </section>
   )

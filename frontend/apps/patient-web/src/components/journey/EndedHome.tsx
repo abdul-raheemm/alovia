@@ -39,13 +39,19 @@ export function EndedHome({ data }: { data: JourneyHome }) {
         <Card>
           <ul className="flex flex-col gap-2">
             <li>
-              <Link to="/appointments">Appointments</Link>
+              <Link className="tap" to="/appointments">
+                Appointments
+              </Link>
             </li>
             <li>
-              <Link to="/doctor-notes">Doctor notes</Link>
+              <Link className="tap" to="/doctor-notes">
+                Doctor notes
+              </Link>
             </li>
             <li>
-              <Link to="/log/history">Symptom history</Link>
+              <Link className="tap" to="/log/history">
+                Symptom history
+              </Link>
             </li>
           </ul>
         </Card>

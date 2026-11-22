@@ -37,6 +37,8 @@ export function HomePage() {
   // notifications call does not block the home (it shows no bar)
   const notifications = useNotifications()
   const [rise] = useState(() => !entranceShown)
+  // §7.2 (c): the previewed day (null = today); local, so leaving Home returns to today
+  const [preview, setPreview] = useState<number | null>(null)
   useEffect(() => {
     entranceShown = true
   }, [])
@@ -61,12 +63,13 @@ export function HomePage() {
       ))}
       <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[420px_minmax(0,1fr)] lg:items-start lg:gap-8">
         {pregnancy ? (
-          <RingColumn data={data} pregnancy={pregnancy} />
+          <RingColumn data={data} pregnancy={pregnancy} preview={preview} onPreview={setPreview} />
         ) : (
           <OnboardingCard data={data} />
         )}
         <div className={cn('flex flex-col gap-6', rise && 'home-rise')}>
-          <QuickLogCard loggedToday={data.logged_today} />
+          {/* §7.2 (b): a previewed week is read-only, so no log action while previewing */}
+          {preview === null && <QuickLogCard loggedToday={data.logged_today} />}
           {pregnancy && (
             <StageSection
               items={data.stage_items}
@@ -101,10 +104,20 @@ function HomeSkeleton() {
 }
 
 /** Ring, headline, preview chip and size line; sticky on laptops (§7.1 "Home on desktop"). */
-function RingColumn({ data, pregnancy }: { data: JourneyHome; pregnancy: Pregnancy }) {
+function RingColumn({
+  data,
+  pregnancy,
+  preview,
+  onPreview,
+}: {
+  data: JourneyHome
+  pregnancy: Pregnancy
+  preview: number | null
+  onPreview: (day: number | null) => void
+}) {
   const today = todayDay(pregnancy)
-  // §7.2 (c): local state only, so leaving Home and coming back returns to today
-  const [previewDay, setPreviewDay] = useState(today)
+  const previewDay = preview ?? today
+  const setPreviewDay = (day: number) => onPreview(day === today ? null : day)
   const previewing = previewDay !== today
   const week = Math.floor(previewDay / 7)
   const readMonth = monthOfWeek(data.months, week)
@@ -123,7 +136,9 @@ function RingColumn({ data, pregnancy }: { data: JourneyHome; pregnancy: Pregnan
           <p>Starts {formatDay(weekStartDate(data.dates.due_date, week))}</p>
           {readMonth && (
             <p>
-              <Link to={`/months/${readMonth}`}>Read about week {week}</Link>
+              <Link className="tap" to={`/months/${readMonth}`}>
+                Read about week {week}
+              </Link>
             </p>
           )}
           <p className="flex flex-wrap items-center justify-center gap-2 rounded-full bg-primary-soft py-1 pr-1 pl-3 text-sm font-semibold">
@@ -143,9 +158,13 @@ function RingColumn({ data, pregnancy }: { data: JourneyHome; pregnancy: Pregnan
         <Headline data={data} pregnancy={pregnancy} />
       )}
       <SizeLine size={data.size} messages={data.messages} />
-      <p className="text-sm">
-        <Link to="/dates">Change pregnancy dates</Link>
-      </p>
+      {!previewing && (
+        <p className="text-sm">
+          <Link className="tap" to="/dates">
+            Change pregnancy dates
+          </Link>
+        </p>
+      )}
     </div>
   )
 }

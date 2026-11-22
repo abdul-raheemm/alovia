@@ -431,7 +431,9 @@ export function PatientList({ preview }: { preview?: number }) {
 
       {preview ? (
         <p className="text-sm">
-          <Link to="/patients">All patients ({patients.data.length})</Link>
+          <Link className="tap" to="/patients">
+            All patients ({patients.data.length})
+          </Link>
         </p>
       ) : (
         shown.pages > 1 && (
