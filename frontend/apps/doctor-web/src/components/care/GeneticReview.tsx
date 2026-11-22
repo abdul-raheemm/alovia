@@ -154,7 +154,7 @@ function CorrectForm({
   return (
     <form
       noValidate
-      className="flex flex-col gap-4"
+      className="max-w-3xl flex flex-col gap-4"
       onSubmit={(e) => {
         e.preventDefault()
         const gaps = missingAnswers(draft)
@@ -265,7 +265,7 @@ function ReviewActions({ a, onChanged }: { a: DoctorAssessment; onChanged: () =>
     return (
       <form
         noValidate
-        className="flex flex-col gap-3"
+        className="max-w-3xl flex flex-col gap-3"
         onSubmit={(e) => {
           e.preventDefault()
           setEmpty(!note.trim())

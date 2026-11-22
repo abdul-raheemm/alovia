@@ -562,7 +562,7 @@ Use `/playwright-best-practices`. Minimal reporters in CLI runs. Projects: patie
 | 3 | Doctor notes in the bottom nav or under More | **Decided (DEC-112):** under More, plus a Home status card |
 | 4 | Chip icons: Lucide only, or custom | Lucide only (design system) |
 | 5 | Ring colours: tints of primary or distinct hues | Tints of primary (section 5.2) |
-| 6 | Empty states for history charts and calendar | Claude Code proposes with `/impeccable onboard`; owner approves |
+| 6 | Empty states for history charts and calendar | **Decided 2026-11-22 (DEC-118):** Symptom history icon + "Log a symptom" button; empty calendar day offers the Log only for today |
 | 7 | Estimate band width on the ring | Not built; the "estimate" label is shown |
 | 8 | Typography choice | **Decided 2026-11-21 (DEC-111):** the owner picked Fraunces + Figtree after the 375 px comparison |
 | 9 | Licence for the nine illustrations | Prototype only; buy or replace before public release |

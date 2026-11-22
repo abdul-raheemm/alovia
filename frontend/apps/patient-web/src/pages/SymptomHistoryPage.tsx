@@ -1,5 +1,6 @@
 import { userMessage, type SymptomCharts } from '@alovia/shared'
-import { Card, ErrorState, PageSkeleton } from '@alovia/ui'
+import { Button, Card, ErrorState, PageSkeleton } from '@alovia/ui'
+import { ChartColumn } from 'lucide-react'
 import { Link } from 'react-router'
 import {
   Bar,
@@ -52,11 +53,15 @@ export function SymptomHistoryPage() {
     <section className="flex flex-col gap-6">
       <h1>Symptom history</h1>
       {symptoms.length === 0 ? (
-        <Card>
+        // empty state (FRONTEND_REDESIGN open item 6, DEC-118): existing words only
+        <Card className="flex flex-col items-center gap-3 py-8 text-center">
+          <span className="flex size-14 items-center justify-center rounded-full bg-primary-soft text-primary">
+            <ChartColumn aria-hidden="true" className="size-7" />
+          </span>
           <p className="text-muted">Nothing logged yet.</p>
-          <p className="mt-2 text-sm">
+          <Button asChild>
             <Link to="/log">Log a symptom</Link>
-          </p>
+          </Button>
         </Card>
       ) : (
         symptoms.map((s) => (

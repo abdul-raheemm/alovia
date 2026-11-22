@@ -461,8 +461,14 @@ function DayDetails({
         {week !== null && week >= 0 && <p className="text-sm text-muted">Week {week}</p>}
       </div>
       {empty ? (
-        <Card>
+        <Card className="flex flex-col items-start gap-3">
           <p className="text-muted">Nothing on this day.</p>
+          {/* empty state (open item 6, DEC-118): only today can be logged (§7.6) */}
+          {day === isoDay(new Date()) && (
+            <Button asChild>
+              <Link to="/log">Log a symptom</Link>
+            </Button>
+          )}
         </Card>
       ) : (
         <Card className="flex flex-col gap-3">

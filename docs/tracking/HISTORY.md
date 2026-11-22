@@ -936,3 +936,13 @@ Done:
 - `--ease-drawer` token; `Sheet` gets `from` (side / bottom / left). New `e2e/motion.spec.ts`; the sheet-layout test now waits for the slide-in before measuring.
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 84 unit; build; 179 E2E; motion and log-sheet specs also ran 3× each without a failure.
 Next step: step 8 plan (unslop / impeccable passes).
+
+## Session 50 — 2026-11-22 — Frontend redesign step 8: quality pass
+Who: Raheem + agent: Claude Code
+Done:
+- `impeccable detect`: code scan clean; live public pages had ~100-character lines (fixed: 70ch). Screenshots of all 130 E2E end states reviewed in a sample of screens not redesigned before. `/unslop` audit: light slop — one tell (uppercase tracked "LEARN", fixed); brand lavender, 700-weight headings and the tinted page background kept (design system decisions).
+- Owner chose empty states A and B (DEC-118): Symptom history icon + "Log a symptom" button; empty calendar day offers the Log only for today.
+- Harden with worst-case data (70-character unbroken name, 4-digit counts, long titles): five screens overflowed at 375 px (up to 911 px); fixed with `overflow-wrap: anywhere` on the root. Genetic review forms capped at `max-w-3xl`. New `e2e/worst-case.spec.ts`.
+- A suspected missing Home image/cards in a screenshot was the 300 ms fade being captured at its start (measured opacity 1 after load) — not a bug.
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 84 unit; build; 183 E2E.
+Next step: step 9 plan (final suite, axe, snapshots).

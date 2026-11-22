@@ -824,3 +824,13 @@ Fix: the test waits for the sheet's animations to finish before measuring.
 Verified by: the spec passed 3× on both projects.
 Prevention: tests that measure an animated element wait for `getAnimations()` to finish.
 Category: test
+
+### ERR-079 — 2026-11-22 — Very long words widened the page on phones
+Who: Claude Code
+Phase / task: Redesign step 8 (harden)
+What happened: with a 70-character unbroken name, doctor Home / list / patient page and patient Home measured 601-911 px wide at 375 px.
+Cause: long words cannot wrap by default and flex items will not shrink below their longest word.
+Fix: `overflow-wrap: anywhere` on the root (breaks only when a word cannot fit).
+Verified by: `e2e/worst-case.spec.ts` (all five screens 375 px).
+Prevention: the spec stays.
+Category: design (found by worst-case data)

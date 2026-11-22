@@ -1,6 +1,6 @@
 # CONTEXT — start here (for any new agent, chat or teammate)
 
-**Last updated:** 2026-11-21 by Claude Code (session 49, redesign steps 0-7) — update the "Current state" section at the end of every session.
+**Last updated:** 2026-11-21 by Claude Code (session 50, redesign steps 0-8) — update the "Current state" section at the end of every session.
 
 ## What Alovia is
 A woman-centric pregnancy web app (patient app) with a doctor dashboard (doctor app) and one FastAPI backend. Capstone project of a 3-person team at MJCET (AI & DS), led by Raheem. Research prototype — synthetic/test data only, not for clinical use.
@@ -32,7 +32,7 @@ Windows, PowerShell, `py` launcher. Backend uses a Python 3.14 virtual environme
 ## Current state
 
 ### Frontend redesign — in progress (2026-11-21)
-- Branch `redesign/frontend` (from `main` at 0.5.0). Brief: `docs/FRONTEND_REDESIGN.md`; build order §14. Steps 0-7 done (PROGRESS.md). Next: step 8 (unslop / impeccable passes). Bottom bar: Home, Calendar, Log, Visits, More (DEC-112).
+- Branch `redesign/frontend` (from `main` at 0.5.0). Brief: `docs/FRONTEND_REDESIGN.md`; build order §14. Steps 0-8 done (PROGRESS.md). Next: step 9 (final suite, axe, snapshots). Bottom bar: Home, Calendar, Log, Visits, More (DEC-112).
 - Fonts: Fraunces (H1/H2) + Figtree, Geist for doctors (DEC-111); safety/clinical headings use `font-sans`.
 - Phase 6 stays paused until the redesign is done or the owner says otherwise.
 

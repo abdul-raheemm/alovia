@@ -162,7 +162,7 @@ Small: `0 1px 2px rgb(0 0 0 / 0.06)`. Medium: `0 4px 12px rgb(0 0 0 / 0.08)`. La
 - **Loading:** label stays, spinner inside, button disabled.
 
 ## 9. Inputs
-Label always visible above the field (no placeholder-only labels). Focus: 2px primary outline + 2px offset. Error: urgent-coloured border, message below with icon, `aria-describedby`. Units shown inside the field on the right (e.g. "mmol/mol").
+Long forms stay within a readable width on laptops (`max-w-xl` to `max-w-3xl`); long words (names, emails) break instead of widening the page (`overflow-wrap: anywhere` on the root, DEC-118). Label always visible above the field (no placeholder-only labels). Focus: 2px primary outline + 2px offset. Error: urgent-coloured border, message below with icon, `aria-describedby`. Units shown inside the field on the right (e.g. "mmol/mol").
 
 **Chips (patient Log, FRONTEND_REDESIGN §7.5):** a real checkbox (symptom) or radio (single choice) covering the whole chip invisibly; at least 44 px, pill shape; off: `primary-soft` wash with a 1 px border; on: `primary` fill, `on-primary` text and a check icon; press scales to 0.97 (none with reduced motion); focus ring on the chip.
 

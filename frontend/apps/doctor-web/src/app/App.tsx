@@ -28,7 +28,8 @@ function PublicLayout() {
           <Logo />
         </Link>
       </header>
-      <main id="main" className="flex-1">
+      {/* about 70 characters per line (impeccable detect: line-length) */}
+      <main id="main" className="max-w-[70ch] flex-1">
         <Outlet />
       </main>
       <footer className="border-t border-border pt-4 text-sm">

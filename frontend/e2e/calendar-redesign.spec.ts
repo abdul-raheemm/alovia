@@ -205,9 +205,14 @@ test('laptop: one month with Previous, Next and Today; the day panel on the righ
   await expect(page.getByText('September 2026', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: /^12 September 2026/ }).click()
   await expect(page.getByRole('heading', { name: '12 September 2026' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Log a symptom' })).toHaveCount(0)
   await page.getByRole('button', { name: 'Today', exact: true }).click()
   await expect(page.getByText('November 2026', { exact: true })).toBeVisible()
   await expect(page.getByRole('heading', { name: '17 November 2026' })).toBeVisible()
+  // empty state (DEC-118): only today offers the Log; past days stay view-only
+  const todayPanel = page.getByRole('region', { name: '17 November 2026' })
+  await expect(todayPanel.getByText('Nothing on this day.')).toBeVisible()
+  await expect(todayPanel.getByRole('link', { name: 'Log a symptom' })).toBeVisible()
   // the panel sits to the right of the month grid
   const grid = await page.getByRole('grid').boundingBox()
   const panel = await page.getByRole('region', { name: '17 November 2026' }).boundingBox()

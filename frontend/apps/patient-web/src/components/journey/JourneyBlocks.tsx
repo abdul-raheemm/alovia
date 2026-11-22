@@ -59,7 +59,7 @@ export function SizeLine({ size, messages }: { size: JourneyHome['size']; messag
 export function ContentCard({ item }: { item: JourneyContentItem }) {
   return (
     <article className="rounded-lg bg-primary-soft p-4">
-      <p className="mb-1 flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-primary">
+      <p className="mb-1 flex items-center gap-1 text-sm font-semibold text-primary">
         <BookOpen aria-hidden="true" className="size-4" />
         Learn
       </p>
