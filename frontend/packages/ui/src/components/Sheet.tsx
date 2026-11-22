@@ -8,12 +8,15 @@ export function Sheet({
   open,
   onClose,
   labelledBy,
+  from = 'side',
   className,
   children,
 }: {
   open: boolean
   onClose: () => void
   labelledBy: string
+  /** the edge it slides in from: 'side' = bottom on phones, right on laptops */
+  from?: 'side' | 'bottom' | 'left'
   className?: string
   children: ReactNode
 }) {
@@ -28,6 +31,7 @@ export function Sheet({
     <dialog
       ref={ref}
       aria-labelledby={labelledBy}
+      data-sheet={from}
       // Esc: let the owner of the sheet decide (it may keep a draft or go back)
       onCancel={(e) => {
         e.preventDefault()

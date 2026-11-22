@@ -804,3 +804,23 @@ Fix: on phones the theme switch sits inside the user menu.
 Verified by: `doctor-shell.spec.ts` (no sideways scroll), screenshots.
 Prevention: the test stays.
 Category: design (found by tests)
+
+### ERR-077 — 2026-11-22 — Lint: module variable changed during render
+Who: Claude Code
+Phase / task: Redesign step 7
+What happened: `react-hooks/globals` failed on the once-per-load Home entrance flag.
+Cause: the flag was set while rendering.
+Fix: read it once in a `useState` initializer, set it in an effect.
+Verified by: lint clean; `motion.spec.ts`.
+Prevention: never write outside variables during render.
+Category: code
+
+### ERR-078 — 2026-11-22 — Sheet layout test measured mid-animation
+Who: Claude Code
+Phase / task: Redesign step 7
+What happened: the Log sheet's size and position were checked while it was still sliding in.
+Cause: the new 300 ms slide-in.
+Fix: the test waits for the sheet's animations to finish before measuring.
+Verified by: the spec passed 3× on both projects.
+Prevention: tests that measure an animated element wait for `getAnimations()` to finish.
+Category: test

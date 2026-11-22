@@ -110,3 +110,33 @@
 .prose-legal code {
   font-size: 0.9em;
 }
+
+/* Sheets slide in from their edge (FRONTEND_REDESIGN §5.4; step 7). Entry only: a closing sheet
+   goes at once, so nothing waits on it. Reduced motion: no movement at all (§5.4 "instant"). */
+@media (prefers-reduced-motion: no-preference) {
+  dialog[data-sheet][open] {
+    transition: transform var(--duration-slow) var(--ease-drawer);
+  }
+  dialog[data-sheet][open]::backdrop {
+    transition: opacity var(--duration-slow) var(--ease-out-strong);
+  }
+  @starting-style {
+    dialog[data-sheet='side'][open],
+    dialog[data-sheet='bottom'][open] {
+      transform: translateY(100%);
+    }
+    dialog[data-sheet='left'][open] {
+      transform: translateX(-100%);
+    }
+    dialog[data-sheet][open]::backdrop {
+      opacity: 0;
+    }
+  }
+  @media (min-width: 1024px) {
+    @starting-style {
+      dialog[data-sheet='side'][open] {
+        transform: translateX(100%);
+      }
+    }
+  }
+}

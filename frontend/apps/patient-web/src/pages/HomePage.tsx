@@ -1,7 +1,7 @@
 import { userMessage, type JourneyHome } from '@alovia/shared'
-import { Button, Card, CardSkeleton, ErrorState, RingSkeleton, Skeleton } from '@alovia/ui'
+import { Button, Card, CardSkeleton, cn, ErrorState, RingSkeleton, Skeleton } from '@alovia/ui'
 import { Eye, Info } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 
 import { formatDay, messageText, weeksLabel } from '../app/journey'
@@ -23,6 +23,8 @@ import { NotificationBar, StatusCards } from '../components/journey/Notification
 import { PregnancyRing } from '../components/journey/PregnancyRing'
 
 type Pregnancy = NonNullable<JourneyHome['pregnancy']>
+// the cards rise in on the first Home of this page load only, not on every return to Home
+let entranceShown = false
 const TRIMESTER = ['First trimester', 'Second trimester', 'Third trimester']
 
 /** Journey home (Journey §4.3, FRONTEND_REDESIGN §7.1): notification bar, the ring with today's
@@ -34,6 +36,10 @@ export function HomePage() {
   // §11 rule 5: home data and notifications appear together (no layout shift); a failed
   // notifications call does not block the home (it shows no bar)
   const notifications = useNotifications()
+  const [rise] = useState(() => !entranceShown)
+  useEffect(() => {
+    entranceShown = true
+  }, [])
   if (home.isPending || notifications.isPending) return <HomeSkeleton />
   if (home.isError) {
     return (
@@ -59,7 +65,7 @@ export function HomePage() {
         ) : (
           <OnboardingCard data={data} />
         )}
-        <div className="flex flex-col gap-6">
+        <div className={cn('flex flex-col gap-6', rise && 'home-rise')}>
           <QuickLogCard loggedToday={data.logged_today} />
           {pregnancy && (
             <StageSection

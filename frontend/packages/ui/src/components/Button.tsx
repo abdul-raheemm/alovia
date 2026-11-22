@@ -7,7 +7,7 @@ import { cn } from '../cn'
 
 // DESIGN_SYSTEM.md §8: 44px touch target, medium radius, clear verb labels
 const buttonVariants = cva(
-  'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-base font-semibold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-40 aria-disabled:cursor-not-allowed aria-disabled:opacity-40',
+  'inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 text-base font-semibold no-underline transition-[color,background-color,transform] duration-[var(--duration-fast)] ease-[var(--ease-out-strong)] active:scale-[0.97] disabled:active:scale-100 aria-disabled:active:scale-100 motion-reduce:active:scale-100 disabled:cursor-not-allowed disabled:opacity-40 aria-disabled:cursor-not-allowed aria-disabled:opacity-40',
   {
     variants: {
       variant: {

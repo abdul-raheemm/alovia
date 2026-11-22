@@ -127,6 +127,7 @@ export function DoctorShell({ me }: { me: Me }) {
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
         labelledBy="doctor-menu-title"
+        from="left"
         className="mr-auto w-[280px] md:hidden"
       >
         <nav aria-label="Main" className="flex h-full flex-col gap-4 bg-surface p-3">

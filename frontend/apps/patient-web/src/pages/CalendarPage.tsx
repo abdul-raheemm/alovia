@@ -192,6 +192,7 @@ function CalendarView({
           open={selected !== null}
           onClose={() => setSelected(null)}
           labelledBy="day-heading"
+          from="bottom"
           className="top-auto bottom-0 h-auto max-h-[85dvh] rounded-t-2xl"
         >
           <div className="flex flex-col gap-3 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
@@ -336,9 +337,11 @@ function PhoneMonths({
           type="button"
           className="fixed right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-20 rounded-full shadow-md"
           onClick={() =>
-            list.current
-              ?.querySelector(`[data-day="${today}"]`)
-              ?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+            list.current?.querySelector(`[data-day="${today}"]`)?.scrollIntoView({
+              block: 'center',
+              // §5.4: instant with reduced motion
+              behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            })
           }
         >
           <LocateFixed aria-hidden="true" className="size-5" />

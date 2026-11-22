@@ -927,3 +927,12 @@ Done:
 - One care test checked "(LMP estimate)" once; it now appears in the header too, so the check was scoped (count 2, the tab's copy visible).
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 84 unit; build; 175 E2E.
 Next step: step 7 plan (motion).
+
+## Session 49 — 2026-11-22 — Frontend redesign step 7: motion
+Who: Raheem + agent: Claude Code
+Done:
+- Owner approved and asked to consider page transitions and decorative motion where they improve the app (DEC-117).
+- Quick animation audit (Emil `improve-animations` rules): sheets teleported, buttons had no press feedback, "Jump to today" ignored reduced motion, the ring marker jumped back to today. All fixed; added patient tab cross-fades (view transitions, not Log/Urgent, none in the doctor app) and a once-per-load Home card rise. Ring draw-in skipped (would animate more than transform/opacity).
+- `--ease-drawer` token; `Sheet` gets `from` (side / bottom / left). New `e2e/motion.spec.ts`; the sheet-layout test now waits for the slide-in before measuring.
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 84 unit; build; 179 E2E; motion and log-sheet specs also ran 3× each without a failure.
+Next step: step 8 plan (unslop / impeccable passes).

@@ -77,7 +77,8 @@ Build order for the rest of Phase 2 (owner, 2026-11-17): home screen + month car
 - [x] Step 5: Calendar — phone month list with pregnancy-week rows and W gutter (DEC-115), sticky weekdays and months, Jump to today, bottom-sheet day details with symptoms; laptop month + right panel; L1/L2 distinct markers, legend — Raheem + Claude Code — 2026-11-22
 - [x] Step 6a: Doctor shell (240/72 px side bar with marker, tablet icons, phone menu sheet, 56 px top bar with "/" search and user menu), home (needs attention with level icons and week, summary tiles, list preview), patient list (badges, sort, 25 per page, keyboard rows, filter chips, phone cards; Due date and Pregnancy hidden below 1536 px) — DEC-116 — Raheem + Claude Code — 2026-11-22
 - [x] Step 6b: Doctor patient detail — header card (age, week, due date + source, unseen, per-module badges), scrolling tab bar with the open tab in view, "View as table" on every chart, sticky main form buttons on phones — Raheem + Claude Code — 2026-11-22
-- [ ] Step 7: motion pass (Emil skills) and reduced-motion pass — next
+- [x] Step 7: motion pass — audit with the Emil improve-animations skill (quick); sheet slide-in, button press, ring spring, instant scroll with reduced motion, patient tab cross-fades, once-per-load Home card rise (DEC-117); reduced-motion E2E — Raheem + Claude Code — 2026-11-22
+- [ ] Step 8: /unslop and /impeccable critique, audit, polish, harden over every screen — next
 - [ ] Steps 3-9: Log, Home ring, Calendar, Doctor screens, motion pass, unslop/impeccable pass, Playwright + snapshots
 - Owner items: fill `docs/illustration_review.md`; illustration licence before public release.
 

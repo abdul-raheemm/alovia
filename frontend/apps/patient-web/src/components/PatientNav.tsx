@@ -52,6 +52,7 @@ export function BottomNav({ items }: { items: NavItem[] }) {
             ) : (
               <NavLink
                 to={to}
+                viewTransition
                 className={({ isActive }) =>
                   cn(
                     'my-1 flex min-h-11 min-w-0 max-w-full flex-col items-center justify-center gap-0.5 rounded-2xl px-2 text-sm leading-tight no-underline',
@@ -98,6 +99,7 @@ export function SideNav({ items }: { items: NavItem[] }) {
             <li key={key}>
               <NavLink
                 to={to}
+                viewTransition
                 className={({ isActive }) =>
                   cn(
                     'flex min-h-11 items-center gap-3 rounded-full px-3 no-underline',

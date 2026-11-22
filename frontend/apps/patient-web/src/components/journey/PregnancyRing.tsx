@@ -1,5 +1,5 @@
-import { useReducedMotion } from 'motion/react'
-import { useRef, useState, type PointerEvent } from 'react'
+import { animate, useReducedMotion } from 'motion/react'
+import { useEffect, useRef, useState, type PointerEvent } from 'react'
 
 import { illustrationAlt, illustrationSrc } from '../../app/journey'
 import { angleOf, arcAngles, arcPath, dayAtPoint, MAX_DAY, pointAt } from '../../app/ring'
@@ -28,7 +28,24 @@ export function PregnancyRing({
   const svg = useRef<SVGSVGElement>(null)
   const [dragging, setDragging] = useState(false)
   const reduceMotion = useReducedMotion()
-  const t = previewDay / 7
+  // §5.4: when the marker moves without a drag ("Back to today") it glides on a short spring;
+  // the text above changes at once (§11 rule 10). No spring with reduced motion.
+  const [shownDay, setShownDay] = useState(previewDay)
+  const shown = useRef(previewDay)
+  useEffect(() => {
+    if (dragging || reduceMotion) return
+    const glide = animate(shown.current, previewDay, {
+      type: 'spring',
+      stiffness: 400,
+      damping: 40,
+      onUpdate: (v) => {
+        shown.current = v
+        setShownDay(v)
+      },
+    })
+    return () => glide.stop()
+  }, [previewDay, dragging, reduceMotion])
+  const t = (dragging || reduceMotion ? previewDay : shownDay) / 7
 
   function dayFor(e: PointerEvent) {
     const box = svg.current?.getBoundingClientRect()
@@ -41,6 +58,11 @@ export function PregnancyRing({
       160,
       previewDay,
     )
+  }
+  function release() {
+    shown.current = previewDay // the marker stays where the finger let go
+    setShownDay(previewDay)
+    setDragging(false)
   }
   function move(e: PointerEvent) {
     if (!dragging) return
@@ -106,8 +128,8 @@ export function PregnancyRing({
             setDragging(true)
           }}
           onPointerMove={move}
-          onPointerUp={() => setDragging(false)}
-          onPointerCancel={() => setDragging(false)}
+          onPointerUp={release}
+          onPointerCancel={release}
           className="cursor-grab touch-none active:cursor-grabbing"
         >
           {/* 44 px bubble; surface + text tokens (a checked pair in both themes) */}
@@ -129,7 +151,7 @@ export function PregnancyRing({
             fill="var(--color-text)"
             className="pointer-events-none select-none tabular-nums"
           >
-            Wk {Math.floor(t)}
+            Wk {Math.floor(previewDay / 7)}
           </text>
         </g>
       </svg>

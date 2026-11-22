@@ -194,6 +194,14 @@ Loading, Empty, Error, Success, Disabled as defined in `docs/UX_FLOWS.md` §0.
 ## 14. Motion
 Framer Motion (`motion` package) for gentle float, swipes and week transitions; Lottie only for decorative moments. Durations: fast 150 ms, base 200 ms, slow 300 ms; entering and moving elements ease out with `cubic-bezier(0.23, 1, 0.32, 1)`; animate `transform` and `opacity` only; hover styles only inside `@media (hover: hover)` (`FRONTEND_REDESIGN.md` §5.4). **Respect `prefers-reduced-motion`** and the in-app "Reduce motion" setting. No motion on L1 screens, and no heartbeat-like animation anywhere.
 
+**In use (redesign step 7, DEC-117):**
+- Sheets slide in from their edge (bottom on phones, right on laptops; the doctor menu from the left; the calendar day from the bottom): 300 ms, `--ease-drawer` `cubic-bezier(0.32, 0.72, 0, 1)`; the backdrop fades; closing is instant.
+- Buttons and chips scale to 0.97 when pressed (150 ms ease-out); not when disabled.
+- Patient tabs cross-fade (view transitions, 150 ms); not the Log or Urgent links; none in the doctor app (used many times a day).
+- Patient Home cards rise in once per page load (8 px, 50 ms apart, 300 ms).
+- Ring: month image float (4 px / 6 s, idle only), month fade 300 ms, "Back to today" marker on a short spring (stiffness 400, damping 40).
+- Reduced motion: all of the above off; scrolling is instant.
+
 ## 15. Responsive design
 Tailwind breakpoints: phone < 640px, small tablet 640–767px, tablet 768–1023px, laptop ≥ 1024px. Patient app designed at 375px first; doctor app at 1280px first, usable down to 375px (tables become cards). Layout details may change during build `[CONFIGURABLE]`, but must work at 375px and 1280px.
 

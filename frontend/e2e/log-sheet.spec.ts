@@ -70,6 +70,8 @@ test('sheet layout: full screen on the phone, right panel on the laptop; Save di
   await expect(sheet(page)).toBeVisible()
   await expect(sheet(page).getByText('Week 24')).toBeVisible()
 
+  // measure after the slide-in (step 7) has finished
+  await sheet(page).evaluate((e) => Promise.all(e.getAnimations().map((a) => a.finished)))
   const view = page.viewportSize() ?? { width: 0, height: 0 }
   const box = await sheet(page).boundingBox()
   if (view.width >= 1024) {
