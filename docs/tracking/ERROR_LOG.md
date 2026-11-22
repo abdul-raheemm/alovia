@@ -784,3 +784,23 @@ Fix: month name sticks at 25 px; the week number also drawn at full opacity.
 Verified by: screenshot at the same scroll position; full check.
 Prevention: measure positions before changing styles on a guess.
 Category: design
+
+### ERR-075 — 2026-11-22 — setState inside effects (new React lint rule)
+Who: Claude Code
+Phase / task: Redesign step 6a
+What happened: `react-hooks/set-state-in-effect` failed twice (closing the phone menu on route change; syncing the search with `?q=`).
+Cause: state was copied from props/route in `useEffect`.
+Fix: the menu closes from the link's own click; the search follows `?q=` by adjusting state during render (React's documented pattern).
+Verified by: lint clean; doctor E2E.
+Prevention: derive or adjust state in render instead of effects.
+Category: code
+
+### ERR-076 — 2026-11-22 — Doctor top bar overflowed a 375 px phone
+Who: Claude Code
+Phase / task: Redesign step 6a
+What happened: the new phone test found a 385 px page width; the search box had shrunk to 0 px.
+Cause: the 253 px theme switch plus the menu and account buttons did not fit.
+Fix: on phones the theme switch sits inside the user menu.
+Verified by: `doctor-shell.spec.ts` (no sideways scroll), screenshots.
+Prevention: the test stays.
+Category: design (found by tests)

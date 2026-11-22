@@ -1,7 +1,7 @@
 import 'react-day-picker/style.css'
 
 import { userMessage, type CheckinHistory, type JourneyCalendar } from '@alovia/shared'
-import { Button, CalendarMonthSkeleton, Card, cn, ErrorState } from '@alovia/ui'
+import { Button, CalendarMonthSkeleton, Card, cn, ErrorState, Sheet } from '@alovia/ui'
 import {
   CalendarClock,
   CircleAlert,
@@ -38,7 +38,6 @@ import {
   warningLevel,
   type DayMarkers,
 } from '../components/journey/CalendarMarkers'
-import { Sheet } from '../components/symptoms/Sheet'
 
 const DAY = /^\d{4}-\d{2}-\d{2}$/
 const LAPTOP = '(min-width: 1024px)'

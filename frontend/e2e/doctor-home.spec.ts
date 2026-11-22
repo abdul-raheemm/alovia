@@ -101,20 +101,42 @@ test('doctor home: inbox, mark as seen, patient list in server order with filter
   await expect(page.getByRole('heading', { level: 1, name: 'Home' })).toBeVisible()
   await expect(page.getByText('Symptom check-in: level L1')).toBeVisible()
   await expect(page.getByText('AI suggestion')).toBeVisible() // labelled (§7.2)
-  const rows = page.getByRole('region', { name: 'Patient list' }).getByRole('row')
-  await expect(rows.nth(1)).toContainText('Test Patient A')
-  await expect(rows.nth(1)).toContainText('Suspect') // class as text, not colour only
-  await expect(rows.nth(2)).toContainText('Not joined yet')
+  // summary tiles (FRONTEND_REDESIGN §8.2): patients and unseen alerts
+  const summary = page.locator('dl[aria-label="Summary"]')
+  await expect(summary.locator('dt')).toHaveText(['Patients', 'Unseen alerts'])
+  await expect(summary.locator('dd')).toHaveText(['2', '2'])
+  // the patient list preview keeps the server's order and links to the full list
+  const laptopOrTablet = (page.viewportSize()?.width ?? 0) >= 768
+  const list = laptopOrTablet
+    ? page.getByRole('region', { name: 'Patient list' }).getByRole('row')
+    : page.getByRole('list', { name: 'Patient list' }).getByRole('listitem')
+  const first = laptopOrTablet ? 1 : 0 // the table has a header row
+  await expect(list.nth(first)).toContainText('Test Patient A')
+  await expect(list.nth(first)).toContainText('Suspect') // class as text, not colour only
+  await expect(list.nth(first + 1)).toContainText('Not joined yet')
+  await expect(page.getByRole('link', { name: 'All patients (2)' })).toBeVisible()
   await expectNoA11yViolations(page)
-
-  await page.getByLabel('Latest maternal class').selectOption('Low')
-  await expect(page.getByText('1 of 2 patients')).toBeVisible()
-  await expect(rows).toHaveCount(2) // header + Test Patient B
 
   await page
     .getByRole('button', { name: 'Mark as seen: Symptom check-in: level L1, Test Patient A' })
     .click()
   await expect(page.getByText('Nothing needs attention right now.')).toBeVisible()
+
+  // filters live on the Patients page; on phones they open in a sheet (§8.5)
+  await page.getByRole('link', { name: 'All patients (2)' }).click()
+  if (!laptopOrTablet) await page.getByRole('button', { name: 'Filters' }).click()
+  const filters = laptopOrTablet
+    ? page.locator('main')
+    : page.getByRole('dialog', { name: 'Filters' })
+  await filters.getByLabel('Latest maternal class').selectOption('Low')
+  if (!laptopOrTablet) await page.getByRole('button', { name: 'Show 1 patients' }).click()
+  await expect(page.getByText('1 of 2 patients')).toBeVisible()
+  await expect(list).toHaveCount(laptopOrTablet ? 2 : 1) // Test Patient B (+ header)
+  await expect(list.nth(first)).toContainText('Test Patient B')
+  // the active filter is a chip that removes it
+  await page.getByRole('button', { name: /Maternal: Low/ }).click()
+  await expect(page.getByText('2 of 2 patients')).toBeVisible()
+  await expectNoA11yViolations(page)
 })
 
 test('doctor: inbox item opens the related tab of the patient', async ({ page }) => {

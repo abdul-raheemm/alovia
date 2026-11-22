@@ -2,7 +2,15 @@ import type { PatientRow } from '@alovia/shared'
 import { describe, expect, it } from 'vitest'
 
 import { patientErrors, toPatientInput } from '../components/PatientForm'
-import { filterPatients, gaLabel, geneticLabel, inboxTab, NO_FILTERS } from './patients'
+import {
+  filterPatients,
+  gaLabel,
+  geneticLabel,
+  inboxTab,
+  NO_FILTERS,
+  pageOf,
+  sortPatients,
+} from './patients'
 
 const AT = '2026-11-19T05:00:00Z'
 
@@ -97,5 +105,45 @@ describe('patient form checks (§8.1, DEC-023)', () => {
       age: 30,
       notes: 'n',
     })
+  })
+})
+
+describe('patient list sort and pages (FRONTEND_REDESIGN §8.3)', () => {
+  const a = row({ name: 'Asha', ga_weeks: 30, ga_days: 1, unseen_count: 1 })
+  const b = row({ name: 'bina', ga_weeks: 12, ga_days: 0, unseen_count: 3 })
+  const c = row({ name: 'Chitra', ga_weeks: null, unseen_count: 0 }) // no dates yet
+
+  it('keeps the server order without a sort', () => {
+    expect(sortPatients([c, a, b], null)).toEqual([c, a, b])
+  })
+
+  it('sorts by name ignoring case, either way', () => {
+    expect(sortPatients([c, b, a], { key: 'name', dir: 'asc' }).map((r) => r.name)).toEqual([
+      'Asha',
+      'bina',
+      'Chitra',
+    ])
+    expect(sortPatients([a, b, c], { key: 'name', dir: 'desc' })[0]?.name).toBe('Chitra')
+  })
+
+  it('puts empty values last in both directions', () => {
+    expect(sortPatients([c, a, b], { key: 'ga', dir: 'asc' }).map((r) => r.name)).toEqual([
+      'bina',
+      'Asha',
+      'Chitra',
+    ])
+    expect(sortPatients([c, a, b], { key: 'ga', dir: 'desc' }).map((r) => r.name)).toEqual([
+      'Asha',
+      'bina',
+      'Chitra',
+    ])
+  })
+
+  it('pages 25 at a time and keeps the page in range', () => {
+    const many = Array.from({ length: 51 }, (_, i) => i)
+    expect(pageOf(many, 0)).toMatchObject({ page: 0, pages: 3 })
+    expect(pageOf(many, 2).rows).toEqual([50])
+    expect(pageOf(many, 9).page).toBe(2) // past the end -> last page
+    expect(pageOf([], 0)).toEqual({ rows: [], page: 0, pages: 1 })
   })
 })

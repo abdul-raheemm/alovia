@@ -127,3 +127,39 @@ export function filterPatients(rows: PatientRow[], f: Filters): PatientRow[] {
       (!f.unseenOnly || r.unseen_count > 0),
   )
 }
+
+// ---- patient list table (FRONTEND_REDESIGN §8.3) ----
+
+export type SortKey = 'name' | 'ga' | 'due_date' | 'last_checkin' | 'unseen'
+export interface Sort {
+  key: SortKey
+  dir: 'asc' | 'desc'
+}
+export const PAGE_SIZE = 25
+
+const SORT_VALUE: Record<SortKey, (r: PatientRow) => string | number | null> = {
+  name: (r) => r.name.toLocaleLowerCase(),
+  ga: (r) => (r.ga_weeks === null ? null : r.ga_weeks * 7 + (r.ga_days ?? 0)),
+  due_date: (r) => r.due_date,
+  last_checkin: (r) => r.symptom?.created_at ?? null,
+  unseen: (r) => r.unseen_count,
+}
+
+/** Rows sorted by a column; empty values always last. No sort = the server's §6 order. */
+export function sortPatients(rows: PatientRow[], sort: Sort | null): PatientRow[] {
+  if (!sort) return rows
+  const value = SORT_VALUE[sort.key]
+  const sign = sort.dir === 'asc' ? 1 : -1
+  return [...rows].sort((a, b) => {
+    const [x, y] = [value(a), value(b)]
+    if (x === null || y === null) return x === y ? 0 : x === null ? 1 : -1
+    return x < y ? -sign : x > y ? sign : 0
+  })
+}
+
+/** One page of rows (page from 0) and the page count (at least 1). */
+export function pageOf<T>(rows: T[], page: number, size = PAGE_SIZE) {
+  const pages = Math.max(1, Math.ceil(rows.length / size))
+  const current = Math.min(Math.max(page, 0), pages - 1)
+  return { rows: rows.slice(current * size, (current + 1) * size), page: current, pages }
+}

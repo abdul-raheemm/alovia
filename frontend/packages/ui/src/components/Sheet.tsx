@@ -1,4 +1,4 @@
-import { cn } from '@alovia/ui'
+import { cn } from '../cn'
 import { useEffect, useRef, type ReactNode } from 'react'
 
 /** A modal sheet on the native <dialog> (owner choice 2026-11-21: no new dependency). The browser

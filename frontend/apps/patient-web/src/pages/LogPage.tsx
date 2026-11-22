@@ -13,6 +13,7 @@ import {
   ChipRowSkeleton,
   ErrorState,
   FieldError,
+  Sheet,
   TextAreaField,
   TextField,
 } from '@alovia/ui'
@@ -47,7 +48,6 @@ import {
 import { useSubmitCheckin, useVocabulary } from '../app/useSymptoms'
 import { AdviceScreen, AfterEndNotice, NotMonitoredNotice } from '../components/symptoms/Advice'
 import { ChipChoiceGroup, SymptomChip } from '../components/symptoms/Fields'
-import { Sheet } from '../components/symptoms/Sheet'
 
 type Vocabulary = SymptomVocabulary
 

@@ -4,6 +4,7 @@ export { Card } from './components/Card'
 export { CheckboxField, FieldError, TextAreaField, TextField } from './components/Field'
 export { Logo } from './components/Logo'
 export { Markdown } from './components/Markdown'
+export { Sheet } from './components/Sheet'
 export { SignInForm } from './components/SignInForm'
 export {
   CalendarMonthSkeleton,

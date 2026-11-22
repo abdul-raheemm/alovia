@@ -909,3 +909,12 @@ Done:
 - Fixed after screenshots: a 3 px gap between the pinned weekday row and the sticky month name let rows show through; the day sheet stretched to full height.
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 80 unit; build; 159 E2E.
 Next step: step 6 plan (doctor app).
+
+## Session 47 — 2026-11-22 — Frontend redesign step 6a: doctor shell, home, patient list
+Who: Raheem + agent: Claude Code
+Done:
+- Owner approved the recommendations (DEC-116): split step 6; no new APIs (no today's-appointments tile, next-appointment column or activity feed).
+- `Sheet` moved to `packages/ui` (both apps). Doctor shell, home and patient list rebuilt as in PROGRESS. Owner chose (a): hide Due date and Pregnancy below 1536 px; names and dates no longer wrap (rows ~57-73 px because each badge has its date under it).
+- Bug found by the new test: on a 375 px phone the theme switch squeezed the search to 0 px and caused sideways scroll; moved into the user menu on phones.
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 84 unit; build; 169 E2E.
+Next step: step 6b plan (patient detail).

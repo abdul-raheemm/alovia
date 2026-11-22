@@ -1,13 +1,13 @@
 import type { PatientDetail } from '@alovia/shared'
-import { Button } from '@alovia/ui'
+import { Button, Card } from '@alovia/ui'
 import { useQueryClient } from '@tanstack/react-query'
 import { UserPlus } from 'lucide-react'
 import { Link, useNavigate } from 'react-router'
 
 import { api } from '../app/services'
-import { Inbox } from '../components/Inbox'
+import { Inbox, useInbox } from '../components/Inbox'
 import { PatientForm } from '../components/PatientForm'
-import { PatientList } from '../components/PatientList'
+import { PatientList, usePatients } from '../components/PatientList'
 
 function NewPatientLink() {
   return (
@@ -20,18 +20,36 @@ function NewPatientLink() {
   )
 }
 
-/** Doctor home (§5, UX_FLOWS D2): needs-attention inbox on top, then the patient list. */
+/** One summary number (FRONTEND_REDESIGN §8.2): big tabular numeral, small label, no chart. */
+function Tile({ label, value }: { label: string; value: number | undefined }) {
+  return (
+    <Card className="flex flex-col gap-1">
+      <dt className="text-sm text-muted">{label}</dt>
+      <dd className="text-3xl font-semibold tabular-nums">{value ?? '—'}</dd>
+    </Card>
+  )
+}
+
+/** Doctor home (Dashboard §5, UX_FLOWS D2, FRONTEND_REDESIGN §8.2): needs attention first, then
+ * the summary tiles and a patient list preview. "Today's appointments" and recent activity have
+ * no API yet and are left out (owner, 2026-11-22, DEC-116). */
 export function HomePage() {
+  const patients = usePatients()
+  const unseen = useInbox()
   return (
     <section className="flex flex-col gap-6">
       <h1>Home</h1>
       <Inbox />
+      <dl aria-label="Summary" className="grid grid-cols-2 gap-3 md:max-w-md">
+        <Tile label="Patients" value={patients.data?.length} />
+        <Tile label="Unseen alerts" value={unseen.data?.length} />
+      </dl>
       <section aria-labelledby="patients-heading" className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="patients-heading">Patients</h2>
           <NewPatientLink />
         </div>
-        <PatientList />
+        <PatientList preview={5} />
       </section>
     </section>
   )
