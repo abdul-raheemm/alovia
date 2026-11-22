@@ -12,6 +12,7 @@ import {
   toModelUnit,
 } from '../../app/predictions'
 import { api } from '../../app/services'
+import { StickyActions } from '../StickyActions'
 
 type Field = PredictionSchema['groups'][number]['fields'][number]
 
@@ -200,9 +201,11 @@ export function PredictionForm({
           {formError}
         </p>
       )}
-      <Button type="submit" loading={busy} className="self-start">
-        Run prediction
-      </Button>
+      <StickyActions>
+        <Button type="submit" loading={busy} className="self-start">
+          Run prediction
+        </Button>
+      </StickyActions>
     </form>
   )
 }

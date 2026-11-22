@@ -15,11 +15,13 @@ import {
 
 import { formatDateTime } from '../../app/patients'
 import { api } from '../../app/services'
+import { tableClass, useTableView } from '../ChartTable'
 
 type Points = DoctorSymptoms['charts']['symptoms'][number]['points']
 
 /** Entries of one symptom per pregnancy week (one series, one colour), with a text table. */
 function SymptomChart({ label, points }: { label: string; points: Points }) {
+  const [asTable, tableToggle] = useTableView()
   const counts = new Map<string, number>()
   for (const p of points) {
     const key = p.pregnancy_week === null ? 'no week' : `wk ${p.pregnancy_week}`
@@ -28,27 +30,37 @@ function SymptomChart({ label, points }: { label: string; points: Points }) {
   const data = [...counts].map(([week, n]) => ({ week, n }))
   return (
     <Card className="flex flex-col gap-2">
-      <h4>{label}</h4>
-      <div aria-hidden="true" className="h-36 w-full">
-        <ResponsiveContainer>
-          <BarChart accessibilityLayer={false} data={data} margin={{ top: 8, right: 8, left: 0 }}>
-            <CartesianGrid stroke="var(--color-border)" vertical={false} />
-            <XAxis dataKey="week" tick={{ fill: 'var(--color-muted)', fontSize: 12 }} />
-            <YAxis
-              allowDecimals={false}
-              width={32}
-              tick={{ fill: 'var(--color-muted)', fontSize: 12 }}
-            />
-            <Bar
-              dataKey="n"
-              fill="var(--color-secondary)"
-              radius={[4, 4, 0, 0]}
-              isAnimationActive={false}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+      <div className="flex items-center justify-between gap-2">
+        <h4>{label}</h4>
+        {tableToggle}
       </div>
-      <table className="sr-only">
+      {!asTable && (
+        <div aria-hidden="true" className="h-36 w-full">
+          <ResponsiveContainer>
+            <BarChart accessibilityLayer={false} data={data} margin={{ top: 8, right: 8, left: 0 }}>
+              <CartesianGrid stroke="var(--color-border)" vertical={false} />
+              <XAxis
+                interval="preserveStartEnd"
+                minTickGap={16}
+                dataKey="week"
+                tick={{ fill: 'var(--color-muted)', fontSize: 12 }}
+              />
+              <YAxis
+                allowDecimals={false}
+                width={32}
+                tick={{ fill: 'var(--color-muted)', fontSize: 12 }}
+              />
+              <Bar
+                dataKey="n"
+                fill="var(--color-secondary)"
+                radius={[4, 4, 0, 0]}
+                isAnimationActive={false}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+      <table className={tableClass(asTable)}>
         <caption>{label}: entries per pregnancy week</caption>
         <tbody>
           {data.map((d) => (
@@ -65,47 +77,58 @@ function SymptomChart({ label, points }: { label: string; points: Points }) {
 
 /** PUQE score over time with the bands from the rule file shaded and named. */
 function PuqeChart({ data }: { data: DoctorSymptoms }) {
+  const [asTable, tableToggle] = useTableView()
   const points = data.charts.puqe.map((p) => ({ ...p, x: p.local_date }))
   if (points.length === 0) return null
   return (
     <Card className="flex flex-col gap-2">
-      <h4>PUQE score</h4>
+      <div className="flex items-center justify-between gap-2">
+        <h4>PUQE score</h4>
+        {tableToggle}
+      </div>
       <p className="text-sm text-muted">
         Bands: {data.puqe_bands.map((b) => `${b.band} ${b.min}–${b.max}`).join(', ')}
       </p>
-      <div aria-hidden="true" className="h-40 w-full">
-        <ResponsiveContainer>
-          <LineChart
-            accessibilityLayer={false}
-            data={points}
-            margin={{ top: 8, right: 16, left: 0 }}
-          >
-            {data.puqe_bands.map((b, i) => (
-              <ReferenceArea
-                key={b.band}
-                y1={b.min}
-                y2={b.max}
-                fill="var(--color-primary)"
-                fillOpacity={0.06 + i * 0.06}
+      {!asTable && (
+        <div aria-hidden="true" className="h-40 w-full">
+          <ResponsiveContainer>
+            <LineChart
+              accessibilityLayer={false}
+              data={points}
+              margin={{ top: 8, right: 16, left: 0 }}
+            >
+              {data.puqe_bands.map((b, i) => (
+                <ReferenceArea
+                  key={b.band}
+                  y1={b.min}
+                  y2={b.max}
+                  fill="var(--color-primary)"
+                  fillOpacity={0.06 + i * 0.06}
+                />
+              ))}
+              <CartesianGrid stroke="var(--color-border)" vertical={false} />
+              <XAxis
+                interval="preserveStartEnd"
+                minTickGap={16}
+                dataKey="x"
+                tick={{ fill: 'var(--color-muted)', fontSize: 12 }}
               />
-            ))}
-            <CartesianGrid stroke="var(--color-border)" vertical={false} />
-            <XAxis dataKey="x" tick={{ fill: 'var(--color-muted)', fontSize: 12 }} />
-            <YAxis
-              domain={[3, 15]}
-              width={32}
-              tick={{ fill: 'var(--color-muted)', fontSize: 12 }}
-            />
-            <Line
-              dataKey="score"
-              stroke="var(--color-secondary)"
-              strokeWidth={2}
-              isAnimationActive={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-      <table className="sr-only">
+              <YAxis
+                domain={[3, 15]}
+                width={32}
+                tick={{ fill: 'var(--color-muted)', fontSize: 12 }}
+              />
+              <Line
+                dataKey="score"
+                stroke="var(--color-secondary)"
+                strokeWidth={2}
+                isAnimationActive={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+      <table className={tableClass(asTable)}>
         <caption>PUQE scores</caption>
         <tbody>
           {points.map((p, i) => (

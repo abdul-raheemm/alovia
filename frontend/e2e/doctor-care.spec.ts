@@ -253,7 +253,9 @@ test('notes, appointments and pregnancy tabs', async ({ page }) => {
     return route.fulfill({ json: { data: patient(), error: null } })
   })
   await page.goto(`${DOCTOR}/patients/${PID}/pregnancy`)
-  await expect(page.getByText('(LMP estimate)')).toBeVisible()
+  // the source shows in the header card and in the tab's own dates section
+  await expect(page.getByText('(LMP estimate)')).toHaveCount(2)
+  await expect(page.locator('main').getByText('(LMP estimate)').last()).toBeVisible()
   await page.getByLabel('Due date', { exact: true }).fill('2027-03-05')
   await page.getByRole('button', { name: 'Save dates' }).click()
   await expect.poll(() => dates).toEqual({ option: 'due_date', due_date: '2027-03-05' })

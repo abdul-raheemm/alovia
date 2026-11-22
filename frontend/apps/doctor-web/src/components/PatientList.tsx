@@ -14,15 +14,11 @@ import {
   ArrowUp,
   ArrowUpDown,
   ChevronRight,
-  Circle,
-  CircleAlert,
   Dna,
   HeartPulse,
   SlidersHorizontal,
   Stethoscope,
-  TriangleAlert,
   X,
-  type LucideIcon,
 } from 'lucide-react'
 import { useId, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router'
@@ -42,6 +38,7 @@ import {
   type SortKey,
 } from '../app/patients'
 import { api } from '../app/services'
+import { Badge, ModuleBadges, SymptomBadge } from './StatusBadges'
 
 export function usePatients() {
   return useQuery({
@@ -83,39 +80,6 @@ function Select({
       </select>
     </div>
   )
-}
-
-/** A status badge: module icon plus the value as text (colour is never the only signal).
- * Symptom levels use the reserved L1 / L2 colours; the other modules stay neutral. */
-function Badge({
-  Icon,
-  text,
-  tone,
-}: {
-  Icon: LucideIcon
-  text: string
-  tone?: 'urgent' | 'caution'
-}) {
-  return (
-    <span
-      className={
-        tone === 'urgent'
-          ? 'inline-flex items-center gap-1 rounded-md bg-urgent/10 px-2 py-0.5 text-sm font-semibold text-urgent'
-          : tone === 'caution'
-            ? 'inline-flex items-center gap-1 rounded-md bg-caution/10 px-2 py-0.5 text-sm font-semibold text-caution'
-            : 'inline-flex items-center gap-1 rounded-md border border-border px-2 py-0.5 text-sm'
-      }
-    >
-      <Icon aria-hidden="true" className="size-4 shrink-0" />
-      {text}
-    </span>
-  )
-}
-
-function SymptomBadge({ level }: { level: string }) {
-  if (level === 'L1') return <Badge Icon={TriangleAlert} text="L1" tone="urgent" />
-  if (level === 'L2') return <Badge Icon={CircleAlert} text="L2" tone="caution" />
-  return <Badge Icon={Circle} text={level} />
 }
 
 function Latest({ value, badge }: { value: { at: string } | null; badge: ReactNode }) {
@@ -339,13 +303,7 @@ export function PatientList({ preview }: { preview?: number }) {
                   {!r.linked && ' · Not joined yet'}
                   {r.unseen_count > 0 && ` · ${r.unseen_count} unseen`}
                 </span>
-                <span className="flex flex-wrap gap-1">
-                  {r.fetal && <Badge Icon={HeartPulse} text={`Fetal ${r.fetal.predicted_class}`} />}
-                  {r.maternal && (
-                    <Badge Icon={Stethoscope} text={`Maternal ${r.maternal.predicted_class}`} />
-                  )}
-                  {r.symptom && <SymptomBadge level={r.symptom.level} />}
-                </span>
+                <ModuleBadges row={r} />
               </span>
               <ChevronRight aria-hidden="true" className="size-5 shrink-0 text-muted" />
             </Link>

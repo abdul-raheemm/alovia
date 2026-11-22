@@ -24,6 +24,7 @@ import { PregnancyTab } from '../components/care/PregnancyTab'
 import { RecordsTab } from '../components/care/RecordsTab'
 import { SymptomsTab } from '../components/care/SymptomsTab'
 import { PatientForm } from '../components/PatientForm'
+import { ModuleBadges } from '../components/StatusBadges'
 import { AuditTable } from './AdminPage'
 import { PredictionTab } from '../components/predictions/PredictionTab'
 
@@ -250,6 +251,28 @@ function PatientActivity({ patientId }: { patientId: string }) {
 
 /** Patient detail (§5): tabs as links, so each tab has its own address (inbox items open the
  * related tab). */
+/** Header card (FRONTEND_REDESIGN §8.4): name, age, week, due date and its source, the unseen
+ * count and one badge per module (never combined). */
+function PatientHeader({ patient }: { patient: PatientDetail }) {
+  const facts = [
+    patient.age != null ? `Age ${patient.age}` : null,
+    patient.ga_weeks !== null
+      ? `Week ${gaLabel(patient)}`
+      : PREGNANCY_STATUS[patient.pregnancy_status],
+    patient.due_date
+      ? `Due ${formatDay(patient.due_date)}${patient.due_date_source ? ` (${DUE_DATE_SOURCE[patient.due_date_source] ?? patient.due_date_source})` : ''}`
+      : null,
+    patient.unseen_count > 0 ? `${patient.unseen_count} unseen` : null,
+  ].filter(Boolean)
+  return (
+    <Card className="flex flex-col gap-2">
+      <h1 className="text-2xl lg:text-3xl">{patient.name}</h1>
+      <p className="text-muted tabular-nums">{facts.join(' · ')}</p>
+      <ModuleBadges row={patient} />
+    </Card>
+  )
+}
+
 export function PatientPage() {
   const { id = '', tab = 'overview' } = useParams()
   const patient = useQuery({
@@ -272,19 +295,25 @@ export function PatientPage() {
       <p>
         <Link to="/patients">All patients</Link>
       </p>
-      <h1>{patient.data.name}</h1>
-      <nav aria-label="Patient sections" className="overflow-x-auto">
+      <PatientHeader patient={patient.data} />
+      <nav aria-label="Patient sections" className="-mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
         <ul className="flex gap-1 border-b border-border">
           {TABS.map((t) => (
             <li key={t.id}>
               <Link
                 to={`/patients/${id}/${t.id}`}
                 aria-current={t.id === current.id ? 'page' : undefined}
-                className={cn(
-                  'flex min-h-11 items-center whitespace-nowrap px-3 no-underline',
+                // §8.5: on phones the tab bar scrolls; the open tab is brought into view
+                ref={
                   t.id === current.id
-                    ? 'border-b-2 border-primary font-semibold text-primary'
-                    : 'text-text',
+                    ? (el) => el?.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+                    : undefined
+                }
+                className={cn(
+                  '-mb-px flex min-h-11 items-center whitespace-nowrap border-b-2 px-3 no-underline',
+                  t.id === current.id
+                    ? 'border-primary font-semibold text-primary'
+                    : 'border-transparent text-text hover:text-primary',
                 )}
               >
                 {t.label}

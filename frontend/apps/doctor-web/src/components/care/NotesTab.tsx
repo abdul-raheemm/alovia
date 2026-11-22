@@ -5,6 +5,7 @@ import { useState } from 'react'
 
 import { formatDateTime } from '../../app/patients'
 import { api } from '../../app/services'
+import { StickyActions } from '../StickyActions'
 
 /** Dashboard §15: private (doctors only) or shared, chosen when writing; a private note can
  * be shared later, never the other way; notes are not edited or deleted. */
@@ -66,9 +67,11 @@ export function NotesTab({ patientId }: { patientId: string }) {
               {userMessage(write.error, 'doctor')}
             </p>
           )}
-          <Button type="submit" className="self-start" loading={write.isPending}>
-            Save note
-          </Button>
+          <StickyActions>
+            <Button type="submit" className="self-start" loading={write.isPending}>
+              Save note
+            </Button>
+          </StickyActions>
         </form>
       </section>
       <section aria-labelledby="notes-heading" className="flex flex-col gap-3">

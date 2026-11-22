@@ -918,3 +918,12 @@ Done:
 - Bug found by the new test: on a 375 px phone the theme switch squeezed the search to 0 px and caused sideways scroll; moved into the user menu on phones.
 Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 84 unit; build; 169 E2E.
 Next step: step 6b plan (patient detail).
+
+## Session 48 — 2026-11-22 — Frontend redesign step 6b: doctor patient detail
+Who: Raheem + agent: Claude Code
+Done:
+- Owner approved the full plan (with sticky bars) and asked to commit 6b without a separate review stop, then plan step 7.
+- Shared `StatusBadges` (list, cards, header); `PatientHeader` card; tab bar restyled, open tab scrolled into view; `useTableView` gives each chart (fetal/maternal trends, symptom bars, PUQE) a visible table switch; `StickyActions` on the main button of the prediction, notes, appointment, record, pregnancy-dates and genetic review forms (phones only); fewer axis labels on narrow charts.
+- One care test checked "(LMP estimate)" once; it now appears in the header too, so the check was scoped (count 2, the tab's copy visible).
+Checks: `bash scripts/check_all.sh` exit 0 — backend 561; frontend 84 unit; build; 175 E2E.
+Next step: step 7 plan (motion).

@@ -22,6 +22,7 @@ import { useId, useState } from 'react'
 
 import { formatDateTime } from '../../app/patients'
 import { api } from '../../app/services'
+import { StickyActions } from '../StickyActions'
 
 type Condition = DoctorAssessment['result']['conditions'][number]
 type Outcomes = NonNullable<Condition['outcomes']>
@@ -231,9 +232,11 @@ function CorrectForm({
         </p>
       )}
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" loading={save.isPending}>
-          Save correction
-        </Button>
+        <StickyActions>
+          <Button type="submit" loading={save.isPending}>
+            Save correction
+          </Button>
+        </StickyActions>
         <Button type="button" variant="ghost" onClick={onCancel}>
           Cancel
         </Button>
@@ -282,9 +285,11 @@ function ReviewActions({ a, onChanged }: { a: DoctorAssessment; onChanged: () =>
           </p>
         )}
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" loading={confirm.isPending}>
-            Confirm review
-          </Button>
+          <StickyActions>
+            <Button type="submit" loading={confirm.isPending}>
+              Confirm review
+            </Button>
+          </StickyActions>
           <Button type="button" variant="ghost" onClick={() => setMode(null)}>
             Cancel
           </Button>

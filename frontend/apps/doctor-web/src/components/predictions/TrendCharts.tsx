@@ -13,6 +13,7 @@ import {
 
 import { formatDate } from '../../app/patients'
 import { shortNumber } from '../../app/predictions'
+import { tableClass, useTableView } from '../ChartTable'
 
 type Point = Trends['maternal'][number]
 
@@ -56,50 +57,61 @@ function Chart({
   points: Point[]
   series: { feature: string; name: string; dashed?: boolean }[]
 }) {
+  const [asTable, tableToggle] = useTableView()
   const data = points.map((p) => ({ ...p.values, x: xLabel(p), cls: p.predicted_class, p }))
   return (
     <Card className="flex flex-col gap-2">
-      <h4>{title}</h4>
-      <div aria-hidden="true" className="h-48 w-full">
-        <ResponsiveContainer>
-          <LineChart
-            accessibilityLayer={false}
-            data={data}
-            margin={{ top: 8, right: 16, bottom: 8, left: 0 }}
-          >
-            <CartesianGrid stroke="var(--color-border)" vertical={false} />
-            <XAxis dataKey="x" tick={{ fill: 'var(--color-muted)', fontSize: 12 }} />
-            <YAxis tick={{ fill: 'var(--color-muted)', fontSize: 12 }} width={48} />
-            <Tooltip
-              contentStyle={{
-                background: 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                color: 'var(--color-text)',
-              }}
-              formatter={(v: unknown, name: unknown) => [shortNumber(Number(v)), String(name)]}
-              labelFormatter={(
-                label: unknown,
-                payload: readonly { payload?: { cls?: string } }[],
-              ) => `${String(label)} · ${payload[0]?.payload?.cls ?? ''}`}
-            />
-            {series.length > 1 && <Legend />}
-            {series.map((s) => (
-              <Line
-                key={s.feature}
-                dataKey={s.feature}
-                name={s.name}
-                stroke="var(--color-muted)"
-                strokeWidth={2}
-                strokeDasharray={s.dashed ? '6 4' : undefined}
-                dot={Dot(model)}
-                activeDot={false}
-                isAnimationActive={false}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
+      <div className="flex items-center justify-between gap-2">
+        <h4>{title}</h4>
+        {tableToggle}
       </div>
-      <table className="sr-only">
+      {!asTable && (
+        <div aria-hidden="true" className="h-48 w-full">
+          <ResponsiveContainer>
+            <LineChart
+              accessibilityLayer={false}
+              data={data}
+              margin={{ top: 8, right: 16, bottom: 8, left: 0 }}
+            >
+              <CartesianGrid stroke="var(--color-border)" vertical={false} />
+              <XAxis
+                interval="preserveStartEnd"
+                minTickGap={16}
+                dataKey="x"
+                tick={{ fill: 'var(--color-muted)', fontSize: 12 }}
+              />
+              <YAxis tick={{ fill: 'var(--color-muted)', fontSize: 12 }} width={48} />
+              <Tooltip
+                contentStyle={{
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text)',
+                }}
+                formatter={(v: unknown, name: unknown) => [shortNumber(Number(v)), String(name)]}
+                labelFormatter={(
+                  label: unknown,
+                  payload: readonly { payload?: { cls?: string } }[],
+                ) => `${String(label)} · ${payload[0]?.payload?.cls ?? ''}`}
+              />
+              {series.length > 1 && <Legend />}
+              {series.map((s) => (
+                <Line
+                  key={s.feature}
+                  dataKey={s.feature}
+                  name={s.name}
+                  stroke="var(--color-muted)"
+                  strokeWidth={2}
+                  strokeDasharray={s.dashed ? '6 4' : undefined}
+                  dot={Dot(model)}
+                  activeDot={false}
+                  isAnimationActive={false}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+      <table className={tableClass(asTable)}>
         <caption>{title}</caption>
         <thead>
           <tr>

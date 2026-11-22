@@ -11,6 +11,7 @@ import { useState } from 'react'
 
 import { formatDay } from '../../app/patients'
 import { api } from '../../app/services'
+import { StickyActions } from '../StickyActions'
 
 const when = (a: Appointment) => `${formatDay(a.date)}${a.time ? `, ${a.time.slice(0, 5)}` : ''}`
 
@@ -88,9 +89,11 @@ function AppointmentForm({
         </p>
       )}
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" loading={busy}>
-          {initial ? 'Save changes' : 'Add appointment'}
-        </Button>
+        <StickyActions>
+          <Button type="submit" loading={busy}>
+            {initial ? 'Save changes' : 'Add appointment'}
+          </Button>
+        </StickyActions>
         {onCancel && (
           <Button type="button" variant="ghost" onClick={onCancel}>
             Cancel

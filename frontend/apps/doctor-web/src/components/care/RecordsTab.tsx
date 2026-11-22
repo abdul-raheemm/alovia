@@ -6,6 +6,7 @@ import { useId, useRef, useState } from 'react'
 
 import { formatDateTime } from '../../app/patients'
 import { api } from '../../app/services'
+import { StickyActions } from '../StickyActions'
 
 export const RECORD_TYPES: Record<MedicalRecord['file_type'], string> = {
   ultrasound: 'Ultrasound',
@@ -107,10 +108,12 @@ export function RecordsTab({ patientId }: { patientId: string }) {
               {userMessage(upload.error, 'doctor')}
             </p>
           )}
-          <Button type="submit" className="self-start" loading={upload.isPending}>
-            <Upload aria-hidden="true" className="size-5" />
-            Upload
-          </Button>
+          <StickyActions>
+            <Button type="submit" className="self-start" loading={upload.isPending}>
+              <Upload aria-hidden="true" className="size-5" />
+              Upload
+            </Button>
+          </StickyActions>
         </form>
       </section>
       <section aria-labelledby="records-heading" className="flex flex-col gap-3">

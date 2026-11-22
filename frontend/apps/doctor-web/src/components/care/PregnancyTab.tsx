@@ -5,6 +5,7 @@ import { useId, useState } from 'react'
 
 import { DUE_DATE_SOURCE, formatDay, gaLabel, PREGNANCY_STATUS } from '../../app/patients'
 import { api } from '../../app/services'
+import { StickyActions } from '../StickyActions'
 
 const END_CHOICES = ['ended_birth', 'ended_loss', 'ended_not_specified'] as const
 
@@ -119,9 +120,11 @@ function DatesForm({ patient, onSaved }: { patient: PatientDetail; onSaved: () =
           {formError}
         </p>
       )}
-      <Button type="submit" className="self-start" loading={busy}>
-        Save dates
-      </Button>
+      <StickyActions>
+        <Button type="submit" className="self-start" loading={busy}>
+          Save dates
+        </Button>
+      </StickyActions>
     </form>
   )
 }
